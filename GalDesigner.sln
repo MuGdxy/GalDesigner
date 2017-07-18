@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{4698C6F6-8029-4408-BF78-AE7F34F9B309}"
+	ProjectSection(SolutionItems) = preProject
+		GalDesigner.md = GalDesigner.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameBox", "GameBox", "{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A}"
+	ProjectSection(SolutionItems) = preProject
+		GameBox.md = GameBox.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
+	EndGlobalSection
+EndGlobal
