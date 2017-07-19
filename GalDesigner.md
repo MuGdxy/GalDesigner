@@ -24,7 +24,7 @@ So we need to analysis the script and run it.
 
 See more in [GameBox.Script.md]().
 
-### Do Event
+### Event
 
 There are many events GameBox should do such as input event, effect event and so on.
 
@@ -34,9 +34,11 @@ See more in [GameBox.Event.md]()
 
 ## Application 
 
-An Application is between player and GameBox. Application can get input from player, render objects and so on.
+Application is between player and GameBox. Application can get input from player, render objects and so on.
 
 Application is more reality than GameBox. It is an engineer to finish task what GameBox told. And it need to tell the leader what happened.
+
+Application is used for inputing data and outputing data. If we want to tell GameBox we click a button, we must tell the Application the ClickEvent and Application will tell the GameBox this event. If GameBox want to draw a button or play sound, GameBox must tell Application this command and Application will do this work.
 
 See more in [Application.md]()
 
