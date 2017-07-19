@@ -2,13 +2,17 @@
 
 A Galgame Engine on Windows.
 
-It is simple and fast to make a Galgame.
+It is simple and fast way to make a Galgame.
 
 ## GameBox
 
-A GameBox run the script, do input event, draw the sence and so on.
+A GameBox run the script, do events and so on.
 
-A GameBox is not an Application. It is a class, Application tell GameBox the input event, and the GameBox draw sence to Application.
+A GameBox is not an Application, GameBox manager the game and tell the Application something like what objects should show, what effects should show and so on.
+
+A GameBox also get events from Application. GameBox is used for game's logic.
+
+The GameBox is a leader.Tell Application what should do.
 
 See more in [GameBox.md]()
 
@@ -20,19 +24,29 @@ So we need to analysis the script and run it.
 
 See more in [GameBox.Script.md]().
 
-### Do Input Event
+### Do Event
 
-The GameBox can't get input message directly, it is the Application's task. The Application get input message and process it. After that, Application will tell some useful input event to GameBox and GameBox will do this input event.
+There are many events GameBox should do such as input event, effect event and so on.
+
+GameBox can get events from Application and tell events to Application.
 
 See more in [GameBox.Event.md]()
 
-### Draw and Audio
+## Application 
 
-If GameBox run, it means that the game is working. So we need present sence and play sound.
+An Application is between player and GameBox. Application can get input from player, render objects and so on.
 
-For this, we design a library to manager this. We will use Direct2D to implement this library.
+Application is more reality than GameBox. It is an engineer to finish task what GameBox told. And it need to tell the leader what happened.
 
-See more in [GraphicsEngine.md]()
+See more in [Application.md]()
+
+### Graphics And Audio 
+
+We will design a GraphisRender to output the game's sence. It is Application's task.
+
+Application gets commands from GameBox,So it will known what should draw or what music should play and so on. 
+
+See more in [Application.GraphicsRender.md]()
 
 ## GameDesigner
 
