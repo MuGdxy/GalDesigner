@@ -32,6 +32,16 @@ GameBox can get events from Application and tell events to Application.
 
 See more in [GameBox.Event.md]()
 
+### Control
+
+In sometimes, we need some buttons or images to draw our game scene. 
+So we have controls to do this work.
+But GameBox only manager the control's property, events(such as click, destory, move and so on), lifetime. 
+
+**We can use control in Script as variable.**
+
+See more in [GameBox.Contorl.md]()
+
 ## Application 
 
 Application is between player and GameBox. Application can get input from player, render objects and so on.
@@ -42,6 +52,12 @@ Application is used for inputing data and outputing data. If we want to tell Gam
 
 See more in [Application.md]()
 
+### Event
+
+Application also have events need to process, when we input keys or move mouse the Application should process this event and tell the event to GameBox.
+
+See more in [Application.Event.md]()
+
 ### Graphics And Audio 
 
 We will design a GraphisRender to output the game's sence. It is Application's task.
@@ -49,6 +65,11 @@ We will design a GraphisRender to output the game's sence. It is Application's t
 Application gets commands from GameBox,So it will known what should draw or what music should play and so on. 
 
 See more in [Application.GraphicsRender.md]()
+
+### Control 
+
+Application also manager controls.
+In this case, Application only render it.
 
 ## GameDesigner
 

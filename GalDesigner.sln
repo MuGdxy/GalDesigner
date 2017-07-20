@@ -13,11 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameBox", "GameBox", "{CFFD
 		GameBox.md = GameBox.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{7EC03187-C4E4-49EA-8BAD-72FB44E8E4C7}"
+	ProjectSection(SolutionItems) = preProject
+		Application.md = Application.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
+		{7EC03187-C4E4-49EA-8BAD-72FB44E8E4C7} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
 	EndGlobalSection
 EndGlobal

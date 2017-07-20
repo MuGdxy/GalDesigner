@@ -31,6 +31,7 @@ In main loop, we do many thins. There are some things we need to do:
 
 - Read event from Application and process it.
 - Tell event to Application.
+- Check current ScriptState.
 
 In fact, for once loop, we only get one event from Application.
 
@@ -42,7 +43,7 @@ We can use script to make game differently.
 
 For GameBox, It need to run a script. There are stages of how to run a script.
 
-- Initialize A script.
+- Initialize a script.
 - Enter the entryScriptState and set pre GameState.
 - Wait to next ScriptState.
 - Go next ScriptState.
@@ -51,7 +52,7 @@ For GameBox, It need to run a script. There are stages of how to run a script.
 
 **The GameState will be keeped even if you change the script before you change this GameState.**
 
-The Scirpt is not synchronized with GameBox. The Script tell GameBox that what state we are, what nextStates we can go, the condition we go a nextState.
+The Scirpt is not synchronized with GameBox. The Script tell GameBox that what state we are, what nextStates we can go, the condition we go a nextState. And the GameBox decide when go to nextState, go to nextState and so on.
 
 See more in [GameBox.Script.md]().
 
