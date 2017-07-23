@@ -6,4 +6,21 @@ It is a concrete application framework. **User need not to program Application s
 
 ## Event
 
-In most time, Application only transmit events from Player to GameBox.
+Application also have events need to process, when we input keys or move mouse the Application should process this event and tell the event to GameBox.
+
+In most time, Application only send message that Application got to GameBox.
+
+See more in [Application.Event.md]()
+
+## Graphics And Audio 
+
+We will design a GraphisRender to output the game's sence. It is Application's task.
+
+Application gets commands from GameBox,So it will known what should draw or what music should play and so on. 
+
+See more in [Application.GraphicsRender.md]()
+
+## Control 
+
+Application also manager controls.
+In this case, Application only render it.

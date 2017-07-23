@@ -66,6 +66,16 @@ The main things that GameBox do. GameBox need to process many events which from 
 
 See more in [GameBox.Event.md]()
 
+## Control
+
+In sometimes, we need some buttons or images to draw our game scene. 
+So we have controls to do this work.
+But GameBox only manager the control's property, events(such as click, destory, move and so on), lifetime. 
+
+**We can use control in Script as variable.**
+
+See more in [GameBox.Contorl.md]()
+
 
 
 
