@@ -21,12 +21,33 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 		Application.md = Application.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reference", "Reference", "{99839C46-350B-45F7-BA2A-745C2D275690}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APILibrary", "..\APILibrary\APILibrary\APILibrary.csproj", "{5359E988-F8FB-4597-9655-9F976B5F1CF5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalEngine", "GalEngine\GalEngine.csproj", "{26AFD910-AD7C-4165-8622-CB8103C2CA7D}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5359E988-F8FB-4597-9655-9F976B5F1CF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5359E988-F8FB-4597-9655-9F976B5F1CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5359E988-F8FB-4597-9655-9F976B5F1CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5359E988-F8FB-4597-9655-9F976B5F1CF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
 		{7EC03187-C4E4-49EA-8BAD-72FB44E8E4C7} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
+		{5359E988-F8FB-4597-9655-9F976B5F1CF5} = {99839C46-350B-45F7-BA2A-745C2D275690}
 	EndGlobalSection
 EndGlobal

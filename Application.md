@@ -4,6 +4,9 @@ Application between player and GameBox. Player input data to GameBox by using Ap
 
 It is a concrete application framework. **User need not to program Application script**(Maybe we will support C# script for this). 
 
+In fact, we use `Builder`([See This](https://github.com/LinkClinton/Builder)) to finish our Application.
+But we will change some codes.
+
 ## Event
 
 Application also have events need to process, when we input keys or move mouse the Application should process this event and tell the event to GameBox.
