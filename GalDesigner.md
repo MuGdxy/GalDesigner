@@ -14,7 +14,7 @@ A GameBox also get events from Application. GameBox is used for game's logic.
 
 The GameBox is a leader.Tell Application what should do.
 
-See more in [GameBox.md]()
+See more in [GameBox.md](/GameBox.md)
 
 ## Application 
 
@@ -24,7 +24,7 @@ Application is more reality than GameBox. It is an engineer to finish task what 
 
 Application is used for inputing data and outputing data. If we want to tell GameBox we click a button, we must tell the Application the ClickEvent and Application will tell the GameBox this event. If GameBox want to draw a button or play sound, GameBox must tell Application this command and Application will do this work.
 
-See more in [Application.md]()
+See more in [Application.md](/Application.md)
 
 ## GameDesigner
 
