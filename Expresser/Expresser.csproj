@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{26AFD910-AD7C-4165-8622-CB8103C2CA7D}</ProjectGuid>
+    <ProjectGuid>{C2A2E9BC-A7D8-43AD-90A6-9DF81874CAAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GalEngine</RootNamespace>
-    <AssemblyName>GalEngine</AssemblyName>
+    <RootNamespace>Expresser</RootNamespace>
+    <AssemblyName>Expresser</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -43,16 +43,5 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Builder\Builder\Builder.csproj">
-      <Project>{d6e4e0ba-fe87-46a7-8e1e-a1b869c5f72b}</Project>
-      <Name>Builder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Expresser\Expresser.csproj">
-      <Project>{c2a2e9bc-a7d8-43ad-90a6-9df81874caae}</Project>
-      <Name>Expresser</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
