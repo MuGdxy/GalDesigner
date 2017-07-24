@@ -14,6 +14,6 @@ There is process about Application run:
 
 - A Event is triggered, Application can get this event and event's data(input key or mouse position).
 - Process this event.
-- Send this to GameBox.
+- Send this to GalEngine.
 
 

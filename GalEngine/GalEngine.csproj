@@ -41,12 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\Application.cs" />
-    <Compile Include="Application\GenericEvent.cs" />
-    <Compile Include="Application\GenericKeycode.cs" />
-    <Compile Include="Application\GenericPrivate.cs" />
-    <Compile Include="Application\GenericStatic.cs" />
-    <Compile Include="Application\GenericWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +48,13 @@
       <Project>{5359e988-f8fb-4597-9655-9f976b5f1cf5}</Project>
       <Name>APILibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Builder\Builder\Builder.csproj">
+      <Project>{d6e4e0ba-fe87-46a7-8e1e-a1b869c5f72b}</Project>
+      <Name>Builder</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Expresser\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

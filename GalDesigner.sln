@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{
 		GalDesigner.md = GalDesigner.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameBox", "GameBox", "{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A}"
 	ProjectSection(SolutionItems) = preProject
-		GameBox.md = GameBox.md
+		GalEngine.md = GalEngine.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{7EC03187-C4E4-49EA-8BAD-72FB44E8E4C7}"
@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APILibrary", "..\APILibrary
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalEngine", "GalEngine\GalEngine.csproj", "{26AFD910-AD7C-4165-8622-CB8103C2CA7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Builder", "..\Builder\Builder\Builder.csproj", "{D6E4E0BA-FE87-46A7-8E1E-A1B869C5F72B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6E4E0BA-FE87-46A7-8E1E-A1B869C5F72B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6E4E0BA-FE87-46A7-8E1E-A1B869C5F72B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6E4E0BA-FE87-46A7-8E1E-A1B869C5F72B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6E4E0BA-FE87-46A7-8E1E-A1B869C5F72B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +55,6 @@ Global
 		{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
 		{7EC03187-C4E4-49EA-8BAD-72FB44E8E4C7} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
 		{5359E988-F8FB-4597-9655-9F976B5F1CF5} = {99839C46-350B-45F7-BA2A-745C2D275690}
+		{D6E4E0BA-FE87-46A7-8E1E-A1B869C5F72B} = {99839C46-350B-45F7-BA2A-745C2D275690}
 	EndGlobalSection
 EndGlobal

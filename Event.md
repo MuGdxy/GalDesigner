@@ -1,6 +1,6 @@
 # Event
 
-No matter events in Application or GameBox, we need a type to store event message.
+No matter events in Application or GalEngine, we need a type to store event message.
 So we will define this type there.
 
 - We need a base event type, there is EventArgs in `C#`.
