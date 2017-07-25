@@ -52,6 +52,10 @@
       <Project>{c2a2e9bc-a7d8-43ad-90a6-9df81874caae}</Project>
       <Name>Expresser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Presenter\Presenter.csproj">
+      <Project>{856d69c7-4ebf-4ded-8410-9691179cf021}</Project>
+      <Name>Presenter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

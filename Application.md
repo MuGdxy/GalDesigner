@@ -16,11 +16,11 @@ See more in [Application.Event.md](/Application.Event.md)
 
 ## Graphics And Audio 
 
-We will design a Expresser to output the game's sence. It is Application's task.
+We will design a Presenter to output the game's sence. It is Application's task.
 
 Application gets commands from GalEngine,So it will known what should draw or what music should play and so on. 
 
-See more in [Application.Expresser.md](/Application.Expresser.md)
+See more in [Application.Presenter.md](/Application.Presenter.md)
 
 ## Control 
 
