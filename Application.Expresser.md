@@ -36,10 +36,24 @@ We do not have only one kind of resource, we have many kinds of resource:
 - Brush
 - TextLayout(A Text you can think it is a bitmap)
 
+### Transform
+
+Sometimes we need to rotate our bitmap or scale our rectangle.
+So we should define a stand. For simplicity, we use the matrix to describe the transform.
+
 ### About Audio
 
 We will use `XAudio2` to finish this task.
 
+### Detail 
 
+You can ignore this.
 
+**What do we need?**
+
+- Static class manager RenderDevice.
+- Static class manager Resource.
+- Kinds of Resource.
+- Surface and present.
+- Need Update...
 
