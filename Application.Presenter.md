@@ -2,7 +2,7 @@
 
 In Windows version, we will use `DirectX` to finish this task.
 
-Presenter will support to draw sence, play music, play video.
+Presenter will support to draw sence, play music, play video.(**It bases on the [Presenter](https://github.com/LinkClinton/Presenter)**).
 
 ## About Draw
 
@@ -49,11 +49,15 @@ We will use `XAudio2` to finish this task.
 
 You can ignore this.
 
-**What do we need?**
+**What do we need ?**
 
 - Static class manager RenderDevice.
 - Static class manager Resource.
 - Kinds of Resource.
-- Surface and present.
 - Need Update...
+
+**What is it ?**
+
+Our surface where we draw is a Texture in 3D world. We will set a camera to see this Texture.
+So we use `Direct2D` to render our game and `Direct3D` to present it to our window. 
 

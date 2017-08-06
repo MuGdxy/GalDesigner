@@ -4,7 +4,8 @@ Application between player and GalEngine. Player input data to GalEngine by usin
 
 It is a concrete application framework. **User need not to program Application script**(Maybe we will support C# script for this). 
 
-In fact, we use `Builder`([See This](https://github.com/LinkClinton/Builder)) to finish our Application.
+In fact, we use `Builder`([See This](https://github.com/LinkClinton/Builder)) to finish our Application
+(**It is not same as Builder,We will change some code for our Engine**).
 
 ## Event
 
