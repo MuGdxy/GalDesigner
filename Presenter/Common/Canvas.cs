@@ -20,6 +20,20 @@ namespace Presenter
             }
         }
 
+        public static void BeginDraw(TextureFace textureFace)
+        {
+            context.Target = textureFace.CanvasTarget;
+
+            context.BeginDraw();
+        }
+
+        public static void EndDraw()
+        {
+            context.Target = null;
+
+            context.EndDraw();
+        }
+
         internal static SharpDX.Direct2D1.Device ID2D1Device => device;
         internal static SharpDX.Direct2D1.DeviceContext ID2D1DeviceContext => context;
     }

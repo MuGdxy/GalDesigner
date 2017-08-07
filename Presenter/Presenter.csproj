@@ -57,7 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Canvas\Canvas.cs" />
+    <Compile Include="Common\Canvas.cs" />
     <Compile Include="Common\BlendState.cs" />
     <Compile Include="Common\DepthStencilState.cs" />
     <Compile Include="Common\Engine.cs" />
@@ -79,9 +79,11 @@
     <Compile Include="Public\Enum\CullMode.cs" />
     <Compile Include="Public\Enum\ElementSize.cs" />
     <Compile Include="Public\Enum\FillMode.cs" />
+    <Compile Include="Public\Enum\ParagraphAlignment.cs" />
     <Compile Include="Public\Enum\PrimitiveType.cs" />
     <Compile Include="Public\Enum\ResourceFormat.cs" />
     <Compile Include="Public\Enum\ResourceType.cs" />
+    <Compile Include="Public\Enum\TextAlignment.cs" />
     <Compile Include="Public\Enum\TextureAddressMode.cs" />
     <Compile Include="Public\Enum\TextureFilter.cs" />
     <Compile Include="Public\InputLayoutElement.cs" />
@@ -92,6 +94,11 @@
     <Compile Include="Resource\BufferResource\IndexBuffer.cs" />
     <Compile Include="Resource\BufferResource\InputLayout.cs" />
     <Compile Include="Resource\BufferResource\VertexBuffer.cs" />
+    <Compile Include="Resource\CanvasResource\CanvasBrush.cs" />
+    <Compile Include="Resource\CanvasResource\CanvasImage.cs" />
+    <Compile Include="Resource\CanvasResource\CanvasResource.cs" />
+    <Compile Include="Resource\CanvasResource\CanvasTextFormat.cs" />
+    <Compile Include="Resource\CanvasResource\CanvasText.cs" />
     <Compile Include="Resource\Resource.cs" />
     <Compile Include="Resource\ResourceHeap.cs" />
     <Compile Include="Resource\ResourceLayout.cs" />
