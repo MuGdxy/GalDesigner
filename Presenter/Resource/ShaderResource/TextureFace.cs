@@ -18,8 +18,6 @@ namespace Presenter
 
         private bool enableDepth;
 
-        private Vector4 backGround = Vector4.One;
-
         private void CreateResourceView()
         {
             renderTargetView = new SharpDX.Direct3D11.RenderTargetView(Engine.ID3D11Device, ID3D11Resource,
@@ -100,7 +98,7 @@ namespace Presenter
                 Engine.ImmediateContext.OutputMerger.SetTargets(depthStencilView, renderTargetView);
 
                 Engine.ImmediateContext.ClearRenderTargetView(renderTargetView,
-                    new SharpDX.Mathematics.Interop.RawColor4(backGround.X, backGround.Y, backGround.Z, backGround.W));
+                    new SharpDX.Mathematics.Interop.RawColor4(1, 1, 1, 1));
 
                 Engine.ImmediateContext.ClearDepthStencilView(depthStencilView,
                      SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
@@ -110,16 +108,11 @@ namespace Presenter
                 Engine.ImmediateContext.OutputMerger.SetTargets(renderTargetView);
 
                 Engine.ImmediateContext.ClearRenderTargetView(renderTargetView,
-                    new SharpDX.Mathematics.Interop.RawColor4(backGround.X, backGround.Y, backGround.Z, backGround.W));
+                    new SharpDX.Mathematics.Interop.RawColor4(1, 1, 1, 1));
             }
         }
 
         internal void ClearState()
-        {
-
-        }
-
-        internal void Presented()
         {
 
         }
@@ -139,15 +132,14 @@ namespace Presenter
             CreateCanvasTarget();
         }
 
+        public void ResetBuffer()
+        {
+            ResetResourceView();
+        }
+
         internal SharpDX.Direct2D1.Bitmap1 CanvasTarget => canvasTarget;
 
         public bool EnableDepthTest => enableDepth;
-
-        public Vector4 BackGround
-        {
-            set => backGround = value;
-            get => backGround;
-        }
     }
 
     public static partial class GraphicsPipeline

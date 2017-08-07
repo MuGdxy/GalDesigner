@@ -27,8 +27,6 @@ namespace Presenter
             Reset(GraphicsPipelineState);
 
             present.ResetViewPort();
-
-            present.ResetResourceView();
         }
 
         public static void Open(GraphicsPipelineState GraphicsPipelineState, TextureFace target)
@@ -44,22 +42,12 @@ namespace Presenter
             Reset(GraphicsPipelineState);
 
             textureFace.ResetViewPort();
-
-            textureFace.ResetResourceView();
         }
 
         public static void Close()
         {
             present?.ClearState();
             textureFace?.ClearState();
-
-            using (var commandList = Engine.ImmediateContext.FinishCommandList(false))
-            {
-                Engine.ID3D11Device.ImmediateContext.ExecuteCommandList(commandList, false);
-            }
-
-            present?.Presented();
-            textureFace?.Presented();
 
             InputAssemblerStage.Reset();
             VertexShaderStage.Reset();
@@ -71,11 +59,6 @@ namespace Presenter
             graphicsPipelineState = null;
 
             isOpened = false;
-        }
-
-        public static void WaitFlush()
-        {
-
         }
 
         public static bool IsOpened => isOpened;

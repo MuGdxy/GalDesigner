@@ -18,8 +18,6 @@ namespace Presenter
         private int width;
         private int height;
 
-        private Vector4 backGround = Vector4.One;
-
         private SharpDX.DXGI.SwapChain swapChain;
 
         private IntPtr handle;
@@ -91,7 +89,7 @@ namespace Presenter
             Engine.ImmediateContext.OutputMerger.SetTargets(depthStencilView, renderTargetView);
 
             Engine.ImmediateContext.ClearRenderTargetView(renderTargetView,
-                new SharpDX.Mathematics.Interop.RawColor4(backGround.X, backGround.Y, backGround.Z, backGround.W));
+                new SharpDX.Mathematics.Interop.RawColor4(1, 1, 1, 1));
 
             Engine.ImmediateContext.ClearDepthStencilView(depthStencilView,
                  SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
@@ -101,12 +99,6 @@ namespace Presenter
         {
 
         }
-
-        internal void Presented()
-        {
-            swapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
-        }
-
 
         public Present(IntPtr Handle, bool Windowed = true)
         {
@@ -152,6 +144,13 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref dxgifactory);
         }
 
+        public void SwapBuffer()
+        {
+            swapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
+
+            ResetResourceView();
+        }
+
         internal SharpDX.Direct3D11.Texture2D RenderTarget => renderTarget;
         internal SharpDX.Direct3D11.Texture2D DepthStencil => depthStencil;
 
@@ -160,12 +159,6 @@ namespace Presenter
 
         public int Width => width;
         public int Height => height;
-
-        public Vector4 BackGround
-        {
-            set => backGround = value;
-            get => backGround;
-        }
 
         public IntPtr Handle => handle;
 
