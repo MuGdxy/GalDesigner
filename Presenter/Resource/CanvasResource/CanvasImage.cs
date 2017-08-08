@@ -26,4 +26,14 @@ namespace Presenter
 
         ~CanvasImage() => SharpDX.Utilities.Dispose(ref bitmap); 
     }
+
+    public static partial class Canvas
+    {
+        public static void DrawImage(float left, float top, float right, float bottom,
+            CanvasImage image, float opacity = 1.0f)
+        {
+            ID2D1DeviceContext.DrawBitmap(image.ID2D1Bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
+                left, top, right, bottom), opacity, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+        }
+    }
 }

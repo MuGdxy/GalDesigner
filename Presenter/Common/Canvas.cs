@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public static class Canvas
+    public static partial class Canvas
     {
         private static SharpDX.Direct2D1.Device device;
         private static SharpDX.Direct2D1.DeviceContext context;

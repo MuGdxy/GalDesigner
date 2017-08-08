@@ -21,6 +21,9 @@ namespace Presenter
             textFormat = new SharpDX.DirectWrite.TextFormat(Engine.WriteFactory,
                 fontface, (SharpDX.DirectWrite.FontWeight)(fWeight = weight), SharpDX.DirectWrite.FontStyle.Normal,
                 fSize = size);
+
+            textFormat.TextAlignment = textAlignment;
+            textFormat.ParagraphAlignment = paragraphAlignment;
         }
 
         public float Size => fSize;
@@ -29,13 +32,21 @@ namespace Presenter
         public TextAlignment TextAlignment
         {
             get => (TextAlignment)textAlignment;
-            set => textAlignment = (SharpDX.DirectWrite.TextAlignment)value;
+            set
+            {
+                textAlignment = (SharpDX.DirectWrite.TextAlignment)value;
+                textFormat.TextAlignment = textAlignment;
+            }
         }
 
         public ParagraphAlignment ParagraphAlignment
         {
             get => (ParagraphAlignment)paragraphAlignment;
-            set => paragraphAlignment = (SharpDX.DirectWrite.ParagraphAlignment)value;
+            set
+            {
+                paragraphAlignment = (SharpDX.DirectWrite.ParagraphAlignment)value;
+                textFormat.ParagraphAlignment = paragraphAlignment;
+            }
         }
 
         internal SharpDX.DirectWrite.TextFormat TextFormat => textFormat;

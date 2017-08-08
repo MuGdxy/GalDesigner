@@ -151,6 +151,12 @@ namespace Presenter
             ResetResourceView();
         }
 
+        public void CopyFromTexture(Texture2D texture)
+        {
+            Engine.ImmediateContext.CopyResource(texture.ID3D11Resource,
+                renderTarget);
+        }
+
         internal SharpDX.Direct3D11.Texture2D RenderTarget => renderTarget;
         internal SharpDX.Direct3D11.Texture2D DepthStencil => depthStencil;
 
