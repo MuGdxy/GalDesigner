@@ -1,4 +1,4 @@
-# Application.Presenter
+﻿# Application.Presenter
 
 In Windows version, we will use `DirectX` to finish this task.
 
@@ -31,10 +31,10 @@ But if you want to destory a resource, you should tell Presenter that which reso
 
 We do not have only one kind of resource, we have many kinds of resource:
 
-- Font
 - Bitmap
 - Brush
-- TextLayout(A Text you can think it is a bitmap)
+- Text(A Text you can think it is a bitmap)
+- TextFormat(Manager the format of Text)
 
 ### Transform
 
@@ -61,3 +61,10 @@ You can ignore this.
 Our surface where we draw is a Texture in 3D world. We will set a camera to see this Texture.
 So we use `Direct2D` to render our game and `Direct3D` to present it to our window. 
 
+### Need Finish
+
+- Resource  (<font color = "green">✓</font>)
+- DrawCommand (<font color = "green">✓</font>)
+- Transform (<font color = "green">✓</font>)
+- Bitmap to Texture (<font color = "green">✓</font>)
+- Audio

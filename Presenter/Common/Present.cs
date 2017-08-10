@@ -15,12 +15,22 @@ namespace Presenter
         private SharpDX.Direct3D11.Texture2D renderTarget;
         private SharpDX.Direct3D11.Texture2D depthStencil;
 
+        private SharpDX.Direct2D1.Bitmap1 canvasTarget;
+
         private int width;
         private int height;
 
         private SharpDX.DXGI.SwapChain swapChain;
 
         private IntPtr handle;
+
+        private void CreateCanvasTarget()
+        {
+            using (var surface = renderTarget.QueryInterface<SharpDX.DXGI.Surface>())
+            {
+                canvasTarget = new SharpDX.Direct2D1.Bitmap1(Canvas.ID2D1DeviceContext, surface);
+            }
+        }
 
         private void CreateResource(ref SharpDX.Direct3D11.Texture2D resource,
             SharpDX.Direct3D11.BindFlags bindFlags, SharpDX.DXGI.Format format)
@@ -139,6 +149,8 @@ namespace Presenter
 
             CreateResourceView();
 
+            CreateCanvasTarget();
+
             SharpDX.Utilities.Dispose(ref dxgidevice);
             SharpDX.Utilities.Dispose(ref dxgiadapte);
             SharpDX.Utilities.Dispose(ref dxgifactory);
@@ -162,6 +174,8 @@ namespace Presenter
 
         internal SharpDX.Direct3D11.RenderTargetView RenderTargetView => renderTargetView;
         internal SharpDX.Direct3D11.DepthStencilView DepthStencilView => depthStencilView;
+
+        internal SharpDX.Direct2D1.Bitmap1 CanvasTarget => canvasTarget;
 
         internal static SharpDX.DXGI.Format DepthStencilFormat => SharpDX.DXGI.Format.D24_UNorm_S8_UInt;
         internal static SharpDX.DXGI.Format RenderTargetFormat => SharpDX.DXGI.Format.R8G8B8A8_UNorm;

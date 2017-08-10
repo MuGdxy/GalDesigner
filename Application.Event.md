@@ -1,4 +1,4 @@
-# Application.Event
+﻿# Application.Event
 
 There are events in Application.
 
@@ -12,7 +12,7 @@ In Application, we only need this events:
 
 There is process about Application run:
 
-- A Event is triggered, Application can get this event and event's data(input key or mouse position).
+- A Event is triggered, Application can get this event and event's data(input key or mouse position). 
 - Process this event.
 - Send this to GalEngine.
 

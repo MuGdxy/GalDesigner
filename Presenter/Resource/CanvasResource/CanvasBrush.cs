@@ -45,5 +45,20 @@ namespace Presenter
                 new SharpDX.Mathematics.Interop.RawVector2(centerPosX, centerPosY), radiusX, radiusY),
                 brush.ID2D1Brush, strokeWidth);
         }
+
+        public static void FillRectangle(float left, float top, float right, float bottom,
+            CanvasBrush brush)
+        {
+            ID2D1DeviceContext.FillRectangle(new SharpDX.Mathematics.Interop.RawRectangleF(left,
+                top, right, bottom), brush.ID2D1Brush);
+        }
+
+        public static void FillEllipse(float centerPosX, float centerPosY, float radiusX, float radiusY,
+            CanvasBrush brush)
+        {
+            ID2D1DeviceContext.FillEllipse(new SharpDX.Direct2D1.Ellipse(
+                new SharpDX.Mathematics.Interop.RawVector2(centerPosX, centerPosY), radiusX, radiusY),
+                brush.ID2D1Brush);
+        }
     }
 }

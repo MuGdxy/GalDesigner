@@ -28,13 +28,10 @@ namespace TestApp
 
         public override void OnUpdate(object sender)
         {
-            textureFace.ResetBuffer();
-
-            Canvas.BeginDraw(textureFace);
+            Canvas.BeginDraw(present);
 
             Canvas.EndDraw();
-
-            present.CopyFromTexture(textureFace);
+            
             present.SwapBuffer();
 
             base.OnUpdate(sender);
