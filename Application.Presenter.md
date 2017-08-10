@@ -63,8 +63,8 @@ So we use `Direct2D` to render our game and `Direct3D` to present it to our wind
 
 ### Need Finish
 
-- Resource  (<font color = "green">✓</font>)
-- DrawCommand (<font color = "green">✓</font>)
-- Transform (<font color = "green">✓</font>)
-- Bitmap to Texture (<font color = "green">✓</font>)
-- Audio
+- Resource  ✓
+- DrawCommand ✓
+- Transform ✓
+- Bitmap to Texture ✓
+- Audio 
