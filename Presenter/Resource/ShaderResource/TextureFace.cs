@@ -117,6 +117,20 @@ namespace Presenter
 
         }
 
+        private TextureFace(Texture2D texture, bool enableDepthBuffer = false) : base(texture)
+        {
+            enableDepth = enableDepthBuffer;
+
+            if (enableDepth is true)
+            {
+                CreateResource(ref depthStencil, SharpDX.Direct3D11.BindFlags.DepthStencil,
+                    Present.DepthStencilFormat);
+            }
+
+            CreateResourceView();
+            CreateCanvasTarget();
+        }
+        
         public TextureFace(int width, int height, bool enableDepthBuffer = false) 
             : base(width, height, (ResourceFormat)Present.RenderTargetFormat, 1)
         {
@@ -135,6 +149,11 @@ namespace Presenter
         public void ResetBuffer()
         {
             ResetResourceView();
+        }
+
+        public static TextureFace FromTexture2D(Texture2D texture, bool enableDepthBuffer = false)
+        {
+            return new TextureFace(texture, enableDepthBuffer);
         }
 
         internal SharpDX.Direct2D1.Bitmap1 CanvasTarget => canvasTarget;

@@ -160,6 +160,9 @@ namespace Presenter
         internal SharpDX.Direct3D11.Texture2D RenderTarget => renderTarget;
         internal SharpDX.Direct3D11.Texture2D DepthStencil => depthStencil;
 
+        internal SharpDX.Direct3D11.RenderTargetView RenderTargetView => renderTargetView;
+        internal SharpDX.Direct3D11.DepthStencilView DepthStencilView => depthStencilView;
+
         internal static SharpDX.DXGI.Format DepthStencilFormat => SharpDX.DXGI.Format.D24_UNorm_S8_UInt;
         internal static SharpDX.DXGI.Format RenderTargetFormat => SharpDX.DXGI.Format.R8G8B8A8_UNorm;
 

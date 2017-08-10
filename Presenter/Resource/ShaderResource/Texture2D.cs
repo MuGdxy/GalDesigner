@@ -14,6 +14,21 @@ namespace Presenter
 
         private int rowPitch;
 
+        protected Texture2D(Texture2D baseTexture)
+        {
+            tWidth = baseTexture.tWidth;
+            tHeight = baseTexture.tHeight;
+            mipLevels = baseTexture.mipLevels;
+
+            rowPitch = baseTexture.rowPitch;
+
+            size = baseTexture.size;
+            resource = baseTexture.resource;
+            resourceview = baseTexture.resourceview;
+
+            pixelFormat = baseTexture.pixelFormat;
+        }
+
         public Texture2D(int width, int height, ResourceFormat format, int miplevels = 1)
         {
             tWidth = width;
