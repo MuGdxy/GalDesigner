@@ -14,6 +14,9 @@ namespace Presenter
 
         private static SharpDX.WIC.ImagingFactory imagingFactory;
 
+        private static SharpDX.XAudio2.XAudio2 xAudio;
+        private static SharpDX.XAudio2.MasteringVoice masteringVoice;
+
         private static SharpDX.Direct3D11.Device device;
         private static SharpDX.Direct3D11.DeviceContext immediateContext;
 
@@ -35,6 +38,10 @@ namespace Presenter
             writeFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
           
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
+
+            xAudio = new SharpDX.XAudio2.XAudio2();
+
+            masteringVoice = new SharpDX.XAudio2.MasteringVoice(xAudio);
         }
 
         internal static SharpDX.Direct2D1.Factory1 ID2D1Factory
@@ -44,6 +51,8 @@ namespace Presenter
         }
 
         internal static SharpDX.DirectWrite.Factory WriteFactory => writeFactory;
+
+        internal static SharpDX.XAudio2.XAudio2 XAudio => xAudio;
 
         internal static SharpDX.WIC.ImagingFactory ImagingFactory
         {

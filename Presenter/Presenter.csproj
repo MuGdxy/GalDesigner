@@ -46,6 +46,9 @@
     <Reference Include="SharpDX.DXGI, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.DXGI.4.0.1\lib\net45\SharpDX.DXGI.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.XAudio2, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.XAudio2.4.0.1\lib\net45\SharpDX.XAudio2.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -108,6 +111,8 @@
     <Compile Include="Resource\ShaderResource\Texture2D.cs" />
     <Compile Include="Resource\ShaderResource\Texture3D.cs" />
     <Compile Include="Resource\ShaderResource\TextureFace.cs" />
+    <Compile Include="Resource\VoiceResource\SourceVoice.cs" />
+    <Compile Include="Resource\VoiceResource\VoiceResource.cs" />
     <Compile Include="Shader\PixelShader.cs" />
     <Compile Include="Shader\Shader.cs" />
     <Compile Include="Shader\VertexShader.cs" />
