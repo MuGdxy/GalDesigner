@@ -74,5 +74,6 @@ namespace Presenter
         public static float DpiY => d2d1Factory.DesktopDpi.Height;
 
         public static float AppScale => (DpiX + DpiY) / 192;
+
     }
 }
