@@ -19,12 +19,18 @@ namespace Presenter
                 new SharpDX.Size2(iWidth = width, iHeight = height));
         }
 
+        public override void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref bitmap);
+            base.Dispose();
+        }
+
         public int Width => iWidth;
         public int Height => iHeight;
 
         internal SharpDX.Direct2D1.Bitmap ID2D1Bitmap => bitmap;
 
-        ~CanvasImage() => SharpDX.Utilities.Dispose(ref bitmap); 
+        ~CanvasImage() => SharpDX.Utilities.Dispose(ref bitmap);
     }
 
     public static partial class Canvas

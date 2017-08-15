@@ -24,6 +24,12 @@ namespace Presenter
                 tText = text, (textFormat = format).TextFormat, tWidth = width, tHeight = height);
         }
 
+        public override void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref textLayout);
+            base.Dispose();
+        }
+
         internal SharpDX.DirectWrite.TextLayout TextLayout => textLayout;
 
         public CanvasTextFormat TextFormat => textFormat;

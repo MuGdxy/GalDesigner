@@ -38,10 +38,6 @@ namespace Presenter
             writeFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
           
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
-
-            xAudio = new SharpDX.XAudio2.XAudio2();
-
-            masteringVoice = new SharpDX.XAudio2.MasteringVoice(xAudio);
         }
 
         internal static SharpDX.Direct2D1.Factory1 ID2D1Factory
@@ -69,11 +65,25 @@ namespace Presenter
         internal static SharpDX.Direct3D11.DeviceContext ImmediateContext
             => immediateContext;
 
+        internal static void CreateAudio()
+        { 
+            xAudio = new SharpDX.XAudio2.XAudio2();
+            masteringVoice = new SharpDX.XAudio2.MasteringVoice(xAudio);
+        }
+
+        internal static void DestoryAudio()
+        {
+            masteringVoice.DestroyVoice();
+            masteringVoice.Dispose();
+            xAudio.Dispose();
+        }
 
         public static float DpiX => d2d1Factory.DesktopDpi.Width;
         public static float DpiY => d2d1Factory.DesktopDpi.Height;
 
         public static float AppScale => (DpiX + DpiY) / 192;
+
+        
 
     }
 }

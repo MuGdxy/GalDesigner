@@ -259,3 +259,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/TestApp/Test2.wav
+/TestApp/Test1.wav
+/TestApp/Test2.wav
+/TestApp/Test1.wav

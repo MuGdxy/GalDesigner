@@ -16,6 +16,12 @@ namespace Presenter
 
         public ResourceFormat PixelFormat => pixelFormat;
 
+        public override void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref resourceview);
+            base.Dispose();
+        }
+
         ~ShaderResource() => SharpDX.Utilities.Dispose(ref resourceview);
     }
 

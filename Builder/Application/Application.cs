@@ -91,7 +91,7 @@ namespace Builder
                 foreach (var item in Windows)
                 {
                     if (item.IsEnable is false) continue;
-                    if (item.IsVailed is false) Remove(item);
+                    if (item.IsVailed is false) { Remove(item); continue; }
 
                     item.PrivateOnUpdate(item);
                 }

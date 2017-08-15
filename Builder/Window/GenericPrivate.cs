@@ -156,7 +156,7 @@ namespace Builder
                     PrivateKeyEvent(this, new KeyEventArgs() { isdown = false, keycode = (KeyCode)wParam });
                     break;
                 case APILibrary.Win32.WinMsg.WM_DESTROY:
-                    OnDestroyed(this);
+                    PrivateDestory(this);
                     isVailed = false;
                     APILibrary.Win32.Internal.UnRegisterAppinfo(appinfo.lpszClassName, appinfo.hInstance);
                     APILibrary.Win32.Internal.PostQuitMessage(0);

@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class CanvasResource
+    public class CanvasResource : IDisposable
     {
+        public virtual void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }

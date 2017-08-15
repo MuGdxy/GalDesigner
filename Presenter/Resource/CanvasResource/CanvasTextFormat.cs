@@ -26,6 +26,12 @@ namespace Presenter
             textFormat.ParagraphAlignment = paragraphAlignment;
         }
 
+        public override void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref textFormat);
+            base.Dispose();
+        }
+
         public float Size => fSize;
         public int Weight => fWeight;
 

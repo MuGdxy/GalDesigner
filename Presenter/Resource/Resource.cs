@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public abstract class Resource
+    public abstract class Resource : IDisposable
     {
         protected int size;
 
@@ -18,10 +18,18 @@ namespace Presenter
 
         public abstract void Update(IntPtr data);
 
+        public virtual void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref resource);
+
+            GC.SuppressFinalize(this);
+        }
+
         public int Size => size;
 
         internal SharpDX.Direct3D11.Resource ID3D11Resource => resource;
-
+        
         ~Resource() => SharpDX.Utilities.Dispose(ref resource);
     }
+
 }

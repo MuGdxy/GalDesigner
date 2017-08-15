@@ -5,6 +5,7 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{4698C6F6-8029-4408-BF78-AE7F34F9B309}"
 	ProjectSection(SolutionItems) = preProject
+		Bug.md = Bug.md
 		Event.md = Event.md
 		GalDesigner.md = GalDesigner.md
 	EndProjectSection

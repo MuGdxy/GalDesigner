@@ -49,10 +49,22 @@ namespace Presenter
             sourceVoice.Stop();
         }
 
+        public override void Dispose()
+        {
+            sourceVoice.DestroyVoice();
+            sourceVoice.Dispose();
+            audioBuffer.Stream.Dispose();
+
+            base.Dispose();
+        }
+
         ~SourceVoice()
         {
-          
+            sourceVoice.DestroyVoice();
+            sourceVoice.Dispose();
+            audioBuffer.Stream.Dispose();
         }
+
     }    
 
 }

@@ -16,6 +16,12 @@ namespace Presenter
                 new SharpDX.Mathematics.Interop.RawColor4(red, green, blue, alpha));
         }
 
+        public override void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref brush);
+            base.Dispose();
+        }
+
         internal SharpDX.Direct2D1.Brush ID2D1Brush => brush;
 
         ~CanvasBrush() => SharpDX.Utilities.Dispose(ref brush);

@@ -159,6 +159,25 @@ namespace Presenter
         internal SharpDX.Direct2D1.Bitmap1 CanvasTarget => canvasTarget;
 
         public bool EnableDepthTest => enableDepth;
+
+        public override void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref depthStencil);
+            SharpDX.Utilities.Dispose(ref canvasTarget);
+
+            SharpDX.Utilities.Dispose(ref renderTargetView);
+            SharpDX.Utilities.Dispose(ref depthStencilView);
+            base.Dispose();
+        }
+
+        ~TextureFace()
+        {
+            SharpDX.Utilities.Dispose(ref depthStencil);
+            SharpDX.Utilities.Dispose(ref canvasTarget);
+
+            SharpDX.Utilities.Dispose(ref renderTargetView);
+            SharpDX.Utilities.Dispose(ref depthStencilView);
+        }
     }
 
     public static partial class GraphicsPipeline

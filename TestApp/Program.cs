@@ -17,6 +17,8 @@ namespace TestApp
             Application.Add(new TestWindow(AppName, 800, 600));
 
             Application.RunLoop();
+
+            Resource.Destory();
         }
     }
 }

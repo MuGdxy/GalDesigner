@@ -17,6 +17,8 @@ namespace TestApp
         private CanvasBrush redBrush = new CanvasBrush(1, 0, 0);
         private CanvasTextFormat textFormat = new CanvasTextFormat("Consolas", 12);
 
+     
+
         public TestWindow(string Title, int Width, int Height) : base(Title, Width, Height)
         {
             present = new Present(Handle);
@@ -24,6 +26,9 @@ namespace TestApp
             textureFace = new TextureFace(Width, Height);
 
             Show();
+
+            Resource.voice1.Play();
+            Resource.voice2.Play();
         }
 
         public override void OnMouseClick(object sender, MouseClickEventArgs e)
