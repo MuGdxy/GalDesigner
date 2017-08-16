@@ -159,7 +159,6 @@ namespace Builder
                     PrivateDestory(this);
                     isVailed = false;
                     APILibrary.Win32.Internal.UnRegisterAppinfo(appinfo.lpszClassName, appinfo.hInstance);
-                    APILibrary.Win32.Internal.PostQuitMessage(0);
                     break;
                 case APILibrary.Win32.WinMsg.WM_KILLFOCUS:
                     isFocus = false;

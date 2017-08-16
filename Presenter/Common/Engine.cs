@@ -50,6 +50,8 @@ namespace Presenter
 
         internal static SharpDX.XAudio2.XAudio2 XAudio => xAudio;
 
+        internal static SharpDX.XAudio2.MasteringVoice MasteringVoice => masteringVoice;
+
         internal static SharpDX.WIC.ImagingFactory ImagingFactory
         {
             private set => imagingFactory = value;
