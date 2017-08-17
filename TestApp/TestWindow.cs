@@ -27,7 +27,7 @@ namespace TestApp
 
             Show();
 
-            Resource.voice1.Play();
+            Resource.voicePlayer1.Play();
         }
 
         public override void OnMouseClick(object sender, MouseClickEventArgs e)

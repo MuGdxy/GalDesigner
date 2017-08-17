@@ -38,6 +38,39 @@ namespace Presenter
             writeFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
           
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
+
+            CreateAudio();
+        }
+
+        /*public static void Start()
+        {
+#if DEBUG
+            ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
+                 SharpDX.Direct3D11.DeviceCreationFlags.Debug | SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport);
+
+            ID2D1Factory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded);
+#else
+            ID3D11Device = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
+                SharpDX.Direct3D11.DeviceCreationFlags.BgraSupport); 
+
+            ID2D1Factory = new SharpDX.Direct2D1.Factory1(SharpDX.Direct2D1.FactoryType.SingleThreaded);
+#endif
+            immediateContext = ID3D11Device.ImmediateContext;
+
+            writeFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
+
+            ImagingFactory = new SharpDX.WIC.ImagingFactory();
+        }*/
+
+        public static void Stop()
+        {
+            SharpDX.Utilities.Dispose(ref device);
+            SharpDX.Utilities.Dispose(ref d2d1Factory);
+            SharpDX.Utilities.Dispose(ref immediateContext);
+            SharpDX.Utilities.Dispose(ref writeFactory);
+            SharpDX.Utilities.Dispose(ref imagingFactory);
+
+            DestoryAudio();
         }
 
         internal static SharpDX.Direct2D1.Factory1 ID2D1Factory

@@ -111,7 +111,8 @@
     <Compile Include="Resource\ShaderResource\Texture2D.cs" />
     <Compile Include="Resource\ShaderResource\Texture3D.cs" />
     <Compile Include="Resource\ShaderResource\TextureFace.cs" />
-    <Compile Include="Resource\VoiceResource\SourceVoice.cs" />
+    <Compile Include="Resource\VoiceResource\VoiceBuffer.cs" />
+    <Compile Include="Resource\VoiceResource\VoicePlayer.cs" />
     <Compile Include="Resource\VoiceResource\VoiceResource.cs" />
     <Compile Include="Shader\PixelShader.cs" />
     <Compile Include="Shader\Shader.cs" />

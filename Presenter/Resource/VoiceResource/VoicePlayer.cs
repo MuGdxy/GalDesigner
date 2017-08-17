@@ -6,30 +6,26 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class SourceVoice : VoiceResource
+    public class VoicePlayer : VoiceResource
     {
         private SharpDX.XAudio2.SourceVoice sourceVoice;
+
         private SharpDX.XAudio2.AudioBuffer audioBuffer;
+    
+        private VoiceBuffer voiceBuffer;
 
-        private SharpDX.Multimedia.WaveFormat waveFormat;
-        private SharpDX.Multimedia.SoundStream soundStream;
-
-        public SourceVoice(string fileName)
+        public VoicePlayer(VoiceBuffer voiceBuffer)
         {
-            soundStream = new SharpDX.Multimedia.SoundStream(System.IO.File.OpenRead(fileName));
-
-            waveFormat = soundStream.Format;
+            this.voiceBuffer = voiceBuffer;
 
             audioBuffer = new SharpDX.XAudio2.AudioBuffer()
             {
-                Stream = soundStream.ToDataStream(),
-                AudioBytes = (int)soundStream.Length,
+                Stream = voiceBuffer.DataStream,
+                AudioBytes = (int)voiceBuffer.SoundStream.Length,
                 Flags = SharpDX.XAudio2.BufferFlags.EndOfStream
             };
 
-            soundStream.Close();
-
-            sourceVoice = new SharpDX.XAudio2.SourceVoice(Engine.XAudio, waveFormat, true);
+            sourceVoice = new SharpDX.XAudio2.SourceVoice(Engine.XAudio, voiceBuffer.WaveFormat);
         }
 
         public void Play()
@@ -40,7 +36,7 @@ namespace Presenter
         public void PlayLoop(int LoopCount)
         {
             audioBuffer.LoopCount = LoopCount;
-            sourceVoice.SubmitSourceBuffer(audioBuffer, soundStream.DecodedPacketsInfo);
+            sourceVoice.SubmitSourceBuffer(audioBuffer, voiceBuffer.SoundStream.DecodedPacketsInfo);
             sourceVoice.Start();
         }
 
@@ -53,18 +49,15 @@ namespace Presenter
         {
             sourceVoice.DestroyVoice();
             sourceVoice.Dispose();
-            audioBuffer.Stream.Dispose();
 
             base.Dispose();
         }
 
-        ~SourceVoice()
+        ~VoicePlayer()
         {
             sourceVoice.DestroyVoice();
             sourceVoice.Dispose();
-            audioBuffer.Stream.Dispose();
         }
 
-    }    
-
+    }
 }

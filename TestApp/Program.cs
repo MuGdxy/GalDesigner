@@ -19,6 +19,8 @@ namespace TestApp
             Application.RunLoop();
 
             Resource.Destory();
+
+            Presenter.Engine.Stop();
         }
     }
 }
