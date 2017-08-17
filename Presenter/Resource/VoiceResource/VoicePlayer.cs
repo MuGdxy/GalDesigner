@@ -8,15 +8,18 @@ namespace Presenter
 {
     public class VoicePlayer : VoiceResource
     {
+        private bool isStoping = true;
+        private bool isStream = false;
+
         private SharpDX.XAudio2.SourceVoice sourceVoice;
 
         private SharpDX.XAudio2.AudioBuffer audioBuffer;
     
-        private VoiceBuffer voiceBuffer;
+        private SharpDX.Multimedia.SoundStream soundStream;
 
         public VoicePlayer(VoiceBuffer voiceBuffer)
         {
-            this.voiceBuffer = voiceBuffer;
+            soundStream = voiceBuffer.SoundStream;
 
             audioBuffer = new SharpDX.XAudio2.AudioBuffer()
             {
@@ -28,6 +31,17 @@ namespace Presenter
             sourceVoice = new SharpDX.XAudio2.SourceVoice(Engine.XAudio, voiceBuffer.WaveFormat);
         }
 
+        public VoicePlayer(string fileName)
+        {
+            soundStream = new SharpDX.Multimedia.SoundStream(System.IO.File.OpenRead(fileName));
+
+            audioBuffer = new SharpDX.XAudio2.AudioBuffer();
+
+            sourceVoice = new SharpDX.XAudio2.SourceVoice(Engine.XAudio, soundStream.Format);
+            
+            isStream = true;
+        }
+
         public void Play()
         {
             PlayLoop(1);
@@ -35,20 +49,39 @@ namespace Presenter
 
         public void PlayLoop(int LoopCount)
         {
-            audioBuffer.LoopCount = LoopCount;
-            sourceVoice.SubmitSourceBuffer(audioBuffer, voiceBuffer.SoundStream.DecodedPacketsInfo);
-            sourceVoice.Start();
+            isStoping = false;
+
+            if (isStream is true)
+            {
+                //Need Update
+                if (isStoping is true) return;
+            }
+            else
+            {
+                audioBuffer.LoopCount = LoopCount;
+                sourceVoice.SubmitSourceBuffer(audioBuffer, soundStream.DecodedPacketsInfo);
+                sourceVoice.Start();
+            }
         }
 
         public void Stop()
         {
-            sourceVoice.Stop();
+            isStoping = true;
+
+            if (isStream is false)
+                sourceVoice.Stop();
         }
 
         public override void Dispose()
         {
             sourceVoice.DestroyVoice();
             sourceVoice.Dispose();
+
+            if (isStream is true)
+            {
+                soundStream.Close();
+                SharpDX.Utilities.Dispose(ref soundStream);
+            }
 
             base.Dispose();
         }
@@ -57,6 +90,12 @@ namespace Presenter
         {
             sourceVoice.DestroyVoice();
             sourceVoice.Dispose();
+
+            if (isStream is true)
+            {
+                soundStream.Close();
+                SharpDX.Utilities.Dispose(ref soundStream);
+            }
         }
 
     }
