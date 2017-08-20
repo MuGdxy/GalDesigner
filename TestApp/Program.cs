@@ -14,6 +14,8 @@ namespace TestApp
 
         static void Main(string[] args)
         {
+            Resource.Create();
+
             Application.Add(new TestWindow(AppName, 800, 600));
 
             Application.RunLoop();

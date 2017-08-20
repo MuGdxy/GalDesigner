@@ -114,6 +114,7 @@
     <Compile Include="Resource\VoiceResource\VoiceBuffer.cs" />
     <Compile Include="Resource\VoiceResource\VoicePlayer.cs" />
     <Compile Include="Resource\VoiceResource\VoiceResource.cs" />
+    <Compile Include="Resource\VoiceResource\VoiceStream.cs" />
     <Compile Include="Shader\PixelShader.cs" />
     <Compile Include="Shader\Shader.cs" />
     <Compile Include="Shader\VertexShader.cs" />

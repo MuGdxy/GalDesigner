@@ -24,6 +24,24 @@ namespace Presenter
             soundStream.Close();
         }
 
+        public VoiceBuffer(VoiceStream voiceStream, int byteStartPos = 0, long byteLength = 0)
+        {
+#if DEBUG
+            if (byteLength + byteStartPos - 1 >= voiceStream.Length)
+                throw new ArgumentOutOfRangeException("Length is out of range.");
+#endif
+            voiceStream.SoundStream.Position = byteStartPos;
+
+            byte[] buffer = new byte[byteLength];
+
+            voiceStream.SoundStream.Read(buffer, 0, (int)byteLength);
+
+            dataStream = SharpDX.DataStream.Create(buffer, true, true);
+
+            waveFormat = voiceStream.SoundStream.Format;
+            soundStream = voiceStream.SoundStream;
+        }
+
         internal SharpDX.DataStream DataStream => dataStream;
 
         internal SharpDX.Multimedia.WaveFormat WaveFormat => waveFormat;
