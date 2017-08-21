@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\APILibrary\APILibrary.csproj">
-      <Project>{5359e988-f8fb-4597-9655-9f976b5f1cf5}</Project>
+      <Project>{1bfd5a07-ed14-4cba-bde3-648db0d5206b}</Project>
       <Name>APILibrary</Name>
     </ProjectReference>
   </ItemGroup>
