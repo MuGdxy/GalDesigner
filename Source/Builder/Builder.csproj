@@ -49,11 +49,5 @@
     <Compile Include="Window\GenericStatic.cs" />
     <Compile Include="Window\GenericWindow.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\APILibrary\APILibrary.csproj">
-      <Project>{1bfd5a07-ed14-4cba-bde3-648db0d5206b}</Project>
-      <Name>APILibrary</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
