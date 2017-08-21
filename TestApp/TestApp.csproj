@@ -59,11 +59,11 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Builder\Builder.csproj">
+    <ProjectReference Include="..\Source\Builder\Builder.csproj">
       <Project>{630d9395-ee2a-4301-bef7-bfaffa2d2d38}</Project>
       <Name>Builder</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Presenter\Presenter.csproj">
+    <ProjectReference Include="..\Source\Presenter\Presenter.csproj">
       <Project>{856d69c7-4ebf-4ded-8410-9691179cf021}</Project>
       <Name>Presenter</Name>
     </ProjectReference>

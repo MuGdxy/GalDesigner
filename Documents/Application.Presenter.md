@@ -1,4 +1,4 @@
-﻿# Application.Presenter
+﻿# Application.Presenter ✓
 
 In Windows version, we will use `DirectX` to finish this task.
 
@@ -67,4 +67,4 @@ So we use `Direct2D` to render our game and `Direct3D` to present it to our wind
 - DrawCommand ✓
 - Transform ✓
 - Bitmap to Texture ✓
-- Audio 
+- Audio(Video Later) ✓

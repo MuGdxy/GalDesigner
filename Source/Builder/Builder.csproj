@@ -50,7 +50,7 @@
     <Compile Include="Window\GenericWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\APILibrary\APILibrary\APILibrary.csproj">
+    <ProjectReference Include="..\APILibrary\APILibrary.csproj">
       <Project>{5359e988-f8fb-4597-9655-9f976b5f1cf5}</Project>
       <Name>APILibrary</Name>
     </ProjectReference>

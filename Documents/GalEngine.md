@@ -41,7 +41,7 @@ Scripts are design for user to design their own Games.
 
 We can use script to make game differently.
 
-For GalEngine, It need to run a script. There are stages of how to run a script.
+For GalEngine, It need to run a script. There are stages of runing a script.
 
 - Initialize a script.
 - Enter the entryScriptState and set pre GameState.
