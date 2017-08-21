@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presenter", "Source\Present
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GalEngine", "Source\GalEngine\GalEngine.csproj", "{26AFD910-AD7C-4165-8622-CB8103C2CA7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreLibrary", "Source\CoreLibrary\CoreLibrary.csproj", "{FFFA5E8E-D6B6-4F6D-8334-524A9E12A4C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26AFD910-AD7C-4165-8622-CB8103C2CA7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFFA5E8E-D6B6-4F6D-8334-524A9E12A4C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFA5E8E-D6B6-4F6D-8334-524A9E12A4C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFA5E8E-D6B6-4F6D-8334-524A9E12A4C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFA5E8E-D6B6-4F6D-8334-524A9E12A4C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{9ECAF0B0-7ED2-4C51-9A89-059DD0692EF6} = {D1F0759E-2FED-4EFA-9FFE-3C5C9FB8D74E}
 		{630D9395-EE2A-4301-BEF7-BFAFFA2D2D38} = {99839C46-350B-45F7-BA2A-745C2D275690}
 		{856D69C7-4EBF-4DED-8410-9691179CF021} = {99839C46-350B-45F7-BA2A-745C2D275690}
+		{FFFA5E8E-D6B6-4F6D-8334-524A9E12A4C0} = {99839C46-350B-45F7-BA2A-745C2D275690}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61ACECAF-B6E4-40A6-BDAD-1619F5C966DD}
