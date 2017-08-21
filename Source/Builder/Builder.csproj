@@ -50,9 +50,9 @@
     <Compile Include="Window\GenericWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoreLibrary\CoreLibrary.csproj">
-      <Project>{fffa5e8e-d6b6-4f6d-8334-524a9e12a4c0}</Project>
-      <Name>CoreLibrary</Name>
+    <ProjectReference Include="..\APILibrary\APILibrary.csproj">
+      <Project>{9f6b254e-6770-4a79-97f3-671d98618ac0}</Project>
+      <Name>APILibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
