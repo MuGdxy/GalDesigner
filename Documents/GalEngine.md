@@ -54,7 +54,7 @@ For GalEngine, It need to run a script. There are stages of runing a script.
 
 The Scirpt is not synchronized with GalEngine. The Script tell GalEngine that what state we are, what nextStates we can go, the condition we go a nextState. And the GalEngine decide when go to nextState, go to nextState and so on.
 
-See more in [GalEngine.Script.md]().
+See more in [GalEngine.Script.md](/GalEngine.Script.md).
 
 ## Event 
 
@@ -64,7 +64,7 @@ The main things that GalEngine do. GalEngine need to process many events which f
 - Process event.
 - Give a result to Application.
 
-See more in [GalEngine.Event.md]()
+See more in [GalEngine.Event.md](/GalEngine.Event.md)
 
 ## Control
 
@@ -74,7 +74,7 @@ But GalEngine only manager the control's property, events(such as click, destory
 
 **We can use control in Script as variable.**
 
-See more in [GalEngine.Contorl.md]()
+See more in [GalEngine.Contorl.md](/GalEngine.Contorl.md)
 
 
 
