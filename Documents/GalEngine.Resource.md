@@ -5,18 +5,57 @@ So we need to manager load and release resource.
 
 We define a file(**.reslist**) to give a way to manager resource.
 
+The file only tell the GalEngine what resource we will use. 
+The GalEngine will load and release resource by itself, you don't need to care this.
+
+**To be exact, GalEngine will count the used times of resource. If it is zero, we will load or release it(Like COM).**
+
 ## Format
 
-For one line only have one resource to define.
+For one line, only have one resource to define.
 
 ```resList
 
-ResourceType ResourceName = ResourcePath from StartState to EndState
+[Type = ResourceType, Tag = ResourceTag, FilePath = ResourcePath]
 
-//Like this: Image Image1 = "XX.Png" from "State1" to "State2"
+or 
+
+[ResourceType, ResourceTag, FilePath] 
+
+//You can not do this: [Type = ResourceType, ResourceTag, FilePath] 
+
+//For example: [Type = Image, Tag = Image1, FilePath = "Image1.Png"]
 ```
 
-It means that we will load a resource in StartState(before this state start) and release it in EndState(after this state end).
+## ResourceType
 
-If you do not set the StartState and EndState, we will manager it by GameEngine. 
-In most time, you need not to manager it by yourself.
+A resource must have it's type. GalEngine need this to load resource.
+
+### Image
+
+Image Resource such as BackGround, UI and so on. 
+We use `WIC` to load this file. 
+So if `WIC` support this file format, we support it, too.
+
+**Support Format:** `bmp`, `jpg`, `png`, `jpeg`, `dds`...
+
+### Audio
+
+Audio Resource such like BackGroundMusic, Voice and so on. 
+We use `XAudio` to do this.
+So if `XAudio` support this file format, we support it, too.
+
+**Support Format:** `XWMA`, `WAV` ...
+
+## ResourceTag
+
+A resource must have it's ID to distinguish it from resources.
+
+So we define the `ResourceTag`. 
+It likes a string, but we don't use `""`.
+You can think it is variable.
+
+## FilePath
+
+A resource is loaded from file.
+So we need the file's path.
