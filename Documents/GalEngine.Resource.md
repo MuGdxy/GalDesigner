@@ -18,12 +18,6 @@ For one line, only have one resource to define.
 
 [Type = ResourceType, Tag = ResourceTag, FilePath = ResourcePath]
 
-or 
-
-[ResourceType, ResourceTag, FilePath] 
-
-//You can not do this: [Type = ResourceType, ResourceTag, FilePath] 
-
 //For example: [Type = Image, Tag = Image1, FilePath = "Image1.Png"]
 ```
 
