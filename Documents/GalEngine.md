@@ -41,17 +41,6 @@ Scripts are design for user to design their own Games.
 
 We can use script to make game differently.
 
-For GalEngine, It need to run a script. There are stages of runing a script.
-
-- Initialize a script.
-- Enter the entryScriptState and set pre GameState.
-- Wait to next ScriptState.
-- Go next ScriptState.
-- Repeat 
-- End or goto other Script.
-
-**The GameState will be keeped even if you change the script before you change this GameState.**
-
 The Scirpt is not synchronized with GalEngine. The Script tell GalEngine that what state we are, what nextStates we can go, the condition we go a nextState. And the GalEngine decide when go to nextState, go to nextState and so on.
 
 See more in [GalEngine.Script.md](/GalEngine.Script.md).

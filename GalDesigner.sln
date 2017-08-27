@@ -15,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{
 		Documents\GalEngine.Event.md = Documents\GalEngine.Event.md
 		Documents\GalEngine.md = Documents\GalEngine.md
 		Documents\GalEngine.Resource.md = Documents\GalEngine.Resource.md
+		Documents\GalEngine.Script.Character.md = Documents\GalEngine.Script.Character.md
 		Documents\GalEngine.Script.md = Documents\GalEngine.Script.md
+		Documents\GalEngine.Script.State.md = Documents\GalEngine.Script.State.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{7EC03187-C4E4-49EA-8BAD-72FB44E8E4C7}"
