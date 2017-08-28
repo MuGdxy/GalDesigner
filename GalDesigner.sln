@@ -14,6 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{
 	ProjectSection(SolutionItems) = preProject
 		Documents\GalEngine.Event.md = Documents\GalEngine.Event.md
 		Documents\GalEngine.md = Documents\GalEngine.md
+		Documents\GalEngine.Page.md = Documents\GalEngine.Page.md
 		Documents\GalEngine.Resource.md = Documents\GalEngine.Resource.md
 		Documents\GalEngine.Script.Character.md = Documents\GalEngine.Script.Character.md
 		Documents\GalEngine.Script.md = Documents\GalEngine.Script.md
