@@ -22,8 +22,3 @@ We will design a Presenter to output the game's sence. It is Application's task.
 Application gets commands from GalEngine,So it will known what should draw or what music should play and so on. 
 
 See more in [Application.Presenter.md](/Application.Presenter.md)
-
-## Control 
-
-Application also manager controls.
-In this case, Application only render it.

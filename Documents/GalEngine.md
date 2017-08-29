@@ -55,16 +55,5 @@ The main things that GalEngine do. GalEngine need to process many events which f
 
 See more in [GalEngine.Event.md](/GalEngine.Event.md)
 
-## Control
-
-In sometimes, we need some buttons or images to draw our game scene. 
-So we have controls to do this work.
-But GalEngine only manager the control's property, events(such as click, destory, move and so on), lifetime. 
-
-**We can use control in Script as variable.**
-
-See more in [GalEngine.Contorl.md](/GalEngine.Contorl.md)
-
-
 
 
