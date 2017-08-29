@@ -19,18 +19,15 @@ namespace TestApp
 
         public TestWindow(string Title, int Width, int Height) : base(Title, Width, Height)
         {
-            present = new Present(Handle);
+            present = new Present(Handle, Width, Height);
 
             textureFace = new TextureFace(Width, Height);
-
+            
             Show();
-
-            Resource.voicePlayer1.Play();
         }
 
         public override void OnMouseClick(object sender, MouseClickEventArgs e)
         {
-            Resource.voicePlayer1.Stop();
             base.OnMouseClick(sender, e);
         }
 
@@ -42,6 +39,8 @@ namespace TestApp
         public override void OnUpdate(object sender)
         {
             Canvas.BeginDraw(present);
+
+            Canvas.DrawText("1", 0, 0, 100, 100, textFormat, redBrush);
 
             Canvas.EndDraw();
             

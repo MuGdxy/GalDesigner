@@ -87,8 +87,6 @@ namespace Presenter
                 X = 0f,
                 Y = 0f
             });
-
-            Engine.ImmediateContext.Rasterizer.SetScissorRectangle(0, 0, Width, Height);
         }
 
         internal void ResetResourceView()

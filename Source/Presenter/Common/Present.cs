@@ -90,8 +90,6 @@ namespace Presenter
                 X = 0f,
                 Y = 0f
             });
-
-            Engine.ImmediateContext.Rasterizer.SetScissorRectangle(0, 0, width, height);
         }
 
         internal void ResetResourceView()
@@ -110,13 +108,9 @@ namespace Presenter
 
         }
 
-        public Present(IntPtr Handle, bool Windowed = true)
+        public Present(IntPtr Handle, int bufferWidth, int bufferHeight, bool Windowed = true)
         {
             handle = Handle;
-
-            APILibrary.Win32.Rect realRect = new APILibrary.Win32.Rect();
-
-            APILibrary.Win32.Internal.GetClientRect(handle, ref realRect);
 
             SharpDX.DXGI.Device dxgidevice = Engine.ID3D11Device.QueryInterface<SharpDX.DXGI.Device>();
             SharpDX.DXGI.Adapter dxgiadapte = dxgidevice.GetParent<SharpDX.DXGI.Adapter>();
@@ -127,8 +121,8 @@ namespace Presenter
                 {
                     ModeDescription = new SharpDX.DXGI.ModeDescription()
                     {
-                        Width = width = realRect.right - realRect.left,
-                        Height = height = realRect.bottom - realRect.top,
+                        Width = width = bufferWidth,
+                        Height = height = bufferHeight,
                         RefreshRate = new SharpDX.DXGI.Rational(60, 1),
                         Scaling = SharpDX.DXGI.DisplayModeScaling.Unspecified,
                         ScanlineOrdering = SharpDX.DXGI.DisplayModeScanlineOrder.Unspecified,

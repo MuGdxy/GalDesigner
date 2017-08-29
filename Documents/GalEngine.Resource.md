@@ -18,7 +18,7 @@ For one line, only have one resource to define.
 
 [Type = ResourceType, Tag = ResourceTag, FilePath = ResourcePath]
 
-//For example: [Type = Image, Tag = Image1, FilePath = "Image1.Png"]
+//For example: [Type = Image, Tag = "Image1", FilePath = "Image1.Png"]
 ```
 
 ## ResourceType
@@ -46,7 +46,6 @@ So if `XAudio` support this file format, we support it, too.
 A resource must have it's ID to distinguish it from resources.
 
 So we define the `ResourceTag`. 
-It likes a string, but we don't use `""`.
 You can think it is variable.
 
 ## FilePath
