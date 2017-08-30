@@ -8,7 +8,6 @@ namespace Builder
 {
     public abstract partial class GenericWindow
     {
-        
         public bool IsVisible
         {
             get => isVisible;

@@ -9,6 +9,8 @@ namespace Presenter
 {
     public class Present
     {
+        private static bool EnableDepth = false;
+
         private SharpDX.Direct3D11.RenderTargetView renderTargetView;
         private SharpDX.Direct3D11.DepthStencilView depthStencilView;
 
@@ -66,6 +68,8 @@ namespace Presenter
                     }
                 });
 
+            if (EnableDepth is false) return;
+
             depthStencilView = new SharpDX.Direct3D11.DepthStencilView(Engine.ID3D11Device, depthStencil,
                 new SharpDX.Direct3D11.DepthStencilViewDescription()
                 {
@@ -94,10 +98,14 @@ namespace Presenter
 
         internal void ResetResourceView()
         {
-            Engine.ImmediateContext.OutputMerger.SetTargets(depthStencilView, renderTargetView);
+            if (EnableDepth is true)
+                Engine.ImmediateContext.OutputMerger.SetTargets(depthStencilView, renderTargetView);
+            else Engine.ImmediateContext.OutputMerger.SetTargets(renderTargetView);
 
             Engine.ImmediateContext.ClearRenderTargetView(renderTargetView,
-                new SharpDX.Mathematics.Interop.RawColor4(1, 1, 1, 1));
+                new SharpDX.Mathematics.Interop.RawColor4(0, 0, 0, 0));
+
+            if (EnableDepth is false) return;
 
             Engine.ImmediateContext.ClearDepthStencilView(depthStencilView,
                  SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
@@ -108,7 +116,7 @@ namespace Presenter
 
         }
 
-        public Present(IntPtr Handle, int bufferWidth, int bufferHeight, bool Windowed = true)
+        public Present(IntPtr Handle, int bufferWidth, int bufferHeight)
         {
             handle = Handle;
 
@@ -134,12 +142,13 @@ namespace Presenter
                     OutputHandle = handle,
                     SampleDescription = new SharpDX.DXGI.SampleDescription(1, 0),
                     SwapEffect = SharpDX.DXGI.SwapEffect.Discard,
-                    IsWindowed = Windowed
+                    IsWindowed = true
                 });
 
             renderTarget = swapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0);
 
-            CreateResource(ref depthStencil, SharpDX.Direct3D11.BindFlags.DepthStencil, DepthStencilFormat);
+            if (EnableDepth is true)
+                CreateResource(ref depthStencil, SharpDX.Direct3D11.BindFlags.DepthStencil, DepthStencilFormat);
 
             CreateResourceView();
 
@@ -150,9 +159,28 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref dxgifactory);
         }
 
+        public void ResizeBuffer(int newWidth,int newHeight)
+        {
+            SharpDX.Utilities.Dispose(ref renderTarget);
+            SharpDX.Utilities.Dispose(ref depthStencil);
+            SharpDX.Utilities.Dispose(ref renderTargetView);
+            SharpDX.Utilities.Dispose(ref depthStencilView);
+            SharpDX.Utilities.Dispose(ref canvasTarget);
+
+            swapChain.ResizeBuffers(1, newWidth, newHeight, RenderTargetFormat, SharpDX.DXGI.SwapChainFlags.AllowModeSwitch);
+
+            renderTarget = swapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0);
+
+            if (EnableDepth is true)
+                CreateResource(ref depthStencil, SharpDX.Direct3D11.BindFlags.DepthStencil, DepthStencilFormat);
+
+            CreateResourceView();
+            CreateCanvasTarget();
+        }
+
         public void SwapBuffer()
         {
-            swapChain.Present(0, SharpDX.DXGI.PresentFlags.None);
+            swapChain.Present(1, SharpDX.DXGI.PresentFlags.None);
 
             ResetResourceView();
         }

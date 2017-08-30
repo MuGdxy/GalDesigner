@@ -38,6 +38,12 @@ namespace APILibrary.Win32
             uint dwStyle, uint x, uint y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu,
             IntPtr hlnstance, IntPtr lpParam);
 
+        [DllImport(User32, CharSet =  CharSet.Auto)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [DllImport(kernel32)]
+        public static extern int GetLastError();
+
         [DllImport(User32)]
         public static extern bool DestroyWindow(IntPtr hWnd);
 

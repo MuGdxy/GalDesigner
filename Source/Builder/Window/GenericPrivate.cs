@@ -152,6 +152,8 @@ namespace Builder
                 case APILibrary.Win32.WinMsg.WM_KEYDOWN:
                     PrivateKeyEvent(this, new KeyEventArgs() { isdown = true, keycode = (KeyCode)wParam });
                     break;
+                case APILibrary.Win32.WinMsg.WM_SYSKEYDOWN:
+                    break;
                 case APILibrary.Win32.WinMsg.WM_KEYUP:
                     PrivateKeyEvent(this, new KeyEventArgs() { isdown = false, keycode = (KeyCode)wParam });
                     break;

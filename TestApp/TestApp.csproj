@@ -60,6 +60,10 @@
     <None Include="app.manifest" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Source\APILibrary\APILibrary.csproj">
+      <Project>{9f6b254e-6770-4a79-97f3-671d98618ac0}</Project>
+      <Name>APILibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Source\Builder\Builder.csproj">
       <Project>{630d9395-ee2a-4301-bef7-bfaffa2d2d38}</Project>
       <Name>Builder</Name>
