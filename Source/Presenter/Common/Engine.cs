@@ -20,6 +20,12 @@ namespace Presenter
         private static SharpDX.Direct3D11.Device device;
         private static SharpDX.Direct3D11.DeviceContext immediateContext;
 
+        private static float physicsAspectRatio = (float)APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CXFULLSCREEN)
+                    / APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CYFULLSCREEN);
+
+        private static float physicsAspectRatioX = APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CXFULLSCREEN);
+        private static float physicsAspectRatioY = APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CYFULLSCREEN);
+
         static Engine()
         {
 #if DEBUG
@@ -37,10 +43,11 @@ namespace Presenter
             immediateContext = ID3D11Device.ImmediateContext;
 
             writeFactory = new SharpDX.DirectWrite.Factory(SharpDX.DirectWrite.FactoryType.Shared);
-          
+
             ImagingFactory = new SharpDX.WIC.ImagingFactory();
 
             CreateAudio();
+
         }
 
         /*public static void Start()
@@ -116,6 +123,11 @@ namespace Presenter
 
         public static float DpiX => d2d1Factory.DesktopDpi.Width;
         public static float DpiY => d2d1Factory.DesktopDpi.Height;
+
+        public static float PhysicsAspectRatio => physicsAspectRatio;
+
+        public static float PhysicsAspectRatioMaxX => physicsAspectRatioX;
+        public static float PhysicsAspectRatioMaxY => physicsAspectRatioY;
 
         public static float AppScale => (DpiX + DpiY) / 192;
 

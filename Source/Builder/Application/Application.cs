@@ -18,9 +18,6 @@ namespace Builder
         private static List<GenericWindow> AddList = new List<GenericWindow>();
         private static List<GenericWindow> RemoveList = new List<GenericWindow>();
 
-        private static int updateCount = 0;
-        private static int sleepTime = 0;
-
         private static void PumpMessage()
         {
             while (APILibrary.Win32.Internal.PeekMessage(out APILibrary.Win32.Message message, IntPtr.Zero, 0, 0,
@@ -68,24 +65,8 @@ namespace Builder
 
         public static void RunLoop()
         {
-            float delta = (updateCount != 0) ? 1f / updateCount : 0;
-
-            float passtime = delta;
-            DateTime last_time = DateTime.Now;
-
             while (IsRunLoopEnd() is false)
             {
-                delta = (updateCount != 0) ? 1f / updateCount : 0;
-                System.Threading.Thread.Sleep(sleepTime);
-
-                DateTime current_time = DateTime.Now;
-                passtime += (float)(current_time - last_time).TotalSeconds;
-                last_time = current_time;
-
-                if (passtime < delta) continue;
-
-                passtime -= delta;
-
                 PumpMessage();
 
                 foreach (var item in Windows)
@@ -114,10 +95,6 @@ namespace Builder
             get => appIcon;
             set { appIcon = value; appinfo.hIcon = APILibrary.Win32.Internal.LoadImage(IntPtr.Zero, appIcon, 1, 0, 0, 0x00000010); }
         }
-
-        public static int UpdateCount { set => updateCount = value; get => updateCount; }
-
-        public static int SleepTime { set => sleepTime = value; get => sleepTime; }
 
         internal static APILibrary.Win32.AppInfo AppInfo => appinfo;
     }

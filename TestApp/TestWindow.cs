@@ -32,6 +32,7 @@ namespace TestApp
 
         public override void OnSizeChange(object sender, SizeChangeEventArgs e)
         {
+            present?.ResizeBuffer(e.NextWidth, e.NextHeight);
             base.OnSizeChange(sender, e);
         }
 
@@ -54,39 +55,54 @@ namespace TestApp
 
         public override void OnUpdate(object sender)
         {
+            Canvas.BeginDraw(textureFace);
+
+            Canvas.FillRectangle(0, 0, present.Width, present.Height, whiteBrush);
+            //Canvas.DrawText(posX + " " + posY, 0, 0, 100, 100, textFormat, redBrush);
+
+            Canvas.EndDraw();
+
+            Canvas.BeginDraw(present);
+
+
             if (present.IsFullScreen is false)
-            {
-                Canvas.BeginDraw(present);
-
-                Canvas.FillRectangle(0, 0, present.Width, present.Height, whiteBrush);
-
-                Canvas.DrawText(Width + " " + Height, 0, 0, 100, 100, textFormat, redBrush);
-
-                Canvas.EndDraw();
-            }
+                Canvas.DrawImage(0, 0, present.Width, present.Height, textureFace);
             else
             {
-                Canvas.BeginDraw(textureFace);
+                float Tx = textureFace.Width;
+                float Ty = textureFace.Height;
 
-                Canvas.FillRectangle(0, 0, present.Width, present.Height, whiteBrush);
+                float x = Engine.PhysicsAspectRatioMaxX;
+                float y = Engine.PhysicsAspectRatioMaxY;
 
-                Canvas.DrawText(Width + " " + Height, 0, 0, 100, 100, textFormat, redBrush);
-
-                Canvas.EndDraw();
-
-                Canvas.BeginDraw(present);
-
-                float scaleWidth = Width;
-                float scaleHeight = (Height * 1080f / 1280f);
+                float scaleHeight = 0;
+                float scaleWidth = 0;
 
                 float offX = 0;
-                float offY = (Height - scaleHeight) / 2f;
+                float offY = 0;
 
-                Canvas.DrawImage(offX, offY, offX + scaleWidth, offY + scaleHeight,
-                    textureFace);
+                if (Ty * x > Tx * y)
+                {
+                    //for w
+                    scaleWidth = Width / ((Ty * x) / (Tx * y));
+                    scaleHeight = Height;
 
-                Canvas.EndDraw();
+                    offX = (Width - scaleWidth) / 2f;
+                }else
+                {
+                    //for h
+                    scaleWidth = Width;
+                    scaleHeight = Height * ((Ty * x) / (Tx * y));
+
+                    offY = (Height - scaleHeight) / 2f;
+                }
+
+                Canvas.DrawImage(offX, offY, offX + scaleWidth, offY + scaleHeight, textureFace);
+                Canvas.DrawText((x).ToString() + " " + (y).ToString(), 0, 0, 100, 100, textFormat, redBrush);
             }
+
+            Canvas.EndDraw();
+
             present.SwapBuffer();
 
             base.OnUpdate(sender);

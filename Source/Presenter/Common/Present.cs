@@ -161,6 +161,9 @@ namespace Presenter
 
         public void ResizeBuffer(int newWidth,int newHeight)
         {
+            width = newWidth;
+            height = newHeight;
+
             SharpDX.Utilities.Dispose(ref renderTarget);
             SharpDX.Utilities.Dispose(ref depthStencil);
             SharpDX.Utilities.Dispose(ref renderTargetView);

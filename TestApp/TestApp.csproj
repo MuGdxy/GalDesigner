@@ -68,6 +68,10 @@
       <Project>{630d9395-ee2a-4301-bef7-bfaffa2d2d38}</Project>
       <Name>Builder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Source\GalEngine\GalEngine.csproj">
+      <Project>{26afd910-ad7c-4165-8622-cb8103c2ca7d}</Project>
+      <Name>GalEngine</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Source\Presenter\Presenter.csproj">
       <Project>{856d69c7-4ebf-4ded-8410-9691179cf021}</Project>
       <Name>Presenter</Name>
