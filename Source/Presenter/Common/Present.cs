@@ -207,6 +207,12 @@ namespace Presenter
 
         public IntPtr Handle => handle;
 
+        public bool IsFullScreen
+        {
+            set => swapChain.IsFullScreen = value;
+            get => swapChain.IsFullScreen;
+        }
+
         ~Present()
         {
             SharpDX.Utilities.Dispose(ref renderTarget);

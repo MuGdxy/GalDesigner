@@ -15,7 +15,8 @@ namespace TestApp
         private TextureFace textureFace;
 
         private CanvasBrush redBrush = new CanvasBrush(1, 0, 0);
-        private CanvasTextFormat textFormat = new CanvasTextFormat("Consolas", 12);
+        private CanvasBrush whiteBrush = new CanvasBrush(1, 1, 1);
+        private CanvasTextFormat textFormat = new CanvasTextFormat("Consolas", 20);
 
         private int posX;
         private int posY;
@@ -26,8 +27,7 @@ namespace TestApp
             
             present = new Present(Handle, Width, Height);
 
-            //textureFace = new TextureFace(Width, Height);
-            
+            textureFace = new TextureFace(Width, Height);
         }
 
         public override void OnSizeChange(object sender, SizeChangeEventArgs e)
@@ -54,12 +54,39 @@ namespace TestApp
 
         public override void OnUpdate(object sender)
         {
-            Canvas.BeginDraw(present);
+            if (present.IsFullScreen is false)
+            {
+                Canvas.BeginDraw(present);
 
-            Canvas.DrawText(Width + " " + Height, 0, 0, 100, 100, textFormat, redBrush);
+                Canvas.FillRectangle(0, 0, present.Width, present.Height, whiteBrush);
 
-            Canvas.EndDraw();
+                Canvas.DrawText(Width + " " + Height, 0, 0, 100, 100, textFormat, redBrush);
 
+                Canvas.EndDraw();
+            }
+            else
+            {
+                Canvas.BeginDraw(textureFace);
+
+                Canvas.FillRectangle(0, 0, present.Width, present.Height, whiteBrush);
+
+                Canvas.DrawText(Width + " " + Height, 0, 0, 100, 100, textFormat, redBrush);
+
+                Canvas.EndDraw();
+
+                Canvas.BeginDraw(present);
+
+                float scaleWidth = Width;
+                float scaleHeight = (Height * 1080f / 1280f);
+
+                float offX = 0;
+                float offY = (Height - scaleHeight) / 2f;
+
+                Canvas.DrawImage(offX, offY, offX + scaleWidth, offY + scaleHeight,
+                    textureFace);
+
+                Canvas.EndDraw();
+            }
             present.SwapBuffer();
 
             base.OnUpdate(sender);
