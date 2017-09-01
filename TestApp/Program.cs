@@ -17,7 +17,7 @@ namespace TestApp
         {
             Resource.Create();
 
-            Application.Add(new TestWindow(AppName, 1800, 1200));
+            Application.Add(new TestWindow(AppName, 1920, 1080));
 
             Application.RunLoop();
 

@@ -20,11 +20,11 @@ namespace Presenter
         private static SharpDX.Direct3D11.Device device;
         private static SharpDX.Direct3D11.DeviceContext immediateContext;
 
-        private static float physicsAspectRatio = (float)APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CXFULLSCREEN)
-                    / APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CYFULLSCREEN);
+        private static float physicsAspectRatio = (float)APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CXSCREEN)
+                    / APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CYSCREEN);
 
-        private static float physicsAspectRatioX = APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CXFULLSCREEN);
-        private static float physicsAspectRatioY = APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CYFULLSCREEN);
+        private static float physicsAspectRatioX = APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CXSCREEN);
+        private static float physicsAspectRatioY = APILibrary.Win32.Internal.GetSystemMetrics((int)APILibrary.Win32.SystemMetricsCodes.SM_CYSCREEN);
 
         static Engine()
         {
