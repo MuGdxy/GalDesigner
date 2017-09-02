@@ -38,6 +38,8 @@ namespace TestApp
 
         public override void OnMouseClick(object sender, MouseClickEventArgs e)
         {
+            if (e.IsDown is false) return;
+
             base.OnMouseClick(sender, e);
         }
 

@@ -36,15 +36,29 @@ namespace Presenter
 
         public void PlayLoop(int LoopCount)
         {
+            if (isStoping is false) return;
+
             isStoping = false;
+
+            sourceVoice.FlushSourceBuffers();
 
             audioBuffer.LoopCount = LoopCount;
             sourceVoice.SubmitSourceBuffer(audioBuffer, soundStream.DecodedPacketsInfo);
             sourceVoice.Start();
         }
 
+        public void Continue()
+        {
+            if (isStoping is false) return;
+
+            isStoping = false;
+            sourceVoice.Start();
+        }
+
         public void Stop()
         {
+            if (isStoping is true) return;
+
             isStoping = true;
             sourceVoice.Stop();
         }
