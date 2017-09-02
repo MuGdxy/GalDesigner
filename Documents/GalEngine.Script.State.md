@@ -78,10 +78,6 @@ This is not necessary.
 The level of nextState.
 This is not necessary. Default is zero.
 
-#### Style
-
-Next Update...
-
 #### Example
 
 ```gs
@@ -90,7 +86,6 @@ Next:
     Condition = GameOver is true
     Condition = GameEnd is true
     HintText = "Go to GameEnd"
-    Style = "ButtonStyle"
     Level = 1
 ```
 
@@ -112,10 +107,8 @@ First, we use `{}` to define a block to write our code.
     Next:
         ToState = "NextState1"
         HintText = "Road1"
-        Style = "ButtonStyle"
     Next:
         ToState = "NextState2"
         HintText = "Road2"
-        Style = "ButtonStyle"
 }
 ```

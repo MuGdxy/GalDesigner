@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
-using Builder;
+using GalEngine;
 
 namespace TestApp
 {
@@ -15,15 +15,7 @@ namespace TestApp
 
         static void Main(string[] args)
         {
-            Resource.Create();
-
-            Application.Add(new TestWindow(AppName, 1920, 1080));
-
-            Application.RunLoop();
-
-            Resource.Destory();
-
-            Presenter.Engine.Stop();
+            GalEngine.GalEngine.Run();
         }
     }
 }

@@ -42,6 +42,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseStruct\Rect.cs" />
+    <Compile Include="Debug\GameWindow.cs" />
+    <Compile Include="GalEngine.cs" />
+    <Compile Include="GameWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
