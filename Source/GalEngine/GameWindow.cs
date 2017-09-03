@@ -9,7 +9,6 @@ using Presenter;
 
 namespace GalEngine
 {
-    using BaseStruct;
 
     partial class GameWindow : GenericWindow
     {
@@ -67,17 +66,17 @@ namespace GalEngine
             {
                 ComputeGameRect(out Rect gameRect);
 
-                Canvas.DrawImage(gameRect.left, gameRect.top, gameRect.right, gameRect.bottom, renderSurface);
+                Canvas.DrawImage(gameRect.Left, gameRect.Top, gameRect.Right, gameRect.Bottom, renderSurface);
             }
         }
 
         private void ComputeMousePos(Rect gameRect, int x, int y, ref int resultX, ref int resultY)
         {
-            float width = gameRect.right - gameRect.left;
-            float height = gameRect.bottom - gameRect.top;
+            float width = gameRect.Right - gameRect.Left;
+            float height = gameRect.Bottom - gameRect.Top;
 
-            resultX = (int)(renderSurface.Width * (x - gameRect.left) / width);
-            resultY = (int)(renderSurface.Height * (y - gameRect.top) / height);
+            resultX = (int)(renderSurface.Width * (x - gameRect.Left) / width);
+            resultY = (int)(renderSurface.Height * (y - gameRect.Top) / height);
         }
 
         public GameWindow(string Title, int Width, int Height) : base(Title, Width, Height)

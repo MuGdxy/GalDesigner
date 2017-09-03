@@ -4,21 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GalEngine.BaseStruct
+namespace GalEngine
 {
-    struct Rect
+    public struct Rect
     {
-        public float left;
-        public float top;
-        public float right;
-        public float bottom;
+        public float Left;
+        public float Top;
+        public float Right;
+        public float Bottom;
 
-        public Rect(float Left, float Top, float Right, float Bottom)
+        public Rect(float left, float top, float right, float bottom)
         {
-            left = Left; top = Top; right = Right; bottom = Bottom;
+            Left = left; Top = top; Right = right; Bottom = bottom;
         }
 
         public bool IsContained(float x, float y)
-            => (x >= left && x <= right && y >= top && y <= bottom);
+            => (x >= Left && x <= Right && y >= Top && y <= Bottom);
     }
 }
