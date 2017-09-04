@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="BaseStruct\Rect.cs" />
     <Compile Include="DebugLayer\DebugLayer.cs" />
+    <Compile Include="DebugLayer\ErrorType.cs" />
     <Compile Include="GalEngine.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -15,7 +15,7 @@ namespace TestApp
 
         static void Main(string[] args)
         {
-            //GalEngine.GalEngine.Run();
+
         }
     }
 }
