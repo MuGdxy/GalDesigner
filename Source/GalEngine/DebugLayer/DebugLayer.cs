@@ -8,8 +8,10 @@ namespace GalEngine
 {
     public static class DebugLayer
     {
-        private static Dictionary<ErrorType, string> errorText;
-        private static Dictionary<WarningType, string> warningText;
+        private static Dictionary<ErrorType, string> errorText = new Dictionary<ErrorType, string>();
+        private static Dictionary<WarningType, string> warningText = new Dictionary<WarningType, string>();
+
+        private static List<WarningMessage> warningList = new List<WarningMessage>();
 
         private static string SetParamsToString(string text, params object[] value)
         {
@@ -29,8 +31,7 @@ namespace GalEngine
 
         static DebugLayer()
         {
-            errorText = new Dictionary<ErrorType, string>();
-            warningText = new Dictionary<WarningType, string>();
+
         }
 
         public static Exception GetErrorException(ErrorType errorType, params object[] value)
@@ -45,7 +46,7 @@ namespace GalEngine
 
         public static void ReportWarning(WarningType warningType, params object[] value)
         {
-
+            warningList.Add(new WarningMessage(SetParamsToString(warningText[warningType], value), DateTime.Now));
         }
 
         public static void Assert(bool testValue, ErrorType errorType, params object[] value)
@@ -57,6 +58,18 @@ namespace GalEngine
         {
             if (testValue is true) ReportWarning(warningType, value);
         }
+
+        public static void RegisterError(ErrorType errorType, string messageText)
+        {
+            errorText[errorType] = messageText;
+        }
+
+        public static void RegisterWarning(WarningType warningType, string messageText)
+        {
+            warningText[warningType] = messageText;
+        }
+
+        public static WarningMessage GetWarning(int count) => warningList[count];
 
     }
 }

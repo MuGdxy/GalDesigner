@@ -16,7 +16,7 @@ namespace GalEngine
             Application.Add(new GameWindow("GalEngine", 1920, 1080));
 
             Application.RunLoop();
-
+            
             Engine.Stop();
         }
 

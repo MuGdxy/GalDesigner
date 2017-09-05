@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public enum WarningType : int
+    interface IActivable : IDisposable
     {
-
+        void Active();
     }
 }

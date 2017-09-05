@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public enum ErrorType
+    public enum ErrorType : int
     {
 
     }

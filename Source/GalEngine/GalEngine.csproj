@@ -45,10 +45,16 @@
     <Compile Include="BaseStruct\Rect.cs" />
     <Compile Include="DebugLayer\DebugLayer.cs" />
     <Compile Include="DebugLayer\ErrorType.cs" />
+    <Compile Include="DebugLayer\WarningMessage.cs" />
     <Compile Include="DebugLayer\WarningType.cs" />
     <Compile Include="GalEngine.cs" />
     <Compile Include="GameWindow.cs" />
+    <Compile Include="Interface\IActivable.cs" />
+    <Compile Include="Interface\IValuable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\GlobalResource.cs" />
+    <Compile Include="Resource\GlobalValue.cs" />
+    <Compile Include="Resource\ResourceTag.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Builder\Builder.csproj">
