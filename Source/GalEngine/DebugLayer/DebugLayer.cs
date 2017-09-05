@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    static class DebugLayer
+    public static class DebugLayer
     {
         private static Dictionary<ErrorType, string> errorText;
+        private static Dictionary<WarningType, string> warningText;
 
         private static string SetParamsToString(string text, params object[] value)
         {
@@ -29,11 +30,33 @@ namespace GalEngine
         static DebugLayer()
         {
             errorText = new Dictionary<ErrorType, string>();
+            warningText = new Dictionary<WarningType, string>();
         }
 
         public static Exception GetErrorException(ErrorType errorType, params object[] value)
         {
             return new Exception(SetParamsToString(errorText[errorType], value));
         }
+
+        public static void ReportError(ErrorType errorType, params object[] value)
+        {
+            throw GetErrorException(errorType, value);
+        }
+
+        public static void ReportWarning(WarningType warningType, params object[] value)
+        {
+
+        }
+
+        public static void Assert(bool testValue, ErrorType errorType, params object[] value)
+        {
+            if (testValue is true) ReportError(errorType, value);
+        }
+
+        public static void Assert(bool testValue ,WarningType warningType,params object[] value)
+        {
+            if (testValue is true) ReportWarning(warningType, value);
+        }
+
     }
 }
