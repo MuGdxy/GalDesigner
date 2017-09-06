@@ -31,6 +31,10 @@ Image Resource such as BackGround, UI and so on.
 We use `WIC` to load this file. 
 So if `WIC` support this file format, we support it, too.
 
+```resList
+[Type = Image, Tag = "Image1", FilePath = "Image1.Png"]
+```
+
 **Support Format:** `bmp`, `jpg`, `png`, `jpeg`, `dds`...
 
 ### Audio
@@ -39,7 +43,27 @@ Audio Resource such like BackGroundMusic, Voice and so on.
 We use `XAudio` to do this.
 So if `XAudio` support this file format, we support it, too.
 
+```resList
+[Type = Audio, Tag = "Audio", FilePath = "Audio.Png"]
+```
+
 **Support Format:** `XWMA`, `WAV` ...
+
+### Fontface 
+
+When we render text, we need its size, weight and which fontface we use. 
+
+```resList
+[Type = Fontface, Tag = "Fontface", Font = "Consolas", Size = 12, Weight = 400]
+```
+
+### Brush
+
+when we render text , we need its color.
+
+```resList
+[Type = Brush, Tag = "Brush", Red = 1, Blue = 1, Green = 1, Alpha =1]
+```
 
 ## ResourceTag
 

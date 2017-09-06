@@ -6,21 +6,15 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    class ResourceTag
+    abstract class ResourceTag
     {
         private int count;
         private string tag;
         private object resource;
 
-        protected virtual void ActiveResource(ref object resource)
-        {
-            resource = null;
-        }
-
-        protected virtual void DiposeResource(ref object resource)
-        {
-            resource = null;
-        }
+        protected abstract void ActiveResource(ref object resource);
+        protected abstract void DiposeResource(ref object resource);
+        
 
         public ResourceTag(string Tag)
         {
