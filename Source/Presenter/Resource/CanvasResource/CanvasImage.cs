@@ -19,11 +19,29 @@ namespace Presenter
                 new SharpDX.Size2(iWidth = width, iHeight = height));
         }
 
+        public CanvasImage(string fileName)
+        {
+            SharpDX.WIC.BitmapDecoder decoder = new SharpDX.WIC.BitmapDecoder(Engine.ImagingFactory,
+                fileName, SharpDX.IO.NativeFileAccess.Read, SharpDX.WIC.DecodeOptions.CacheOnLoad);
+
+            SharpDX.WIC.FormatConverter converter = new SharpDX.WIC.FormatConverter(Engine.ImagingFactory);
+
+            converter.Initialize(decoder.GetFrame(0), SharpDX.WIC.PixelFormat.Format32bppBGRA,
+                SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
+
+            bitmap = SharpDX.Direct2D1.Bitmap1.FromWicBitmap(Canvas.ID2D1DeviceContext, converter);
+
+            iWidth = (int)bitmap.Size.Width;
+            iHeight = (int)bitmap.Size.Height;
+        }
+
         public override void Dispose()
         {
             SharpDX.Utilities.Dispose(ref bitmap);
             base.Dispose();
         }
+
+        public static CanvasImage FromFile(string fileName) => new CanvasImage(fileName);
 
         public int Width => iWidth;
         public int Height => iHeight;
