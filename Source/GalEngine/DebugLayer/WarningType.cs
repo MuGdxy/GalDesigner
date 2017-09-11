@@ -8,6 +8,7 @@ namespace GalEngine
 {
     public enum WarningType : int
     {
-
+        MoreThanOneEncoderDelegate,
+        MoreThanOneDecoderDelegate
     }
 }

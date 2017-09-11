@@ -31,7 +31,8 @@ namespace GalEngine
 
         static DebugLayer()
         {
-
+            warningText.Add(WarningType.MoreThanOneEncoderDelegate, "We get {0} encoder delegate in this EncoderEvent, but we only can have one.");
+            warningText.Add(WarningType.MoreThanOneEncoderDelegate, "We get {0} decoder delegate in this EncoderEvent, but we only can have one.");
         }
 
         public static Exception GetErrorException(ErrorType errorType, params object[] value)

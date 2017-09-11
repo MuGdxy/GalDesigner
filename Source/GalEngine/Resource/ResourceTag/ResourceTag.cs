@@ -15,7 +15,6 @@ namespace GalEngine
         protected abstract void ActiveResource(ref object resource);
         protected abstract void DiposeResource(ref object resource);
         
-
         public ResourceTag(string Tag)
         {
             tag = Tag;
@@ -41,5 +40,6 @@ namespace GalEngine
         }
 
         public string Tag => tag;
+        public int Count => count;
     }
 }

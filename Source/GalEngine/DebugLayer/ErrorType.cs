@@ -8,6 +8,5 @@ namespace GalEngine
 {
     public enum ErrorType : int
     {
-
     }
 }
