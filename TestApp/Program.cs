@@ -15,6 +15,15 @@ namespace TestApp
 
         static void Main(string[] args)
         {
+#if true
+            Builder.Application.Add(new TestWindow(AppName, 1920, 1080));
+
+            Builder.Application.RunLoop();
+
+            Presenter.Engine.Stop();
+#else
+
+#endif
 
         }
     }

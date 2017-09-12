@@ -9,11 +9,11 @@ using Presenter;
 
 namespace GalEngine
 {
-    class BrushResourceTag : ResourceTag
+    class BrushTag : ResourceTag
     {
         private Vector4 brushColor;
         
-        public BrushResourceTag(string Tag, Vector4 color) : base(Tag)
+        public BrushTag(string Tag, Vector4 color) : base(Tag)
         {
             brushColor = color;
         }

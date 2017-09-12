@@ -31,8 +31,8 @@ namespace GalEngine
 
         static DebugLayer()
         {
-            warningText.Add(WarningType.MoreThanOneEncoderDelegate, "We get {0} encoder delegate in this EncoderEvent, but we only can have one.");
-            warningText.Add(WarningType.MoreThanOneEncoderDelegate, "We get {0} decoder delegate in this EncoderEvent, but we only can have one.");
+            errorText.Add(ErrorType.UnknownResourceType, "Get Unknown Resource Type in resList.");
+            errorText.Add(ErrorType.FileIsNotExist, "The FilePath {0} is not exist");
         }
 
         public static Exception GetErrorException(ErrorType errorType, params object[] value)

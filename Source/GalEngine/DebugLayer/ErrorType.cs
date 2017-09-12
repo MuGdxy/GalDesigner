@@ -8,5 +8,7 @@ namespace GalEngine
 {
     public enum ErrorType : int
     {
+        UnknownResourceType,
+        FileIsNotExist
     }
 }

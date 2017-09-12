@@ -49,12 +49,12 @@ So if `XAudio` support this file format, we support it, too.
 
 **Support Format:** `XWMA`, `WAV` ...
 
-### Fontface 
+### TextFormat 
 
 When we render text, we need its size, weight and which fontface we use. 
 
 ```resList
-[Type = Fontface, Tag = "Fontface", Font = "Consolas", Size = 12, Weight = 400]
+[Type = TextFormat, Tag = "TextFormat", Fontface = "Consolas", Size = 12, Weight = 400]
 ```
 
 ### Brush

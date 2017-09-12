@@ -16,7 +16,7 @@ namespace TestApp
 
         private CanvasBrush redBrush = new CanvasBrush(1, 0, 0);
         private CanvasBrush whiteBrush = new CanvasBrush(1, 1, 1);
-        private CanvasTextFormat textFormat = new CanvasTextFormat("Consolas", 20);
+        private CanvasTextFormat textFormat = new CanvasTextFormat(@"FLOWERS", 40, 400);
 
         private int posX;
         private int posY;
@@ -60,7 +60,7 @@ namespace TestApp
             Canvas.BeginDraw(textureFace);
 
             Canvas.FillRectangle(0, 0, present.Width, present.Height, whiteBrush);
-            //Canvas.DrawText(posX + " " + posY, 0, 0, 100, 100, textFormat, redBrush);
+            Canvas.DrawText(posX + " 告白 " + posY, 0, 0, 100, 100, textFormat, redBrush);
 
             Canvas.EndDraw();
 

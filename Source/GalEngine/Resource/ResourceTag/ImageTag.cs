@@ -8,15 +8,12 @@ using Presenter;
 
 namespace GalEngine
 {
-    class AudioResourceTag : ResourceTag
+    class ImageTag : ResourceTag
     {
-        private VoicePlayer voicePlayer;
-
         private string filePath;
 
-        public AudioResourceTag(string Tag, string FilePath) : base(Tag)
+        public ImageTag(string Tag, string FilePath) : base(Tag)
         {
-            voicePlayer = null;
             filePath = FilePath;
         }
 
@@ -24,8 +21,7 @@ namespace GalEngine
         {
             if (resource is null)
             {
-                resource = new VoiceBuffer(filePath);
-                voicePlayer = new VoicePlayer(resource as VoiceBuffer);
+                resource = new CanvasImage(filePath);
             }
         }
 
@@ -33,12 +29,10 @@ namespace GalEngine
         {
             if (resource is null) return;
 
-            voicePlayer.Dispose();
-            (resource as VoiceBuffer).Dispose();
-            voicePlayer = null;
+            (resource as CanvasImage).Dispose();
             resource = null;
         }
 
-        internal VoicePlayer VoicePlayer => voicePlayer;
+        public string FilePath => filePath;
     }
 }

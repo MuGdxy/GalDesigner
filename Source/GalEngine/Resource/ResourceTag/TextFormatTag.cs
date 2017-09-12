@@ -8,13 +8,13 @@ using Presenter;
 
 namespace GalEngine
 {
-    class FontfaceResourceTag : ResourceTag
+    class TextFormatTag : ResourceTag
     {
         private string fontFace;
         private float fontSize;
         private int fontWeight;
 
-        public FontfaceResourceTag(string Tag, string Fontface, float Size, int Weight) : base(Tag)
+        public TextFormatTag(string Tag, string Fontface, float Size, int Weight) : base(Tag)
         {
             fontFace = Fontface;
             fontSize = Size;
@@ -36,5 +36,9 @@ namespace GalEngine
             (resource as CanvasTextFormat).Dispose();
             resource = null;
         }
+
+        public string Fontface => fontFace;
+        public float Size => fontSize;
+        public int Weight => fontWeight;
     }
 }

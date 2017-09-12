@@ -11,25 +11,21 @@ namespace GalEngine
         private string filePath;
         private string tag;
 
-        protected abstract void ProcessReadFile(ref string[] file);
-        protected abstract void ProcessWriteFile(out string[] file);
+        protected abstract void ProcessReadFile(ref string[] contents);
+        protected abstract void ProcessWriteFile(out string[] contents);
 
         internal ResourceAnalyser(string Tag, string FilePath)
         {
             tag = Tag;
             filePath = FilePath;
-
-            LoadAnalyser();
         }
 
         public void LoadAnalyser()
         {
+            DebugLayer.Assert(System.IO.File.Exists(filePath) is false,
+                 ErrorType.FileIsNotExist, filePath);
+
             string[] contents = System.IO.File.ReadAllLines(filePath);
-
-            DebugLayer.Assert(Decoder.GetInvocationList().Length > 1, WarningType.MoreThanOneDecoderDelegate,
-                Decoder.GetInvocationList().Length);
-
-            Decoder?.Invoke(ref contents);
 
             ProcessReadFile(ref contents);
         }
@@ -37,21 +33,12 @@ namespace GalEngine
         public void SaveAnalyser()
         {
             ProcessWriteFile(out string[] contents);
-
-            DebugLayer.Assert(Encoder.GetInvocationList().Length > 1, WarningType.MoreThanOneEncoderDelegate,
-                Encoder.GetInvocationList().Length);
-
+            
             System.IO.File.WriteAllLines(filePath, contents);
         }
-
-        public event DecoderHandler Decoder;
-        public event EncoderHandler Encoder;
 
         public string Tag => tag;
         public string FilePath => filePath;
     }
-
-    public delegate void DecoderHandler(ref string[] file);
-    public delegate void EncoderHandler(ref string[] file);
 
 }
