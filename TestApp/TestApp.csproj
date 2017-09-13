@@ -58,6 +58,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest" />
+    <None Include="ResListT.resList" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Source\APILibrary\APILibrary.csproj">

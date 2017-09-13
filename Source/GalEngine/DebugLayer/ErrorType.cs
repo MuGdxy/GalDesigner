@@ -9,6 +9,8 @@ namespace GalEngine
     public enum ErrorType : int
     {
         UnknownResourceType,
+        InconsistentResourceParameters,
+        InvalidResourceFormat,
         FileIsNotExist
     }
 }

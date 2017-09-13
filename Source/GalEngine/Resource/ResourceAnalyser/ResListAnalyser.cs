@@ -33,7 +33,7 @@ namespace GalEngine
                 string result = "";
 
                 result += "Type = " + Type;
-                result += ", Tag = " + Tag;
+                result += ", Tag = " + Include(Tag);
 
                 switch (Type)
                 {
@@ -43,11 +43,11 @@ namespace GalEngine
 
                     case ResourceType.Image:
                     case ResourceType.Audio:
-                        result += ", FilePath = " + FilePath;
+                        result += ", FilePath = " + Include(FilePath);
                         break;
 
                     case ResourceType.TextFormat:
-                        result += ", Fontface = " + Fontface;
+                        result += ", Fontface = " + Include(Fontface);
                         result += ", Size = " + Size;
                         result += ", Weight = " + Weight;
                         break;
@@ -64,13 +64,180 @@ namespace GalEngine
                 }
                 return "[" + result + "]";
             }
+
+            public bool IsError()
+            {
+                if (Tag is null) return true;
+
+                switch (Type)
+                {
+                    case ResourceType.Unknown:
+                        return true;
+                       
+                    case ResourceType.Image:
+                        return FilePath is null;
+
+                    case ResourceType.Audio:
+                        return FilePath is null;
+
+                    case ResourceType.TextFormat:
+                        return Fontface is null | Size is 0 | Weight is 0; 
+
+                    case ResourceType.Brush:
+                        return Color == -Vector4.One;
+
+                    default:
+                        return true;
+                }
+            }
+
+            public static string Include(string input) => '"' + input + '"';
+
+            public static string UnInclude(string input) => input.Substring(1, input.Length - 2);
+
+            public static ResourceType GetType(string TypeName)
+            {
+                switch (TypeName)
+                {
+                    case "Image":
+                        return ResourceType.Image;
+
+                    case "Audio":
+                        return ResourceType.Audio;
+
+                    case "TextFormat":
+                        return ResourceType.TextFormat;
+
+                    case "Brush":
+                        return ResourceType.Brush;
+
+                    default:
+                        DebugLayer.ReportError(ErrorType.UnknownResourceType);
+                        return ResourceType.Unknown;
+                }
+            }
         }
 
         private Dictionary<string, ResourceTag> resourceList;
 
-        private static void BuildSentenceFromFile(string[] contents, out List<Sentence> sentences)
+        private static void ProcessSentenceValue(ref Sentence sentence, ref string value)
+        {
+            var result = value.Split(new char[] { '=' }, 2);
+
+            var left = result[0]; var right = result[1];
+
+            switch (left)
+            {
+                case "Type":
+                    sentence.Type = Sentence.GetType(right);
+                    break;
+
+                case "Tag":
+                    sentence.Tag = Sentence.UnInclude(right);
+                    break;
+
+                case "FilePath":
+                    sentence.FilePath = Sentence.UnInclude(right);
+                    break;
+
+                case "Fontface":
+                    sentence.Fontface = Sentence.UnInclude(right);
+                    break;
+
+                case "Size":
+                    sentence.Size = (float)Convert.ToDouble(right);
+                    break;
+
+                case "Weight":
+                    sentence.Weight = Convert.ToInt32(right);
+                    break;
+
+                case "Red":
+                    sentence.Color.X = (float)Convert.ToDouble(right);
+                    break;
+
+                case "Green":
+                    sentence.Color.Y = (float)Convert.ToDouble(right);
+                    break;
+
+                case "Blue":
+                    sentence.Color.Z = (float)Convert.ToDouble(right);
+                    break;
+
+                case "Alpha":
+                    sentence.Color.W = (float)Convert.ToDouble(right);
+                    break;
+
+
+                default:
+                    break;
+            }
+
+            value = "";
+        }
+
+        private static void BuildSentenceFromFile(string[] contents, string filePath, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
+
+            Sentence currentSentence = null;
+
+            string currentString = "";
+            bool inString = false;
+            bool inSentence = false;
+
+            int line = 0;
+
+            foreach (var item in contents)
+            {
+                line++;
+
+                for (int i = 0; i < item.Length; i++)
+                {
+                    //The Sentence's Beginning
+                    if (item[i] is '[')
+                    {
+                        DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, filePath);
+
+                        inSentence = true;
+                        currentSentence = new Sentence(); continue;
+                    }
+
+
+                    //The Sentence's Ending
+                    if (item[i] is ']')
+                    {
+                        DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, filePath);
+
+                        inSentence = false;
+
+                        ProcessSentenceValue(ref currentSentence, ref currentString);
+
+                        DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
+                            currentSentence.ToString());
+
+                        sentences.Add(currentSentence); continue;
+                    }
+
+                    //Find a value
+                    if (item[i] is ',' && inString is false)
+                    {
+                        ProcessSentenceValue(ref currentSentence, ref currentString);
+
+                        continue;
+                    }
+
+                    if (item[i] != ' ' | inString is true)
+                        currentString += item[i];
+
+                    if (item[i] is '"') { inString ^= true; continue; }
+                }
+            }
+
+            DebugLayer.Assert(inSentence is true | inString is true, ErrorType.InvalidResourceFormat,
+                contents.Length, filePath);
+
+
         }
 
         private static void BuildSentenceFromList(Dictionary<string, ResourceTag> resourceList, out List<Sentence> sentences)
@@ -124,7 +291,7 @@ namespace GalEngine
 
         protected override void ProcessReadFile(ref string[] contents)
         {
-            BuildSentenceFromFile(contents, out List<Sentence> sentences);
+            BuildSentenceFromFile(contents, FilePath, out List<Sentence> sentences);
 
             foreach (var item in sentences)
             {
