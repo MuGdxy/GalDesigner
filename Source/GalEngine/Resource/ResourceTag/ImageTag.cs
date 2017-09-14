@@ -21,6 +21,11 @@ namespace GalEngine
         {
             if (resource is null)
             {
+
+#if DEBUG
+                DebugLayer.Assert(System.IO.File.Exists(filePath), ErrorType.FileIsNotExist, filePath);
+#endif
+
                 resource = new CanvasImage(filePath);
             }
         }

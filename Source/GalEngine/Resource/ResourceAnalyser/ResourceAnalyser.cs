@@ -22,9 +22,10 @@ namespace GalEngine
 
         public void LoadAnalyser()
         {
+#if DEBUG
             DebugLayer.Assert(System.IO.File.Exists(filePath) is false,
                  ErrorType.FileIsNotExist, filePath);
-
+#endif
             string[] contents = System.IO.File.ReadAllLines(filePath);
 
             ProcessReadFile(ref contents);

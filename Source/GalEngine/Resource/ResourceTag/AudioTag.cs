@@ -24,6 +24,12 @@ namespace GalEngine
         {
             if (resource is null)
             {
+
+#if DEBUG
+                DebugLayer.Assert(System.IO.File.Exists(filePath) is true,
+                     ErrorType.FileIsNotExist, filePath);
+#endif
+
                 resource = new VoiceBuffer(filePath);
                 voicePlayer = new VoicePlayer(resource as VoiceBuffer);
             }

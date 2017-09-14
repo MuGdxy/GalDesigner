@@ -33,7 +33,7 @@ namespace GalEngine
         {
             errorText.Add(ErrorType.UnknownResourceType, "Get Unknown Resource Type in resList.");
             errorText.Add(ErrorType.InconsistentResourceParameters, "Resource Parameters are inconsistent, there is current code: {0}");
-            errorText.Add(ErrorType.InvalidResourceFormat, "The Resource format is not right in line {0}, file {1}");
+            errorText.Add(ErrorType.InvalidResourceFormat, "The Resource format is not right at Line {0}, File \"{1}\"");
             errorText.Add(ErrorType.FileIsNotExist, "The FilePath {0} is not exist");
         }
 

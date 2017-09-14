@@ -12,7 +12,7 @@ namespace GalEngine
 
         public static void SetValue(ResourceTag resourceTag)
         {
-            resourceTagList.Add(resourceTag.Tag, resourceTag);
+            resourceTagList[resourceTag.Tag] = resourceTag;
         }
 
         public static ResourceTag GetValue(string valueName) => resourceTagList[valueName]; 

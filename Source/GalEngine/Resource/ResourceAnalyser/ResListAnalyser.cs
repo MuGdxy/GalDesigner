@@ -197,8 +197,9 @@ namespace GalEngine
                     //The Sentence's Beginning
                     if (item[i] is '[')
                     {
+#if DEBUG
                         DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, filePath);
-
+#endif
                         inSentence = true;
                         currentSentence = new Sentence(); continue;
                     }
@@ -207,15 +208,17 @@ namespace GalEngine
                     //The Sentence's Ending
                     if (item[i] is ']')
                     {
+#if DEBUG
                         DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, filePath);
-
+#endif
                         inSentence = false;
 
                         ProcessSentenceValue(ref currentSentence, ref currentString);
 
+#if DEBUG
                         DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
                             currentSentence.ToString());
-
+#endif
                         sentences.Add(currentSentence); continue;
                     }
 
@@ -234,9 +237,10 @@ namespace GalEngine
                 }
             }
 
+#if DEBUG
             DebugLayer.Assert(inSentence is true | inString is true, ErrorType.InvalidResourceFormat,
                 contents.Length, filePath);
-
+#endif
 
         }
 
