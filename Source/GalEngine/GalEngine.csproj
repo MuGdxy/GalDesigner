@@ -52,6 +52,7 @@
     <Compile Include="Interface\IActivable.cs" />
     <Compile Include="Interface\IValuable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resource\GlobalAnalyser.cs" />
     <Compile Include="Resource\ResourceAnalyser\ResListAnalyser.cs" />
     <Compile Include="Resource\ResourceAnalyser\ResourceAnalyser.cs" />
     <Compile Include="Resource\ResourceTag\AudioTag.cs" />

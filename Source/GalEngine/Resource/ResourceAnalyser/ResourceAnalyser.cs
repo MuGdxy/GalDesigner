@@ -18,6 +18,8 @@ namespace GalEngine
         {
             tag = Tag;
             filePath = FilePath;
+
+            GlobalAnalyser.SetValue(this);
         }
 
         public void LoadAnalyser()

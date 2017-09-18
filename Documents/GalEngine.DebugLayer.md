@@ -19,7 +19,14 @@ If we assume the text is `Error: we need {1} , but we get {2}.`
 The result of text is `Error: we need value1 , but we get value2.`
 The `value1` and `value2` is variable.
 
-## Aboud Add Erorr or Warning Type
+## About Assert
+
+```C#
+    DebugLayer.Assert(bool condition, Error or Warning, ...)
+```
+If the condition is true, we will report this error or warning.
+
+## About Add Erorr or Warning Type
 
 We can add our own errorType or warningType.
 To do this ,we need the TypeID(**If the ID is used, we will cover the old**), MessageText.
