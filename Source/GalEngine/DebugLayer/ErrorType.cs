@@ -11,6 +11,7 @@ namespace GalEngine
         UnknownResourceType,
         InconsistentResourceParameters,
         InvalidResourceFormat,
-        FileIsNotExist
+        FileIsNotExist,
+        InvalidValueType
     }
 }

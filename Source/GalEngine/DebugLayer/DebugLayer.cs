@@ -35,6 +35,7 @@ namespace GalEngine
             errorText.Add(ErrorType.InconsistentResourceParameters, "Resource Parameters are inconsistent, there is current code: {0}");
             errorText.Add(ErrorType.InvalidResourceFormat, "The Resource format is not right. At Line: {0}, File: \"{1}\"");
             errorText.Add(ErrorType.FileIsNotExist, "The FilePath {0} is not exist.");
+            errorText.Add(ErrorType.InvalidValueType, "The value's type is not support.");
         }
 
         public static Exception GetErrorException(ErrorType errorType, params object[] value)

@@ -53,15 +53,17 @@
     <Compile Include="Interface\IValuable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\GlobalAnalyser.cs" />
+    <Compile Include="Resource\GlobalConfig.cs" />
+    <Compile Include="Resource\ResourceAnalyser\ConfigAnalyser.cs" />
     <Compile Include="Resource\ResourceAnalyser\ResListAnalyser.cs" />
     <Compile Include="Resource\ResourceAnalyser\ResourceAnalyser.cs" />
     <Compile Include="Resource\ResourceTag\AudioTag.cs" />
     <Compile Include="Resource\ResourceTag\BrushTag.cs" />
     <Compile Include="Resource\ResourceTag\TextFormatTag.cs" />
     <Compile Include="Resource\GlobalResource.cs" />
-    <Compile Include="Resource\GlobalValue.cs" />
     <Compile Include="Resource\ResourceTag\ImageTag.cs" />
     <Compile Include="Resource\ResourceTag\ResourceTag.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Builder\Builder.csproj">
