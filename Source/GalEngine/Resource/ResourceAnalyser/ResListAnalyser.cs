@@ -170,6 +170,7 @@ namespace GalEngine
 
 
                 default:
+                    DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, value);
                     break;
             }
 
@@ -230,7 +231,7 @@ namespace GalEngine
                         continue;
                     }
 
-                    if (item[i] != ' ' | inString is true)
+                    if (item[i] != ' ' || inString is true)
                         currentString += item[i];
 
                     if (item[i] is '"') { inString ^= true; continue; }

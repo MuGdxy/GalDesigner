@@ -2,7 +2,7 @@
 
 In our game, we need to tell the Application some information such as window's width and height, fullscreen and so on.
 
-So we have a file(.config) to define this information.
+So we have a file(.gsconfig) to define this information.
 
 ## Format
 

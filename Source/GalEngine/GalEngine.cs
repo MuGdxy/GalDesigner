@@ -14,10 +14,15 @@ namespace GalEngine
         public static void Run()
         {
 
-#if true
+#if false
             ResListAnalyser resListAnalyser = new ResListAnalyser("1", @"C:\Users\LinkC\Documents\Visual Studio 2017\Projects\GalDesigner\TestApp\ResListT.resList");
             resListAnalyser.LoadAnalyser();
             resListAnalyser.SaveAnalyser();
+#endif
+
+#if true
+            ConfigAnalyser configAnalyser = new ConfigAnalyser("1", @"C:\Users\LinkC\Documents\Visual Studio 2017\Projects\GalDesigner\TestApp\ConfigT.gsconfig");
+            configAnalyser.LoadAnalyser();
 #endif
 
             Application.Add(new GameWindow("GalEngine", 1920, 1080));
