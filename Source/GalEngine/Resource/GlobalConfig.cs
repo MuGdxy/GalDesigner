@@ -42,6 +42,8 @@ namespace GalEngine
             return (T)valueList[Tag];
         }
 
+        internal static Dictionary<string, object> ValueList => valueList;
+
         public static int Width
         {
             set => valueList[WidthName] = value;

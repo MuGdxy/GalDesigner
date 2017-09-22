@@ -1,12 +1,8 @@
 {
-  Width = 1920,
-  Height = 1080,
-  AppName = "GalEngine",
-  FullScreen = false
+	Width = 1920,
+	Height = 1080,
+	AppName = "GalEngine",
+	FullScreen = false,
+	TestValue = 2,
+	TestValue2 = 3
 }
-
-{
-  TestValue = 2,
-  TestValue2 = 3.0
-}
-

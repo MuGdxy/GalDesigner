@@ -27,7 +27,28 @@ namespace GalEngine
 
             public static string UnInclude(string input) => input.Substring(1, input.Length - 2);
 
-            public static ValueType GetType(string value)
+            public static ValueType GetType(object value)
+            {
+                switch (value)
+                {
+                    case string String:
+                        return ValueType.String;
+
+                    case int Int:
+                        return ValueType.Int;
+
+                    case bool Bool:
+                        return ValueType.Bool;
+
+                    case float Float:
+                        return ValueType.Float;
+
+                    default:
+                        return ValueType.Unknown;
+                }
+            }
+
+            public static ValueType GetType(string value, int Line, string FileTag)
             {
                 //Test String
                 if (value[0] is '"' && value[value.Length - 1] is '"') return ValueType.String;
@@ -44,20 +65,49 @@ namespace GalEngine
                     {
                         PointCount++;
 
-                        if (PointCount > 1) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, value);
+                        if (PointCount > 1) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
 
                         continue;
                     }
 
-                    if (item < '0' || item > '9') DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, value);
+                    if (item < '0' || item > '9') DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
                 }
 
                 if (value.Contains('.')) return ValueType.Float;
                 else return ValueType.Int;
             }
+
+            public override string ToString()
+            {
+                switch (Type)
+                {
+                    case ValueType.Unknown:
+                        return "";
+                        
+                    case ValueType.Int:
+                        return ValueName + " = " + (int)Value;
+                        
+                    case ValueType.Bool:
+                        string tempValue = null;
+
+                        if (Value is true) tempValue = "true";
+                        else tempValue = "false";
+
+                        return ValueName = " = " + tempValue; 
+
+                    case ValueType.Float:
+                        return ValueName + " = " + (float)Value;
+                        
+                    case ValueType.String:
+                        return ValueName + " = " + Include(Value as string);
+                        
+                    default:
+                        return "";
+                }
+            }
         }
 
-        private void ProcessSentenceValue(ref string value)
+        private static void ProcessSentenceValue(ref string value, int Line, string FileTag)
         {
             Sentence sentence = new Sentence();
 
@@ -66,23 +116,27 @@ namespace GalEngine
             var left = result[0]; var right = result[1];
 
             sentence.ValueName = left;
-            sentence.Type = Sentence.GetType(right);
+            sentence.Type = Sentence.GetType(right, Line, FileTag);
 
             switch (sentence.Type)
             {
                 case ValueType.Int:
                     sentence.Value = Convert.ToInt32(right);
                     break;
+
                 case ValueType.Bool:
                     if (right is "true") sentence.Value = true;
                     else sentence.Value = false;
                     break;
+
                 case ValueType.Float:
                     sentence.Value = (float)Convert.ToDouble(right);
                     break;
+
                 case ValueType.String:
                     sentence.Value = Sentence.UnInclude(right);
                     break;
+
                 default:
                     break;
             }
@@ -105,7 +159,7 @@ namespace GalEngine
             bool inString = false;
 
             int line = 0;
-            
+
 
             foreach (var item in contents)
             {
@@ -116,27 +170,27 @@ namespace GalEngine
                     if (item[i] is '{')
                     {
 #if DEBUG
-                        DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, FilePath);
+                        DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, Tag);
 #endif
 
                         inCodeBlock = true;
                         continue;
                     }
-                    
+
                     if (item[i] is '}')
                     {
 #if DEBUG
-                        DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, FilePath);
+                        DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, Tag);
 #endif
 
                         inCodeBlock = false;
 
-                        ProcessSentenceValue(ref currentString); continue;
+                        ProcessSentenceValue(ref currentString, line, Tag); continue;
                     }
 
                     if (item[i] is ',' && inString is false)
                     {
-                        ProcessSentenceValue(ref currentString); continue;
+                        ProcessSentenceValue(ref currentString, line, Tag); continue;
                     }
 
                     if (item[i] != ' ' || inString is true)
@@ -147,12 +201,32 @@ namespace GalEngine
             }
 
             if (inCodeBlock is true || inString is true)
-                DebugLayer.ReportError(ErrorType.InvalidResourceFormat, line, FilePath);
+                DebugLayer.ReportError(ErrorType.InvalidResourceFormat, line, Tag);
         }
 
         protected override void ProcessWriteFile(out string[] contents)
         {
-            contents = new string[10];
+            contents = new string[2 + GlobalConfig.ValueList.Count];
+
+            contents[0] = "{";
+
+            int line = 0;
+
+            foreach (var item in GlobalConfig.ValueList)
+            {
+                Sentence sentence = new Sentence()
+                {
+                    Value = item.Value,
+                    ValueName = item.Key,
+                    Type = Sentence.GetType(item.Value)
+                };
+
+                contents[++line] = "\t" + sentence;
+
+                if (line < contents.Length - 2) contents[line] += ',';  
+            }
+
+            contents[++line] = "}";
         }
     }
 }

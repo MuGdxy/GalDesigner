@@ -120,7 +120,7 @@ namespace GalEngine
 
         private Dictionary<string, ResourceTag> resourceList;
 
-        private static void ProcessSentenceValue(ref Sentence sentence, ref string value)
+        private static void ProcessSentenceValue(ref Sentence sentence, ref string value, int Line, string FileTag)
         {
             var result = value.Split(new char[] { '=' }, 2);
 
@@ -170,14 +170,14 @@ namespace GalEngine
 
 
                 default:
-                    DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, value);
+                    DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
                     break;
             }
 
             value = "";
         }
 
-        private static void BuildSentenceFromFile(string[] contents, string filePath, out List<Sentence> sentences)
+        private static void BuildSentenceFromFile(string[] contents, string FileTag, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
 
@@ -199,7 +199,7 @@ namespace GalEngine
                     if (item[i] is '[')
                     {
 #if DEBUG
-                        DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, filePath);
+                        DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileTag);
 #endif
                         inSentence = true;
                         currentSentence = new Sentence(); continue;
@@ -210,11 +210,11 @@ namespace GalEngine
                     if (item[i] is ']')
                     {
 #if DEBUG
-                        DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, filePath);
+                        DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileTag);
 #endif
                         inSentence = false;
 
-                        ProcessSentenceValue(ref currentSentence, ref currentString);
+                        ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
 
 #if DEBUG
                         DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
@@ -226,7 +226,7 @@ namespace GalEngine
                     //Find a value
                     if (item[i] is ',' && inString is false)
                     {
-                        ProcessSentenceValue(ref currentSentence, ref currentString);
+                        ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
 
                         continue;
                     }
@@ -240,7 +240,7 @@ namespace GalEngine
 
 #if DEBUG
             DebugLayer.Assert(inSentence is true | inString is true, ErrorType.InvalidResourceFormat,
-                contents.Length, filePath);
+                contents.Length, FileTag);
 #endif
 
         }

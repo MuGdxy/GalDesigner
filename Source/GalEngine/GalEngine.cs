@@ -23,9 +23,10 @@ namespace GalEngine
 #if true
             ConfigAnalyser configAnalyser = new ConfigAnalyser("1", @"C:\Users\LinkC\Documents\Visual Studio 2017\Projects\GalDesigner\TestApp\ConfigT.gsconfig");
             configAnalyser.LoadAnalyser();
+            configAnalyser.SaveAnalyser();
 #endif
 
-            Application.Add(new GameWindow("GalEngine", 1920, 1080));
+            Application.Add(new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height));
 
             Application.RunLoop();
             

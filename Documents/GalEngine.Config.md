@@ -34,4 +34,4 @@ But we only support this format: `bool`, `int`, `float`, `string`.
 
 We can use `SetValue` to set the value and `GetValue` to get the value in C# script.
 
-**The value's tag can not be same as Keyword.** 
+**The value's name can not be same as Keyword.** 

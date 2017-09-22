@@ -13,11 +13,11 @@ namespace GalEngine
         /// </summary>
         UnknownResourceType,
         /// <summary>
-        /// Resource Parameters are inconsistent, there is current code: {0}
+        /// Resource Parameters are inconsistent. At Line: {0}, FileTag: {1}
         /// </summary>
         InconsistentResourceParameters,
         /// <summary>
-        /// The Resource format is not right. At Line: {0}, File: {1}
+        /// The Resource format is not right. At Line: {0}, FileTag: {1}
         /// </summary>
         InvalidResourceFormat,
         /// <summary>
