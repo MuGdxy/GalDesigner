@@ -223,6 +223,9 @@ namespace GalEngine
                         sentences.Add(currentSentence); continue;
                     }
 
+                    //Find String Value's Tag
+                    if (item[i] is '"') { currentString += item[i]; inString ^= true; continue; }
+
                     //Find a value
                     if (item[i] is ',' && inString is false)
                     {
@@ -231,10 +234,9 @@ namespace GalEngine
                         continue;
                     }
 
-                    if (item[i] != ' ' || inString is true)
+                    //Build String for making Sentence
+                    if (Utilities.IsAlphaOrNumber(item[i]) is true || item[i] is '=' || inString is true)
                         currentString += item[i];
-
-                    if (item[i] is '"') { inString ^= true; continue; }
                 }
             }
 

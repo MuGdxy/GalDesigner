@@ -93,7 +93,7 @@ namespace GalEngine
                         if (Value is true) tempValue = "true";
                         else tempValue = "false";
 
-                        return ValueName = " = " + tempValue; 
+                        return ValueName + " = " + tempValue; 
 
                     case ValueType.Float:
                         return ValueName + " = " + (float)Value;
@@ -177,6 +177,7 @@ namespace GalEngine
                         continue;
                     }
 
+                    //Find Block
                     if (item[i] is '}')
                     {
 #if DEBUG
@@ -193,10 +194,11 @@ namespace GalEngine
                         ProcessSentenceValue(ref currentString, line, Tag); continue;
                     }
 
-                    if (item[i] != ' ' || inString is true)
-                        currentString += item[i];
+                    if (item[i] is '"') { currentString += item[i]; inString ^= true; continue; }
 
-                    if (item[i] is '"') { inString ^= true; continue; }
+                    //Bulid String to making Sentence
+                    if (Utilities.IsAlphaOrNumber(item[i]) is true || item[i] is '=' || inString is true)
+                        currentString += item[i];
                 }
             }
 
