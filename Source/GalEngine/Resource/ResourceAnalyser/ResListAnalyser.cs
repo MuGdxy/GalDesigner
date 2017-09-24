@@ -177,7 +177,7 @@ namespace GalEngine
             value = "";
         }
 
-        private static void BuildSentenceFromFile(string[] contents, string FileTag, out List<Sentence> sentences)
+        private static void BuildSentenceFromFile(string contents, string FileTag, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
 
@@ -191,53 +191,47 @@ namespace GalEngine
 
             foreach (var item in contents)
             {
-                line++;
+                if (item is '\n') { line++; continue; }
 
-                for (int i = 0; i < item.Length; i++)
+                if (item is '[')
                 {
-                    //The Sentence's Beginning
-                    if (item[i] is '[')
-                    {
 #if DEBUG
-                        DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileTag);
+                    DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileTag);
 #endif
-                        inSentence = true;
-                        currentSentence = new Sentence(); continue;
-                    }
-
-
-                    //The Sentence's Ending
-                    if (item[i] is ']')
-                    {
-#if DEBUG
-                        DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileTag);
-#endif
-                        inSentence = false;
-
-                        ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
-
-#if DEBUG
-                        DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
-                            currentSentence.ToString());
-#endif
-                        sentences.Add(currentSentence); continue;
-                    }
-
-                    //Find String Value's Tag
-                    if (item[i] is '"') { currentString += item[i]; inString ^= true; continue; }
-
-                    //Find a value
-                    if (item[i] is ',' && inString is false)
-                    {
-                        ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
-
-                        continue;
-                    }
-
-                    //Build String for making Sentence
-                    if (Utilities.IsAlphaOrNumber(item[i]) is true || item[i] is '=' || inString is true)
-                        currentString += item[i];
+                    inSentence = true;
+                    currentSentence = new Sentence(); continue;
                 }
+
+                if (item is ']')
+                {
+#if DEBUG
+                    DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileTag);
+#endif
+                    inSentence = false;
+
+                    ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
+
+#if DEBUG
+                    DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
+                        currentSentence.ToString());
+#endif
+                    sentences.Add(currentSentence); continue;
+                }
+
+                //Find String Value's Tag
+                if (item is '"') { currentString += item; inString ^= true; continue; }
+
+                //Find a value
+                if (item is ',' && inString is false)
+                {
+                    ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
+
+                    continue;
+                }
+
+                //Build String for making Sentence
+                if (Utilities.IsAlphaOrNumber(item) is true || item is '=' || inString is true)
+                    currentString += item;
             }
 
 #if DEBUG
@@ -296,7 +290,7 @@ namespace GalEngine
             resourceList = new Dictionary<string, ResourceTag>();
         }
 
-        protected override void ProcessReadFile(ref string[] contents)
+        protected override void ProcessReadFile(ref string contents)
         {
             BuildSentenceFromFile(contents, FilePath, out List<Sentence> sentences);
 
@@ -331,15 +325,15 @@ namespace GalEngine
 
         }
 
-        protected override void ProcessWriteFile(out string[] contents)
+        protected override void ProcessWriteFile(out string contents)
         {
             BuildSentenceFromList(resourceList, out List<Sentence> sentences);
 
-            contents = new string[sentences.Count * 2];
+            contents = "";
 
             for (int i = 0; i < sentences.Count; i++)
             {
-                contents[i * 2] = sentences[i].ToString();
+                contents += sentences[i] + "\n";
             }
         }
     }

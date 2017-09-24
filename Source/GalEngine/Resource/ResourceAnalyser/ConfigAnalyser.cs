@@ -151,7 +151,7 @@ namespace GalEngine
             
         }
 
-        protected override void ProcessReadFile(ref string[] contents)
+        protected override void ProcessReadFile(ref string contents)
         {
             string currentString = "";
 
@@ -160,62 +160,58 @@ namespace GalEngine
 
             int line = 0;
 
-
             foreach (var item in contents)
             {
-                line++;
+                if (item is '\n') { line++; continue; }
 
-                for (int i = 0; i < item.Length; i++)
+                if (item is '{')
                 {
-                    if (item[i] is '{')
-                    {
 #if DEBUG
-                        DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, Tag);
+                    DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, Tag);
 #endif
 
-                        inCodeBlock = true;
-                        continue;
-                    }
-
-                    //Find Block
-                    if (item[i] is '}')
-                    {
-#if DEBUG
-                        DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, Tag);
-#endif
-
-                        inCodeBlock = false;
-
-                        ProcessSentenceValue(ref currentString, line, Tag); continue;
-                    }
-
-                    if (item[i] is ',' && inString is false)
-                    {
-                        ProcessSentenceValue(ref currentString, line, Tag); continue;
-                    }
-
-                    if (item[i] is '"') { currentString += item[i]; inString ^= true; continue; }
-
-                    //Bulid String to making Sentence
-                    if (Utilities.IsAlphaOrNumber(item[i]) is true || item[i] is '=' || inString is true)
-                        currentString += item[i];
+                    inCodeBlock = true;
+                    continue;
                 }
+
+                //Find Block
+                if (item is '}')
+                {
+#if DEBUG
+                    DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, Tag);
+#endif
+
+                    inCodeBlock = false;
+
+                    ProcessSentenceValue(ref currentString, line, Tag); continue;
+                }
+
+                if (item is ',' && inString is false)
+                {
+                    ProcessSentenceValue(ref currentString, line, Tag); continue;
+                }
+
+                if (item is '"') { currentString += item; inString ^= true; continue; }
+
+                //Bulid String to making Sentence
+                if (Utilities.IsAlphaOrNumber(item) is true || item is '=' || inString is true)
+                    currentString += item;
             }
 
             if (inCodeBlock is true || inString is true)
                 DebugLayer.ReportError(ErrorType.InvalidResourceFormat, line, Tag);
         }
 
-        protected override void ProcessWriteFile(out string[] contents)
+        protected override void ProcessWriteFile(out string contents)
         {
-            contents = new string[2 + GlobalConfig.ValueList.Count];
-
-            contents[0] = "{";
+            contents = "{\n";
 
             int line = 0;
 
             foreach (var item in GlobalConfig.ValueList)
             {
+                line++;
+
                 Sentence sentence = new Sentence()
                 {
                     Value = item.Value,
@@ -223,12 +219,14 @@ namespace GalEngine
                     Type = Sentence.GetType(item.Value)
                 };
 
-                contents[++line] = "\t" + sentence;
+                contents += "\t" + sentence;
 
-                if (line < contents.Length - 2) contents[line] += ',';  
+                if (line < GlobalConfig.ValueList.Count) contents += ',';
+
+                contents += "\n";
             }
 
-            contents[++line] = "}";
+            contents += "}";
         }
     }
 }

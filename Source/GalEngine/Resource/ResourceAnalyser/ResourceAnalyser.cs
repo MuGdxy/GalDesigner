@@ -11,8 +11,8 @@ namespace GalEngine
         private string filePath;
         private string tag;
 
-        protected abstract void ProcessReadFile(ref string[] contents);
-        protected abstract void ProcessWriteFile(out string[] contents);
+        protected abstract void ProcessReadFile(ref string contents);
+        protected abstract void ProcessWriteFile(out string contents);
 
         internal ResourceAnalyser(string Tag, string FilePath)
         {
@@ -28,16 +28,16 @@ namespace GalEngine
             DebugLayer.Assert(System.IO.File.Exists(filePath) is false,
                  ErrorType.FileIsNotExist, filePath);
 #endif
-            string[] contents = System.IO.File.ReadAllLines(filePath);
+            string contents = System.IO.File.ReadAllText(filePath);
 
             ProcessReadFile(ref contents);
         }
 
         public void SaveAnalyser()
         {
-            ProcessWriteFile(out string[] contents);
+            ProcessWriteFile(out string contents);
             
-            System.IO.File.WriteAllLines(filePath, contents);
+            System.IO.File.WriteAllText(filePath, contents);
         }
 
         public string Tag => tag;

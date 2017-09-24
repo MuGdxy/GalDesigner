@@ -15,13 +15,13 @@ namespace GalEngine
         {
 
 #if false
-            ResListAnalyser resListAnalyser = new ResListAnalyser("1", @"C:\Users\LinkC\Documents\Visual Studio 2017\Projects\GalDesigner\TestApp\ResListT.resList");
+            ResListAnalyser resListAnalyser = new ResListAnalyser("1", @"ResListT.resList");
             resListAnalyser.LoadAnalyser();
             resListAnalyser.SaveAnalyser();
 #endif
 
 #if true
-            ConfigAnalyser configAnalyser = new ConfigAnalyser("1", @"C:\Users\LinkC\Documents\Visual Studio 2017\Projects\GalDesigner\TestApp\ConfigT.gsconfig");
+            ConfigAnalyser configAnalyser = new ConfigAnalyser("1", @"ConfigT.gsConfig");
             configAnalyser.LoadAnalyser();
             configAnalyser.SaveAnalyser();
 #endif
