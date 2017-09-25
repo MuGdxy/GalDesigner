@@ -93,7 +93,7 @@ namespace GalEngine
 
             public static string Include(string input) => '"' + input + '"';
 
-            public static string UnInclude(string input) => input.Substring(1, input.Length - 2);
+            public static string Unclude(string input) => input.Substring(1, input.Length - 2);
 
             public static ResourceType GetType(string TypeName)
             {
@@ -133,15 +133,15 @@ namespace GalEngine
                     break;
 
                 case "Tag":
-                    sentence.Tag = Sentence.UnInclude(right);
+                    sentence.Tag = Sentence.Unclude(right);
                     break;
 
                 case "FilePath":
-                    sentence.FilePath = Sentence.UnInclude(right);
+                    sentence.FilePath = Sentence.Unclude(right);
                     break;
 
                 case "Fontface":
-                    sentence.Fontface = Sentence.UnInclude(right);
+                    sentence.Fontface = Sentence.Unclude(right);
                     break;
 
                 case "Size":
@@ -193,6 +193,16 @@ namespace GalEngine
             {
                 if (item is '\n') { line++; continue; }
 
+                //Find String Value's Tag
+                if (item is '"') { currentString += item; inString ^= true; continue; }
+
+                //Build String for making Sentence
+                if (Utilities.IsAlphaOrNumber(item) is true || item is '=' || inString is true)
+                {
+                    currentString += item;
+                    continue;
+                }
+
                 if (item is '[')
                 {
 #if DEBUG
@@ -218,20 +228,13 @@ namespace GalEngine
                     sentences.Add(currentSentence); continue;
                 }
 
-                //Find String Value's Tag
-                if (item is '"') { currentString += item; inString ^= true; continue; }
-
                 //Find a value
-                if (item is ',' && inString is false)
+                if (item is ',')
                 {
                     ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
 
                     continue;
                 }
-
-                //Build String for making Sentence
-                if (Utilities.IsAlphaOrNumber(item) is true || item is '=' || inString is true)
-                    currentString += item;
             }
 
 #if DEBUG

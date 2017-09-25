@@ -25,7 +25,7 @@ namespace GalEngine
 
             public static string Include(string input) => '"' + input + '"';
 
-            public static string UnInclude(string input) => input.Substring(1, input.Length - 2);
+            public static string Unclude(string input) => input.Substring(1, input.Length - 2);
 
             public static ValueType GetType(object value)
             {
@@ -70,7 +70,7 @@ namespace GalEngine
                         continue;
                     }
 
-                    if (item < '0' || item > '9') DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
+                    if (Utilities.IsNumber(item) is false) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
                 }
 
                 if (value.Contains('.')) return ValueType.Float;
@@ -134,7 +134,7 @@ namespace GalEngine
                     break;
 
                 case ValueType.String:
-                    sentence.Value = Sentence.UnInclude(right);
+                    sentence.Value = Sentence.Unclude(right);
                     break;
 
                 default:
@@ -164,6 +164,15 @@ namespace GalEngine
             {
                 if (item is '\n') { line++; continue; }
 
+                if (item is '"') { currentString += item; inString ^= true; continue; }
+
+                //Bulid String to making Sentence
+                if (Utilities.IsAlphaOrNumber(item) is true || item is '=' || inString is true)
+                {
+                    currentString += item;
+                    continue;
+                }
+
                 if (item is '{')
                 {
 #if DEBUG
@@ -186,16 +195,11 @@ namespace GalEngine
                     ProcessSentenceValue(ref currentString, line, Tag); continue;
                 }
 
-                if (item is ',' && inString is false)
+                if (item is ',')
                 {
                     ProcessSentenceValue(ref currentString, line, Tag); continue;
                 }
 
-                if (item is '"') { currentString += item; inString ^= true; continue; }
-
-                //Bulid String to making Sentence
-                if (Utilities.IsAlphaOrNumber(item) is true || item is '=' || inString is true)
-                    currentString += item;
             }
 
             if (inCodeBlock is true || inString is true)

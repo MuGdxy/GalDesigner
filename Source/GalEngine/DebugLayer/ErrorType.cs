@@ -27,6 +27,10 @@ namespace GalEngine
         /// <summary>
         /// The value's type is not support.
         /// </summary>
-        InvalidValueType
+        InvalidValueType,
+        /// <summary>
+        /// The file's type is not support. At line: {0}, FileTag: {1}
+        /// </summary>
+        InvaildFileType
     }
 }
