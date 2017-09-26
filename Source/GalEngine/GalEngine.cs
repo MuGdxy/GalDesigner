@@ -16,20 +16,15 @@ namespace GalEngine
 
 #if false
             ResListAnalyser resListAnalyser = new ResListAnalyser("1", @"ResListT.resList");
-            resListAnalyser.LoadAnalyser();
-            resListAnalyser.SaveAnalyser();
 #endif
 
 #if false
             ConfigAnalyser configAnalyser = new ConfigAnalyser("1", @"ConfigT.gsConfig");
-            configAnalyser.LoadAnalyser();
-            configAnalyser.SaveAnalyser();
 #endif
 
 #if true
-            BuildListAnalyser buildListAnalyser = new BuildListAnalyser("1", @"BuildListT.buildList");
-            buildListAnalyser.LoadAnalyser();
 #endif
+            BuildListAnalyser.LoadAllBuildList();
 
             Application.Add(new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height));
 

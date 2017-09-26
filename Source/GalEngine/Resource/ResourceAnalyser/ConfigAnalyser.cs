@@ -107,7 +107,7 @@ namespace GalEngine
             }
         }
 
-        private static void ProcessSentenceValue(ref string value, int Line, string FileTag)
+        private void ProcessSentenceValue(ref string value, int Line, string FileTag)
         {
             Sentence sentence = new Sentence();
 
@@ -230,7 +230,7 @@ namespace GalEngine
                 contents += "\n";
             }
 
-            contents += "}";
+            contents += "}\n";
         }
     }
 }

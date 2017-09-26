@@ -120,7 +120,7 @@ namespace GalEngine
 
         private Dictionary<string, ResourceTag> resourceList;
 
-        private static void ProcessSentenceValue(ref Sentence sentence, ref string value, int Line, string FileTag)
+        private void ProcessSentenceValue(ref Sentence sentence, ref string value, int Line, string FileTag)
         {
             var result = value.Split(new char[] { '=' }, 2);
 
@@ -177,7 +177,7 @@ namespace GalEngine
             value = "";
         }
 
-        private static void BuildSentenceFromFile(string contents, string FileTag, out List<Sentence> sentences)
+        private void BuildSentenceFromFile(string contents, string FileTag, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
 
@@ -244,7 +244,7 @@ namespace GalEngine
 
         }
 
-        private static void BuildSentenceFromList(Dictionary<string, ResourceTag> resourceList, out List<Sentence> sentences)
+        private void BuildSentenceFromList(Dictionary<string, ResourceTag> resourceList, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
 

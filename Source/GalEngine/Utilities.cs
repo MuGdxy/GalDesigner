@@ -18,5 +18,27 @@ namespace GalEngine
             => value >= '0' && value <= '9';
 
         public static bool IsAlphaOrNumber(char value) => IsAlpha(value) || IsNumber(value);
+
+        public static string GetFileSuffix(string file)
+        {
+            if (file.Contains('.') is false)
+                throw new Exception("Get FileSuffix failed, the file does not have suffix.");
+
+            var suffix = "";
+
+            for (int i = file.Length - 1; i >= 0; i--)
+            {
+                if (file[i] is '.') break;
+
+                suffix += file[i];
+            }
+
+            var result = "";
+
+            for (int i = suffix.Length - 1; i >= 0; i--)
+                result += suffix[i];
+
+            return result;
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿resList{
-	resList1 = "ResListT.resList"
+	resList1 = "ResListT.resList",
+	resList2 = "ResListT.resList"
 }
 
 gsConfig{
-	gsConfig1 = "ConfigT.gsConfig"
+	gsConfig1 = "ConfigT.gsConfig",
+	gsConfig2 = "ConfigT.gsConfig"
 }
