@@ -245,10 +245,12 @@ namespace GalEngine
 
         private static void ProcessDirectory(string directoryPath)
         {
+            //Get files in this directory
             var files = System.IO.Directory.GetFiles(directoryPath);
 
             foreach (var item in files)
             {
+                //Find a .buildList file
                 if (Utilities.GetFileSuffix(item) is SuffixName)
                 {
                     var buildListAnalyser = new BuildListAnalyser(item, item);
@@ -256,6 +258,7 @@ namespace GalEngine
                 }
             }
 
+            //Get directorys in this directory
             var directorys = System.IO.Directory.GetDirectories(directoryPath);
 
             foreach (var item in directorys)
@@ -270,5 +273,17 @@ namespace GalEngine
             ProcessDirectory(Environment.CurrentDirectory);
         }
 
+        public static void SaveAllBuildList()
+        {
+            foreach (var item in GlobalAnalyser.AnalyserList)
+            {
+                //Find ConfigAnalyser
+                if (item.Value is ConfigAnalyser)
+                {
+                    //Save it.
+                    item.Value.SaveAnalyser();
+                }
+            }
+        }
     }
 }

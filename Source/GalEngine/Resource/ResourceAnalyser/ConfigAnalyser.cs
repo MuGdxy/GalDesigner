@@ -107,6 +107,8 @@ namespace GalEngine
             }
         }
 
+        private Dictionary<string, object> valueList;
+
         private void ProcessSentenceValue(ref string value, int Line, string FileTag)
         {
             Sentence sentence = new Sentence();
@@ -141,6 +143,8 @@ namespace GalEngine
                     break;
             }
 
+            valueList[sentence.ValueName] = sentence.Value;
+
             GlobalConfig.SetValue(sentence.ValueName, sentence.Value);
 
             value = "";
@@ -148,7 +152,7 @@ namespace GalEngine
 
         internal ConfigAnalyser(string Tag, string FilePath) : base(Tag, FilePath)
         {
-            
+            valueList = new Dictionary<string, object>();   
         }
 
         protected override void ProcessReadFile(ref string contents)
@@ -212,20 +216,20 @@ namespace GalEngine
 
             int line = 0;
 
-            foreach (var item in GlobalConfig.ValueList)
+            foreach (var item in valueList)
             {
                 line++;
 
                 Sentence sentence = new Sentence()
                 {
-                    Value = item.Value,
+                    Value = GlobalConfig.ValueList[item.Key],
                     ValueName = item.Key,
                     Type = Sentence.GetType(item.Value)
                 };
 
                 contents += "\t" + sentence;
 
-                if (line < GlobalConfig.ValueList.Count) contents += ',';
+                if (line < valueList.Count) contents += ',';
 
                 contents += "\n";
             }

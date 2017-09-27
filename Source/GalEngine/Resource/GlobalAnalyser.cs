@@ -15,6 +15,8 @@ namespace GalEngine
             analyserList = new Dictionary<string, ResourceAnalyser>();
         }
 
+        internal static Dictionary<string, ResourceAnalyser> AnalyserList => analyserList;
+
         public static void SetValue(ResourceAnalyser resourceAnalyser)
             => analyserList[resourceAnalyser.Tag] = resourceAnalyser;
         

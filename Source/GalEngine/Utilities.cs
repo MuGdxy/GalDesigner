@@ -21,8 +21,9 @@ namespace GalEngine
 
         public static string GetFileSuffix(string file)
         {
-            if (file.Contains('.') is false)
-                throw new Exception("Get FileSuffix failed, the file does not have suffix.");
+#if DEBUG
+            DebugLayer.Assert(file.Contains('.') is false, ErrorType.FileSuffixIsNotExist);
+#endif
 
             var suffix = "";
 

@@ -89,8 +89,10 @@ namespace GalEngine
 
         public override void OnSizeChange(object sender, SizeChangeEventArgs e)
         {
+            //On Create Window
             if (presentSurface is null) return;
 
+            //Resize Buffer
             presentSurface.ResizeBuffer(e.NextWidth, e.NextHeight);
 
             base.OnSizeChange(sender, e);

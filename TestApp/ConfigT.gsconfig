@@ -1,4 +1,5 @@
 {
+	C = 2,
 	Width = 1920,
 	Height = 1080,
 	AppName = "GalEngine",

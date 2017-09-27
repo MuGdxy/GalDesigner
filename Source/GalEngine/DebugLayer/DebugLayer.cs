@@ -35,6 +35,7 @@ namespace GalEngine
             errorText.Add(ErrorType.InconsistentResourceParameters, "Resource Parameters are inconsistent. At Line: {0}, FileTag: {1}");
             errorText.Add(ErrorType.InvalidResourceFormat, "The Resource format is not right. At Line: {0}, FileTag: {1}");
             errorText.Add(ErrorType.FileIsNotExist, "The FilePath {0} is not exist.");
+            errorText.Add(ErrorType.FileSuffixIsNotExist, "The FilePath suffix is not exist.");
             errorText.Add(ErrorType.InvalidValueType, "The value's type is not support.");
             errorText.Add(ErrorType.InvaildFileType, "The file's type is not support. At line: {0}, FileTag: {1}");
         }

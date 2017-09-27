@@ -205,6 +205,13 @@ namespace Builder
             APILibrary.Win32.Internal.SetWindowText(handle, tag);
         }
 
+        public void SetWindowSize(int Width, int Height)
+        {
+            APILibrary.Win32.Internal.SetWindowPos(handle,
+                IntPtr.Zero, 0, 0, Width, Height,
+                (uint)(APILibrary.Win32.SetWindowPosFlags.SWP_NOMOVE | APILibrary.Win32.SetWindowPosFlags.SWP_NOZORDER));
+        }
+
         public void Show()
         {
             if (isVisible is true) return;

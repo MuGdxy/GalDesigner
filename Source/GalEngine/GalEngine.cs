@@ -25,11 +25,13 @@ namespace GalEngine
 #if true
 #endif
             BuildListAnalyser.LoadAllBuildList();
-
+            
             Application.Add(new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height));
 
             Application.RunLoop();
-            
+
+            BuildListAnalyser.SaveAllBuildList();
+
             Engine.Stop();
         }
 
