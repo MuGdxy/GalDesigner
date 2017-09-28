@@ -25,10 +25,6 @@ namespace GalEngine
         /// </summary>
         FileIsNotExist,
         /// <summary>
-        /// The FilePath suffix is not exist.
-        /// </summary>
-        FileSuffixIsNotExist,
-        /// <summary>
         /// The value's type is not support.
         /// </summary>
         InvalidValueType,

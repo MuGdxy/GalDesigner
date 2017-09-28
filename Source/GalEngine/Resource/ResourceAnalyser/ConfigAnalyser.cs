@@ -222,7 +222,7 @@ namespace GalEngine
 
                 Sentence sentence = new Sentence()
                 {
-                    Value = GlobalConfig.ValueList[item.Key],
+                    Value = GlobalConfig.GetValue(item.Key),
                     ValueName = item.Key,
                     Type = Sentence.GetType(item.Value)
                 };

@@ -11,6 +11,8 @@ namespace GalEngine
 {
     public static class GalEngine
     {
+        private static GameWindow gameWindow;
+
         public static void Run()
         {
 
@@ -25,8 +27,11 @@ namespace GalEngine
 #if true
 #endif
             BuildListAnalyser.LoadAllBuildList();
-            
-            Application.Add(new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height));
+
+            Application.Add(gameWindow = new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height)
+            {
+                IsFullScreen = GlobalConfig.IsFullScreen
+            });
 
             Application.RunLoop();
 
@@ -35,6 +40,7 @@ namespace GalEngine
             Engine.Stop();
         }
 
+        internal static GameWindow GameWindow => gameWindow;
         
     }
 }

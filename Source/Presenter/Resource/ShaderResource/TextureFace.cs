@@ -144,9 +144,21 @@ namespace Presenter
             CreateCanvasTarget();
         }
 
-        public void ResetBuffer()
+        public void ResetBuffer(float red = 0, float green = 0, float blue = 0, float alpha = 0)
         {
-            ResetResourceView();
+            if (enableDepth is true)
+            {
+                Engine.ImmediateContext.ClearRenderTargetView(renderTargetView,
+                   new SharpDX.Mathematics.Interop.RawColor4(red, green, blue, alpha));
+
+                Engine.ImmediateContext.ClearDepthStencilView(depthStencilView,
+                     SharpDX.Direct3D11.DepthStencilClearFlags.Depth | SharpDX.Direct3D11.DepthStencilClearFlags.Stencil, 1f, 0);
+            }
+            else
+            {
+                Engine.ImmediateContext.ClearRenderTargetView(renderTargetView,
+                   new SharpDX.Mathematics.Interop.RawColor4(red, green, blue, alpha));
+            }
         }
 
         public static TextureFace FromTexture2D(Texture2D texture, bool enableDepthBuffer = false)

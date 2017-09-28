@@ -21,9 +21,7 @@ namespace GalEngine
 
         public static string GetFileSuffix(string file)
         {
-#if DEBUG
-            DebugLayer.Assert(file.Contains('.') is false, ErrorType.FileSuffixIsNotExist);
-#endif
+            if (file.Contains('.') is false) return null;
 
             var suffix = "";
 

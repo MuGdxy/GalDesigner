@@ -15,6 +15,9 @@ namespace GalEngine
             resourceTagList[resourceTag.Tag] = resourceTag;
         }
 
-        public static ResourceTag GetValue(string valueName) => resourceTagList[valueName]; 
+        public static ResourceTag GetValue(string Tag) => resourceTagList[Tag];
+
+        public static T GetValue<T>(string Tag) where T : ResourceTag
+            => resourceTagList[Tag] as T;
     }
 }

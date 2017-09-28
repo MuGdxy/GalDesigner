@@ -8,17 +8,13 @@ namespace GalEngine
 {
     public static class GlobalConfig
     {
-        private const string WidthName = "Width";
-        private const string HeightName = "Height";
-        private const string ApplicationName = "AppName";
-        private const string FullScreenName = "FullScreen";
-
-        private static Dictionary<string, object> valueList;
+        internal const string WidthName = "Width";
+        internal const string HeightName = "Height";
+        internal const string ApplicationName = "AppName";
+        internal const string FullScreenName = "FullScreen";
 
         static GlobalConfig()
         {
-            valueList = new Dictionary<string, object>();
-
             SetValue(WidthName, 800);
             SetValue(HeightName, 600);
             SetValue(ApplicationName, "GalEngine");
@@ -27,45 +23,35 @@ namespace GalEngine
 
         public static void SetValue(string Tag, object value)
         {
-
-#if DEBUG
-            DebugLayer.Assert(Utilities.IsBaseType(value) is false, ErrorType.InvalidValueType);
-#endif
-
-            valueList[Tag] = value;
+            GlobalValue.SetValue(Tag, value);
         }
 
-        public static object GetValue(string Tag) => valueList[Tag];
+        public static object GetValue(string Tag) => GlobalValue.GetValue(Tag);
 
-        public static T GetValue<T>(string Tag)
-        {
-            return (T)valueList[Tag];
-        }
-
-        internal static Dictionary<string, object> ValueList => valueList;
+        public static T GetValue<T>(string Tag) => GlobalValue.GetValue<T>(Tag);
 
         public static int Width
         {
-            set => valueList[WidthName] = value;
-            get => (int)valueList[WidthName];
+            set => GlobalValue.SetValue(WidthName, value);
+            get => GlobalValue.GetValue<int>(WidthName);
         }
 
         public static int Height
         {
-            set => valueList[HeightName] = value;
-            get => (int)valueList[HeightName];
+            set => GlobalValue.SetValue(HeightName, value);
+            get => GlobalValue.GetValue<int>(HeightName);
         }
 
         public static string AppName
         {
-            set => valueList[ApplicationName] = value;
-            get => valueList[ApplicationName] as string;
+            set => GlobalValue.SetValue(ApplicationName, value);
+            get => GlobalValue.GetValue<string>(ApplicationName);
         }
 
         public static bool IsFullScreen
         {
-            set => valueList[FullScreenName] = value;
-            get => (bool)valueList[FullScreenName];
+            set => GlobalValue.SetValue(FullScreenName, value);
+            get => GlobalValue.GetValue<bool>(FullScreenName);
         }
     }
 }

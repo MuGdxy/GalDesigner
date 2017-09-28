@@ -58,8 +58,38 @@ namespace GalEngine
             }
         }
 
+        private void CheckConfigValue()
+        {
+            bool isSizeChange = false;
+            bool isAppNameChange = false;
+
+            if (GlobalConfig.Width != Width || GlobalConfig.Height != Height)
+                isSizeChange = true;
+
+            if (GlobalConfig.AppName != Title)
+                isAppNameChange = true;
+
+            //We need to make this state be same as Present 
+            GlobalConfig.IsFullScreen = IsFullScreen;
+
+            if (isSizeChange is true)
+                SetWindowSize(GlobalConfig.Width, GlobalConfig.Height);
+
+            if (isAppNameChange is true)
+                SetTitle(GlobalConfig.AppName);
+        }
+
         private void OnRender()
         {
+            renderSurface.ResetBuffer(1, 1, 1, 1);
+
+            Canvas.BeginDraw(renderSurface);
+
+            Canvas.EndDraw();
+
+            Canvas.BeginDraw(presentSurface);
+
+            //Present
             if (presentSurface.IsFullScreen is false)
                 Canvas.DrawImage(0, 0, Width, Height, renderSurface);
             else
@@ -68,6 +98,9 @@ namespace GalEngine
 
                 Canvas.DrawImage(gameRect.Left, gameRect.Top, gameRect.Right, gameRect.Bottom, renderSurface);
             }
+
+            Canvas.EndDraw();
+
         }
 
         private void ComputeMousePos(Rect gameRect, int x, int y, ref int resultX, ref int resultY)
@@ -133,13 +166,21 @@ namespace GalEngine
 
         public override void OnUpdate(object sender)
         {
-            Canvas.BeginDraw(presentSurface);
+            //Check State
+            CheckConfigValue();
 
-            Canvas.EndDraw();
+            //Render And Present
+            OnRender();
 
             presentSurface.SwapBuffer();
 
             base.OnUpdate(sender);
+        }
+
+        public bool IsFullScreen
+        {
+            set => presentSurface.IsFullScreen = value;
+            get => presentSurface.IsFullScreen;
         }
 
     }
