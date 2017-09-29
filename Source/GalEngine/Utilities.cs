@@ -39,5 +39,14 @@ namespace GalEngine
 
             return result;
         }
+
+        public static void Dipose<T>(ref T value) where T : class
+        {
+            if (value is null) return;
+
+            (value as IDisposable).Dispose();
+
+            value = null;
+        }
     }
 }

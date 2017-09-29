@@ -37,3 +37,13 @@ For example:
     DebugLayer.RegisterError(errorType, "We get error {1} in line {2}.");
 ```
 
+## About Watch
+
+We have a surface to draw value for watching and debug.
+
+We use `Tab` to enable or disable it. 
+
+We can use `DebugLayer.AddWatch(ValueTag)`,`DebugLayer.RemoveWatch(ValueTag)` to add or remove a value to watch.
+
+
+

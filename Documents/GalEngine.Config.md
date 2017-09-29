@@ -22,8 +22,8 @@ Like `.json`. We use `{}` to include all value and `,` to distinguish the value.
 
 Some value have their own function.
 
-- `Width`: The window's width.
-- `Height`: The window's height.
+- `Width`: The window's width(Resolution).
+- `Height`: The window's height(Resolution).
 - `AppName`: The window's title.
 - `FullScreen`: IsFullScreen.
 

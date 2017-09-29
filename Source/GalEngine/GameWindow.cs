@@ -12,18 +12,15 @@ namespace GalEngine
 
     partial class GameWindow : GenericWindow
     {
-        private Present presentSurface;
-        private TextureFace renderSurface;
-
         private int mousePosX;
         private int mousePosY;
 
         private void ComputeGameRect(out Rect result)
         {
-            if (presentSurface.IsFullScreen is true)
+            if (GalEngine.PresentSurface.IsFullScreen is true)
             {
-                float Tx = renderSurface.Width;
-                float Ty = renderSurface.Height;
+                float Tx = GalEngine.RenderSurface.Width;
+                float Ty = GalEngine.RenderSurface.Height;
 
                 float x = Engine.PhysicsAspectRatioMaxX;
                 float y = Engine.PhysicsAspectRatioMaxY;
@@ -60,11 +57,12 @@ namespace GalEngine
 
         private void CheckConfigValue()
         {
-            bool isSizeChange = false;
+            bool isResolutionChange = false;
             bool isAppNameChange = false;
 
-            if (GlobalConfig.Width != Width || GlobalConfig.Height != Height)
-                isSizeChange = true;
+            if (GalEngine.RenderSurface.Width != GlobalConfig.Width ||
+                GalEngine.RenderSurface.Height != GlobalConfig.Height)
+                isResolutionChange = true;
 
             if (GlobalConfig.AppName != Title)
                 isAppNameChange = true;
@@ -72,8 +70,8 @@ namespace GalEngine
             //We need to make this state be same as Present 
             GlobalConfig.IsFullScreen = IsFullScreen;
 
-            if (isSizeChange is true)
-                SetWindowSize(GlobalConfig.Width, GlobalConfig.Height);
+            if (isResolutionChange is true)
+                GalEngine.SetResolution(GlobalConfig.Width, GlobalConfig.Height);
 
             if (isAppNameChange is true)
                 SetTitle(GlobalConfig.AppName);
@@ -81,22 +79,22 @@ namespace GalEngine
 
         private void OnRender()
         {
-            renderSurface.ResetBuffer(1, 1, 1, 1);
+            GalEngine.RenderSurface.ResetBuffer(1, 1, 1, 1);
 
-            Canvas.BeginDraw(renderSurface);
+            Canvas.BeginDraw(GalEngine.RenderSurface);
 
             Canvas.EndDraw();
 
-            Canvas.BeginDraw(presentSurface);
+            Canvas.BeginDraw(GalEngine.PresentSurface);
 
             //Present
-            if (presentSurface.IsFullScreen is false)
-                Canvas.DrawImage(0, 0, Width, Height, renderSurface);
+            if (GalEngine.PresentSurface.IsFullScreen is false)
+                Canvas.DrawImage(0, 0, Width, Height, GalEngine.RenderSurface);
             else
             {
                 ComputeGameRect(out Rect gameRect);
 
-                Canvas.DrawImage(gameRect.Left, gameRect.Top, gameRect.Right, gameRect.Bottom, renderSurface);
+                Canvas.DrawImage(gameRect.Left, gameRect.Top, gameRect.Right, gameRect.Bottom, GalEngine.RenderSurface);
             }
 
             Canvas.EndDraw();
@@ -108,14 +106,14 @@ namespace GalEngine
             float width = gameRect.Right - gameRect.Left;
             float height = gameRect.Bottom - gameRect.Top;
 
-            resultX = (int)(renderSurface.Width * (x - gameRect.Left) / width);
-            resultY = (int)(renderSurface.Height * (y - gameRect.Top) / height);
+            resultX = (int)(GalEngine.RenderSurface.Width * (x - gameRect.Left) / width);
+            resultY = (int)(GalEngine.RenderSurface.Height * (y - gameRect.Top) / height);
         }
 
         public GameWindow(string Title, int Width, int Height) : base(Title, Width, Height)
         {
-            presentSurface = new Present(Handle, Width, Height);
-            renderSurface = new TextureFace(Width, Height);
+            GalEngine.PresentSurface = new Present(Handle, Width, Height);
+
 
             IsVisible = true;
         }
@@ -123,10 +121,11 @@ namespace GalEngine
         public override void OnSizeChange(object sender, SizeChangeEventArgs e)
         {
             //On Create Window
-            if (presentSurface is null) return;
+            if (GalEngine.PresentSurface is null) return;
 
             //Resize Buffer
-            presentSurface.ResizeBuffer(e.NextWidth, e.NextHeight);
+            if (e.LastHeight != e.NextHeight || e.LastWidth != e.NextWidth)
+                GalEngine.PresentSurface.ResizeBuffer(e.NextWidth, e.NextHeight);
 
             base.OnSizeChange(sender, e);
         }
@@ -138,7 +137,7 @@ namespace GalEngine
             if (gameRect.IsContained(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
-
+            
             base.OnMouseClick(sender, e);
         }
 
@@ -172,15 +171,15 @@ namespace GalEngine
             //Render And Present
             OnRender();
 
-            presentSurface.SwapBuffer();
+            GalEngine.PresentSurface.SwapBuffer();
 
             base.OnUpdate(sender);
         }
 
         public bool IsFullScreen
         {
-            set => presentSurface.IsFullScreen = value;
-            get => presentSurface.IsFullScreen;
+            set => GalEngine.PresentSurface.IsFullScreen = value;
+            get => GalEngine.PresentSurface.IsFullScreen;
         }
 
     }
