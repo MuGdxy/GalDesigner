@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public static partial class DebugLayer
+    public static class DebugLayer
     {
         private static Dictionary<ErrorType, string> errorText = new Dictionary<ErrorType, string>();
         private static Dictionary<WarningType, string> warningText = new Dictionary<WarningType, string>();

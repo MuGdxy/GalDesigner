@@ -50,6 +50,9 @@ namespace GalEngine
                 gameWindow.SetWindowSize(Width, Height);
                 presentSurface.IsFullScreen = true;
             }
+
+            //When we change the resolution, we need to update something.
+            VisualLayer.OnResolutionChange();
         }
 
         internal static GameWindow GameWindow => gameWindow;

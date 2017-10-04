@@ -176,6 +176,10 @@ namespace GalEngine
             base.OnUpdate(sender);
         }
 
+        public int MousePosX => mousePosX;
+
+        public int MousePosY => mousePosY;
+
         public bool IsFullScreen
         {
             set => GalEngine.PresentSurface.IsFullScreen = value;

@@ -43,7 +43,7 @@ We have a surface to draw value for watching and debug.
 
 We use `Tab` to enable or disable it. 
 
-We can use `DebugLayer.AddWatch(ValueTag)`,`DebugLayer.RemoveWatch(ValueTag)` to add or remove a value to watch.
+We can use `DebugLayer.Watch(ValueTag)`,`DebugLayer.UnWatch(ValueTag)` to add or remove a value to watch.
 
 
 
