@@ -85,6 +85,9 @@ namespace GalEngine
 
             Canvas.EndDraw();
 
+            //Render Debug Visual Layer
+            VisualLayer.OnRender();
+
             Canvas.BeginDraw(GalEngine.PresentSurface);
 
             //Present
@@ -114,7 +117,6 @@ namespace GalEngine
         {
             GalEngine.PresentSurface = new Present(Handle, Width, Height);
 
-
             IsVisible = true;
         }
 
@@ -128,6 +130,16 @@ namespace GalEngine
                 GalEngine.PresentSurface.ResizeBuffer(e.NextWidth, e.NextHeight);
 
             base.OnSizeChange(sender, e);
+        }
+
+        public override void OnKeyEvent(object sender, KeyEventArgs e)
+        {
+            if (e.IsDown is true && e.KeyCode is KeyCode.Tab)
+            {
+                VisualLayer.IsEnable ^= true;
+            }
+
+            base.OnKeyEvent(sender, e);
         }
 
         public override void OnMouseClick(object sender, MouseClickEventArgs e)

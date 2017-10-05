@@ -52,7 +52,7 @@ namespace GalEngine
             }
 
             //When we change the resolution, we need to update something.
-            VisualLayer.OnResolutionChange();
+            VisualLayer.OnResolutionChange(Width, Height);
         }
 
         internal static GameWindow GameWindow => gameWindow;
