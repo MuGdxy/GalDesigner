@@ -8,74 +8,141 @@ using Presenter;
 
 namespace GalEngine
 {
-    static class VisualLayer
+    static partial class VisualLayer
+    {
+        private class VisualPad
+        {
+            private float width;
+            private float height;
+
+            private float startPosX;
+            private float startPosY;
+
+            public void OnRender()
+            {
+                float realStartPosX = startPosX * VisualLayer.width;
+                float realStartPosY = startPosY * VisualLayer.height;
+
+                float realWidth = width * VisualLayer.width;
+                float realHeight = height * VisualLayer.height;
+
+                Canvas.DrawRectangle(realStartPosX, realStartPosY,
+                    realStartPosX + realWidth,
+                    realStartPosY + realHeight, rectBrush,2);
+
+            }
+
+            public void SetArea(float Width, float Height)
+            {
+                width = Width;
+                height = Height;
+            }
+
+            public void SetAreaKeeper(float baseValue, float targetAspectRatio, bool isWidth = true)
+            {
+                if (isWidth is true)
+                {
+                    width = baseValue;
+                    height = width / targetAspectRatio * aspectRatio;
+                }else
+
+                {
+                    height = baseValue;
+                    width = height * targetAspectRatio / aspectRatio;
+                }
+            }
+
+            public void SetPosition(float posX, float posY)
+            {
+                startPosX = posX;
+                startPosY = posY;
+            }
+
+            public float Width => height;
+
+            public float Height => height;
+
+            public float StartPosX => startPosX;
+
+            public float StartPosY => startPosY;
+        }
+    }
+
+    static partial class VisualLayer
     {
         private const float borderX = 0.01f;
         private const float borderY = 0.01f;
-
-        private const float spaceSizeX = 0.02f;
-        private const float spaceSizeY = 0.03f;
-
-        private const float leftRectWidth = 0.2f;
-
+        
         private static TextureFace debugSurface;
 
         private static CanvasBrush rectBrush = new CanvasBrush(0, 0, 0, 1);
 
+        private static VisualPad infomationPad = new VisualPad();
+        private static VisualPad warningPad = new VisualPad();
+        private static VisualPad watchPad = new VisualPad();
+
         private static int width;
         private static int height;
 
-        private static bool isLock = false;
+        private static float aspectRatio;
+
         private static bool isEnable = false;
 
-        private static float opacity = 0.7f;
+        private static float opacity = 0.5f;
+
+        private static void UpdatePads(int newWidth, int newHeight)
+        {
+            if (newWidth > newHeight)
+            {
+                //const
+                const float leftAspectRatio = 16f / 9f;
+
+                //Width > Height
+
+                //Update Information Pad
+                infomationPad.SetAreaKeeper(0.2f, leftAspectRatio, false);
+                infomationPad.SetPosition(borderX, borderY);
+
+                //Update Warning Pad 
+                warningPad.SetAreaKeeper(0.7f, leftAspectRatio, false);
+                warningPad.SetPosition(borderX, borderY + infomationPad.Height + borderY);
+                
+            }
+            else
+            {
+
+            }
+        }
+
+        static VisualLayer()
+        {
+
+        }
 
         internal static void OnResolutionChange(int newWidth, int newHeight)
         {
+            aspectRatio = newWidth / (float)newHeight;
+
             Utilities.Dipose(ref debugSurface);
 
             debugSurface = new TextureFace(width = newWidth, height = newHeight);
+
+            UpdatePads(width, height);
         }
 
-        private const float informationRectWidth = leftRectWidth;
-        private const float informationRectHeight = 0.35f;
-
-        private static void OnRenderInformationRect()
+        private static void OnRenderInformationPad()
         {
-            float startPosX = borderX * width;
-            float startPosY = borderY * height;
-
-            Canvas.DrawRectangle(startPosX, startPosY,
-                startPosX + width * informationRectWidth,
-                startPosY + height * informationRectHeight, rectBrush);
+            infomationPad.OnRender();
         }
-
-        private const float warningRectWidth = leftRectWidth;
-        private const float warningRectHeight = 0.6f;
 
         private static void OnRenderWarningRect()
         {
-            float startPosX = borderX * width;
-            float startPosY = height * (borderY + informationRectHeight + spaceSizeY);
-
-            Canvas.DrawRectangle(startPosX, startPosY,
-                startPosX + width * warningRectWidth,
-                startPosY + height * warningRectHeight, rectBrush);
-
+            warningPad.OnRender();
         }
-
-        private const float watchRectWidth = 0.7f;
-        private const float watchRectHeight = informationRectHeight +
-            spaceSizeY + warningRectHeight;
 
         private static void OnRenderWatchRect()
         {
-            float startPosX = width * (borderX + leftRectWidth + spaceSizeX);
-            float startPosY = height * borderY;
 
-            Canvas.DrawRectangle(startPosX, startPosY,
-                startPosX + width * watchRectWidth,
-                startPosY + height * watchRectHeight, rectBrush);
         }
 
         internal static void OnRender()
@@ -88,7 +155,7 @@ namespace GalEngine
             //Render Object 
             Canvas.BeginDraw(debugSurface);
 
-            OnRenderInformationRect();
+            OnRenderInformationPad();
 
             OnRenderWarningRect();
 

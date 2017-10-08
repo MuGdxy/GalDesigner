@@ -127,7 +127,9 @@ namespace GalEngine
 
             //Resize Buffer
             if (e.LastHeight != e.NextHeight || e.LastWidth != e.NextWidth)
+            {
                 GalEngine.PresentSurface.ResizeBuffer(e.NextWidth, e.NextHeight);
+            }
 
             base.OnSizeChange(sender, e);
         }
@@ -149,7 +151,7 @@ namespace GalEngine
             if (gameRect.IsContained(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
-            
+
             base.OnMouseClick(sender, e);
         }
 
