@@ -22,6 +22,7 @@ namespace Presenter
         {
             textLayout = new SharpDX.DirectWrite.TextLayout(Engine.WriteFactory,
                 tText = text, (textFormat = format).TextFormat, tWidth = width, tHeight = height);
+            
         }
 
         public override void Dispose()
