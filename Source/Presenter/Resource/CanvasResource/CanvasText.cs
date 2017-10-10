@@ -6,8 +6,29 @@ using System.Threading.Tasks;
 
 namespace Presenter
 {
-    public class CanvasText : CanvasResource
+    public class TextMetrics
     {
+        private int lineCount;
+        private float height;
+        private float width;
+
+        internal TextMetrics(SharpDX.DirectWrite.TextMetrics textMetrics)
+        {
+            lineCount = textMetrics.LineCount;
+            height = textMetrics.Height;
+            width = textMetrics.Width;
+        }
+
+        public int LineCount => lineCount;
+
+        public float Height => height;
+
+        public float Width => width;
+    }
+
+    public class CanvasText : CanvasResource
+    { 
+
         private SharpDX.DirectWrite.TextLayout textLayout;
 
         private float tWidth;
@@ -22,11 +43,10 @@ namespace Presenter
         {
             textLayout = new SharpDX.DirectWrite.TextLayout(Engine.WriteFactory,
                 tText = text, (textFormat = format).TextFormat, tWidth = width, tHeight = height);
-            
         }
 
         public override void Dispose()
-        {
+        { 
             SharpDX.Utilities.Dispose(ref textLayout);
             base.Dispose();
         }
@@ -34,6 +54,12 @@ namespace Presenter
         internal SharpDX.DirectWrite.TextLayout TextLayout => textLayout;
 
         public CanvasTextFormat TextFormat => textFormat;
+
+        public TextMetrics Metrics => new TextMetrics(TextLayout.Metrics);
+
+        public float Width => tWidth;
+
+        public float Height => tHeight;
 
         ~CanvasText() => SharpDX.Utilities.Dispose(ref textLayout);
 
