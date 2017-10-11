@@ -83,10 +83,10 @@ namespace GalEngine
 
             Canvas.BeginDraw(GalEngine.RenderSurface);
 
-            Canvas.EndDraw();
-
             //Render Debug Visual Layer
             VisualLayer.OnRender();
+
+            Canvas.EndDraw();
 
             Canvas.BeginDraw(GalEngine.PresentSurface);
 

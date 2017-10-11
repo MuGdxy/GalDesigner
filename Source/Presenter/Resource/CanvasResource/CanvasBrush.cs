@@ -10,10 +10,14 @@ namespace Presenter
     {
         private SharpDX.Direct2D1.Brush brush;
 
+        private float redColor;
+        private float greenColor;
+        private float blueColor;
+
         public CanvasBrush(float red, float green, float blue, float alpha = 1)
         {
             brush = new SharpDX.Direct2D1.SolidColorBrush(Canvas.ID2D1DeviceContext,
-                new SharpDX.Mathematics.Interop.RawColor4(red, green, blue, alpha));
+                new SharpDX.Mathematics.Interop.RawColor4(redColor = red, greenColor = green, blueColor = blue, alpha));
         }
 
         public override void Dispose()
@@ -21,6 +25,14 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref brush);
             base.Dispose();
         }
+
+        public float Red => redColor;
+
+        public float Green => greenColor;
+
+        public float Blue => blueColor;
+
+        public float Alpha => brush.Opacity;
 
         internal SharpDX.Direct2D1.Brush ID2D1Brush => brush;
 

@@ -61,10 +61,28 @@ namespace Presenter
         }
 
         public static void DrawImage(float left, float top, float right, float bottom,
+            CanvasImage image, float sourceLeft, float sourceTop,
+            float sourceRight, float sourceBottom, float opacity = 1.0f)
+        {
+            ID2D1DeviceContext.DrawBitmap(image.ID2D1Bitmap, new SharpDX.Mathematics.Interop.RawRectangleF(
+               left, top, right, bottom), opacity, SharpDX.Direct2D1.BitmapInterpolationMode.Linear,
+               new SharpDX.Mathematics.Interop.RawRectangleF(sourceLeft, sourceTop, sourceRight, sourceBottom));
+        }
+
+        public static void DrawImage(float left, float top, float right, float bottom,
             TextureFace textureFace, float opacity = 1.0f)
         {
             ID2D1DeviceContext.DrawBitmap(textureFace.CanvasTarget, new SharpDX.Mathematics.Interop.RawRectangleF(
                 left, top, right, bottom), opacity, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+        }
+
+        public static void DrawImage(float left, float top, float right, float bottom,
+            TextureFace textureFace, float sourceLeft, float sourceTop,
+            float sourceRight, float sourceBottom, float opacity = 1.0f)
+        {
+            ID2D1DeviceContext.DrawBitmap(textureFace.CanvasTarget, new SharpDX.Mathematics.Interop.RawRectangleF(
+               left, top, right, bottom), opacity, SharpDX.Direct2D1.BitmapInterpolationMode.Linear,
+               new SharpDX.Mathematics.Interop.RawRectangleF(sourceLeft, sourceTop, sourceRight, sourceBottom));
         }
 
     }

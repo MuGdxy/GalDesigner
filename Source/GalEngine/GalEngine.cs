@@ -13,6 +13,7 @@ namespace GalEngine
     {
         private static Present presentSurface;
         private static TextureFace renderSurface;
+        private static TextureFace templateSurface;
 
         private static GameWindow gameWindow;
 
@@ -38,8 +39,10 @@ namespace GalEngine
         internal static void SetResolution(int Width, int Height)
         {
             Utilities.Dipose(ref renderSurface);
+            Utilities.Dipose(ref templateSurface);
 
             renderSurface = new TextureFace(Width, Height);
+            templateSurface = new TextureFace(Width, Height);
 
             //Make sure the Window size
             if (presentSurface.IsFullScreen is false)
@@ -62,9 +65,9 @@ namespace GalEngine
             set => presentSurface = value;
             get => presentSurface;
         }
-        internal static TextureFace RenderSurface
-        {
-            get => renderSurface;
-        }
+
+        internal static TextureFace RenderSurface => renderSurface;
+
+        internal static TextureFace TemplateSurface => templateSurface;
     }
 }

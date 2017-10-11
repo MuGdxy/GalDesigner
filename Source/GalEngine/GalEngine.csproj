@@ -46,6 +46,7 @@
     <Compile Include="DebugLayer\DebugLayer.cs" />
     <Compile Include="DebugLayer\VisualLayer.cs" />
     <Compile Include="DebugLayer\ErrorType.cs" />
+    <Compile Include="DebugLayer\VisualPad.cs" />
     <Compile Include="DebugLayer\WarningMessage.cs" />
     <Compile Include="DebugLayer\WarningType.cs" />
     <Compile Include="GalEngine.cs" />

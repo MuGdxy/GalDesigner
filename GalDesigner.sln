@@ -7,6 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{
 	ProjectSection(SolutionItems) = preProject
 		Documents\Bug.md = Documents\Bug.md
 		Documents\Event.md = Documents\Event.md
+		Features.md = Features.md
 		Documents\GalDesigner.md = Documents\GalDesigner.md
 	EndProjectSection
 EndProject
