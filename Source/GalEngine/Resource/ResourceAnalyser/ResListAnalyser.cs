@@ -185,8 +185,10 @@ namespace GalEngine
 
             string currentString = "";
             bool inString = false;
-            bool inSentence = false;
 
+#if DEBUG
+            bool inSentence = false;
+#endif
             int line = 0;
 
             foreach (var item in contents)
@@ -207,8 +209,9 @@ namespace GalEngine
                 {
 #if DEBUG
                     DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileTag);
-#endif
+                    
                     inSentence = true;
+#endif
                     currentSentence = new Sentence(); continue;
                 }
 
@@ -216,8 +219,8 @@ namespace GalEngine
                 {
 #if DEBUG
                     DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileTag);
-#endif
                     inSentence = false;
+#endif
 
                     ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
 

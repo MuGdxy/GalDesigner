@@ -96,7 +96,6 @@ namespace GalEngine
             if (isEnable is false) return;
 
             //Render Object 
-            //Canvas.BeginDraw(debugSurface);
             Canvas.PushLayer(0, 0, width, height, opacity);
             
             //Render BackGround

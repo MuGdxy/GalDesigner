@@ -13,7 +13,8 @@ namespace Presenter
         private static SharpDX.Direct2D1.Device device;
         private static SharpDX.Direct2D1.DeviceContext context;
 
-        private static SharpDX.Direct2D1.Layer layer;
+        private static int layerCount ;
+        private static List<SharpDX.Direct2D1.Layer> layerList;
 
         private static Matrix3x2 transformMatrix;
 
@@ -25,7 +26,8 @@ namespace Presenter
                 context = new SharpDX.Direct2D1.DeviceContext(device, SharpDX.Direct2D1.DeviceContextOptions.None);
             }
 
-            layer = new SharpDX.Direct2D1.Layer(context, null);
+            layerCount = 0;
+            layerList = new List<SharpDX.Direct2D1.Layer>();
         }
 
         public static void BeginDraw(Present present)
@@ -49,16 +51,23 @@ namespace Presenter
 
         public static void PushLayer(float left, float top, float right, float bottom, float opacity = 1.0f)
         {
+            if (++layerCount > layerList.Count)
+                layerList.Add(new SharpDX.Direct2D1.Layer(context, null));
+
+            SharpDX.Direct2D1.Layer layer = new SharpDX.Direct2D1.Layer(context, null);
+
             context.PushLayer(new SharpDX.Direct2D1.LayerParameters1()
             {
                 ContentBounds = new SharpDX.Mathematics.Interop.RawRectangleF(left, top, right, bottom),
                 Opacity = opacity
-            }, layer);
+            }, layerList[layerCount - 1]);
         }
 
         public static void PopLayer()
         {
             context.PopLayer();
+
+            layerCount--;
         }
 
         public static void EndDraw()

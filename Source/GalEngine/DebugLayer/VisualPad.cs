@@ -79,6 +79,9 @@ namespace GalEngine
             private float startPosX;
             private float startPosY;
 
+            private float currentTopItemOffset = 0;
+            private int currentTopItem = 1;
+
             private List<PadItem> itemList;
 
             public VisualPad()
@@ -107,32 +110,25 @@ namespace GalEngine
                 float contentWidth = realWidth - borderX * 2;
                 float contentHeight = realHeight - borderY * 2;
 
+                //Trnasform Pad
                 Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realStartPosX,
                     realStartPosY));
 
                 Canvas.Transform = transform;
 
+                //Render Pad border
                 Canvas.DrawRectangle(0, 0, realWidth, realHeight, padBrush, 2);
 
-                Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(borderX, borderY));
-                
-                float totalHeight = borderY;
+                //Get Content's area
+                Rect contentRect = new Rect(startPosX + borderX,
+                    startPosY + borderY, startPosX + borderX + contentWidth,
+                    startPosY + borderY + contentHeight);
 
-                foreach (var item in itemList)
-                {
-                    item.Reset(item.Text, contentWidth);
+                //Render rontent layer
+                Canvas.PushLayer(contentRect.Left, contentRect.Top,
+                    contentRect.Right, contentRect.Bottom);
 
-                    float offHeight = item.Height + borderY;
-
-                    totalHeight += offHeight;
-
-                    if (totalHeight <= contentHeight)
-                    {
-                        item.OnRender();
-
-                        Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(0, offHeight));
-                    }
-                }
+                Canvas.PopLayer();
 
                 Canvas.Transform = Matrix3x2.Identity;
             }
