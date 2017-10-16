@@ -79,10 +79,68 @@ namespace GalEngine
             private float startPosX;
             private float startPosY;
 
-            private float currentTopItemOffset = 0;
-            private int currentTopItem = 1;
+            private float currentTopItemOffset = -1;
+            private float currentLastItemOffset = 0;
+            private int currentTopItem = -1;
+            private int currentLastItem = 0;
 
             private List<PadItem> itemList;
+
+            private void SetItemAsTop(int itemID, float offset)
+            {
+                currentTopItem = itemID;
+                currentTopItemOffset = offset;
+
+                float contentHeight = ContentHeight;
+                float contentWidth = ContentWidth;
+
+                //height
+                float height = itemList[itemID].Height + offset;
+
+                for (int i = itemID + 1; i < itemList.Count; i++)
+                {
+                    height += itemList[i].Height;
+
+                    if (height >= contentHeight)
+                    {
+                        currentLastItem = itemID;
+                        currentLastItemOffset = contentHeight - height;
+                    }
+                }
+
+                if (height < contentHeight)
+                {
+                    currentLastItem = itemList.Count - 1;
+                    currentLastItemOffset = contentHeight - height;
+                }
+            }
+
+            private void SetItemAsLast(int itemID, float offset)
+            {
+                currentLastItem = itemID;
+                currentLastItemOffset = offset;
+
+                float contenHeight = ContentHeight;
+
+                float height = itemList[itemID].Height + offset;
+
+                for (int i = itemID - 1; i >= 0; i--)
+                {
+                    height += itemList[i].Height;
+
+                    if (height >= contenHeight)
+                    {
+                        currentTopItem = i;
+                        currentTopItemOffset = contenHeight - height;
+                    }
+                }
+
+                if (height < contenHeight)
+                {
+                    currentTopItem = 0;
+                    currentTopItemOffset = contenHeight - height;
+                }
+            }
 
             public VisualPad()
             {
@@ -97,6 +155,8 @@ namespace GalEngine
                 itemList.Add(new PadItem("t23"));
                 itemList.Add(new PadItem("t23"));
                 itemList.Add(new PadItem("t23"));
+
+                SetItemAsTop(0, 0);
             }
 
             public void OnRender()
@@ -104,11 +164,11 @@ namespace GalEngine
                 float realStartPosX = startPosX * VisualLayer.width;
                 float realStartPosY = startPosY * VisualLayer.height;
 
-                float realWidth = width * VisualLayer.width;
-                float realHeight = height * VisualLayer.height;
+                float realWidth = RealWidth;
+                float realHeight = RealHeight;
 
-                float contentWidth = realWidth - borderX * 2;
-                float contentHeight = realHeight - borderY * 2;
+                float contentWidth = ContentWidth;
+                float contentHeight = ContentHeight;
 
                 //Trnasform Pad
                 Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realStartPosX,
@@ -124,10 +184,23 @@ namespace GalEngine
                     startPosY + borderY, startPosX + borderX + contentWidth,
                     startPosY + borderY + contentHeight);
 
+                //Update PadItem
+                for (int i = 0; i < itemList.Count; i++)
+                    itemList[i].Reset(itemList[i].Text, contentWidth);
+
                 //Render rontent layer
                 Canvas.PushLayer(contentRect.Left, contentRect.Top,
                     contentRect.Right, contentRect.Bottom);
 
+                Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(borderX, borderY + currentTopItemOffset));
+
+                for (int i = currentTopItem; i <= currentLastItem; i++)
+                {
+                    itemList[i].OnRender();
+
+                    Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(0, itemList[i].Height));
+                }
+                
                 Canvas.PopLayer();
 
                 Canvas.Transform = Matrix3x2.Identity;
@@ -137,6 +210,8 @@ namespace GalEngine
             {
                 width = Width;
                 height = Height;
+
+                SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
             public void SetAreaKeeper(float baseValue, float targetAspectRatio, bool isWidth = true)
@@ -152,6 +227,8 @@ namespace GalEngine
                     height = baseValue;
                     width = height * targetAspectRatio * aspectRatio;
                 }
+
+                SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
             public void SetPosition(float posX, float posY)
@@ -159,6 +236,14 @@ namespace GalEngine
                 startPosX = posX;
                 startPosY = posY;
             }
+
+            public float RealWidth => width * VisualLayer.width;
+
+            public float RealHeight => height * VisualLayer.height;
+
+            public float ContentWidth => RealWidth - borderX * 2;
+
+            public float ContentHeight => RealHeight - borderY * 2;
 
             public float Width => width;
 
