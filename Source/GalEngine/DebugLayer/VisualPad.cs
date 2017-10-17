@@ -13,8 +13,8 @@ namespace GalEngine
     {
         private class VisualPad
         {
-            private const float borderX = 3;
-            private const float borderY = 2;
+            private const float borderX = 5;
+            private const float borderY = 3;
 
             private class PadItem
             {
@@ -22,7 +22,7 @@ namespace GalEngine
                 private const float borderY = 0.1f;
 
                 private static CanvasBrush padItemBrush = new CanvasBrush(1, 0, 0, 1);
-
+                
                 private string text;
                 private float width;
 
@@ -91,11 +91,19 @@ namespace GalEngine
             private int currentLastItem = 0;
 
             private List<PadItem> itemList;
+            private Dictionary<string, PadItem> itemIndex;
 
             private void SetItemAsTop(int itemID, float offset)
             {
                 currentTopItem = itemID;
                 currentTopItemOffset = offset;
+
+                if (itemList.Count is 0)
+                {
+                    currentLastItem = 0;
+                    currentLastItemOffset = 0;
+                    return;
+                }
 
                 //height
                 float height = itemList[itemID].Height + offset;
@@ -123,6 +131,13 @@ namespace GalEngine
                 currentLastItem = itemID;
                 currentLastItemOffset = offset;
 
+                if (itemList.Count is 0)
+                {
+                    currentTopItem = 0;
+                    currentTopItemOffset = 0;
+                    return;
+                }
+
                 float height = itemList[itemID].Height + offset;
 
                 for (int i = itemID - 1; i >= 0; i--)
@@ -146,18 +161,40 @@ namespace GalEngine
             public VisualPad()
             {
                 itemList = new List<PadItem>();
-
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
-                itemList.Add(new PadItem("t23"));
+                itemIndex = new Dictionary<string, PadItem>();
 
                 SetItemAsTop(0, 0);
+            }
+
+            public void AddItem(string Tag, string Text)
+            {
+                PadItem padItem = new PadItem(Text, contentWidth);
+
+                itemList.Add(padItem);
+                itemIndex.Add(Tag, padItem);
+
+                SetItemAsTop(currentTopItem, currentTopItemOffset);
+            }
+
+            public void RemoveItem(string Tag)
+            {
+                itemList.Remove(itemIndex[Tag]);
+                itemIndex.Remove(Tag);
+
+                SetItemAsTop(currentTopItem, currentTopItemOffset);
+            }
+
+            public void SetItem(string Tag, string Text)
+            {
+                if (itemIndex.ContainsKey(Tag) is false)
+                {
+                    AddItem(Tag, Text);
+                    return;
+                }
+
+                itemIndex[Tag].Text = Text;
+
+                SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
             public void OnRender()
@@ -174,25 +211,28 @@ namespace GalEngine
                 //Render Pad border
                 Canvas.DrawRectangle(0, 0, realWidth, realHeight, padBrush, 2);
 
-                //Get Content's area
-                Rect contentRect = new Rect(startPosX + borderX,
-                    startPosY + borderY, startPosX + borderX + contentWidth,
-                    startPosY + borderY + contentHeight);
-
-                //Render content layer
-                Canvas.PushLayer(contentRect.Left, contentRect.Top,
-                    contentRect.Right, contentRect.Bottom);
-
-                Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(borderX, borderY + currentTopItemOffset));
-
-                for (int i = currentTopItem; i <= currentLastItem; i++)
+                if (itemList.Count != 0)
                 {
-                    itemList[i].OnRender();
+                    //Get Content's area
+                    Rect contentRect = new Rect(startPosX + borderX,
+                        startPosY + borderY, startPosX + borderX + contentWidth,
+                        startPosY + borderY + contentHeight);
 
-                    Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(0, itemList[i].Height));
+                    //Render content layer
+                    Canvas.PushLayer(contentRect.Left, contentRect.Top,
+                        contentRect.Right, contentRect.Bottom);
+
+                    Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(borderX, borderY + currentTopItemOffset));
+
+                    for (int i = currentTopItem; i <= currentLastItem; i++)
+                    {
+                        itemList[i].OnRender();
+
+                        Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(0, itemList[i].Height));
+                    }
+
+                    Canvas.PopLayer();
                 }
-                
-                Canvas.PopLayer();
 
                 Canvas.Transform = Matrix3x2.Identity;
             }

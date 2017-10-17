@@ -65,6 +65,13 @@ namespace GalEngine
             infomationPad = new VisualPad();
             warningPad = new VisualPad();
             watchPad = new VisualPad();
+
+            infomationPad.AddItem(GlobalConfig.ApplicationName, "AppName : " +
+                GlobalConfig.AppName);
+            infomationPad.AddItem(GlobalConfig.WidthName, "Width   : " +
+                GlobalConfig.Width);
+            infomationPad.AddItem(GlobalConfig.HeightName, "Height  : " +
+                GlobalConfig.Height);
         }
 
         internal static void OnResolutionChange(int newWidth, int newHeight)

@@ -78,6 +78,8 @@ namespace GalEngine
 
         public static WarningMessage GetWarning(int count) => warningList[count];
 
+        public static List<WarningMessage> WarningMessageList => warningList;
+
         public static bool IsEnableVisualLayer
         {
             internal set => isEnableVisualLayer = value;
