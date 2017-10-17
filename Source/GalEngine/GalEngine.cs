@@ -54,8 +54,9 @@ namespace GalEngine
                 presentSurface.IsFullScreen = true;
             }
 
-            //When we change the resolution, we need to update something.
-            VisualLayer.OnResolutionChange(Width, Height);
+            if (DebugLayer.IsEnableVisualLayer is true)
+                //When we change the resolution, we need to update something.
+                VisualLayer.OnResolutionChange(Width, Height);
         }
 
         internal static GameWindow GameWindow => gameWindow;

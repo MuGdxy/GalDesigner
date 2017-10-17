@@ -20,9 +20,9 @@ namespace GalEngine
 
         private static CanvasBrush backGroundBrush = new CanvasBrush(192 / 255f, 192 / 255f, 192 / 255f, 1f);
 
-        private static VisualPad infomationPad = new VisualPad();
-        private static VisualPad warningPad = new VisualPad();
-        private static VisualPad watchPad = new VisualPad();
+        private static VisualPad infomationPad;
+        private static VisualPad warningPad;
+        private static VisualPad watchPad;
 
         private static int width;
         private static int height;
@@ -62,7 +62,9 @@ namespace GalEngine
 
         static VisualLayer()
         {
-
+            infomationPad = new VisualPad();
+            warningPad = new VisualPad();
+            watchPad = new VisualPad();
         }
 
         internal static void OnResolutionChange(int newWidth, int newHeight)
@@ -93,8 +95,6 @@ namespace GalEngine
 
         internal static void OnRender()
         {
-            if (isEnable is false) return;
-
             //Render Object 
             Canvas.PushLayer(0, 0, width, height, opacity);
             
@@ -112,17 +112,19 @@ namespace GalEngine
 
         public static void Enable()
         {
+            DebugLayer.IsEnableVisualLayer = true;
             isEnable = true;
         }
 
         public static void UnEnable()
         {
+            DebugLayer.IsEnableVisualLayer = false;
             isEnable = false;
         }
 
         public static bool IsEnable
         {
-            set => isEnable = value;
+            set => isEnable = DebugLayer.IsEnableVisualLayer = value;
             get => isEnable;
         }
     }

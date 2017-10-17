@@ -8,6 +8,8 @@ namespace GalEngine
 {
     public static class DebugLayer
     {
+        private static bool isEnableVisualLayer = false;
+
         private static Dictionary<ErrorType, string> errorText = new Dictionary<ErrorType, string>();
         private static Dictionary<WarningType, string> warningText = new Dictionary<WarningType, string>();
 
@@ -76,5 +78,10 @@ namespace GalEngine
 
         public static WarningMessage GetWarning(int count) => warningList[count];
 
+        public static bool IsEnableVisualLayer
+        {
+            internal set => isEnableVisualLayer = value;
+            get => isEnableVisualLayer;
+        }
     }
 }

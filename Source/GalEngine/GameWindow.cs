@@ -84,7 +84,8 @@ namespace GalEngine
             Canvas.BeginDraw(GalEngine.RenderSurface);
 
             //Render Debug Visual Layer
-            VisualLayer.OnRender();
+            if (DebugLayer.IsEnableVisualLayer is true)
+                VisualLayer.OnRender();
 
             Canvas.EndDraw();
 
@@ -139,6 +140,9 @@ namespace GalEngine
             if (e.IsDown is true && e.KeyCode is KeyCode.Tab)
             {
                 VisualLayer.IsEnable ^= true;
+
+                if (VisualLayer.IsEnable is true)
+                    VisualLayer.OnResolutionChange(GlobalConfig.Width, GlobalConfig.Height);
             }
 
             base.OnKeyEvent(sender, e);

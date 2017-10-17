@@ -76,6 +76,12 @@ namespace GalEngine
             private float width;
             private float height;
 
+            private float realWidth;
+            private float realHeight;
+
+            private float contentWidth;
+            private float contentHeight;
+
             private float startPosX;
             private float startPosY;
 
@@ -91,9 +97,6 @@ namespace GalEngine
                 currentTopItem = itemID;
                 currentTopItemOffset = offset;
 
-                float contentHeight = ContentHeight;
-                float contentWidth = ContentWidth;
-
                 //height
                 float height = itemList[itemID].Height + offset;
 
@@ -103,7 +106,7 @@ namespace GalEngine
 
                     if (height >= contentHeight)
                     {
-                        currentLastItem = itemID;
+                        currentLastItem = i;
                         currentLastItemOffset = contentHeight - height;
                     }
                 }
@@ -120,34 +123,32 @@ namespace GalEngine
                 currentLastItem = itemID;
                 currentLastItemOffset = offset;
 
-                float contenHeight = ContentHeight;
-
                 float height = itemList[itemID].Height + offset;
 
                 for (int i = itemID - 1; i >= 0; i--)
                 {
                     height += itemList[i].Height;
 
-                    if (height >= contenHeight)
+                    if (height >= contentHeight)
                     {
                         currentTopItem = i;
-                        currentTopItemOffset = contenHeight - height;
+                        currentTopItemOffset = contentHeight - height;
                     }
                 }
 
-                if (height < contenHeight)
+                if (height < contentHeight)
                 {
                     currentTopItem = 0;
-                    currentTopItemOffset = contenHeight - height;
+                    currentTopItemOffset = contentHeight - height;
                 }
             }
 
             public VisualPad()
             {
                 itemList = new List<PadItem>();
-                itemList.Add(new PadItem("t12"));
-                itemList.Add(new PadItem("t23"));
 
+                itemList.Add(new PadItem("t23"));
+                itemList.Add(new PadItem("t23"));
                 itemList.Add(new PadItem("t23"));
                 itemList.Add(new PadItem("t23"));
                 itemList.Add(new PadItem("t23"));
@@ -164,12 +165,6 @@ namespace GalEngine
                 float realStartPosX = startPosX * VisualLayer.width;
                 float realStartPosY = startPosY * VisualLayer.height;
 
-                float realWidth = RealWidth;
-                float realHeight = RealHeight;
-
-                float contentWidth = ContentWidth;
-                float contentHeight = ContentHeight;
-
                 //Trnasform Pad
                 Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realStartPosX,
                     realStartPosY));
@@ -184,11 +179,7 @@ namespace GalEngine
                     startPosY + borderY, startPosX + borderX + contentWidth,
                     startPosY + borderY + contentHeight);
 
-                //Update PadItem
-                for (int i = 0; i < itemList.Count; i++)
-                    itemList[i].Reset(itemList[i].Text, contentWidth);
-
-                //Render rontent layer
+                //Render content layer
                 Canvas.PushLayer(contentRect.Left, contentRect.Top,
                     contentRect.Right, contentRect.Bottom);
 
@@ -211,6 +202,16 @@ namespace GalEngine
                 width = Width;
                 height = Height;
 
+                realWidth = width * VisualLayer.width;
+                realHeight = height * VisualLayer.height;
+
+                contentWidth = realWidth - borderX * 2;
+                contentHeight = realHeight - borderY * 2;
+
+                //Update PadItem When Size Change
+                for (int i = 0; i < itemList.Count; i++)
+                    itemList[i].Reset(itemList[i].Text, contentWidth);
+
                 SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
@@ -218,17 +219,13 @@ namespace GalEngine
             {
                 if (isWidth is true)
                 {
-                    width = baseValue;
-                    height = width / targetAspectRatio * aspectRatio;
+                    SetArea(baseValue, baseValue / targetAspectRatio * aspectRatio);
                 }
                 else
 
                 {
-                    height = baseValue;
-                    width = height * targetAspectRatio * aspectRatio;
+                    SetArea(baseValue * targetAspectRatio * aspectRatio, baseValue);
                 }
-
-                SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
             public void SetPosition(float posX, float posY)
@@ -236,14 +233,6 @@ namespace GalEngine
                 startPosX = posX;
                 startPosY = posY;
             }
-
-            public float RealWidth => width * VisualLayer.width;
-
-            public float RealHeight => height * VisualLayer.height;
-
-            public float ContentWidth => RealWidth - borderX * 2;
-
-            public float ContentHeight => RealHeight - borderY * 2;
 
             public float Width => width;
 
