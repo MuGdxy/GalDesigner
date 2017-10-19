@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
+using Builder;
 using Presenter;
 
 namespace GalEngine
@@ -87,6 +88,11 @@ namespace GalEngine
                 "Width : " + GlobalConfig.Width);
             infomationPad.SetItem(GlobalConfig.HeightName,
                 "Height : " + GlobalConfig.Height);
+            infomationPad.SetItem("NI",
+                "Height : " + GlobalConfig.Height);
+            infomationPad.SetItem("NIs",
+                "Height : " + GlobalConfig.Height);
+
 
             infomationPad.OnRender();
         }
@@ -124,6 +130,11 @@ namespace GalEngine
             OnRenderWatchPad();
 
             Canvas.PopLayer();
+        }
+
+        public static void OnMouseScroll(int mousePosX, int mousePosY, int offset)
+        {
+            offset = -offset;
         }
 
         public static void SetPadItem(string Tag, string Text, PadType PadType)

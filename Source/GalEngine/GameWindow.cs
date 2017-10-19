@@ -178,6 +178,11 @@ namespace GalEngine
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
 
+            if (VisualLayer.IsEnable is true)
+            {
+                VisualLayer.OnMouseScroll(mousePosX, mousePosY, e.Offset);
+            }
+
             base.OnMouseWheel(sender, e);
         }
 

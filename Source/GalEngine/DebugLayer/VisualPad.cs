@@ -95,11 +95,18 @@ namespace GalEngine
             private List<PadItem> itemList;
             private Dictionary<string, PadItem> itemIndex;
 
-           
+            private float currentContentStart;
+            private float currentContentEnd;
+            private float maxItemHeight;
+
             public VisualPad()
             {
                 itemList = new List<PadItem>();
                 itemIndex = new Dictionary<string, PadItem>();
+
+                maxItemHeight = 0;
+                currentContentStart = 0;
+                currentContentEnd = contentHeight;
             }
 
             public void AddItem(string Tag, string Text)
@@ -108,10 +115,14 @@ namespace GalEngine
 
                 itemList.Add(padItem);
                 itemIndex.Add(Tag, padItem);
+                
+                maxItemHeight += padItem.Height;
             }
 
             public void RemoveItem(string Tag)
             {
+                maxItemHeight -= itemIndex[Tag].Height;
+
                 itemList.Remove(itemIndex[Tag]);
                 itemIndex.Remove(Tag);
             }
@@ -124,12 +135,33 @@ namespace GalEngine
                     return;
                 }
 
+                float preHeight = itemIndex[Tag].Height;
+
                 itemIndex[Tag].Text = Text;
+
+                maxItemHeight = maxItemHeight - preHeight + itemIndex[Tag].Height;
             }
 
             public void OnMouseScroll(int offset)
             {
+                currentContentStart += offset;
+                currentContentEnd = currentContentStart + contentHeight;
 
+                if (offset > 0) // Down
+                {  
+                    if (currentContentEnd > maxItemHeight)
+                    {
+                        currentContentEnd = maxItemHeight;
+                        currentContentStart = currentContentEnd - contentHeight;
+                    } 
+                }else
+                {
+                    if (currentContentStart < 0)
+                    {
+                        currentContentStart = 0;
+                        currentContentEnd = currentContentStart + contentHeight;
+                    }
+                }
             }
 
             public void OnRender()
@@ -157,6 +189,32 @@ namespace GalEngine
                     Canvas.PushLayer(contentRect.Left, contentRect.Top,
                         contentRect.Right, contentRect.Bottom);
 
+                    transform *= Matrix3x2.CreateTranslation(borderX, borderY);
+
+                    float currentHeight = 0;
+
+                    //make sure the postion is right
+                    if (maxItemHeight < contentHeight)
+                    {
+                        currentContentStart = 0;
+                        currentContentEnd = contentHeight;
+                    }
+
+                    foreach (var item in itemList)
+                    {
+                        float height = item.Height;
+
+                        if (currentHeight + height >= currentContentStart 
+                            && currentHeight <= currentContentEnd)
+                        {
+                            Canvas.Transform = transform * Matrix3x2.CreateTranslation(0, currentHeight - currentContentStart);
+
+                            item.OnRender();
+                        }
+
+                        currentHeight += height;
+                    }
+
                     Canvas.PopLayer();
                 }
 
@@ -178,7 +236,7 @@ namespace GalEngine
                 for (int i = 0; i < itemList.Count; i++)
                     itemList[i].Reset(itemList[i].Text, contentWidth);
 
-
+                currentContentEnd = currentContentStart + contentHeight;
             }
 
             public void SetAreaKeeper(float baseValue, float targetAspectRatio, bool isWidth = true)
