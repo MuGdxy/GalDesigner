@@ -65,13 +65,6 @@ namespace GalEngine
             infomationPad = new VisualPad();
             warningPad = new VisualPad();
             watchPad = new VisualPad();
-
-            infomationPad.AddItem(GlobalConfig.ApplicationName, "AppName : " +
-                GlobalConfig.AppName);
-            infomationPad.AddItem(GlobalConfig.WidthName, "Width   : " +
-                GlobalConfig.Width);
-            infomationPad.AddItem(GlobalConfig.HeightName, "Height  : " +
-                GlobalConfig.Height);
         }
 
         internal static void OnResolutionChange(int newWidth, int newHeight)
@@ -87,20 +80,36 @@ namespace GalEngine
 
         private static void OnRenderInformationPad()
         {
+            //Update and Create Information PadItem
+            infomationPad.SetItem(GlobalConfig.ApplicationName,
+                "AppName : " + GlobalConfig.AppName);
+            infomationPad.SetItem(GlobalConfig.WidthName,
+                "Width : " + GlobalConfig.Width);
+            infomationPad.SetItem(GlobalConfig.HeightName,
+                "Height : " + GlobalConfig.Height);
+
             infomationPad.OnRender();
         }
 
         private static void OnRenderWarningPad()
-        {
+        {  
+            //We do not need update WarningPad Item
+
             warningPad.OnRender();
         }
 
         private static void OnRenderWatchPad()
         {
+            //Update WatchPad Item When Text change
+            foreach (var item in DebugLayer.WatchList)
+            {
+                watchPad.SetItem(item, item + " = " + GlobalConfig.GetValue(item));
+            }
+
             watchPad.OnRender();
         }
 
-        internal static void OnRender()
+        public static void OnRender()
         {
             //Render Object 
             Canvas.PushLayer(0, 0, width, height, opacity);
@@ -117,21 +126,45 @@ namespace GalEngine
             Canvas.PopLayer();
         }
 
-        public static void Enable()
+        public static void SetPadItem(string Tag, string Text, PadType PadType)
         {
-            DebugLayer.IsEnableVisualLayer = true;
-            isEnable = true;
+            switch (PadType)
+            {
+                case PadType.InformationPad:
+                    infomationPad.SetItem(Tag, Text);
+                    break;
+                case PadType.WarningPad:
+                    warningPad.SetItem(Tag, Text);
+                    break;
+                case PadType.WatchPad:
+                    watchPad.SetItem(Tag, Text);
+                    break;
+                default:
+                    break;
+            }
         }
 
-        public static void UnEnable()
+        public static void RemovePadItem(string Tag,PadType PadType)
         {
-            DebugLayer.IsEnableVisualLayer = false;
-            isEnable = false;
+            switch (PadType)
+            {
+                case PadType.InformationPad:
+                    infomationPad.RemoveItem(Tag);
+                    break;
+                case PadType.WarningPad:
+                    warningPad.RemoveItem(Tag);
+                    break;
+                case PadType.WatchPad:
+                    watchPad.RemoveItem(Tag);
+                    break;
+                default:
+                    break;
+            }
         }
 
         public static bool IsEnable
         {
-            set => isEnable = DebugLayer.IsEnableVisualLayer = value;
+            set => isEnable = value;
             get => isEnable;
         }
     }

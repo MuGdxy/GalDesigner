@@ -102,6 +102,7 @@
     <Compile Include="Resource\BufferResource\VertexBuffer.cs" />
     <Compile Include="Resource\CanvasResource\CanvasBrush.cs" />
     <Compile Include="Resource\CanvasResource\CanvasImage.cs" />
+    <Compile Include="Resource\CanvasResource\CanvasLayer.cs" />
     <Compile Include="Resource\CanvasResource\CanvasResource.cs" />
     <Compile Include="Resource\CanvasResource\CanvasTextFormat.cs" />
     <Compile Include="Resource\CanvasResource\CanvasText.cs" />

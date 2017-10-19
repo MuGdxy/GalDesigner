@@ -8,12 +8,12 @@ namespace GalEngine
 {
     public static class DebugLayer
     {
-        private static bool isEnableVisualLayer = false;
-
         private static Dictionary<ErrorType, string> errorText = new Dictionary<ErrorType, string>();
         private static Dictionary<WarningType, string> warningText = new Dictionary<WarningType, string>();
 
         private static List<WarningMessage> warningList = new List<WarningMessage>();
+
+        private static List<string> watchList = new List<string>();
 
         private static string SetParamsToString(string text, params object[] value)
         {
@@ -53,7 +53,10 @@ namespace GalEngine
 
         public static void ReportWarning(WarningType warningType, params object[] value)
         {
-            warningList.Add(new WarningMessage(SetParamsToString(warningText[warningType], value), DateTime.Now));
+            var message = new WarningMessage(SetParamsToString(warningText[warningType], value), DateTime.Now);
+            warningList.Add(message);
+
+            VisualLayer.SetPadItem(message.WarningText, message.WarningText, VisualLayer.PadType.WarningPad);
         }
 
         public static void Assert(bool testValue, ErrorType errorType, params object[] value)
@@ -61,7 +64,7 @@ namespace GalEngine
             if (testValue is true) ReportError(errorType, value);
         }
 
-        public static void Assert(bool testValue ,WarningType warningType,params object[] value)
+        public static void Assert(bool testValue , WarningType warningType,params object[] value)
         {
             if (testValue is true) ReportWarning(warningType, value);
         }
@@ -76,14 +79,24 @@ namespace GalEngine
             warningText[warningType] = messageText;
         }
 
+        public static void AddWatch(string Tag)
+        {
+            watchList.Add(Tag);
+
+            VisualLayer.SetPadItem(Tag, Tag + " = " + GlobalConfig.GetValue(Tag), VisualLayer.PadType.WatchPad);
+        }
+
+        public static void RemoveWatch(string Tag)
+        {
+            watchList.Remove(Tag);
+
+            VisualLayer.RemovePadItem(Tag, VisualLayer.PadType.WatchPad);
+        }
+        
         public static WarningMessage GetWarning(int count) => warningList[count];
 
         public static List<WarningMessage> WarningMessageList => warningList;
 
-        public static bool IsEnableVisualLayer
-        {
-            internal set => isEnableVisualLayer = value;
-            get => isEnableVisualLayer;
-        }
+        public static List<string> WatchList => watchList;
     }
 }

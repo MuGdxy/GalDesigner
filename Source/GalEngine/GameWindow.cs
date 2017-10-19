@@ -84,7 +84,7 @@ namespace GalEngine
             Canvas.BeginDraw(GalEngine.RenderSurface);
 
             //Render Debug Visual Layer
-            if (DebugLayer.IsEnableVisualLayer is true)
+            if (VisualLayer.IsEnable is true)
                 VisualLayer.OnRender();
 
             Canvas.EndDraw();

@@ -54,8 +54,6 @@ namespace Presenter
             if (++layerCount > layerList.Count)
                 layerList.Add(new SharpDX.Direct2D1.Layer(context, null));
 
-            SharpDX.Direct2D1.Layer layer = new SharpDX.Direct2D1.Layer(context, null);
-
             context.PushLayer(new SharpDX.Direct2D1.LayerParameters1()
             {
                 ContentBounds = new SharpDX.Mathematics.Interop.RawRectangleF(left, top, right, bottom),

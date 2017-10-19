@@ -22,9 +22,12 @@ namespace TestApp
 
             Presenter.Engine.Stop();
 #else
+            DebugLayer.AddWatch("Width");
+            DebugLayer.AddWatch("Height");
+            DebugLayer.AddWatch("FullScreen");
+            DebugLayer.AddWatch("AppName");
             GalEngine.GalEngine.Run();
 #endif
-
         }
     }
 }

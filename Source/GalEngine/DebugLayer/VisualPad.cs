@@ -11,6 +11,13 @@ namespace GalEngine
 {
     static partial class VisualLayer
     {
+        internal enum PadType
+        {
+            InformationPad,
+            WarningPad,
+            WatchPad
+        }
+
         private class VisualPad
         {
             private const float borderX = 5;
@@ -85,85 +92,14 @@ namespace GalEngine
             private float startPosX;
             private float startPosY;
 
-            private float currentTopItemOffset = -1;
-            private float currentLastItemOffset = 0;
-            private int currentTopItem = -1;
-            private int currentLastItem = 0;
-
             private List<PadItem> itemList;
             private Dictionary<string, PadItem> itemIndex;
 
-            private void SetItemAsTop(int itemID, float offset)
-            {
-                currentTopItem = itemID;
-                currentTopItemOffset = offset;
-
-                if (itemList.Count is 0)
-                {
-                    currentLastItem = 0;
-                    currentLastItemOffset = 0;
-                    return;
-                }
-
-                //height
-                float height = itemList[itemID].Height + offset;
-
-                for (int i = itemID + 1; i < itemList.Count; i++)
-                {
-                    height += itemList[i].Height;
-
-                    if (height >= contentHeight)
-                    {
-                        currentLastItem = i;
-                        currentLastItemOffset = contentHeight - height;
-                    }
-                }
-
-                if (height < contentHeight)
-                {
-                    currentLastItem = itemList.Count - 1;
-                    currentLastItemOffset = contentHeight - height;
-                }
-            }
-
-            private void SetItemAsLast(int itemID, float offset)
-            {
-                currentLastItem = itemID;
-                currentLastItemOffset = offset;
-
-                if (itemList.Count is 0)
-                {
-                    currentTopItem = 0;
-                    currentTopItemOffset = 0;
-                    return;
-                }
-
-                float height = itemList[itemID].Height + offset;
-
-                for (int i = itemID - 1; i >= 0; i--)
-                {
-                    height += itemList[i].Height;
-
-                    if (height >= contentHeight)
-                    {
-                        currentTopItem = i;
-                        currentTopItemOffset = contentHeight - height;
-                    }
-                }
-
-                if (height < contentHeight)
-                {
-                    currentTopItem = 0;
-                    currentTopItemOffset = contentHeight - height;
-                }
-            }
-
+           
             public VisualPad()
             {
                 itemList = new List<PadItem>();
                 itemIndex = new Dictionary<string, PadItem>();
-
-                SetItemAsTop(0, 0);
             }
 
             public void AddItem(string Tag, string Text)
@@ -172,16 +108,12 @@ namespace GalEngine
 
                 itemList.Add(padItem);
                 itemIndex.Add(Tag, padItem);
-
-                SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
             public void RemoveItem(string Tag)
             {
                 itemList.Remove(itemIndex[Tag]);
                 itemIndex.Remove(Tag);
-
-                SetItemAsTop(currentTopItem, currentTopItemOffset);
             }
 
             public void SetItem(string Tag, string Text)
@@ -193,8 +125,11 @@ namespace GalEngine
                 }
 
                 itemIndex[Tag].Text = Text;
+            }
 
-                SetItemAsTop(currentTopItem, currentTopItemOffset);
+            public void OnMouseScroll(int offset)
+            {
+
             }
 
             public void OnRender()
@@ -222,15 +157,6 @@ namespace GalEngine
                     Canvas.PushLayer(contentRect.Left, contentRect.Top,
                         contentRect.Right, contentRect.Bottom);
 
-                    Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(borderX, borderY + currentTopItemOffset));
-
-                    for (int i = currentTopItem; i <= currentLastItem; i++)
-                    {
-                        itemList[i].OnRender();
-
-                        Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(0, itemList[i].Height));
-                    }
-
                     Canvas.PopLayer();
                 }
 
@@ -252,7 +178,7 @@ namespace GalEngine
                 for (int i = 0; i < itemList.Count; i++)
                     itemList[i].Reset(itemList[i].Text, contentWidth);
 
-                SetItemAsTop(currentTopItem, currentTopItemOffset);
+
             }
 
             public void SetAreaKeeper(float baseValue, float targetAspectRatio, bool isWidth = true)
