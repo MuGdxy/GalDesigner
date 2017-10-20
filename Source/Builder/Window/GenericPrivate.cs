@@ -177,8 +177,8 @@ namespace Builder
                     PrivateMouseWheel(this, new MouseWheelEventArgs()
                     {
                         offset = window_offset > 0 ? window_offset / 120 : (window_offset / 120),
-                        x = APILibrary.Win32.Message.LowWord(lParam),
-                        y = APILibrary.Win32.Message.HighWord(lParam)
+                        x = APILibrary.Win32.Message.GetXFromLparam(lParam) - positionx,
+                        y = APILibrary.Win32.Message.GetYFromLparam(lParam) - positiony
                     });
                     break;
                 case APILibrary.Win32.WinMsg.WM_SIZE:

@@ -82,7 +82,7 @@ namespace GalEngine
             GalEngine.RenderSurface.ResetBuffer(1, 1, 1, 1);
 
             Canvas.BeginDraw(GalEngine.RenderSurface);
-
+            
             //Render Debug Visual Layer
             if (VisualLayer.IsEnable is true)
                 VisualLayer.OnRender();
@@ -152,7 +152,7 @@ namespace GalEngine
         {
             ComputeGameRect(out Rect gameRect);
 
-            if (gameRect.IsContained(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
+            if (gameRect.Contains(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
 
@@ -163,7 +163,7 @@ namespace GalEngine
         {
             ComputeGameRect(out Rect gameRect);
 
-            if (gameRect.IsContained(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
+            if (gameRect.Contains(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
             
@@ -174,7 +174,7 @@ namespace GalEngine
         {
             ComputeGameRect(out Rect gameRect);
 
-            if (gameRect.IsContained(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
+            if (gameRect.Contains(e.X, e.Y) is false) { mousePosX = -1; mousePosY = -1; return; }
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
 

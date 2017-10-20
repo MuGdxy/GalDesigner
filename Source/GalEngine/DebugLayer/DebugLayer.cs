@@ -83,7 +83,7 @@ namespace GalEngine
         {
             watchList.Add(Tag);
 
-            VisualLayer.SetPadItem(Tag, Tag + " = " + GlobalConfig.GetValue(Tag), VisualLayer.PadType.WatchPad);
+            VisualLayer.SetPadItem(Tag, Tag + " = " + GlobalValue.GetValue(Tag), VisualLayer.PadType.WatchPad);
         }
 
         public static void RemoveWatch(string Tag)

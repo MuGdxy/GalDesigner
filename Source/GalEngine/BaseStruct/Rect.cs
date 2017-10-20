@@ -18,7 +18,7 @@ namespace GalEngine
             Left = left; Top = top; Right = right; Bottom = bottom;
         }
 
-        public bool IsContained(float x, float y)
+        public bool Contains(float x, float y)
             => (x >= Left && x <= Right && y >= Top && y <= Bottom);
     }
 }

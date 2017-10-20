@@ -19,7 +19,7 @@ namespace GalEngine
         private static CanvasBrush textBrush = new CanvasBrush(0, 0, 0, 1);
         private static CanvasTextFormat textFormat = new CanvasTextFormat("Consolas", 10);
 
-        private static CanvasBrush backGroundBrush = new CanvasBrush(192 / 255f, 192 / 255f, 192 / 255f, 1f);
+        private static CanvasBrush backGroundBrush = new CanvasBrush(1, 1, 1, 1);
 
         private static VisualPad infomationPad;
         private static VisualPad warningPad;
@@ -54,18 +54,17 @@ namespace GalEngine
                 watchPad.SetArea(0.95f - infomationPad.Width,
                     infomationPad.Height + borderY + warningPad.Height);
                 watchPad.SetPosition(infomationPad.Width + borderX * 2, borderY);
-            }
-            else
+            }else
             {
-
+                throw new Exception("Not Support this Resolution");
             }
         }
 
         static VisualLayer()
         {
-            infomationPad = new VisualPad();
-            warningPad = new VisualPad();
-            watchPad = new VisualPad();
+            infomationPad = new VisualPad("Information Pad");
+            warningPad = new VisualPad("Waring Pad");
+            watchPad = new VisualPad("Watch Pad");
         }
 
         internal static void OnResolutionChange(int newWidth, int newHeight)
@@ -74,7 +73,7 @@ namespace GalEngine
             
             Utilities.Dipose(ref textFormat);
 
-            textFormat = new CanvasTextFormat("Consolas", height * 0.03f);
+            textFormat = new CanvasTextFormat("Consolas", height * 0.027f);
             
             UpdatePads(width, height);
         }
@@ -88,11 +87,6 @@ namespace GalEngine
                 "Width : " + GlobalConfig.Width);
             infomationPad.SetItem(GlobalConfig.HeightName,
                 "Height : " + GlobalConfig.Height);
-            infomationPad.SetItem("NI",
-                "Height : " + GlobalConfig.Height);
-            infomationPad.SetItem("NIs",
-                "Height : " + GlobalConfig.Height);
-
 
             infomationPad.OnRender();
         }
@@ -109,7 +103,7 @@ namespace GalEngine
             //Update WatchPad Item When Text change
             foreach (var item in DebugLayer.WatchList)
             {
-                watchPad.SetItem(item, item + " = " + GlobalConfig.GetValue(item));
+                watchPad.SetItem(item, item + " = " + GlobalValue.GetValue(item));
             }
 
             watchPad.OnRender();
@@ -132,9 +126,24 @@ namespace GalEngine
             Canvas.PopLayer();
         }
 
-        public static void OnMouseScroll(int mousePosX, int mousePosY, int offset)
+        public static void OnMouseScroll(int realMousePosX, int realMousePosY, int offset)
         {
             offset = -offset;
+
+            if (infomationPad.Contains(realMousePosX, realMousePosY) is true)
+            {
+                infomationPad.OnMouseScroll(offset); return;
+            }
+
+            if (warningPad.Contains(realMousePosX, realMousePosY) is true)
+            {
+                warningPad.OnMouseScroll(offset); return;
+            }
+
+            if (watchPad.Contains(realMousePosX,realMousePosY) is true)
+            {
+                watchPad.OnMouseScroll(offset); return;
+            }
         }
 
         public static void SetPadItem(string Tag, string Text, PadType PadType)

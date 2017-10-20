@@ -35,6 +35,13 @@ namespace APILibrary.Win32
 
         public static int HighWord(IntPtr number)
             => ((int)number >> 16) & 0xffff;
+
+        public static int GetXFromLparam(IntPtr number)
+            => (short)((int)number & 0xffff);
+
+        public static int GetYFromLparam(IntPtr number)
+            => (short)(((int)number >> 16) & 0xffff);
+
     }
 
 }

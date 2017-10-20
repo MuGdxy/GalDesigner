@@ -13,6 +13,11 @@ namespace GalEngine
         static GlobalValue()
         {
             valueList = new Dictionary<string, object>();
+
+            SetValue(GlobalConfig.WidthName, 800);
+            SetValue(GlobalConfig.HeightName, 600);
+            SetValue(GlobalConfig.ApplicationName, "GalEngine");
+            SetValue(GlobalConfig.FullScreenName, false);
         }
 
         public static void SetValue(string Tag, object value)
@@ -31,11 +36,14 @@ namespace GalEngine
             valueList[Tag] = value;
         }
 
-        public static object GetValue(string Tag) => valueList[Tag];
+        public static object GetValue(string Tag)
+        {
+            return valueList[Tag];
+        }
 
         public static T GetValue<T>(string Tag)
         {
-            return (T)valueList[Tag];
+            return (T)GetValue(Tag);
         }
 
         internal static Dictionary<string, object> ValueList => valueList;

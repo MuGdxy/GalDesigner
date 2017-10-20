@@ -14,11 +14,7 @@ namespace GalEngine
         internal const string FullScreenName = "FullScreen";
 
         static GlobalConfig()
-        {
-            SetValue(WidthName, 800);
-            SetValue(HeightName, 600);
-            SetValue(ApplicationName, "GalEngine");
-            SetValue(FullScreenName, false);
+        { 
         }
 
         public static void SetValue(string Tag, object value)

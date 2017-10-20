@@ -23,12 +23,19 @@ namespace GalEngine
             private const float borderX = 5;
             private const float borderY = 3;
 
+            private const float borderSize = 0.001f;
+
+            private const float titleHeight = 0.05f; //relative visualLayer
+            private const float titleOffsetX = 0.01f;
+            
+            private const float offsetSpeed = 0.02f;
+
             private class PadItem
             {
-                private const float borderX = 0.1f;
+                private const float borderX = 0.3f;
                 private const float borderY = 0.1f;
 
-                private static CanvasBrush padItemBrush = new CanvasBrush(1, 0, 0, 1);
+                private static CanvasBrush padItemBrush = new CanvasBrush(192 / 255f, 192 / 255f, 192 / 255f, 1f);
                 
                 private string text;
                 private float width;
@@ -61,7 +68,7 @@ namespace GalEngine
 
                     Canvas.DrawRectangle(0, 0, Width, Height, padBrush, 1f);
 
-                    Canvas.DrawText(borderX * textFormat.Size, borderY * textFormat.Size,
+                    Canvas.DrawText(titleOffsetX * VisualLayer.width, borderY * textFormat.Size,
                         canvasText, textBrush);
                 }
 
@@ -80,8 +87,22 @@ namespace GalEngine
                 public float Height => textMetrics.Height + borderY * textFormat.Size * 2;
             }
 
+            private static string TitleFormatFont = "Consolas";
+            private static int TitleFormatWeight = 500;
+
+            private static CanvasBrush TitleBrush = new CanvasBrush(135 / 255f, 113 / 255f, 207 / 255f, 1);
+
+            private static CanvasTextFormat TitleFormat = new CanvasTextFormat(TitleFormatFont, 10, TitleFormatWeight)
+            {
+                ParagraphAlignment = ParagraphAlignment.Center
+            };
+
+
             private float width;
             private float height;
+
+            private Rect realLayout;
+            private float realTitleHeight;
 
             private float realWidth;
             private float realHeight;
@@ -92,6 +113,11 @@ namespace GalEngine
             private float startPosX;
             private float startPosY;
 
+            private float realStartPosX;
+            private float realStartPosY;
+
+            private string title;
+
             private List<PadItem> itemList;
             private Dictionary<string, PadItem> itemIndex;
 
@@ -99,7 +125,7 @@ namespace GalEngine
             private float currentContentEnd;
             private float maxItemHeight;
 
-            public VisualPad()
+            public VisualPad(string Title)
             {
                 itemList = new List<PadItem>();
                 itemIndex = new Dictionary<string, PadItem>();
@@ -107,6 +133,8 @@ namespace GalEngine
                 maxItemHeight = 0;
                 currentContentStart = 0;
                 currentContentEnd = contentHeight;
+
+                title = Title;
             }
 
             public void AddItem(string Tag, string Text)
@@ -142,8 +170,10 @@ namespace GalEngine
                 maxItemHeight = maxItemHeight - preHeight + itemIndex[Tag].Height;
             }
 
-            public void OnMouseScroll(int offset)
+            public void OnMouseScroll(float offset)
             {
+                offset *= offsetSpeed * VisualLayer.height;
+
                 currentContentStart += offset;
                 currentContentEnd = currentContentStart + contentHeight;
 
@@ -166,9 +196,6 @@ namespace GalEngine
 
             public void OnRender()
             {
-                float realStartPosX = startPosX * VisualLayer.width;
-                float realStartPosY = startPosY * VisualLayer.height;
-
                 //Trnasform Pad
                 Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realStartPosX,
                     realStartPosY));
@@ -176,14 +203,20 @@ namespace GalEngine
                 Canvas.Transform = transform;
 
                 //Render Pad border
-                Canvas.DrawRectangle(0, 0, realWidth, realHeight, padBrush, 2);
+                Canvas.DrawRectangle(0, 0, realWidth, realHeight, padBrush, VisualLayer.width * borderSize);
+
+                Canvas.FillRectangle(0, 0, realWidth, realTitleHeight, TitleBrush);
+
+                Canvas.DrawText(Title, titleOffsetX * VisualLayer.width, 0, realWidth, realTitleHeight, TitleFormat, textBrush);
+
+                transform *= Matrix3x2.CreateTranslation(new Vector2(0, realTitleHeight));
 
                 if (itemList.Count != 0)
                 {
                     //Get Content's area
                     Rect contentRect = new Rect(startPosX + borderX,
-                        startPosY + borderY, startPosX + borderX + contentWidth,
-                        startPosY + borderY + contentHeight);
+                        startPosY + borderY + realTitleHeight, startPosX + borderX + contentWidth,
+                        startPosY + borderY + contentHeight + realTitleHeight);
 
                     //Render content layer
                     Canvas.PushLayer(contentRect.Left, contentRect.Top,
@@ -223,18 +256,37 @@ namespace GalEngine
 
             public void SetArea(float Width, float Height)
             {
+                //Resize Resource
+                Utilities.Dipose(ref TitleFormat);
+                TitleFormat = new CanvasTextFormat(TitleFormatFont, VisualLayer.height * 0.03f, TitleFormatWeight)
+                {
+                    ParagraphAlignment = ParagraphAlignment.Center
+                };
+
                 width = Width;
                 height = Height;
 
                 realWidth = width * VisualLayer.width;
                 realHeight = height * VisualLayer.height;
 
+                realStartPosX = startPosX * VisualLayer.width;
+                realStartPosY = startPosY * VisualLayer.height;
+
+                realLayout = new Rect(realStartPosX, realStartPosY,
+                    realStartPosX + realWidth, realStartPosY + realHeight);
+
+                realTitleHeight = titleHeight * VisualLayer.height;
+
                 contentWidth = realWidth - borderX * 2;
-                contentHeight = realHeight - borderY * 2;
+                contentHeight = realHeight - borderY * 2 - realTitleHeight;
 
                 //Update PadItem When Size Change
+                maxItemHeight = 0;
                 for (int i = 0; i < itemList.Count; i++)
+                {
                     itemList[i].Reset(itemList[i].Text, contentWidth);
+                    maxItemHeight += itemList[i].Height;
+                }
 
                 currentContentEnd = currentContentStart + contentHeight;
             }
@@ -256,6 +308,17 @@ namespace GalEngine
             {
                 startPosX = posX;
                 startPosY = posY;
+
+                realStartPosX = startPosX * VisualLayer.width;
+                realStartPosY = startPosY * VisualLayer.height;
+
+                realLayout = new Rect(realStartPosX, realStartPosY,
+                    realStartPosX + realWidth, realStartPosY + realHeight);
+            }
+
+            public bool Contains(float realPosX, float realPosY)
+            {
+                return realLayout.Contains(realPosX, realPosY);
             }
 
             public float Width => width;
@@ -265,6 +328,12 @@ namespace GalEngine
             public float StartPosX => startPosX;
 
             public float StartPosY => startPosY;
+
+            public string Title
+            {
+                set => title = value;
+                get => title;
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ namespace TestApp
             DebugLayer.AddWatch("Height");
             DebugLayer.AddWatch("FullScreen");
             DebugLayer.AddWatch("AppName");
+
             GalEngine.GalEngine.Run();
 #endif
         }
