@@ -9,6 +9,9 @@ using Presenter;
 
 namespace GalEngine
 {
+    ///Visual Layer Config
+    using LayerConfig = VisualLayerConfig;
+
     static partial class VisualLayer
     {
         internal enum PadType
@@ -18,17 +21,11 @@ namespace GalEngine
             WatchPad
         }
 
+        //relative visualLayer
         private class VisualPad
         {
             private const float borderX = 5;
             private const float borderY = 3;
-
-            private const float borderSize = 0.001f;
-
-            private const float titleHeight = 0.05f; //relative visualLayer
-            private const float titleOffsetX = 0.01f;
-            
-            private const float offsetSpeed = 0.02f;
 
             private class PadItem
             {
@@ -57,7 +54,7 @@ namespace GalEngine
 
                     Utilities.Dipose(ref canvasText);
 
-                    canvasText = new CanvasText(text, width, 0, textFormat);
+                    canvasText = new CanvasText(text, width, 0, LayerConfig.TextFormat);
 
                     textMetrics = canvasText.Metrics;
                 }
@@ -66,10 +63,10 @@ namespace GalEngine
                 {
                     Canvas.FillRectangle(0, 0, Width, Height, padItemBrush);
 
-                    Canvas.DrawRectangle(0, 0, Width, Height, padBrush, 1f);
+                    Canvas.DrawRectangle(0, 0, Width, Height, LayerConfig.BorderBrush, 1f);
 
-                    Canvas.DrawText(titleOffsetX * VisualLayer.width, borderY * textFormat.Size,
-                        canvasText, textBrush);
+                    Canvas.DrawText(LayerConfig.TitleOffsetX, borderY * LayerConfig.TextFormat.Size,
+                        canvasText, LayerConfig.TextBrush);
                 }
 
                 public string Text
@@ -84,19 +81,8 @@ namespace GalEngine
                     get => width;
                 }
 
-                public float Height => textMetrics.Height + borderY * textFormat.Size * 2;
+                public float Height => textMetrics.Height + borderY * LayerConfig.TextFormat.Size * 2;
             }
-
-            private static string TitleFormatFont = "Consolas";
-            private static int TitleFormatWeight = 500;
-
-            private static CanvasBrush TitleBrush = new CanvasBrush(135 / 255f, 113 / 255f, 207 / 255f, 1);
-
-            private static CanvasTextFormat TitleFormat = new CanvasTextFormat(TitleFormatFont, 10, TitleFormatWeight)
-            {
-                ParagraphAlignment = ParagraphAlignment.Center
-            };
-
 
             private float width;
             private float height;
@@ -172,7 +158,7 @@ namespace GalEngine
 
             public void OnMouseScroll(float offset)
             {
-                offset *= offsetSpeed * VisualLayer.height;
+                offset *= LayerConfig.OffsetSpeed;
 
                 currentContentStart += offset;
                 currentContentEnd = currentContentStart + contentHeight;
@@ -203,12 +189,17 @@ namespace GalEngine
                 Canvas.Transform = transform;
 
                 //Render Pad border
-                Canvas.DrawRectangle(0, 0, realWidth, realHeight, padBrush, VisualLayer.width * borderSize);
+                Canvas.DrawRectangle(0, 0, realWidth, realHeight, 
+                    LayerConfig.BorderBrush, LayerConfig.BorderSize);
 
-                Canvas.FillRectangle(0, 0, realWidth, realTitleHeight, TitleBrush);
+                //Render Title BackGround
+                Canvas.FillRectangle(0, 0, realWidth, realTitleHeight, LayerConfig.TitleBrush);
 
-                Canvas.DrawText(Title, titleOffsetX * VisualLayer.width, 0, realWidth, realTitleHeight, TitleFormat, textBrush);
+                //Render Title
+                Canvas.DrawText(Title, LayerConfig.TitleOffsetX,
+                    0, realWidth, realTitleHeight, LayerConfig.TitleFormat, LayerConfig.TextBrush);
 
+                //Render Content
                 transform *= Matrix3x2.CreateTranslation(new Vector2(0, realTitleHeight));
 
                 if (itemList.Count != 0)
@@ -226,13 +217,14 @@ namespace GalEngine
 
                     float currentHeight = 0;
 
-                    //make sure the postion is right
+                    //Make sure the postion is right
                     if (maxItemHeight < contentHeight)
                     {
                         currentContentStart = 0;
                         currentContentEnd = contentHeight;
                     }
 
+                    //Render items in pad
                     foreach (var item in itemList)
                     {
                         float height = item.Height;
@@ -257,8 +249,11 @@ namespace GalEngine
             public void SetArea(float Width, float Height)
             {
                 //Resize Resource
-                Utilities.Dipose(ref TitleFormat);
-                TitleFormat = new CanvasTextFormat(TitleFormatFont, VisualLayer.height * 0.03f, TitleFormatWeight)
+                Utilities.Dipose(ref LayerConfig.TitleFormat);
+
+                LayerConfig.TitleFormat = new CanvasTextFormat(
+                    LayerConfig.TitleFormatFont, VisualLayer.height * 0.03f,
+                    LayerConfig.TitleFormatWeight)
                 {
                     ParagraphAlignment = ParagraphAlignment.Center
                 };
@@ -275,7 +270,7 @@ namespace GalEngine
                 realLayout = new Rect(realStartPosX, realStartPosY,
                     realStartPosX + realWidth, realStartPosY + realHeight);
 
-                realTitleHeight = titleHeight * VisualLayer.height;
+                realTitleHeight = LayerConfig.TitleHeight;
 
                 contentWidth = realWidth - borderX * 2;
                 contentHeight = realHeight - borderY * 2 - realTitleHeight;

@@ -79,14 +79,14 @@ namespace GalEngine
             warningText[warningType] = messageText;
         }
 
-        public static void AddWatch(string Tag)
+        public static void Watch(string Tag)
         {
             watchList.Add(Tag);
 
             VisualLayer.SetPadItem(Tag, Tag + " = " + GlobalValue.GetValue(Tag), VisualLayer.PadType.WatchPad);
         }
 
-        public static void RemoveWatch(string Tag)
+        public static void UnWatch(string Tag)
         {
             watchList.Remove(Tag);
 

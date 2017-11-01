@@ -16,16 +16,12 @@ namespace TestApp
         static void Main(string[] args)
         {
 #if false
-            Builder.Application.Add(new TestWindow(AppName, 1920, 1080));
 
-            Builder.Application.RunLoop();
-
-            Presenter.Engine.Stop();
 #else
-            DebugLayer.AddWatch("Width");
-            DebugLayer.AddWatch("Height");
-            DebugLayer.AddWatch("FullScreen");
-            DebugLayer.AddWatch("AppName");
+            DebugLayer.Watch("Width");
+            DebugLayer.Watch("Height");
+            DebugLayer.Watch("FullScreen");
+            DebugLayer.Watch("AppName");
 
             GalEngine.GalEngine.Run();
 #endif

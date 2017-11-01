@@ -10,17 +10,10 @@ using Presenter;
 
 namespace GalEngine
 {
+    using LayerConfig = VisualLayerConfig;
+
     static partial class VisualLayer
     {
-        private const float borderX = 0.01f;
-        private const float borderY = 0.01f;
-        
-        private static CanvasBrush padBrush = new CanvasBrush(0, 0, 0, 1);
-        private static CanvasBrush textBrush = new CanvasBrush(0, 0, 0, 1);
-        private static CanvasTextFormat textFormat = new CanvasTextFormat("Consolas", 10);
-
-        private static CanvasBrush backGroundBrush = new CanvasBrush(1, 1, 1, 1);
-
         private static VisualPad infomationPad;
         private static VisualPad warningPad;
         private static VisualPad watchPad;
@@ -36,6 +29,9 @@ namespace GalEngine
 
         private static void UpdatePads(int newWidth, int newHeight)
         {
+            const float borderX = 0.01f;
+            const float borderY = 0.01f;
+
             if (newWidth > newHeight)
             {
                 //const
@@ -52,8 +48,14 @@ namespace GalEngine
                 warningPad.SetPosition(borderX, borderY + infomationPad.Height + borderY);
 
                 watchPad.SetArea(0.95f - infomationPad.Width,
-                    infomationPad.Height + borderY + warningPad.Height);
+                    infomationPad.Height + borderY + warningPad.Height - 0.5f);
                 watchPad.SetPosition(infomationPad.Width + borderX * 2, borderY);
+
+                DebugConsole.SetArea(watchPad.Width, warningPad.Height +
+                    warningPad.StartPosY - (watchPad.StartPosY + watchPad.Height + borderY));
+                DebugConsole.SetPosition(watchPad.StartPosX,
+                    watchPad.StartPosY + watchPad.Height + borderY);
+
             }else
             {
                 throw new Exception("Not Support this Resolution");
@@ -71,9 +73,9 @@ namespace GalEngine
         {
             aspectRatio = (width = newWidth) / (float)(height = newHeight);
             
-            Utilities.Dipose(ref textFormat);
+            Utilities.Dipose(ref LayerConfig.TextFormat);
 
-            textFormat = new CanvasTextFormat("Consolas", height * 0.027f);
+            LayerConfig.TextFormat = new CanvasTextFormat("Consolas", height * 0.027f);
             
             UpdatePads(width, height);
         }
@@ -113,15 +115,18 @@ namespace GalEngine
         {
             //Render Object 
             Canvas.PushLayer(0, 0, width, height, opacity);
-            
+
             //Render BackGround
-            Canvas.ClearBuffer(backGroundBrush.Red, backGroundBrush.Green, backGroundBrush.Blue);
+            Canvas.ClearBuffer(LayerConfig.BackGroundBrush.Red,
+                LayerConfig.BackGroundBrush.Green, LayerConfig.BackGroundBrush.Blue);
 
             OnRenderInformationPad();
 
             OnRenderWarningPad();
 
             OnRenderWatchPad();
+
+            DebugConsole.OnRender();
 
             Canvas.PopLayer();
         }
@@ -187,5 +192,9 @@ namespace GalEngine
             set => isEnable = value;
             get => isEnable;
         }
+
+        public static int Height => height;
+
+        public static int Width => width;
     }
 }

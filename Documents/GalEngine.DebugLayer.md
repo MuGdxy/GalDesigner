@@ -46,4 +46,7 @@ We use `Tab` to enable or disable it.
 We can use `DebugLayer.Watch(ValueTag)`,`DebugLayer.UnWatch(ValueTag)` to add or remove a value to watch.
 
 
+## About Console
+
+We can use console in DebugLayer.
 
