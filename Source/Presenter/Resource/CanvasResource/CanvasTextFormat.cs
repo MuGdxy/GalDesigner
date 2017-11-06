@@ -18,10 +18,17 @@ namespace Presenter
 
         public CanvasTextFormat(string fontface, float size, int weight = 400)
         {
+            Reset(fontface, size, weight);
+        }
+
+        public void Reset(string fontface, float size, int weight = 400)
+        {
+            SharpDX.Utilities.Dispose(ref textFormat);
+
             textFormat = new SharpDX.DirectWrite.TextFormat(Engine.WriteFactory,
                 fontface, (SharpDX.DirectWrite.FontWeight)(fWeight = weight), SharpDX.DirectWrite.FontStyle.Normal,
                 fSize = size);
-            
+
             textFormat.TextAlignment = textAlignment;
             textFormat.ParagraphAlignment = paragraphAlignment;
         }

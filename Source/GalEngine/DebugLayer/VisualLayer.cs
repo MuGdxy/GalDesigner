@@ -51,9 +51,9 @@ namespace GalEngine
                     infomationPad.Height + borderY + warningPad.Height - 0.5f);
                 watchPad.SetPosition(infomationPad.Width + borderX * 2, borderY);
 
-                DebugConsole.SetArea(watchPad.Width, warningPad.Height +
+                DebugCommand.SetArea(watchPad.Width, warningPad.Height +
                     warningPad.StartPosY - (watchPad.StartPosY + watchPad.Height + borderY));
-                DebugConsole.SetPosition(watchPad.StartPosX,
+                DebugCommand.SetPosition(watchPad.StartPosX,
                     watchPad.StartPosY + watchPad.Height + borderY);
 
             }else
@@ -72,11 +72,9 @@ namespace GalEngine
         internal static void OnResolutionChange(int newWidth, int newHeight)
         {
             aspectRatio = (width = newWidth) / (float)(height = newHeight);
-            
-            Utilities.Dipose(ref LayerConfig.TextFormat);
 
-            LayerConfig.TextFormat = new CanvasTextFormat("Consolas", height * 0.027f);
-            
+            LayerConfig.OnResizeResource(newWidth, newHeight);
+
             UpdatePads(width, height);
         }
 
@@ -126,7 +124,7 @@ namespace GalEngine
 
             OnRenderWatchPad();
 
-            DebugConsole.OnRender();
+            DebugCommand.OnRender();
 
             Canvas.PopLayer();
         }

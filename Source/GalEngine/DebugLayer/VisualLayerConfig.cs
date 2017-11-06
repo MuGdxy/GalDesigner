@@ -9,7 +9,7 @@ using Presenter;
 namespace GalEngine
 {
     static class VisualLayerConfig
-    { 
+    {
         private const string titleFormatFont = "Consolas";
         private const int titleFormatWeight = 500;
 
@@ -26,10 +26,19 @@ namespace GalEngine
         public static CanvasBrush TitleBrush = new CanvasBrush(135 / 255f, 113 / 255f, 207 / 255f, 1);
 
         public static CanvasTextFormat TextFormat = new CanvasTextFormat("Consolas", 10);
-        public static CanvasTextFormat TitleFormat = new CanvasTextFormat(TitleFormatFont, 10, TitleFormatWeight)
+
+        public static CanvasTextFormat TitleFormat = new CanvasTextFormat(TitleFormatFont, 10, TitleFormatWeight);
+
+        public static void OnResizeResource(int newWidth, int newHeight)
         {
-            ParagraphAlignment = ParagraphAlignment.Center
-        };
+            TextFormat.Reset("Consolas", newHeight * 0.027f);
+
+            TitleFormat.Reset(titleFormatFont, newHeight * 0.03f, titleFormatWeight);
+            
+            TextFormat.ParagraphAlignment = ParagraphAlignment.Center;
+
+            TitleFormat.ParagraphAlignment = ParagraphAlignment.Center;
+        } 
 
         public static string TitleFormatFont => titleFormatFont;
 

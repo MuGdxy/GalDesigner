@@ -65,8 +65,7 @@ namespace GalEngine
 
                     Canvas.DrawRectangle(0, 0, Width, Height, LayerConfig.BorderBrush, 1f);
 
-                    Canvas.DrawText(LayerConfig.TitleOffsetX, borderY * LayerConfig.TextFormat.Size,
-                        canvasText, LayerConfig.TextBrush);
+                    Canvas.DrawText(text, LayerConfig.TitleOffsetX, 0, width, Height, LayerConfig.TextFormat, LayerConfig.TextBrush);
                 }
 
                 public string Text
@@ -205,9 +204,8 @@ namespace GalEngine
                 if (itemList.Count != 0)
                 {
                     //Get Content's area
-                    Rect contentRect = new Rect(startPosX + borderX,
-                        startPosY + borderY + realTitleHeight, startPosX + borderX + contentWidth,
-                        startPosY + borderY + contentHeight + realTitleHeight);
+                    Rect contentRect = new Rect(borderX, borderY + realTitleHeight, borderX + contentWidth,
+                        borderY + contentHeight + realTitleHeight);
 
                     //Render content layer
                     Canvas.PushLayer(contentRect.Left, contentRect.Top,
@@ -248,16 +246,6 @@ namespace GalEngine
 
             public void SetArea(float Width, float Height)
             {
-                //Resize Resource
-                Utilities.Dipose(ref LayerConfig.TitleFormat);
-
-                LayerConfig.TitleFormat = new CanvasTextFormat(
-                    LayerConfig.TitleFormatFont, VisualLayer.height * 0.03f,
-                    LayerConfig.TitleFormatWeight)
-                {
-                    ParagraphAlignment = ParagraphAlignment.Center
-                };
-
                 width = Width;
                 height = Height;
 

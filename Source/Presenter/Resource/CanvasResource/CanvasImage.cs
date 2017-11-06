@@ -15,8 +15,7 @@ namespace Presenter
 
         public CanvasImage(int width, int height)
         {
-            bitmap = new SharpDX.Direct2D1.Bitmap1(Canvas.ID2D1DeviceContext,
-                new SharpDX.Size2(iWidth = width, iHeight = height));
+            Reset(width, height);
         }
 
         public CanvasImage(string fileName)
@@ -33,6 +32,14 @@ namespace Presenter
 
             iWidth = (int)bitmap.Size.Width;
             iHeight = (int)bitmap.Size.Height;
+        }
+
+        public void Reset(int width, int height)
+        {
+            SharpDX.Utilities.Dispose(ref bitmap);
+
+            bitmap = new SharpDX.Direct2D1.Bitmap1(Canvas.ID2D1DeviceContext,
+                new SharpDX.Size2(iWidth = width, iHeight = height));
         }
 
         public override void Dispose()

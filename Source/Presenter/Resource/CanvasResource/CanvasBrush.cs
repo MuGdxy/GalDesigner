@@ -16,6 +16,13 @@ namespace Presenter
 
         public CanvasBrush(float red, float green, float blue, float alpha = 1)
         {
+            Reset(red, green, blue, alpha);
+        }
+
+        public void Reset(float red, float green, float blue, float alpha = 1)
+        {
+            SharpDX.Utilities.Dispose(ref brush);
+            
             brush = new SharpDX.Direct2D1.SolidColorBrush(Canvas.ID2D1DeviceContext,
                 new SharpDX.Mathematics.Interop.RawColor4(redColor = red, greenColor = green, blueColor = blue, alpha));
         }

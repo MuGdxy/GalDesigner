@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Presenter
 {
@@ -28,7 +29,6 @@ namespace Presenter
 
     public class CanvasText : CanvasResource
     { 
-
         private SharpDX.DirectWrite.TextLayout textLayout;
 
         private float tWidth;
@@ -38,11 +38,49 @@ namespace Presenter
 
         private CanvasTextFormat textFormat;
 
+        private void ResetText(string Text)
+        {
+            SharpDX.Utilities.Dispose(ref textLayout);
+
+            textLayout = new SharpDX.DirectWrite.TextLayout(Engine.WriteFactory,
+                tText = Text, textFormat.TextFormat, tWidth, tHeight);
+        }
+
         public CanvasText(string text, float width, float height,
             CanvasTextFormat format)
         {
+            Reset(text, width, height, format);
+        }
+
+        public void Insert(char word, int position)
+        {
+            ResetText(tText.Insert(position, word.ToString()));
+        }
+
+        public void Remove(int position)
+        {
+            ResetText(tText.Remove(position));
+        }
+
+        public Vector2 HitTestPosition(int position, bool isTrailing)
+        {
+            Vector2 result = new Vector2();
+
+            textLayout.HitTestTextPosition(position, isTrailing, out result.X,
+                out result.Y);
+
+            return result;
+        }
+
+        public void Reset(string text, float width, float height,
+            CanvasTextFormat format = null)
+        {
+            SharpDX.Utilities.Dispose(ref textLayout);
+
+            if (format != null) textFormat = format;
+
             textLayout = new SharpDX.DirectWrite.TextLayout(Engine.WriteFactory,
-                tText = text, (textFormat = format).TextFormat, tWidth = width, tHeight = height);
+                tText = text, textFormat.TextFormat, tWidth = width, tHeight = height);
         }
 
         public override void Dispose()
@@ -56,6 +94,8 @@ namespace Presenter
         public CanvasTextFormat TextFormat => textFormat;
 
         public TextMetrics Metrics => new TextMetrics(TextLayout.Metrics);
+
+        public string Text => tText;
 
         public float Width => tWidth;
 
