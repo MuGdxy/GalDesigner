@@ -87,6 +87,12 @@ namespace Builder
 
         public static bool IsKeyDown(KeyCode keycode)
         {
+            if (keycode is KeyCode.CapsLock || keycode is KeyCode.NumLock
+                || keycode is KeyCode.Scroll)
+            {
+                if (APILibrary.Win32.Internal.GetKeyState((int)keycode) is 1) return true;
+                return false;
+            }
             return APILibrary.Win32.Internal.GetKeyState((int)keycode) < 0;
         }
 

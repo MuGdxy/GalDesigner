@@ -145,6 +145,11 @@ namespace GalEngine
                     VisualLayer.OnResolutionChange(GlobalConfig.Width, GlobalConfig.Height);
             }
 
+            if (VisualLayer.IsEnable is true)
+            {
+                VisualLayer.OnKeyEvent(e);
+            }
+            
             base.OnKeyEvent(sender, e);
         }
 

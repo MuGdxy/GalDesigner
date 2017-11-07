@@ -149,6 +149,11 @@ namespace GalEngine
             }
         }
 
+        public static void OnKeyEvent(KeyEventArgs e)
+        {
+            DebugCommand.OnKeyEvent(e);
+        }
+
         public static void SetPadItem(string Tag, string Text, PadType PadType)
         {
             switch (PadType)

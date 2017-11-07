@@ -116,6 +116,7 @@ namespace Builder
             positionx = realRect.left;
             positiony = realRect.top;
         }
+
         public void Destory()
         {
             APILibrary.Win32.Internal.DestroyWindow(handle);
@@ -186,7 +187,7 @@ namespace Builder
         public void SetFocus()
         {
             APILibrary.Win32.Internal.SetFocus(handle);
-
+            
             isFocus = true;
         }
 
@@ -222,5 +223,7 @@ namespace Builder
                 APILibrary.Win32.ShowWindowStyles.SW_SHOW);
 
         }
+
+        
     }
 }

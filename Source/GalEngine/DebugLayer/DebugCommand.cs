@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
+using Builder;
 using Presenter;
 
 namespace GalEngine
@@ -36,11 +37,101 @@ namespace GalEngine
         private static CanvasText inputCommand;
         private static Rect inputCommandRect = new Rect(); //relative DebugCommand
 
-        private static float inputCommandOffset = 0;
+        private static float inputCommandOffset = 0; //+ is right , - is left, relative InputCommand
+
+        private const int baseOffset = 3;
+
+        private static void CursorMoveLeft()
+        {
+            if (cursorPosition is 0) return;
+
+            float currentX = inputCommand.HitTestPosition(cursorPosition, false).X;
+            float nextX = inputCommand.HitTestPosition(cursorPosition - 1, false).X;
+
+            cursorRealPosition -= currentX - nextX;
+            //if the cursorRealPosition < the left border, move InputCommand right
+            if (cursorRealPosition < 0)
+            {
+                /*int targetPosition = 0;
+
+                if (cursorPosition > baseOffset)
+                    targetPosition = cursorPosition - baseOffset;
+
+                float addPosition = inputCommand.HitTestPosition(cursorPosition, false).X -
+                    inputCommand.HitTestPosition(targetPosition, false).X;
+
+                cursorRealPosition += addPosition;
+                inputCommandOffset += addPosition;*/
+                cursorRealPosition += currentX - nextX;
+                inputCommandOffset += currentX - nextX;
+            }
+
+            cursorPosition--;
+        }
+
+        private static void CursorMoveRight()
+        {
+            if (cursorPosition == inputCommand.Text.Length) return;
+
+            float currentX = inputCommand.HitTestPosition(cursorPosition, false).X;
+            float nextX = inputCommand.HitTestPosition(cursorPosition + 1, false).X;
+
+            cursorRealPosition += nextX - currentX;
+            //if the cursorRealPosition > the right border, move InputCommand left
+            if (cursorRealPosition > inputCommandRect.Right - inputCommandRect.Left)
+            {
+                cursorRealPosition -= nextX - currentX;
+                inputCommandOffset -= nextX - currentX;
+            }
+
+            cursorPosition++;
+        }
+
+        private static void Insert(char word)
+        {
+            inputCommand.Insert(word, cursorPosition);
+            CursorMoveRight();
+        }
+
+        private static void Remove()
+        {
+            if (cursorPosition is 0) return;
+            
+            CursorMoveLeft();
+            inputCommand.Remove(cursorPosition, 1);
+        }
+
+        internal static void OnKeyEvent(KeyEventArgs e)
+        {
+            if (e.IsDown is true)
+            {
+                switch (e.KeyCode)
+                {
+                    case KeyCode.Left:
+                        CursorMoveLeft();
+                        break;
+                    case KeyCode.Right:
+                        CursorMoveRight();
+                        break;
+                    default:
+                        break;
+                }
+
+                if (e.KeyCode >= KeyCode.A && e.KeyCode <= KeyCode.Z)
+                {
+                    if (Application.IsKeyDown(KeyCode.CapsLock) is true)
+                        Insert((char)e.KeyCode);
+                    else Insert((char)(e.KeyCode + 'a' - 'A'));
+                }
+
+                if (e.KeyCode is KeyCode.Back)
+                    Remove();
+            }
+        }
 
         static DebugCommand()
         {
-            inputCommand = new CanvasText("1233", float.MaxValue, CommandInputPadHeight, LayerConfig.TextFormat);
+            inputCommand = new CanvasText("", float.MaxValue, CommandInputPadHeight, LayerConfig.TextFormat);
         }
 
         internal static void OnRender()

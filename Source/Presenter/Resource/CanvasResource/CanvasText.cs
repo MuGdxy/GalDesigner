@@ -57,9 +57,9 @@ namespace Presenter
             ResetText(tText.Insert(position, word.ToString()));
         }
 
-        public void Remove(int position)
+        public void Remove(int position,int count)
         {
-            ResetText(tText.Remove(position));
+            ResetText(tText.Remove(position, count));
         }
 
         public Vector2 HitTestPosition(int position, bool isTrailing)
