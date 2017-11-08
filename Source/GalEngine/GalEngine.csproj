@@ -55,6 +55,8 @@
     <Compile Include="GameWindow.cs" />
     <Compile Include="Interface\IActivable.cs" />
     <Compile Include="Interface\IValuable.cs" />
+    <Compile Include="Internal\FpsCounter.cs" />
+    <Compile Include="Internal\ResourceList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource\GlobalAnalyser.cs" />
     <Compile Include="Resource\GlobalConfig.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="Resource\GlobalResource.cs" />
     <Compile Include="Resource\ResourceTag\ImageTag.cs" />
     <Compile Include="Resource\ResourceTag\ResourceTag.cs" />
+    <Compile Include="Time.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

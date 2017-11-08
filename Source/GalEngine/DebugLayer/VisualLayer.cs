@@ -87,6 +87,7 @@ namespace GalEngine
                 "Width : " + GlobalConfig.Width);
             infomationPad.SetItem(GlobalConfig.HeightName,
                 "Height : " + GlobalConfig.Height);
+            infomationPad.SetItem("Fps", "Fps : " + GalEngine.GameWindow.Fps);
 
             infomationPad.OnRender();
         }
@@ -146,6 +147,11 @@ namespace GalEngine
             if (watchPad.Contains(realMousePosX,realMousePosY) is true)
             {
                 watchPad.OnMouseScroll(offset); return;
+            }
+
+            if (DebugCommand.Contains(realMousePosX, realMousePosY) is true)
+            {
+                DebugCommand.OnMouseScroll(offset); return;
             }
         }
 

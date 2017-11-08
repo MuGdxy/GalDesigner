@@ -181,9 +181,9 @@ namespace Presenter
             CreateCanvasTarget();
         }
 
-        public void SwapBuffer()
+        public void SwapBuffer(bool isLock = true)
         {
-            swapChain.Present(1, SharpDX.DXGI.PresentFlags.None);
+            swapChain.Present(isLock ? 1 : 0, SharpDX.DXGI.PresentFlags.None);
 
             ResetResourceView();
         }

@@ -29,7 +29,6 @@ namespace GalEngine
 
             private class PadItem
             {
-                private const float borderX = 0.3f;
                 private const float borderY = 0.1f;
 
                 private static CanvasBrush padItemBrush = new CanvasBrush(192 / 255f, 192 / 255f, 192 / 255f, 1f);
@@ -63,7 +62,7 @@ namespace GalEngine
                 {
                     Canvas.FillRectangle(0, 0, Width, Height, padItemBrush);
 
-                    Canvas.DrawRectangle(0, 0, Width, Height, LayerConfig.BorderBrush, 1f);
+                    Canvas.DrawRectangle(0, 0, Width, Height, LayerConfig.BorderBrush, LayerConfig.BorderSize / 2f);
 
                     Canvas.DrawText(text, LayerConfig.TitleOffsetX, 0, width, Height, LayerConfig.TextFormat, LayerConfig.TextBrush);
                 }

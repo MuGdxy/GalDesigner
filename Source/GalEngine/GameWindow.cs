@@ -15,6 +15,8 @@ namespace GalEngine
         private int mousePosX;
         private int mousePosY;
 
+        private Internal.FpsCounter fpsCounter = new Internal.FpsCounter();
+
         private void ComputeGameRect(out Rect result)
         {
             if (GalEngine.PresentSurface.IsFullScreen is true)
@@ -79,6 +81,8 @@ namespace GalEngine
 
         private void OnRender()
         {
+            fpsCounter.OnExport();
+
             GalEngine.RenderSurface.ResetBuffer(1, 1, 1, 1);
 
             Canvas.BeginDraw(GalEngine.RenderSurface);
@@ -193,14 +197,20 @@ namespace GalEngine
 
         public override void OnUpdate(object sender)
         {
+            Time.Update();
+            fpsCounter.OnUpdate();
+            
+
             //Check State
             CheckConfigValue();
 
             //Render And Present
             OnRender();
-
-            GalEngine.PresentSurface.SwapBuffer();
-
+#if DEBUG
+            GalEngine.PresentSurface.SwapBuffer(false);
+#else
+            GalEngine.PresentSurface.SwapBuffer(true);
+#endif
             base.OnUpdate(sender);
         }
 
@@ -208,6 +218,8 @@ namespace GalEngine
 
         public int MousePosY => mousePosY;
 
+        public int Fps => fpsCounter.Fps;
+        
         public bool IsFullScreen
         {
             set => GalEngine.PresentSurface.IsFullScreen = value;
