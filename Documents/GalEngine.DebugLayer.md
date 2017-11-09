@@ -46,7 +46,41 @@ We use `Tab` to enable or disable it.
 We can use `DebugLayer.Watch(ValueTag)`,`DebugLayer.UnWatch(ValueTag)` to add or remove a value to watch.
 
 
-## About Console
+## About DebugCommand
 
-We can use console in DebugLayer.
+We can send some command by using DebugCommand to our game.
 
+### Support Command
+
+There are some Command that we support:
+
+Command | Format | Description 
+------- | ------ | -----------
+Set     | Set value's name value | Set value, the value must be in GlobalValue or GlobalConfig.
+Get     | Get value's name       | Get value, the value must be in GlobalValue or GlobalConfig.
+Watch   | Watch value's name     | Add a value to WatchPad, the value must be in GlobalValue or GlobalConfig.
+UnWatch | UnWatch value's name   | Remove a value from WatchPad.
+Clear   | Clear                  | Clear Command.
+
+
+
+
+### Custom Command
+
+You can support your command by using `DebugCommand.CommandAnalyser`.
+
+```C#
+    public delegate bool CommandHandle(string command);
+    //the result is used for telling the DebugCommand if the command is right
+    //ture means it is a command, false means it is not a command.
+
+    public static event CommandHandle CommandAnalyser;
+
+    //example
+    DebugCommand.CommandAnalyser += Solution;
+
+    private static bool Solution(string command)
+    {
+        return false;
+    }
+```

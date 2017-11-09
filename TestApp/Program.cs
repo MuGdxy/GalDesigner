@@ -22,9 +22,22 @@ namespace TestApp
             DebugLayer.Watch("Height");
             DebugLayer.Watch("FullScreen");
             DebugLayer.Watch("AppName");
-            
+
+            DebugCommand.CommandAnalyser += DebugCommand_CommandAnalyser;
+            DebugCommand.CommandAnalyser += DebugCommand_CommandAnalyser1;
+
             GalEngine.GalEngine.Run();
 #endif
+        }
+
+        private static bool DebugCommand_CommandAnalyser1(string command)
+        {
+            return false;
+        }
+
+        private static bool DebugCommand_CommandAnalyser(string command)
+        {
+            return false;
         }
     }
 }

@@ -13,12 +13,16 @@ namespace GalEngine
     using LayerConfig = VisualLayerConfig;
     using ResourceList = Internal.ResourceList;
 
+    public delegate bool CommandHandle(string command);
+
     //relative VisualLayer
     public static class DebugCommand
     {
         private const float borderX = 0.01f; //relative DebugCommand 
         private const float borderY = 0.01f; //relative DebugCommand
-     
+
+        private const float cursorShowTimeSpan = 0.5f; //0.5s
+
         //relative VisualLayer
         private class CommandItem
         {
@@ -88,6 +92,8 @@ namespace GalEngine
 
         private static int cursorPosition = 0;
         private static float cursorRealPosition = 0;
+        private static float cursorPassTime = 0;
+        private static bool cursorState = false; //true is showing, false is hiding
 
         private static CanvasBrush cursorBrush = new CanvasBrush(0, 0, 0, 1);
 
@@ -98,6 +104,7 @@ namespace GalEngine
         private static Rect commandListRect = new Rect(); //relative DebugCommand
 
         private static List<CommandItem> commandList = new List<CommandItem>();
+
         private static float currentCommandListStart;
         private static float currentCommandListEnd;
         private static float maxCommandListHeight;
@@ -142,6 +149,26 @@ namespace GalEngine
             cursorPosition++;
         }
 
+        private static void CursorStateUpdate()
+        {
+            cursorPassTime += Time.DeltaSeconds;
+
+            if (cursorPassTime >= cursorShowTimeSpan)
+            {
+                cursorPassTime -= cursorShowTimeSpan;
+                cursorState ^= true;
+            }
+
+            if (cursorState is true)
+            {
+                float inputStartPosition = realHeight - CommandInputPadHeight;
+                float offset = (CommandInputPadHeight - LayerConfig.TextFormat.Size) / 2.3f;
+
+                Canvas.DrawLine(inputCommandRect.Left + cursorRealPosition, inputStartPosition + offset,
+                    inputCommandRect.Left + cursorRealPosition, realHeight - offset, cursorBrush, LayerConfig.BorderSize);
+            }
+        }
+
         private static void Insert(char word)
         {
             inputCommand.Insert(word, cursorPosition);
@@ -154,6 +181,24 @@ namespace GalEngine
             
             CursorMoveLeft();
             inputCommand.Remove(cursorPosition, 1);
+        }
+
+        private static bool AnalyseCommand(string command)
+        {
+            //Custom Command, if the command is not a system command , we will try this.
+            if (CommandAnalyser != null)
+            {
+                bool result = false;
+
+                foreach (CommandHandle item in CommandAnalyser.GetInvocationList())
+                {
+                    result |= item.Invoke(command);
+                }
+
+                return result;
+            }
+
+            return false;
         }
 
         internal static bool Contains(int realPositionX, int realPositionY)
@@ -313,11 +358,8 @@ namespace GalEngine
             Canvas.DrawText(inputCommandRect.Left + inputCommandOffset, inputStartPosition,
                 inputCommand, LayerConfig.TextBrush);
 
-            float offset = (CommandInputPadHeight - LayerConfig.TextFormat.Size) / 2.3f;
-
-            //Render Cursor
-            Canvas.DrawLine(inputCommandRect.Left + cursorRealPosition, inputStartPosition + offset,
-                inputCommandRect.Left + cursorRealPosition, realHeight - offset, cursorBrush, LayerConfig.BorderSize);
+            //Render and Update Cursor
+            CursorStateUpdate();
 
             Canvas.PopLayer();
 
@@ -340,6 +382,9 @@ namespace GalEngine
 
             inputCommandRect = new Rect(borderX * realWidth, realHeight - CommandInputPadHeight,
                 realWidth * (1 - borderX), realHeight);
+
+            //Make sure the InputCommand is right
+            inputCommand.Reset(inputCommand.Text, float.MaxValue, CommandInputPadHeight);
 
             //Make sure the CommandText's width and MaxListHeight is right
             maxCommandListHeight = 0;
@@ -386,6 +431,11 @@ namespace GalEngine
         public static void SendCommand(string command)
         {
             WriteCommand(command);
+
+            bool result = AnalyseCommand(command);
+
+            if (result is false)
+                WriteCommand("No Command Support!");
         }
 
         public static void ClearCommand()
@@ -398,5 +448,7 @@ namespace GalEngine
         }
 
         private static float CommandInputPadHeight => LayerConfig.TextFormat.Size * 2.5f;
+
+        public static event CommandHandle CommandAnalyser;
     }
 }
