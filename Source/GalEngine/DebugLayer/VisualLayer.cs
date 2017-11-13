@@ -35,7 +35,7 @@ namespace GalEngine
             if (newWidth > newHeight)
             {
                 //const
-                const float leftAspectRatio = 10f / 16f;
+                const float leftAspectRatio = 16f / 10f;
 
                 //Width > Height
 

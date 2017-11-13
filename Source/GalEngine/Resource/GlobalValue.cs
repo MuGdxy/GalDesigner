@@ -46,6 +46,11 @@ namespace GalEngine
             return (T)GetValue(Tag);
         }
 
+        public static bool Contains(string Tag)
+        {
+            return valueList.ContainsKey(Tag);
+        }
+
         internal static Dictionary<string, object> ValueList => valueList;
     }
 }

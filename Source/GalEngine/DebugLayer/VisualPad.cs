@@ -282,7 +282,7 @@ namespace GalEngine
                 else
 
                 {
-                    SetArea(baseValue * targetAspectRatio * aspectRatio, baseValue);
+                    SetArea(baseValue * targetAspectRatio / aspectRatio, baseValue);
                 }
             }
 

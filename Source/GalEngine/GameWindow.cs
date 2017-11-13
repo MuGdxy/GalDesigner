@@ -70,7 +70,8 @@ namespace GalEngine
                 isAppNameChange = true;
 
             //We need to make this state be same as Present 
-            GlobalConfig.IsFullScreen = IsFullScreen;
+            if (GlobalConfig.IsFullScreen != IsFullScreen)
+                GlobalConfig.IsFullScreen = IsFullScreen;
 
             if (isResolutionChange is true)
                 GalEngine.SetResolution(GlobalConfig.Width, GlobalConfig.Height);

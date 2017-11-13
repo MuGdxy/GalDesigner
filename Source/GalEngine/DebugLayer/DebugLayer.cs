@@ -81,6 +81,8 @@ namespace GalEngine
 
         public static void Watch(string Tag)
         {
+            if (watchList.Contains(Tag) is true) return;
+
             watchList.Add(Tag);
 
             VisualLayer.SetPadItem(Tag, Tag + " = " + GlobalValue.GetValue(Tag), VisualLayer.PadType.WatchPad);

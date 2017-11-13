@@ -30,12 +30,12 @@ namespace TestApp
 #endif
         }
 
-        private static bool DebugCommand_CommandAnalyser1(string command)
+        private static bool DebugCommand_CommandAnalyser1(string[] commandParameters)
         {
             return false;
         }
 
-        private static bool DebugCommand_CommandAnalyser(string command)
+        private static bool DebugCommand_CommandAnalyser(string[] commandParameters)
         {
             return false;
         }

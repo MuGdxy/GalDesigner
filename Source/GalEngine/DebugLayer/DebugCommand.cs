@@ -13,7 +13,7 @@ namespace GalEngine
     using LayerConfig = VisualLayerConfig;
     using ResourceList = Internal.ResourceList;
 
-    public delegate bool CommandHandle(string command);
+    public delegate bool CommandHandle(string[] commandParameters);
 
     //relative VisualLayer
     public static class DebugCommand
@@ -78,6 +78,14 @@ namespace GalEngine
             public float Height => textMetrics.Height + borderY * LayerConfig.TextFormat.Size * 2;
         }
 
+        private enum CommandErrorType
+        {
+            CommandParametersCount,
+            CommandParametersFormat,
+            CommandGlobalValueExist,
+            CommandWatchValueExist
+        }
+
         private static float width;
         private static float height;
 
@@ -104,6 +112,8 @@ namespace GalEngine
         private static Rect commandListRect = new Rect(); //relative DebugCommand
 
         private static List<CommandItem> commandList = new List<CommandItem>();
+
+        private static Dictionary<CommandErrorType, string> CommandErrorText = new Dictionary<CommandErrorType, string>();
 
         private static float currentCommandListStart;
         private static float currentCommandListEnd;
@@ -183,8 +193,108 @@ namespace GalEngine
             inputCommand.Remove(cursorPosition, 1);
         }
 
+        private static void ReportCommandError(CommandErrorType type)
+        {
+            WriteCommand(CommandErrorText[type]);
+        }
+
+        private static bool Assert(bool test, CommandErrorType type)
+        {
+            if (test is true) { ReportCommandError(type); return true; }
+            return false;
+        }
+
+        private static string[] GetCommandParameters(string command)
+        {
+            return command.Split(' ');
+        }
+
         private static bool AnalyseCommand(string command)
         {
+            string[] commandParameters = GetCommandParameters(command);
+
+            switch (commandParameters[0])
+            {
+                case "Set":
+                    if (Assert(commandParameters.Length != 3, CommandErrorType.CommandParametersCount) is true)
+                        return true;
+
+                    if (Assert(GlobalValue.Contains(commandParameters[1]) is false, CommandErrorType.CommandGlobalValueExist) is true)
+                        return true;
+
+                    string valueName = commandParameters[1];
+                    string value = commandParameters[2];
+
+                    switch (GlobalValue.GetValue(valueName))
+                    {
+                        case int intValue:
+                            GlobalValue.SetValue(valueName, Convert.ToInt32(value));
+                            break;
+
+                        case bool boolValue:
+                            GlobalValue.SetValue(valueName, Convert.ToBoolean(value));
+                            break;
+
+                        case float floatValue:
+                            GlobalValue.SetValue(valueName, (float)Convert.ToDouble(value));
+                            break;
+
+                        case string stringValue:
+                            GlobalValue.SetValue(valueName, Convert.ToString(value));
+                            break;
+
+                        default:
+                            break;
+                    }
+                    return true;
+
+                case "Get":
+                    if (Assert(commandParameters.Length != 2, CommandErrorType.CommandParametersCount) is true)
+                        return true;
+
+                    if (Assert(GlobalValue.Contains(commandParameters[1]) is false, CommandErrorType.CommandGlobalValueExist) is true)
+                        return true;
+
+                    WriteCommand(commandParameters[1] + " = " + GlobalValue.GetValue(commandParameters[1]));
+
+                    return true;
+
+                case "Watch":
+                    if (Assert(commandParameters.Length != 2, CommandErrorType.CommandParametersCount) is true)
+                        return true;
+
+                    if (Assert(GlobalValue.Contains(commandParameters[1]) is false, CommandErrorType.CommandGlobalValueExist) is true)
+                        return true;
+
+                    DebugLayer.Watch(commandParameters[1]);
+
+                    return true;
+
+                case "UnWatch":
+                    if (Assert(commandParameters.Length != 2, CommandErrorType.CommandParametersCount) is true)
+                        return true;
+
+                    if (Assert(GlobalValue.Contains(commandParameters[1]) is false, CommandErrorType.CommandGlobalValueExist) is true)
+                        return true;
+
+                    if (Assert(DebugLayer.WatchList.Contains(commandParameters[1]) is false, CommandErrorType.CommandWatchValueExist)
+                        is true) return true;
+
+                    DebugLayer.UnWatch(commandParameters[1]);
+
+                    return true;
+
+                case "Clear":
+                    if (Assert(commandParameters.Length != 1, CommandErrorType.CommandParametersCount) is true)
+                        return true;
+
+                    ClearCommand();
+
+                    return true;
+                default:
+                    break;
+            }
+
             //Custom Command, if the command is not a system command , we will try this.
             if (CommandAnalyser != null)
             {
@@ -192,7 +302,7 @@ namespace GalEngine
 
                 foreach (CommandHandle item in CommandAnalyser.GetInvocationList())
                 {
-                    result |= item.Invoke(command);
+                    result |= item.Invoke(commandParameters);
                 }
 
                 return result;
@@ -411,6 +521,11 @@ namespace GalEngine
         static DebugCommand()
         {
             WriteCommand("Hi! Welcome to use Command.");
+
+            CommandErrorText.Add(CommandErrorType.CommandParametersCount, "There is wrong number of CommandParameters!");
+            CommandErrorText.Add(CommandErrorType.CommandParametersFormat, "There is wrong format of Command!");
+            CommandErrorText.Add(CommandErrorType.CommandGlobalValueExist, "The value is not in GlobalValue!");
+            CommandErrorText.Add(CommandErrorType.CommandWatchValueExist, "The value is not in WatchList!");
         }
 
         public static void WriteCommand(string command, bool isGoBottom = true)
