@@ -9,106 +9,231 @@ using Presenter;
 
 namespace GalEngine
 {
-    ///Visual Layer Config
+    ///Visual Layer Config.
     using LayerConfig = VisualLayerConfig;
 
     static partial class VisualLayer
     {
+        /// <summary>
+        /// Pad Type.
+        /// </summary>
         internal enum PadType
         {
             InformationPad,
             WarningPad,
             WatchPad
         }
-
-        //relative visualLayer
+        
+        /// <summary>
+        /// Visual Pad.
+        /// </summary>
         private class VisualPad
         {
+            /// <summary>
+            /// The distance from Pad content's border-X to Pad's border-X (pixel).
+            /// </summary>
             private const float borderX = 5;
+            /// <summary>
+            /// The distance from Pad content's border-Y to Pad's border-Y (pixel).
+            /// </summary>
             private const float borderY = 3;
 
+            /// <summary>
+            /// Item in PadList.
+            /// </summary>
             private class PadItem
             {
+                /// <summary>
+                /// The distance from text border-Y to PadItem's border-Y (relative text's size).
+                /// </summary>
                 private const float borderY = 0.1f;
 
+                /// <summary>
+                /// The PadItem's background brush.
+                /// </summary>
                 private static CanvasBrush padItemBrush = new CanvasBrush(192 / 255f, 192 / 255f, 192 / 255f, 1f);
                 
+                /// <summary>
+                /// The PadItem's text.
+                /// </summary>
                 private string text;
+
+                /// <summary>
+                /// The PadItem's width (pixel).
+                /// </summary>
                 private float width;
 
+                /// <summary>
+                /// The PadItem's text instance for render text.
+                /// </summary>
                 private CanvasText canvasText;
+                
+                /// <summary>
+                /// The information about our text.
+                /// </summary>
                 private TextMetrics textMetrics;
 
+                /// <summary>
+                /// Create a PadItem.
+                /// </summary>
+                /// <param name="Text">The PadItem's text.</param>
+                /// <param name="Width">The PadItem's width (pixel).</param>
                 public PadItem(string Text, float Width = 0)
                 {
-                    Reset(Text, Width);
+                    //create text instance
+                    canvasText = new CanvasText(text = Text, width = Width, 0, LayerConfig.TextFormat);
+
+                    //get text metrics
+                    textMetrics = canvasText.Metrics;
                 }
 
+                /// <summary>
+                /// ReCreate the PadItem.
+                /// </summary>
+                /// <param name="Text">The PadItem's text.</param>
+                /// <param name="Width">The PadItem's width (pixel).</param>
                 public void Reset(string Text, float Width)
                 {
+                    //if no change, we do not need to reset it.
                     if (text == Text && width == Width) return;
 
-                    text = Text;
-                    width = Width;
-
-                    Utilities.Dipose(ref canvasText);
-
-                    canvasText = new CanvasText(text, width, 0, LayerConfig.TextFormat);
-
+                    //reset
+                    canvasText.Reset(text = Text, width = Width, 0);
+                    
+                    //get text metrics
                     textMetrics = canvasText.Metrics;
                 }
 
                 public void OnRender()
                 {
+                    //render background
                     Canvas.FillRectangle(0, 0, Width, Height, padItemBrush);
 
+                    //render border
                     Canvas.DrawRectangle(0, 0, Width, Height, LayerConfig.BorderBrush, LayerConfig.BorderSize / 2f);
 
+                    //render text
                     Canvas.DrawText(text, LayerConfig.TitleOffsetX, 0, width, Height, LayerConfig.TextFormat, LayerConfig.TextBrush);
                 }
 
+                /// <summary>
+                /// The PadItem's text.
+                /// </summary>
                 public string Text
                 {
                     set => Reset(value, width);
                     get => text;
                 }
 
+                /// <summary>
+                /// The PadItem's width (pixel).
+                /// </summary>
                 public float Width
                 {
                     set => Reset(text, value);
                     get => width;
                 }
 
+                /// <summary>
+                /// The PadItem's height (pixel). It is decided to width and text.
+                /// </summary>
                 public float Height => textMetrics.Height + borderY * LayerConfig.TextFormat.Size * 2;
             }
 
+            /// <summary>
+            /// The Pad's width (relative VisualLayer).
+            /// </summary>
             private float width;
+
+            /// <summary>
+            /// The Pad's height (relative VisualLayer).
+            /// </summary>
             private float height;
 
+            /// <summary>
+            /// The Pad's scope (pixel).
+            /// </summary>
             private Rect realLayout;
+            
+            /// <summary>
+            /// The Pad's title height (pixel).
+            /// </summary>
             private float realTitleHeight;
 
+            /// <summary>
+            /// The Pad's width (pixel).
+            /// </summary>
             private float realWidth;
+
+            /// <summary>
+            /// The Pad's height (pixel).
+            /// </summary>
             private float realHeight;
 
+            /// <summary>
+            /// The Pad content's width (pixel).
+            /// </summary>
             private float contentWidth;
+
+            /// <summary>
+            /// The Pad content's height (pixel). It only defines the scope that we will render.
+            /// </summary>
             private float contentHeight;
 
+            /// <summary>
+            /// The Pad's position-X (relative VisualLayer).
+            /// </summary>
             private float startPosX;
+            
+            /// <summary>
+            /// The Pad's position-Y (relative VisualLayer).
+            /// </summary>
             private float startPosY;
 
+            /// <summary>
+            /// The Pad's position-X (pixel).
+            /// </summary>
             private float realStartPosX;
+
+            /// <summary>
+            /// The Pad's position-Y (pixel).
+            /// </summary>
             private float realStartPosY;
 
+            /// <summary>
+            /// The Pad's title.
+            /// </summary>
             private string title;
 
+            /// <summary>
+            /// List to save the PadItem.
+            /// </summary>
             private List<PadItem> itemList;
+
+            /// <summary>
+            /// Dictionary to get the PadItem in itemList by string.
+            /// </summary>
             private Dictionary<string, PadItem> itemIndex;
 
+            /// <summary>
+            /// The Pad content's start pos (relative content's real height). It tells us the start scope in content we will render.
+            /// </summary>
             private float currentContentStart;
+
+            /// <summary>
+            /// The Pad content's end pos (relative content's real height). It tells us the end scope in content we will render.
+            /// </summary>
             private float currentContentEnd;
+
+            /// <summary>
+            /// The Pad content's real height.
+            /// </summary>
             private float maxItemHeight;
 
+            /// <summary>
+            /// Create a VisualPad.
+            /// </summary>
+            /// <param name="Title">VisualPad's title.</param>
             public VisualPad(string Title)
             {
                 itemList = new List<PadItem>();
@@ -121,6 +246,11 @@ namespace GalEngine
                 title = Title;
             }
 
+            /// <summary>
+            /// Add a PadItem to VisualPad.
+            /// </summary>
+            /// <param name="Tag">PadItem's tag.</param>
+            /// <param name="Text">PadItem's text.</param>
             public void AddItem(string Tag, string Text)
             {
                 PadItem padItem = new PadItem(Text, contentWidth);
@@ -128,9 +258,14 @@ namespace GalEngine
                 itemList.Add(padItem);
                 itemIndex.Add(Tag, padItem);
                 
+                //we add a item, so we need add the content real height.
                 maxItemHeight += padItem.Height;
             }
 
+            /// <summary>
+            /// Remove a PadItem from VisualPad.
+            /// </summary>
+            /// <param name="Tag">PadItem's tag.</param>
             public void RemoveItem(string Tag)
             {
                 maxItemHeight -= itemIndex[Tag].Height;
@@ -139,8 +274,14 @@ namespace GalEngine
                 itemIndex.Remove(Tag);
             }
 
+            /// <summary>
+            /// Set a PadItem. We can use this function to update PadItem's text.
+            /// </summary>
+            /// <param name="Tag">PadItem's tag.</param>
+            /// <param name="Text">PadItem's text.</param>
             public void SetItem(string Tag, string Text)
             {
+                //if the PadItem is not in itemList, add it.
                 if (itemIndex.ContainsKey(Tag) is false)
                 {
                     AddItem(Tag, Text);
@@ -149,15 +290,23 @@ namespace GalEngine
 
                 float preHeight = itemIndex[Tag].Height;
 
+                //update text.
                 itemIndex[Tag].Text = Text;
 
+                //update content's real height.
                 maxItemHeight = maxItemHeight - preHeight + itemIndex[Tag].Height;
             }
 
+            /// <summary>
+            /// On Mouse Scroll.
+            /// </summary>
+            /// <param name="offset">The offset.</param>
             public void OnMouseScroll(float offset)
             {
+                //real offset.
                 offset *= LayerConfig.OffsetSpeed;
 
+                //change the scope that we will render.
                 currentContentStart += offset;
                 currentContentEnd = currentContentStart + contentHeight;
 
@@ -178,6 +327,9 @@ namespace GalEngine
                 }
             }
 
+            /// <summary>
+            /// Render.
+            /// </summary>
             public void OnRender()
             {
                 //Trnasform Pad
@@ -243,6 +395,11 @@ namespace GalEngine
                 Canvas.Transform = Matrix3x2.Identity;
             }
 
+            /// <summary>
+            /// Set VisualPad's size.
+            /// </summary>
+            /// <param name="Width">width (relative VisualLayer).</param>
+            /// <param name="Height">height (relative VisualLayer).</param>
             public void SetArea(float Width, float Height)
             {
                 width = Width;
@@ -259,6 +416,7 @@ namespace GalEngine
 
                 realTitleHeight = LayerConfig.TitleHeight;
 
+                //get the content scope that we will render.
                 contentWidth = realWidth - borderX * 2;
                 contentHeight = realHeight - borderY * 2 - realTitleHeight;
 
@@ -273,6 +431,12 @@ namespace GalEngine
                 currentContentEnd = currentContentStart + contentHeight;
             }
 
+            /// <summary>
+            /// Set VisualPad's size and keep the AspectRatio.
+            /// </summary>
+            /// <param name="baseValue">width or height (relative VisualLayer).</param>
+            /// <param name="targetAspectRatio">The AspectRatio we want to keep.</param>
+            /// <param name="isWidth">True is width. Flase is height.</param>
             public void SetAreaKeeper(float baseValue, float targetAspectRatio, bool isWidth = true)
             {
                 if (isWidth is true)
@@ -286,6 +450,11 @@ namespace GalEngine
                 }
             }
 
+            /// <summary>
+            /// Set VisualPad's position (relative VisualLayer).
+            /// </summary>
+            /// <param name="posX">Position-X.</param>
+            /// <param name="posY">Position-Y.</param>
             public void SetPosition(float posX, float posY)
             {
                 startPosX = posX;
@@ -298,19 +467,40 @@ namespace GalEngine
                     realStartPosX + realWidth, realStartPosY + realHeight);
             }
 
+            /// <summary>
+            /// If Contains a point.
+            /// </summary>
+            /// <param name="realPosX">Point's position-X (pixel).</param>
+            /// <param name="realPosY">Point's position-Y (pixel).</param>
+            /// <returns>True means the point is contained. Fales means not.</returns>
             public bool Contains(float realPosX, float realPosY)
             {
                 return realLayout.Contains(realPosX, realPosY);
             }
 
+            /// <summary>
+            /// VisualPad's width (relative VisualLayer).
+            /// </summary>
             public float Width => width;
 
+            /// <summary>
+            /// VisualPad's height (relative VisualLayer).
+            /// </summary>
             public float Height => height;
 
+            /// <summary>
+            /// VisualPad's position-X (relative VisualLayer).
+            /// </summary>
             public float StartPosX => startPosX;
 
+            /// <summary>
+            /// VisualPad's position-Y (relative VisualLayer).
+            /// </summary>
             public float StartPosY => startPosY;
 
+            /// <summary>
+            /// VisualPad's title.
+            /// </summary>
             public string Title
             {
                 set => title = value;
