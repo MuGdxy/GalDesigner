@@ -88,7 +88,7 @@ namespace GalEngine
                 }
 
                 /// <summary>
-                /// ReCreate the PadItem.
+                /// Reset the PadItem.
                 /// </summary>
                 /// <param name="Text">The PadItem's text.</param>
                 /// <param name="Width">The PadItem's width (pixel).</param>

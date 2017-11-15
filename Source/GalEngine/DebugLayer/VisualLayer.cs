@@ -12,21 +12,56 @@ namespace GalEngine
 {
     using LayerConfig = VisualLayerConfig;
 
+    /// <summary>
+    /// A surface to render debug message.
+    /// </summary>
     static partial class VisualLayer
     {
+        /// <summary>
+        /// Information Pad.
+        /// </summary>
         private static VisualPad infomationPad;
+        
+        /// <summary>
+        /// Waring Message Pad.
+        /// </summary>
         private static VisualPad warningPad;
+
+        /// <summary>
+        /// Watch Pad.
+        /// </summary>
         private static VisualPad watchPad;
 
+        /// <summary>
+        /// VisualLayer width (pixel). It will be same as resolution-width.
+        /// </summary>
         private static int width;
+        
+        /// <summary>
+        /// VisualLayer height (pixel). It will be same as resolution-height.
+        /// </summary>
         private static int height;
 
+        /// <summary>
+        /// The AspectRatio = width / height.
+        /// </summary>
         private static float aspectRatio;
 
+        /// <summary>
+        /// Is enable VisualLayer.
+        /// </summary>
         private static bool isEnable = false;
 
+        /// <summary>
+        /// The VisualLayer opacity.
+        /// </summary>
         private static float opacity = 0.5f;
 
+        /// <summary>
+        /// Update VisualLayer's Pad size.
+        /// </summary>
+        /// <param name="newWidth">New VisualLayer Width (pixel).</param>
+        /// <param name="newHeight">New VisualLayer Height (pixel).</param>
         private static void UpdatePads(int newWidth, int newHeight)
         {
             const float borderX = 0.01f;
@@ -47,10 +82,12 @@ namespace GalEngine
                 warningPad.SetArea(infomationPad.Width, 0.75f);
                 warningPad.SetPosition(borderX, borderY + infomationPad.Height + borderY);
 
+                //Update Watch Pad
                 watchPad.SetArea(0.95f - infomationPad.Width,
                     infomationPad.Height + borderY + warningPad.Height - 0.5f);
                 watchPad.SetPosition(infomationPad.Width + borderX * 2, borderY);
 
+                //Update Command
                 DebugCommand.SetArea(watchPad.Width, warningPad.Height +
                     warningPad.StartPosY - (watchPad.StartPosY + watchPad.Height + borderY));
                 DebugCommand.SetPosition(watchPad.StartPosX,
@@ -58,10 +95,13 @@ namespace GalEngine
 
             }else
             {
-                throw new Exception("Not Support this Resolution");
+                throw new Exception("Not Support this Resolution!");
             }
         }
 
+        /// <summary>
+        /// Create VisualLayer.
+        /// </summary>
         static VisualLayer()
         {
             infomationPad = new VisualPad("Information Pad");
@@ -69,12 +109,19 @@ namespace GalEngine
             watchPad = new VisualPad("Watch Pad");
         }
 
+        /// <summary>
+        /// On Resolution Change.
+        /// </summary>
+        /// <param name="newWidth">New VisualLayer Width (pixel).</param>
+        /// <param name="newHeight">New VisualLayer Height (pixel).</param>
         internal static void OnResolutionChange(int newWidth, int newHeight)
         {
             aspectRatio = (width = newWidth) / (float)(height = newHeight);
 
+            //Update Resource.
             LayerConfig.OnResizeResource(newWidth, newHeight);
 
+            //Update Pad.
             UpdatePads(width, height);
         }
 
@@ -89,6 +136,7 @@ namespace GalEngine
                 "Height : " + GlobalConfig.Height);
             infomationPad.SetItem("Fps", "Fps : " + GalEngine.GameWindow.Fps);
 
+            //Render Information Pad.
             infomationPad.OnRender();
         }
 
@@ -96,6 +144,7 @@ namespace GalEngine
         {  
             //We do not need update WarningPad Item
 
+            //Render Waring Message Pad.
             warningPad.OnRender();
         }
 
@@ -107,12 +156,16 @@ namespace GalEngine
                 watchPad.SetItem(item, item + " = " + GlobalValue.GetValue(item));
             }
 
+            //Render Watch Pad.
             watchPad.OnRender();
         }
 
+        /// <summary>
+        /// Render.
+        /// </summary>
         public static void OnRender()
         {
-            //Render Object 
+            //Set Layer to render.
             Canvas.PushLayer(0, 0, width, height, opacity);
 
             //Render BackGround
@@ -125,11 +178,19 @@ namespace GalEngine
 
             OnRenderWatchPad();
 
+            //Render DebugCommand.
             DebugCommand.OnRender();
 
+            //Finish Render and Render Layer to present surface.
             Canvas.PopLayer();
         }
 
+        /// <summary>
+        /// On mouse scroll
+        /// </summary>
+        /// <param name="realMousePosX">Mouse position-X (pixel).</param>
+        /// <param name="realMousePosY">Mouse position-Y (pixel).</param>
+        /// <param name="offset">Scroll offset.</param>
         public static void OnMouseScroll(int realMousePosX, int realMousePosY, int offset)
         {
             offset = -offset;
@@ -155,11 +216,21 @@ namespace GalEngine
             }
         }
 
+        /// <summary>
+        /// On key event.
+        /// </summary>
+        /// <param name="e"></param>
         public static void OnKeyEvent(KeyEventArgs e)
         {
             DebugCommand.OnKeyEvent(e);
         }
 
+        /// <summary>
+        /// Set PadItem.
+        /// </summary>
+        /// <param name="Tag">PadItem's tag.</param>
+        /// <param name="Text">PadItem's text.</param>
+        /// <param name="PadType">In which Pad.</param>
         public static void SetPadItem(string Tag, string Text, PadType PadType)
         {
             switch (PadType)
@@ -178,7 +249,12 @@ namespace GalEngine
             }
         }
 
-        public static void RemovePadItem(string Tag,PadType PadType)
+        /// <summary>
+        /// Remove PadItem.
+        /// </summary>
+        /// <param name="Tag">PadItem's tag.</param>
+        /// <param name="PadType">In which Pad.</param>
+        public static void RemovePadItem(string Tag, PadType PadType)
         {
             switch (PadType)
             {
@@ -196,14 +272,24 @@ namespace GalEngine
             }
         }
 
+        /// <summary>
+        /// Is enable VisualLayer.
+        /// </summary>
         public static bool IsEnable
         {
             set => isEnable = value;
             get => isEnable;
         }
 
+        /// <summary>
+        /// VisualLayer height (pixel). It will be same as resolution-height.
+        /// </summary>
         public static int Height => height;
 
+
+        /// <summary>
+        /// VisualLayer width (pixel). It will be same as resolution-width.
+        /// </summary>
         public static int Width => width;
     }
 }

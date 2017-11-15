@@ -13,30 +13,79 @@ namespace GalEngine
     using LayerConfig = VisualLayerConfig;
     using ResourceList = Internal.ResourceList;
 
+    /// <summary>
+    /// A handle to solve the input command.
+    /// </summary>
+    /// <param name="commandParameters">The command. We will divide it to some string (split by ' ').</param>
+    /// <returns></returns>
     public delegate bool CommandHandle(string[] commandParameters);
 
-    //relative VisualLayer
+    /// <summary>
+    /// Debug Command.
+    /// </summary>
     public static class DebugCommand
     {
-        private const float borderX = 0.01f; //relative DebugCommand 
-        private const float borderY = 0.01f; //relative DebugCommand
+        /// <summary>
+        /// The default distance to DebugCommand border-X (relative DebugCommand).
+        /// </summary>
+        private const float borderX = 0.01f;
 
-        private const float cursorShowTimeSpan = 0.5f; //0.5s
+        /// <summary>
+        /// The default distance to DebugCommand border-Y (relative DebugCommand).
+        /// </summary>
+        private const float borderY = 0.01f;
 
-        //relative VisualLayer
+        /// <summary>
+        /// The cursor show timespan (s).
+        /// </summary>
+        private const float cursorShowTimeSpan = 0.5f; 
+        
+        /// <summary>
+        /// Command Message Item. We use this to show the command.
+        /// </summary>
         private class CommandItem
         {
+            /// <summary>
+            /// The Text Brush.
+            /// </summary>
             private static CanvasBrush TextBrush => ResourceList.BlackBrush;
+
+            /// <summary>
+            /// The Border Brush.
+            /// </summary>
             private static CanvasBrush BorderBrush => ResourceList.BlackBrush;
 
+
+            /// <summary>
+            /// The distance from text border-Y to CommandItem's border-Y (relative text's size).
+            /// </summary>
             private const float borderY = 0.1f;
 
+            /// <summary>
+            /// CommandItem text.
+            /// </summary>
             private string text;
+
+            /// <summary>
+            /// CommandItem Width (pixel).
+            /// </summary>
             private float width;
 
+            /// <summary>
+            /// CommandItem text instance for rendering.
+            /// </summary>
             private CanvasText commandText;
+
+            /// <summary>
+            /// The information about our text.
+            /// </summary>
             private TextMetrics textMetrics;
 
+            /// <summary>
+            /// Create a CommmandItem.
+            /// </summary>
+            /// <param name="Text">The CommandItem text.</param>
+            /// <param name="Width">The CommandItem width (pixel).</param>
             public CommandItem(string Text, float Width)
             {
                 text = Text;
@@ -46,6 +95,11 @@ namespace GalEngine
                 textMetrics = commandText.Metrics;
             }
 
+            /// <summary>
+            /// Reset the CommmandItem.
+            /// </summary>
+            /// <param name="Text">The CommandItem text.</param>
+            /// <param name="Width">The CommandItem width (pixel).</param>
             public void Reset(string Text, float Width)
             {
                 if (text == Text && width == Width) return;
@@ -58,69 +112,179 @@ namespace GalEngine
                 textMetrics = commandText.Metrics;
             }
 
+            /// <summary>
+            /// OnRender.
+            /// </summary>
             public void OnRender()
             {
                 Canvas.DrawText("> " + text, 0, 0, width, Height, LayerConfig.TextFormat, TextBrush);
             }
 
+            /// <summary>
+            /// CommandItem text.
+            /// </summary>
             public string Text
             {
                 set => Reset(value, width);
                 get => text;
             }
 
+            /// <summary>
+            /// CommandItem width (pixel).
+            /// </summary>
             public float Width
             {
                 set => Reset(text, value);
                 get => width;
             }
 
+            /// <summary>
+            /// CommandItem height (pixel).
+            /// </summary>
             public float Height => textMetrics.Height + borderY * LayerConfig.TextFormat.Size * 2;
         }
 
+        /// <summary>
+        /// Command error type.
+        /// </summary>
         private enum CommandErrorType
         {
+            /// <summary>
+            /// Parameters count is not right.
+            /// </summary>
             CommandParametersCount,
+            /// <summary>
+            /// Parameters format is not right.
+            /// </summary>
             CommandParametersFormat,
+            /// <summary>
+            /// The value is not in GlobalValue.
+            /// </summary>
             CommandGlobalValueExist,
+            /// <summary>
+            /// The value is not watching.
+            /// </summary>
             CommandWatchValueExist
         }
 
+        /// <summary>
+        /// DebugCommmand width (relative VisualLayer).
+        /// </summary>
         private static float width;
+        
+        /// <summary>
+        /// DebugCommand height (relative VisualLayer).
+        /// </summary>
         private static float height;
 
+        /// <summary>
+        /// DebugCommand position-X (relative VisualLayer).
+        /// </summary>
         private static float startPosX;
+
+        /// <summary>
+        /// DebugCommand position-Y (relative VisualLayer).
+        /// </summary>
         private static float startPosY;
 
+        /// <summary>
+        /// DebugCommand width (pixel).
+        /// </summary>
         private static float realWidth;
+
+        /// <summary>
+        /// DebugCommand height (pixel).
+        /// </summary>
         private static float realHeight;
 
+        /// <summary>
+        /// DebugCommand position-X (pixel).
+        /// </summary>
         private static float realStartPosX;
+
+        /// <summary>
+        /// DebugCommmand position-Y (pixel).
+        /// </summary>
         private static float realStartPosY;
 
+        /// <summary>
+        /// The input cursor position (char).
+        /// </summary>
         private static int cursorPosition = 0;
+
+        /// <summary>
+        /// The input cursor position (pixel).
+        /// </summary>
         private static float cursorRealPosition = 0;
+
+        /// <summary>
+        /// The input cursor pass time from last count.
+        /// </summary>
         private static float cursorPassTime = 0;
-        private static bool cursorState = false; //true is showing, false is hiding
 
-        private static CanvasBrush cursorBrush = new CanvasBrush(0, 0, 0, 1);
+        /// <summary>
+        /// The input cursor state. If true then show it, else hide it.
+        /// </summary>
+        private static bool cursorState = false;
 
+        /// <summary>
+        /// The cursor brush.
+        /// </summary>
+        private static CanvasBrush cursorBrush = ResourceList.BlackBrush;
+
+        /// <summary>
+        /// The input command instance.
+        /// </summary>
         private static CanvasText inputCommand = new CanvasText("", float.MaxValue,
             CommandInputPadHeight, LayerConfig.TextFormat);
 
-        private static Rect inputCommandRect = new Rect(); //relative DebugCommand
-        private static Rect commandListRect = new Rect(); //relative DebugCommand
+        /// <summary>
+        /// The input command rect (relative DebugCommand, pixel).
+        /// </summary>
+        private static Rect inputCommandRect = new Rect();
 
+        /// <summary>
+        /// The command list rect (relative DebugCommmand, pixel).
+        /// </summary>
+        private static Rect commandListRect = new Rect();
+
+        /// <summary>
+        /// The command list. We use it to record the message that we want to show.
+        /// </summary>
         private static List<CommandItem> commandList = new List<CommandItem>();
 
+        /// <summary>
+        /// Map the error to text.
+        /// </summary>
         private static Dictionary<CommandErrorType, string> CommandErrorText = new Dictionary<CommandErrorType, string>();
 
+        /// <summary>
+        /// See this: 
+        /// <see cref="VisualLayer.VisualPad.currentContentStart"/>
+        /// </summary>
         private static float currentCommandListStart;
+
+        /// <summary>
+        /// See this:
+        /// <see cref="VisualLayer.VisualPad.currentContentEnd"/>
+        /// </summary>
         private static float currentCommandListEnd;
+
+        /// <summary>
+        /// See this:
+        /// <see cref="VisualLayer.VisualPad.maxItemHeight"/>
+        /// </summary>
         private static float maxCommandListHeight;
 
+        /// <summary>
+        /// The input command offset the start position-X of <see cref="DebugCommand.inputCommandRect"/>.
+        /// And the + is right, - is left (relative InputCommand, pixel).
+        /// </summary>
         private static float inputCommandOffset = 0; //+ is right , - is left, relative InputCommand
 
+        /// <summary>
+        /// Cursor move left.
+        /// </summary>
         private static void CursorMoveLeft()
         {
             if (cursorPosition is 0) return;
@@ -139,6 +303,9 @@ namespace GalEngine
             cursorPosition--;
         }
 
+        /// <summary>
+        /// Cursor move right.
+        /// </summary>
         private static void CursorMoveRight()
         {
             if (cursorPosition == inputCommand.Text.Length) return;
@@ -159,10 +326,14 @@ namespace GalEngine
             cursorPosition++;
         }
 
+        /// <summary>
+        /// Render and update cursor.
+        /// </summary>
         private static void CursorStateUpdate()
         {
             cursorPassTime += Time.DeltaSeconds;
 
+            //Check the cursor state.
             if (cursorPassTime >= cursorShowTimeSpan)
             {
                 cursorPassTime -= cursorShowTimeSpan;
@@ -179,12 +350,19 @@ namespace GalEngine
             }
         }
 
+        /// <summary>
+        /// Insert a word to InputCommand (position is decide to cursor).
+        /// </summary>
+        /// <param name="word">The word.</param>
         private static void Insert(char word)
         {
             inputCommand.Insert(word, cursorPosition);
             CursorMoveRight();
         }
 
+        /// <summary>
+        /// Remove a word from InputCommand (position is decide to cursor).
+        /// </summary>
         private static void Remove()
         {
             if (cursorPosition is 0) return;
@@ -193,22 +371,42 @@ namespace GalEngine
             inputCommand.Remove(cursorPosition, 1);
         }
 
+        /// <summary>
+        /// Make a error.
+        /// </summary>
+        /// <param name="type">Error type.</param>
         private static void ReportCommandError(CommandErrorType type)
         {
             WriteCommand(CommandErrorText[type]);
         }
 
-        private static bool Assert(bool test, CommandErrorType type)
+        /// <summary>
+        /// Test value. If true, report error.
+        /// </summary>
+        /// <param name="testValue">Test value.</param>
+        /// <param name="type">Error type.</param>
+        /// <returns>Test value.</returns>
+        private static bool Assert(bool testValue, CommandErrorType type)
         {
-            if (test is true) { ReportCommandError(type); return true; }
+            if (testValue is true) { ReportCommandError(type); return true; }
             return false;
         }
 
+        /// <summary>
+        /// Split a command to Parameters.
+        /// </summary>
+        /// <param name="command">Command.</param>
+        /// <returns>Command Parameters</returns>
         private static string[] GetCommandParameters(string command)
         {
             return command.Split(' ');
         }
 
+        /// <summary>
+        /// Analyse and run Command.
+        /// </summary>
+        /// <param name="command">Command.</param>
+        /// <returns>If input string is not a command, return true.</returns>
         private static bool AnalyseCommand(string command)
         {
             string[] commandParameters = GetCommandParameters(command);
@@ -288,7 +486,7 @@ namespace GalEngine
                     if (Assert(commandParameters.Length != 1, CommandErrorType.CommandParametersCount) is true)
                         return true;
 
-                    ClearCommand();
+                    ClearCommandList();
 
                     return true;
                 default:
@@ -311,6 +509,12 @@ namespace GalEngine
             return false;
         }
 
+        /// <summary>
+        /// Test a point that if DebugCommand contains.
+        /// </summary>
+        /// <param name="realPositionX">Point position-X (pixel).</param>
+        /// <param name="realPositionY">Point position-Y (pixel).</param>
+        /// <returns></returns>
         internal static bool Contains(int realPositionX, int realPositionY)
         {
             float positionX = realPositionX - realStartPosX;
@@ -319,6 +523,10 @@ namespace GalEngine
             return commandListRect.Contains(positionX, positionY);
         }
 
+        /// <summary>
+        /// On mouse scroll.
+        /// </summary>
+        /// <param name="offset">Offset</param>
         internal static void OnMouseScroll(float offset)
         {
             offset *= LayerConfig.OffsetSpeed;
@@ -346,6 +554,10 @@ namespace GalEngine
             }
         }
 
+        /// <summary>
+        /// On key event.
+        /// </summary>
+        /// <param name="e">Key event args.</param>
         internal static void OnKeyEvent(KeyEventArgs e)
         {
             if (e.IsDown is true)
@@ -401,6 +613,9 @@ namespace GalEngine
             }
         }
 
+        /// <summary>
+        /// Render.
+        /// </summary>
         internal static void OnRender()
         {
             Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realStartPosX,
@@ -476,6 +691,11 @@ namespace GalEngine
             Canvas.Transform = Matrix3x2.Identity;
         }
 
+        /// <summary>
+        /// Set DebugCommand Size.
+        /// </summary>
+        /// <param name="Width">New width (relative VisualLayer).</param>
+        /// <param name="Height">New height (relative VisualLayer).</param>
         internal static void SetArea(float Width, float Height)
         {
             width = Width;
@@ -509,6 +729,11 @@ namespace GalEngine
             currentCommandListEnd = currentCommandListStart + maxCommandListHeight;
         }
 
+        /// <summary>
+        /// Set DebugCommand position.
+        /// </summary>
+        /// <param name="newStartPosX">New position-X (relative VisualLayer).</param>
+        /// <param name="newStartPosY">New position-Y (relative VisualLayer).</param>
         internal static void SetPosition(float newStartPosX, float newStartPosY)
         {
             startPosX = newStartPosX;
@@ -518,6 +743,9 @@ namespace GalEngine
             realStartPosY = VisualLayer.Height * startPosY;
         }
 
+        /// <summary>
+        /// Create DebugCommand.
+        /// </summary>
         static DebugCommand()
         {
             WriteCommand("Hi! Welcome to use Command.");
@@ -528,6 +756,11 @@ namespace GalEngine
             CommandErrorText.Add(CommandErrorType.CommandWatchValueExist, "The value is not in WatchList!");
         }
 
+        /// <summary>
+        /// Write a command to Command List.
+        /// </summary>
+        /// <param name="command">Command.</param>
+        /// <param name="isGoBottom">Is go bottom.</param>
         public static void WriteCommand(string command, bool isGoBottom = true)
         {
             CommandItem newItem = new CommandItem(command, commandListRect.Right - commandListRect.Left);
@@ -543,6 +776,10 @@ namespace GalEngine
             }
         }
 
+        /// <summary>
+        /// Send a command that we will anlyse and run it.
+        /// </summary>
+        /// <param name="command">Command.</param>
         public static void SendCommand(string command)
         {
             WriteCommand(command);
@@ -553,7 +790,10 @@ namespace GalEngine
                 WriteCommand("No Command Support!");
         }
 
-        public static void ClearCommand()
+        /// <summary>
+        /// Clear Command List.
+        /// </summary>
+        public static void ClearCommandList()
         {
             commandList.Clear();
 
@@ -562,8 +802,14 @@ namespace GalEngine
             maxCommandListHeight = 0;
         }
 
+        /// <summary>
+        /// CommandItem height (pixel).
+        /// </summary>
         private static float CommandInputPadHeight => LayerConfig.TextFormat.Size * 2.5f;
 
+        /// <summary>
+        /// Command Analyser.
+        /// </summary>
         public static event CommandHandle CommandAnalyser;
     }
 }
