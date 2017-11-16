@@ -142,12 +142,21 @@ namespace GalEngine
 
         public override void OnKeyEvent(object sender, KeyEventArgs e)
         {
-            if (e.IsDown is true && e.KeyCode is KeyCode.Tab)
+            if (e.IsDown is true)
             {
-                VisualLayer.IsEnable ^= true;
+                switch (e.KeyCode)
+                {
+                    case KeyCode.Tab:
+                        VisualLayer.IsEnable ^= true;
 
-                if (VisualLayer.IsEnable is true)
-                    VisualLayer.OnResolutionChange(GlobalConfig.Width, GlobalConfig.Height);
+                        if (VisualLayer.IsEnable is true)
+                            VisualLayer.OnResolutionChange(GlobalConfig.Width, GlobalConfig.Height);
+
+                        break;
+                    default:
+                        break;
+                }
+
             }
 
             if (VisualLayer.IsEnable is true)

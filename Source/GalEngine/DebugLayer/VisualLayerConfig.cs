@@ -8,6 +8,8 @@ using Presenter;
 
 namespace GalEngine
 {
+    using ResourceList = Internal.ResourceList;
+
     static class VisualLayerConfig
     {
         /// <summary>
@@ -43,17 +45,16 @@ namespace GalEngine
         /// <summary>
         /// The Border Brush RGBA(0, 0, 0, 1).
         /// </summary>
-        public static CanvasBrush BorderBrush = new CanvasBrush(0, 0, 0, 1);
-
+        public static CanvasBrush BorderBrush = ResourceList.BlackBrush;
         /// <summary>
         /// The Text Brush RGBA(0, 0, 0, 1).
         /// </summary>
-        public static CanvasBrush TextBrush = new CanvasBrush(0, 0, 0, 1);
+        public static CanvasBrush TextBrush = ResourceList.BlackBrush;
 
         /// <summary>
         /// The VisualLayer BackGround Brush RGBA(1, 1, 1, 1).
         /// </summary>
-        public static CanvasBrush BackGroundBrush = new CanvasBrush(1, 1, 1, 1);
+        public static CanvasBrush BackGroundBrush = ResourceList.WhiteBrush;
 
         /// <summary>
         /// The Title Brush RGBA(0.529f, 0.443f, 0.811f, 1f).

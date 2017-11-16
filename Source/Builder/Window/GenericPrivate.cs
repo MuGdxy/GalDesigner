@@ -151,6 +151,9 @@ namespace Builder
                     break;
                 case APILibrary.Win32.WinMsg.WM_KEYDOWN:
                     PrivateKeyEvent(this, new KeyEventArgs() { isdown = true, keycode = (KeyCode)wParam });
+
+                    if ((KeyCode)wParam is KeyCode.CapsLock)
+                        Application.IsCapsLock ^= true;
                     break;
                 case APILibrary.Win32.WinMsg.WM_SYSKEYDOWN:
                     break;

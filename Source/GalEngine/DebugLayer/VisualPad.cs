@@ -85,6 +85,8 @@ namespace GalEngine
 
                     //get text metrics
                     textMetrics = canvasText.Metrics;
+
+                    canvasText.Reset(text, width, Height);
                 }
 
                 /// <summary>
@@ -97,11 +99,14 @@ namespace GalEngine
                     //if no change, we do not need to reset it.
                     if (text == Text && width == Width) return;
 
-                    //reset
+                    //reset to compute height
                     canvasText.Reset(text = Text, width = Width, 0);
                     
                     //get text metrics
                     textMetrics = canvasText.Metrics;
+
+                    //reset to render
+                    canvasText.Reset(text, width, Height);
                 }
 
                 public void OnRender()
@@ -113,7 +118,8 @@ namespace GalEngine
                     Canvas.DrawRectangle(0, 0, Width, Height, LayerConfig.BorderBrush, LayerConfig.BorderSize / 2f);
 
                     //render text
-                    Canvas.DrawText(text, LayerConfig.TitleOffsetX, 0, width, Height, LayerConfig.TextFormat, LayerConfig.TextBrush);
+                    Canvas.DrawText(LayerConfig.TitleOffsetX, 0, canvasText, LayerConfig.TextBrush);
+                    //Canvas.DrawText(text, LayerConfig.TitleOffsetX, 0, width, Height, LayerConfig.TextFormat, LayerConfig.TextBrush);
                 }
 
                 /// <summary>
@@ -183,12 +189,12 @@ namespace GalEngine
             /// <summary>
             /// The Pad's position-X (relative VisualLayer).
             /// </summary>
-            private float startPosX;
+            private float positionX;
             
             /// <summary>
             /// The Pad's position-Y (relative VisualLayer).
             /// </summary>
-            private float startPosY;
+            private float positionY;
 
             /// <summary>
             /// The Pad's position-X (pixel).
@@ -359,8 +365,7 @@ namespace GalEngine
                         borderY + contentHeight + realTitleHeight);
 
                     //Render content layer
-                    Canvas.PushLayer(contentRect.Left, contentRect.Top,
-                        contentRect.Right, contentRect.Bottom);
+                    Canvas.PushLayer(contentRect.Left, contentRect.Top, contentRect.Right, contentRect.Bottom);
 
                     transform *= Matrix3x2.CreateTranslation(borderX, borderY);
 
@@ -408,8 +413,8 @@ namespace GalEngine
                 realWidth = width * VisualLayer.width;
                 realHeight = height * VisualLayer.height;
 
-                realStartPosX = startPosX * VisualLayer.width;
-                realStartPosY = startPosY * VisualLayer.height;
+                realStartPosX = positionX * VisualLayer.width;
+                realStartPosY = positionY * VisualLayer.height;
 
                 realLayout = new Rect(realStartPosX, realStartPosY,
                     realStartPosX + realWidth, realStartPosY + realHeight);
@@ -457,11 +462,11 @@ namespace GalEngine
             /// <param name="posY">Position-Y.</param>
             public void SetPosition(float posX, float posY)
             {
-                startPosX = posX;
-                startPosY = posY;
+                positionX = posX;
+                positionY = posY;
 
-                realStartPosX = startPosX * VisualLayer.width;
-                realStartPosY = startPosY * VisualLayer.height;
+                realStartPosX = positionX * VisualLayer.width;
+                realStartPosY = positionY * VisualLayer.height;
 
                 realLayout = new Rect(realStartPosX, realStartPosY,
                     realStartPosX + realWidth, realStartPosY + realHeight);
@@ -491,12 +496,12 @@ namespace GalEngine
             /// <summary>
             /// VisualPad's position-X (relative VisualLayer).
             /// </summary>
-            public float StartPosX => startPosX;
+            public float PositionX => positionX;
 
             /// <summary>
             /// VisualPad's position-Y (relative VisualLayer).
             /// </summary>
-            public float StartPosY => startPosY;
+            public float PositionY => positionY;
 
             /// <summary>
             /// VisualPad's title.

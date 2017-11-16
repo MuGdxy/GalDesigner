@@ -90,9 +90,11 @@ namespace GalEngine
             {
                 text = Text;
 
-                commandText = new CanvasText("> " + Text, width = Width, 0, LayerConfig.TextFormat);
+                commandText = new CanvasText("> " + text, width = Width, 0, LayerConfig.TextFormat);
 
                 textMetrics = commandText.Metrics;
+
+                commandText.Reset("> " + text, width, Height);
             }
 
             /// <summary>
@@ -107,9 +109,11 @@ namespace GalEngine
                 text = Text;
                 width = Width;
 
-                commandText.Reset("> " + Text, width, 0, LayerConfig.TextFormat);
+                commandText.Reset("> " + text, width, 0);
 
                 textMetrics = commandText.Metrics;
+
+                commandText.Reset("> " + text, width, Height);
             }
 
             /// <summary>
@@ -117,7 +121,8 @@ namespace GalEngine
             /// </summary>
             public void OnRender()
             {
-                Canvas.DrawText("> " + text, 0, 0, width, Height, LayerConfig.TextFormat, TextBrush);
+                Canvas.DrawText(0, 0, commandText, TextBrush);
+                //Canvas.DrawText("> " + text, 0, 0, width, Height, LayerConfig.TextFormat, TextBrush);
             }
 
             /// <summary>
@@ -180,12 +185,12 @@ namespace GalEngine
         /// <summary>
         /// DebugCommand position-X (relative VisualLayer).
         /// </summary>
-        private static float startPosX;
+        private static float positionX;
 
         /// <summary>
         /// DebugCommand position-Y (relative VisualLayer).
         /// </summary>
-        private static float startPosY;
+        private static float positionY;
 
         /// <summary>
         /// DebugCommand width (pixel).
@@ -200,12 +205,12 @@ namespace GalEngine
         /// <summary>
         /// DebugCommand position-X (pixel).
         /// </summary>
-        private static float realStartPosX;
+        private static float realPositionX;
 
         /// <summary>
         /// DebugCommmand position-Y (pixel).
         /// </summary>
-        private static float realStartPosY;
+        private static float realPositionY;
 
         /// <summary>
         /// The input cursor position (char).
@@ -517,8 +522,8 @@ namespace GalEngine
         /// <returns></returns>
         internal static bool Contains(int realPositionX, int realPositionY)
         {
-            float positionX = realPositionX - realStartPosX;
-            float positionY = realPositionY - realStartPosY;
+            float positionX = realPositionX - DebugCommand.realPositionX;
+            float positionY = realPositionY - DebugCommand.realPositionY;
 
             return commandListRect.Contains(positionX, positionY);
         }
@@ -598,8 +603,8 @@ namespace GalEngine
                     default:
                         break;
                 }
-
-                bool specialMode = Application.IsKeyDown(KeyCode.CapsLock) ^ Application.IsKeyDown(KeyCode.ShiftKey);
+                
+                bool specialMode = Application.IsCapsLock ^ Application.IsKeyDown(KeyCode.ShiftKey);
 
                 if (e.KeyCode >= KeyCode.A && e.KeyCode <= KeyCode.Z)
                 {
@@ -618,8 +623,8 @@ namespace GalEngine
         /// </summary>
         internal static void OnRender()
         {
-            Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realStartPosX,
-                realStartPosY));
+            Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realPositionX,
+                realPositionY));
 
             //Transform 
             Canvas.Transform = transform;
@@ -630,8 +635,7 @@ namespace GalEngine
             //Render CommandText
             if (commandList.Count != 0)
             {
-                Canvas.PushLayer(commandListRect.Left, commandListRect.Top,
-                    commandListRect.Right, commandListRect.Bottom);
+                Canvas.PushLayer(commandListRect.Left, commandListRect.Top, commandListRect.Right, commandListRect.Bottom);
 
                 Matrix3x2 currentTransform = transform * Matrix3x2.CreateTranslation(new Vector2(commandListRect.Left,
                     commandListRect.Top));
@@ -704,8 +708,8 @@ namespace GalEngine
             realWidth = VisualLayer.Width * width;
             realHeight = VisualLayer.Height * height;
 
-            realStartPosX = VisualLayer.Width * startPosX;
-            realStartPosY = VisualLayer.Height * startPosY;
+            realPositionX = VisualLayer.Width * positionX;
+            realPositionY = VisualLayer.Height * positionY;
 
             commandListRect = new Rect(borderX * realWidth / 2, borderY * realHeight, realWidth,
                 realHeight - CommandInputPadHeight);
@@ -736,11 +740,11 @@ namespace GalEngine
         /// <param name="newStartPosY">New position-Y (relative VisualLayer).</param>
         internal static void SetPosition(float newStartPosX, float newStartPosY)
         {
-            startPosX = newStartPosX;
-            startPosY = newStartPosY;
+            positionX = newStartPosX;
+            positionY = newStartPosY;
 
-            realStartPosX = VisualLayer.Width * startPosX;
-            realStartPosY = VisualLayer.Height * startPosY;
+            realPositionX = VisualLayer.Width * positionX;
+            realPositionY = VisualLayer.Height * positionY;
         }
 
         /// <summary>

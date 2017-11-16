@@ -18,6 +18,8 @@ namespace Builder
         private static List<GenericWindow> AddList = new List<GenericWindow>();
         private static List<GenericWindow> RemoveList = new List<GenericWindow>();
 
+        private static bool isCapsLock = IsKeyDown(KeyCode.CapsLock);
+
         private static void PumpMessage()
         {
             while (APILibrary.Win32.Internal.PeekMessage(out APILibrary.Win32.Message message, IntPtr.Zero, 0, 0,
@@ -100,6 +102,12 @@ namespace Builder
         {
             get => appIcon;
             set { appIcon = value; appinfo.hIcon = APILibrary.Win32.Internal.LoadImage(IntPtr.Zero, appIcon, 1, 0, 0, 0x00000010); }
+        }
+
+        public static bool IsCapsLock
+        {
+            get => isCapsLock;
+            internal set => isCapsLock = value;
         }
 
         internal static APILibrary.Win32.AppInfo AppInfo => appinfo;

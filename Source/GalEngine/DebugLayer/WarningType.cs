@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+    /// <summary>
+    /// Warning Type
+    /// </summary>
     public enum WarningType : int
     {
     }

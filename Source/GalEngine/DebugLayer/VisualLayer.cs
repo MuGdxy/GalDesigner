@@ -89,9 +89,9 @@ namespace GalEngine
 
                 //Update Command
                 DebugCommand.SetArea(watchPad.Width, warningPad.Height +
-                    warningPad.StartPosY - (watchPad.StartPosY + watchPad.Height + borderY));
-                DebugCommand.SetPosition(watchPad.StartPosX,
-                    watchPad.StartPosY + watchPad.Height + borderY);
+                    warningPad.PositionY - (watchPad.PositionY + watchPad.Height + borderY));
+                DebugCommand.SetPosition(watchPad.PositionX,
+                    watchPad.PositionY + watchPad.Height + borderY);
 
             }else
             {
@@ -219,7 +219,7 @@ namespace GalEngine
         /// <summary>
         /// On key event.
         /// </summary>
-        /// <param name="e"></param>
+        /// <param name="e">Key event args.</param>
         public static void OnKeyEvent(KeyEventArgs e)
         {
             DebugCommand.OnKeyEvent(e);
