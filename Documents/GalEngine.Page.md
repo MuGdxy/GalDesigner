@@ -13,6 +13,14 @@ We will make a IDE for our GalEngine.
 But now you need to use `Mono` or `Visual Studio`.
 You need add `GalEngine.dll` to your program.
 
+## Event
+
+We only use page to design our layout and UI.
+But we can get some events from window. 
+Because someone may need events to do some effect.
+
+**Note: If you want to use events in page,you should add the Builder.dll to your references.**
+
 ## VisualObject
 
 We can put VisualObjects on our Page. 

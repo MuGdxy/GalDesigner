@@ -635,7 +635,7 @@ namespace GalEngine
             //Render CommandText
             if (commandList.Count != 0)
             {
-                Canvas.PushLayer(commandListRect.Left, commandListRect.Top, commandListRect.Right, commandListRect.Bottom);
+                Canvas.PushAxisAlignedClip(commandListRect.Left, commandListRect.Top, commandListRect.Right, commandListRect.Bottom);
 
                 Matrix3x2 currentTransform = transform * Matrix3x2.CreateTranslation(new Vector2(commandListRect.Left,
                     commandListRect.Top));
@@ -668,7 +668,7 @@ namespace GalEngine
                     currentHeight += height;
                 }
 
-                Canvas.PopLayer();
+                Canvas.PopAxisAlignedClip();
 
                 Canvas.Transform = transform;
             }
@@ -681,7 +681,7 @@ namespace GalEngine
                 realHeight, LayerConfig.BorderBrush, LayerConfig.BorderSize);
 
             //Render CommandText
-            Canvas.PushLayer(inputCommandRect.Left - LayerConfig.BorderSize,
+            Canvas.PushAxisAlignedClip(inputCommandRect.Left - LayerConfig.BorderSize,
                 inputCommandRect.Top, inputCommandRect.Right + LayerConfig.BorderSize, inputCommandRect.Bottom);
 
             Canvas.DrawText(inputCommandRect.Left + inputCommandOffset, inputStartPosition,
@@ -690,7 +690,7 @@ namespace GalEngine
             //Render and Update Cursor
             CursorStateUpdate();
 
-            Canvas.PopLayer();
+            Canvas.PopAxisAlignedClip();
 
             Canvas.Transform = Matrix3x2.Identity;
         }

@@ -25,7 +25,7 @@ namespace TestApp
 
             DebugCommand.CommandAnalyser += DebugCommand_CommandAnalyser;
             DebugCommand.CommandAnalyser += DebugCommand_CommandAnalyser1;
-
+            
             GalEngine.GalEngine.Run();
 #endif
         }

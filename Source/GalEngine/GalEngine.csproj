@@ -73,6 +73,7 @@
     <Compile Include="Resource\ResourceTag\ResourceTag.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="VisualObject\GenericPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Builder\Builder.csproj">

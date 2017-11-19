@@ -365,7 +365,7 @@ namespace GalEngine
                         borderY + contentHeight + realTitleHeight);
 
                     //Render content layer
-                    Canvas.PushLayer(contentRect.Left, contentRect.Top, contentRect.Right, contentRect.Bottom);
+                    Canvas.PushAxisAlignedClip(contentRect.Left, contentRect.Top, contentRect.Right, contentRect.Bottom);
 
                     transform *= Matrix3x2.CreateTranslation(borderX, borderY);
 
@@ -394,7 +394,7 @@ namespace GalEngine
                         currentHeight += height;
                     }
 
-                    Canvas.PopLayer();
+                    Canvas.PopAxisAlignedClip();
                 }
 
                 Canvas.Transform = Matrix3x2.Identity;

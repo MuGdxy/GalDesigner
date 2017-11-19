@@ -61,6 +61,17 @@ namespace Presenter
             }, layerList[layerCount - 1]);
         }
 
+        public static void PushAxisAlignedClip(float left, float top, float right, float bottom)
+        {
+            context.PushAxisAlignedClip(new SharpDX.Mathematics.Interop.RawRectangleF(
+                left, top, right, bottom), SharpDX.Direct2D1.AntialiasMode.PerPrimitive);
+        }
+
+        public static void PopAxisAlignedClip()
+        {
+            context.PopAxisAlignedClip();
+        }
+
         public static void PopLayer()
         {
             context.PopLayer();
