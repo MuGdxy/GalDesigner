@@ -2,7 +2,6 @@
 
 In our Application, we need some objects to present and get input.
 So we should have VisualObject to do this, you can think it is `Control`.
-It have some kinds such as Button, Label and so on.
 
 ## VisualObject
 
@@ -21,13 +20,14 @@ There are some VisualObjects we can use.
 You also can design yourself VisualObjects.
 
 - `Button:` A Button.
-- `Label:` A Label, we can put text on it.
 
 ## Children and Parent
 
 We can combine VisualObjects as a new VisualObject.
 
 A VisualObject can only have one parent, but it can have many children.
+
+**And you need to notice it's position and angle is relative the parent.**
 
 ## Animation
 

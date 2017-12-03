@@ -196,6 +196,10 @@ namespace GalEngine
 
                     inCodeBlock = false;
 
+#if DEBUG
+                    DebugLayer.Assert(currentString is "", ErrorType.InvalidResourceFormat, line, Tag);
+#endif
+
                     ProcessSentenceValue(ref currentString, line, Tag); continue;
                 }
 

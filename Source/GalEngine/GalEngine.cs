@@ -17,25 +17,6 @@ namespace GalEngine
 
         private static GameWindow gameWindow;
 
-        public static void Run()
-        {
-            BuildListAnalyser.LoadAllBuildList();
-
-            Application.Add(gameWindow = new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height)
-            {
-                IsFullScreen = GlobalConfig.IsFullScreen
-            });
-
-            SetResolution(gameWindow.Width, gameWindow.Height);
-
-
-            Application.RunLoop();
-
-            BuildListAnalyser.SaveAllBuildList();
-
-            Engine.Stop();
-        }
-
         internal static void SetResolution(int Width, int Height)
         {
             Utilities.Dipose(ref renderSurface);
@@ -57,6 +38,30 @@ namespace GalEngine
             if (VisualLayer.IsEnable is true)
                 //When we change the resolution, we need to update something.
                 VisualLayer.OnResolutionChange(Width, Height);
+
+        }
+
+        public static void Run()
+        {
+            BuildListAnalyser.LoadAllBuildList();
+
+            Application.Add(gameWindow = new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height)
+            {
+                IsFullScreen = GlobalConfig.IsFullScreen
+            });
+
+            SetResolution(gameWindow.Width, gameWindow.Height);
+
+            Application.RunLoop();
+
+            BuildListAnalyser.SaveAllBuildList();
+
+            Engine.Stop();
+        }
+
+        public static void TurnToPage(string pageTag)
+        {
+            gameWindow.CurrentPage = PageList.Element[pageTag];
         }
 
         internal static GameWindow GameWindow => gameWindow;

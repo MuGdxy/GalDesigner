@@ -19,7 +19,9 @@ We only use page to design our layout and UI.
 But we can get some events from window. 
 Because someone may need events to do some effect.
 
-**Note: If you want to use events in page,you should add the Builder.dll to your references.**
+**Note:** 
+- **If you want to use events in page,you should add the Builder.dll to your References.**
+- **The order of doing events is "Window -> Page -> VisualObject".**
 
 ## VisualObject
 

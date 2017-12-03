@@ -10,6 +10,8 @@ namespace GalEngine
 {
     public abstract class GenericPage
     {
+        private string tag;
+
         internal void ProcessKeyEvent(object sender, KeyEventArgs e)
         {
             OnKeyEvent(sender, e);
@@ -52,6 +54,13 @@ namespace GalEngine
             Update?.Invoke(sender);
         }
 
+        public GenericPage(string Tag)
+        {
+            tag = Tag;
+
+            PageList.AddPage(tag, this);
+        }
+
         public abstract void OnKeyEvent(object sender, KeyEventArgs e);
         public abstract void OnMouseClick(object sender, MouseClickEventArgs e);
         public abstract void OnMouseMove(object sender, MouseMoveEventArgs e);
@@ -65,5 +74,7 @@ namespace GalEngine
         public event MouseWheelHandler MouseWheel;
         public event KeyEventHandler KeyEvent;
         public event SizeChangeEventHandler SizeChange;
+
+        public string Tag => tag;
     }
 }

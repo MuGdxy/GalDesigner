@@ -34,6 +34,16 @@ namespace Builder
         /// Mouse Position Y
         /// </summary>
         public int Y => y;
+
+        /// <summary>
+        /// Update Mouse Position.
+        /// </summary>
+        /// <param name="newX">New Mouse Position X.</param>
+        /// <param name="newY">New Mouse Position Y.</param>
+        public void UpdatePosition(int newX,int newY)
+        {
+            x = newX; y = newY;
+        }
     }
 
     /// <summary>

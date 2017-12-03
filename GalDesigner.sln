@@ -1,14 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2009
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{4698C6F6-8029-4408-BF78-AE7F34F9B309}"
 	ProjectSection(SolutionItems) = preProject
 		Documents\Bug.md = Documents\Bug.md
-		Development.md = Development.md
+		Documents\Development.md = Documents\Development.md
 		Documents\Event.md = Documents\Event.md
+		Documents\Features.md = Documents\Features.md
 		Documents\GalDesigner.md = Documents\GalDesigner.md
+		Documents\ProgramAndScript.md = Documents\ProgramAndScript.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{CFFD0A1F-7120-4C40-A35A-DCEE997DD36A}"
@@ -19,6 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{
 		Documents\GalEngine.Event.md = Documents\GalEngine.Event.md
 		Documents\GalEngine.md = Documents\GalEngine.md
 		Documents\GalEngine.Page.md = Documents\GalEngine.Page.md
+		Documents\GalEngine.ProgramAndScript.md = Documents\GalEngine.ProgramAndScript.md
 		Documents\GalEngine.Resource.md = Documents\GalEngine.Resource.md
 		Documents\GalEngine.Script.Character.md = Documents\GalEngine.Script.Character.md
 		Documents\GalEngine.Script.md = Documents\GalEngine.Script.md
