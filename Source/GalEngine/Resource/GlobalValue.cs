@@ -22,11 +22,6 @@ namespace GalEngine
 
         public static void SetValue(string Tag, object value)
         {
-
-#if DEBUG
-            DebugLayer.Assert(Utilities.IsBaseType(value) is false, ErrorType.InvalidValueType);
-#endif
-
             //make value same.
             if (Tag == GlobalConfig.FullScreenName && GalEngine.GameWindow != null)
             {
@@ -38,11 +33,15 @@ namespace GalEngine
 
         public static object GetValue(string Tag)
         {
+            DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlovalValue");
+
             return valueList[Tag];
         }
 
         public static T GetValue<T>(string Tag)
         {
+            DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlovalValue");
+
             return (T)GetValue(Tag);
         }
 

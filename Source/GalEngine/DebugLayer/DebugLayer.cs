@@ -64,6 +64,8 @@ namespace GalEngine
             errorText.Add(ErrorType.FileIsNotExist, "The FilePath {0} is not exist.");
             errorText.Add(ErrorType.InvalidValueType, "The value's type is not support.");
             errorText.Add(ErrorType.InvaildFileType, "The file's type is not support. At line: {0}, FileTag: {1}.");
+            errorText.Add(ErrorType.InvaildTag, "The tag is invaild in {0}.");
+            errorText.Add(ErrorType.InvaildMemberValueName, "The member value's name {0} is not contained.");
         }
 
         /// <summary>
@@ -108,7 +110,9 @@ namespace GalEngine
         /// <param name="value">Error params.</param>
         public static void Assert(bool testValue, ErrorType errorType, params object[] value)
         {
+#if DEBUG
             if (testValue is true) ReportError(errorType, value);
+#endif
         }
 
         /// <summary>
@@ -119,7 +123,9 @@ namespace GalEngine
         /// <param name="value">Warning params.</param>
         public static void Assert(bool testValue, WarningType warningType, params object[] value)
         {
+#if DEBUG
             if (testValue is true) ReportWarning(warningType, value);
+#endif
         }
 
         /// <summary>

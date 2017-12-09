@@ -20,10 +20,18 @@ namespace GalEngine
         public static void SetValue(ResourceAnalyser resourceAnalyser)
             => analyserList[resourceAnalyser.Tag] = resourceAnalyser;
         
-        public static ResourceAnalyser GetValue(string Tag) 
-            => analyserList[Tag];
+        public static ResourceAnalyser GetValue(string Tag)
+        {
+            DebugLayer.Assert(analyserList.ContainsKey(Tag), ErrorType.InvaildTag, "GlobalAnalyser");
+
+            return analyserList[Tag];
+        }
 
         public static T GetValue<T>(string Tag) where T : ResourceAnalyser
-            => analyserList[Tag] as T;
+        {
+            DebugLayer.Assert(analyserList.ContainsKey(Tag), ErrorType.InvaildTag, "GlobalAnalyser");
+
+            return analyserList[Tag] as T;
+        }
     }
 }

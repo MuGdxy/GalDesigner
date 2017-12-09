@@ -67,7 +67,7 @@ namespace GalEngine
             const float borderX = 0.01f;
             const float borderY = 0.01f;
 
-            if (newWidth > newHeight)
+            if (newWidth >= newHeight)
             {
                 //const
                 const float leftAspectRatio = 16f / 10f;

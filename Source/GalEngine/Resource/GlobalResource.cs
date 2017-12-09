@@ -15,9 +15,18 @@ namespace GalEngine
             resourceTagList[resourceTag.Tag] = resourceTag;
         }
 
-        public static ResourceTag GetValue(string Tag) => resourceTagList[Tag];
+        public static ResourceTag GetValue(string Tag)
+        {
+            DebugLayer.Assert(resourceTagList.ContainsKey(Tag), ErrorType.InvaildTag, "GlobalResource");
+
+            return resourceTagList[Tag];
+        }
 
         public static T GetValue<T>(string Tag) where T : ResourceTag
-            => resourceTagList[Tag] as T;
+        {
+            DebugLayer.Assert(resourceTagList.ContainsKey(Tag), ErrorType.InvaildTag, "GlobalResource");
+
+            return resourceTagList[Tag] as T;
+        }
     }
 }

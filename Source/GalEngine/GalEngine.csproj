@@ -54,6 +54,7 @@
     <Compile Include="GalEngine.cs" />
     <Compile Include="GameWindow.cs" />
     <Compile Include="Interface\IActivable.cs" />
+    <Compile Include="Interface\IMemberValuable.cs" />
     <Compile Include="Interface\IValuable.cs" />
     <Compile Include="Internal\FpsCounter.cs" />
     <Compile Include="Internal\ResourceList.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Utilities.cs" />
     <Compile Include="VisualObject\GenericPage.cs" />
     <Compile Include="VisualObject\PageList.cs" />
+    <Compile Include="VisualObject\VisualObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Builder\Builder.csproj">

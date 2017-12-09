@@ -34,6 +34,14 @@ namespace GalEngine
         /// <summary>
         /// The file's type is not support. At line: {0}, FileTag: {1}.
         /// </summary>
-        InvaildFileType
+        InvaildFileType,
+        /// <summary>
+        /// The tag is invaild in {0}.
+        /// </summary>
+        InvaildTag,
+        /// <summary>
+        /// The member value's name {0} is not contained.
+        /// </summary>
+        InvaildMemberValueName
     }
 }
