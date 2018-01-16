@@ -36,7 +36,8 @@ There are default member values:
 - `Height`: height.
 - `PositionX`: position-X.
 - `PositionY`: position-Y. 
-- `Angle`: angle.
+- `BorderSize`: border's size.
+- `opacity`: opacity.
 
 **Also support the Resource Member. You can set which resource you want to use by this function.**
 

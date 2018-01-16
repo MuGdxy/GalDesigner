@@ -89,7 +89,9 @@ namespace GalEngine
             GalEngine.RenderSurface.ResetBuffer(1, 1, 1, 1);
 
             Canvas.BeginDraw(GalEngine.RenderSurface);
-            
+
+            test.OnRender();
+
             //Render Debug Visual Layer
             if (VisualLayer.IsEnable is true)
                 VisualLayer.OnRender();
@@ -121,9 +123,17 @@ namespace GalEngine
             resultY = (int)(GalEngine.RenderSurface.Height * (y - gameRect.Top) / height);
         }
 
+        private VisualObject test;
+
         public GameWindow(string Title, int Width, int Height) : base(Title, Width, Height)
         {
             GalEngine.PresentSurface = new Present(Handle, Width, Height);
+
+            test = new VisualObject(100, 100)
+            {
+                Text = "2333"
+            };
+            test.Active();
 
             IsVisible = true;
         }

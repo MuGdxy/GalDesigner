@@ -24,10 +24,10 @@ namespace GalEngine
         static CanvasResource[] defaultResource = new CanvasResource[]
         {
             Internal.ResourceList.BlackBrush,
-            null,
+            Internal.ResourceList.DefaultTextFormat,
             Internal.ResourceList.BlackBrush,
             null,
-            Internal.ResourceList.DefaultTextFormat
+            Internal.ResourceList.BlackBrush,
         };
 
         private CanvasResource[] memberResource = new CanvasResource[(int)MemberResource.Count];
@@ -42,12 +42,14 @@ namespace GalEngine
         private int width;
         private int height;
 
-        private int positionX;
-        private int positionY;
+        private int positionX = 0;
+        private int positionY = 0;
 
-        private float angle;
+        private float borderSize = 1;
 
-        private string text;
+        private float opacity = 1;
+
+        private string text = "";
 
         private VisualObject parent;
         private List<VisualObject> children = new List<VisualObject>();
@@ -66,9 +68,36 @@ namespace GalEngine
             }
         }
 
+        private object AsObject<T>(T value)
+        {
+            return Convert.ChangeType(value, value.GetType());
+        }
+
         internal void OnRender()
         {
+            Matrix3x2 oldMatrix = Canvas.Transform;
 
+            Canvas.PushLayer(0, 0, width, height, opacity);
+
+            Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(positionX, positionY));
+            
+            Canvas.DrawRectangle(0, 0, width, height, memberResource[(int)MemberResource.BorderBrush] as CanvasBrush, borderSize);
+
+            if (memberResourceTag[(int)MemberResource.BackGroundImage] is null)
+                Canvas.FillRectangle(0, 0, width, height, memberResource[(int)MemberResource.BackGroundBrush] as CanvasBrush);
+            else
+                Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
+
+            Canvas.DrawText(0, 0, textInstance, memberResource[(int)MemberResource.TextBrush] as CanvasBrush);
+
+            foreach (var item in children)
+            {
+                item.OnRender();
+            }
+
+            Canvas.PopLayer();
+
+            Canvas.Transform = oldMatrix;
         }
 
         public VisualObject(int Width, int Height)
@@ -119,22 +148,25 @@ namespace GalEngine
             switch (memberName)
             {
                 case "Width":
-                    return (T)Convert.ChangeType(width, width.GetType());
+                    return (T)AsObject(width);
 
                 case "Height":
-                    return (T)Convert.ChangeType(height, height.GetType());
+                    return (T)AsObject(height);
 
                 case "Text":
                     return (T)(text as object);
 
                 case "PositionX":
-                    return (T)Convert.ChangeType(positionX, positionX.GetType());
+                    return (T)AsObject(positionX);
 
                 case "PositionY":
-                    return (T)Convert.ChangeType(positionY, positionY.GetType());
+                    return (T)AsObject(positionY);
 
-                case "Angle":
-                    return (T)Convert.ChangeType(angle, angle.GetType());
+                case "BorderSize":
+                    return (T)AsObject(borderSize);
+
+                case "Opacity":
+                    return (T)AsObject(opacity);
 
                 case "TextBrush":
                 case "TextFormat":
@@ -173,8 +205,12 @@ namespace GalEngine
                     positionY = (int)value;
                     return;
 
-                case "Angle":
-                    angle = (float)value;
+                case "BorderSize":
+                    borderSize = (float)value;
+                    return;
+
+                case "Opacity":
+                    opacity = (float)value;
                     return;
 
                 case "TextBrush":
@@ -238,10 +274,16 @@ namespace GalEngine
             get => positionY;
         }
 
-        public float Angle
+        public float BorderSize
         {
-            set => angle = value;
-            get => angle;
+            set => borderSize = value;
+            get => borderSize;
+        }
+
+        public float Opacity
+        {
+            set => opacity = value;
+            get => opacity;
         }
 
         public string Text
