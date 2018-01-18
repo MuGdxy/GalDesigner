@@ -53,7 +53,6 @@
     <Compile Include="DebugLayer\WarningType.cs" />
     <Compile Include="GalEngine.cs" />
     <Compile Include="GameWindow.cs" />
-    <Compile Include="Interface\IActivable.cs" />
     <Compile Include="Interface\IMemberValuable.cs" />
     <Compile Include="Interface\IValuable.cs" />
     <Compile Include="Internal\FpsCounter.cs" />

@@ -12,11 +12,18 @@ namespace GalEngine
     {
         private string tag;
 
+        private List<VisualObject> visualObjects = new List<VisualObject>();
+
         internal void ProcessKeyEvent(object sender, KeyEventArgs e)
         {
             OnKeyEvent(sender, e);
 
             KeyEvent?.Invoke(sender, e);
+
+            foreach (var item in visualObjects)
+            {
+                item.PrivateOnKeyEvent(item, e);
+            }
         }
 
         internal void ProcessMouseClick(object sender, MouseClickEventArgs e)
@@ -24,6 +31,11 @@ namespace GalEngine
             OnMouseClick(sender, e);
 
             MouseClick?.Invoke(sender, e);
+
+            foreach (var item in visualObjects)
+            {
+                item.PrivateOnMouseClick(item, e);
+            }
         }
 
         internal void ProcessMouseMove(object sender, MouseMoveEventArgs e)
@@ -31,6 +43,11 @@ namespace GalEngine
             OnMouseMove(sender, e);
 
             MouseMove?.Invoke(sender, e);
+
+            foreach (var item in visualObjects)
+            {
+                item.PrivateOnMouseMove(item, e);
+            }
         }
 
         internal void ProcessMouseWheel(object sender, MouseWheelEventArgs e)
@@ -38,6 +55,11 @@ namespace GalEngine
             OnMouseWheel(sender, e);
 
             MouseWheel?.Invoke(sender, e);
+
+            foreach (var item in visualObjects)
+            {
+                item.PrivateOnMouseWheel(item, e);
+            }
         }
 
         internal void ProcessSizeChange(object sender, SizeChangeEventArgs e)
@@ -52,6 +74,11 @@ namespace GalEngine
             OnUpdate(sender);
 
             Update?.Invoke(sender);
+
+            foreach (var item in visualObjects)
+            {
+                item.PrivateOnUpdate(item);
+            }
         }
 
         public GenericPage(string Tag)

@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Numerics;
 
+using Builder;
 using Presenter;
 
 namespace GalEngine
 {
-    public class VisualObject : IActivable, IMemberValuable
+    public class VisualObject : IMemberValuable
     {
         private enum MemberResource : int
         {
@@ -50,8 +51,7 @@ namespace GalEngine
         private float opacity = 1;
 
         private string text = "";
-
-        private VisualObject parent;
+        
         private List<VisualObject> children = new List<VisualObject>();
 
         private CanvasText textInstance;
@@ -73,41 +73,13 @@ namespace GalEngine
             return Convert.ChangeType(value, value.GetType());
         }
 
-        internal void OnRender()
+        /// <summary>
+        /// Active resource. We will active them on render.
+        /// </summary>
+        private void Active()
         {
-            Matrix3x2 oldMatrix = Canvas.Transform;
+            if (isActive is true) return;
 
-            Canvas.PushLayer(0, 0, width, height, opacity);
-
-            Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(positionX, positionY));
-            
-            Canvas.DrawRectangle(0, 0, width, height, memberResource[(int)MemberResource.BorderBrush] as CanvasBrush, borderSize);
-
-            if (memberResourceTag[(int)MemberResource.BackGroundImage] is null)
-                Canvas.FillRectangle(0, 0, width, height, memberResource[(int)MemberResource.BackGroundBrush] as CanvasBrush);
-            else
-                Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
-
-            Canvas.DrawText(0, 0, textInstance, memberResource[(int)MemberResource.TextBrush] as CanvasBrush);
-
-            foreach (var item in children)
-            {
-                item.OnRender();
-            }
-
-            Canvas.PopLayer();
-
-            Canvas.Transform = oldMatrix;
-        }
-
-        public VisualObject(int Width, int Height)
-        {
-            width = Width;
-            height = Height;
-        }
-
-        public void Active()
-        { 
             isActive = true;
 
             for (int i = 0; i < (int)MemberResource.Count; i++)
@@ -122,8 +94,84 @@ namespace GalEngine
             textInstance = new CanvasText(text, width, height, memberResource[(int)MemberResource.TextFormat] as CanvasTextFormat);
         }
 
+        internal void OnRender()
+        {
+            Active();
+
+            Matrix3x2 oldMatrix = Canvas.Transform;
+
+            Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(positionX, positionY));
+
+            if (opacity != 1.0f)
+                Canvas.PushLayer(0, 0, width, height, opacity);
+
+            Canvas.DrawRectangle(0, 0, width, height, memberResource[(int)MemberResource.BorderBrush] as CanvasBrush, borderSize);
+
+            if (memberResourceTag[(int)MemberResource.BackGroundImage] is null)
+                Canvas.FillRectangle(0, 0, width, height, memberResource[(int)MemberResource.BackGroundBrush] as CanvasBrush);
+            else
+                Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
+
+            Canvas.DrawText(0, 0, textInstance, memberResource[(int)MemberResource.TextBrush] as CanvasBrush);
+
+            foreach (var item in children)
+            {
+                item.OnRender();
+            }
+
+            if (opacity != 1.0f)
+                Canvas.PopLayer();
+
+            Canvas.Transform = oldMatrix;
+        }
+
+        internal void PrivateOnKeyEvent(object sender, KeyEventArgs e)
+        {
+            OnKeyEvent(sender, e);
+
+            KeyEvent?.Invoke(sender, e);
+        }
+
+        internal void PrivateOnMouseClick(object sender, MouseClickEventArgs e)
+        {
+            OnMouseClick(sender, e);
+
+            MouseClick?.Invoke(sender, e);
+        }
+
+        internal void PrivateOnMouseMove(object sender, MouseMoveEventArgs e)
+        {
+            OnMouseMove(sender, e);
+
+            MouseMove?.Invoke(sender, e);
+        }
+
+        internal void PrivateOnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            OnMouseWheel(sender, e);
+
+            MouseWheel?.Invoke(sender, e);
+        }
+
+        internal void PrivateOnUpdate(object sender)
+        {
+            OnUpdate(sender);
+
+            Update?.Invoke(sender);
+
+            OnRender();
+        }
+
+        public VisualObject(int Width, int Height)
+        {
+            width = Width;
+            height = Height;
+        }
+
         public void Dispose()
         {
+            if (isActive is false) return;
+
             isActive = false;
 
             for (int i = 0; i < (int)MemberResource.Count; i++)
@@ -136,6 +184,11 @@ namespace GalEngine
             }
 
             Utilities.Dipose(ref textInstance);
+
+            foreach (var item in children)
+            {
+                Utilities.Dipose(ref item.children);
+            }
         }
 
         public object GetMemberValue(string memberName)
@@ -235,15 +288,27 @@ namespace GalEngine
             }
         }
 
+        public virtual void OnKeyEvent(object sender, KeyEventArgs e) { }
+        public virtual void OnMouseClick(object sender, MouseClickEventArgs e) { }
+        public virtual void OnMouseMove(object sender, MouseMoveEventArgs e) { }
+        public virtual void OnMouseWheel(object sender, MouseWheelEventArgs e) { }
+        public virtual void OnUpdate(object sender) { }
+
+        public bool Contains(int pointX,int pointY)
+        {
+            return pointX >= positionX && pointX < positionX + width &&
+                pointY > positionY && pointY < positionY + height;
+        }
+
+        public event UpdateHandler Update;
+        public event MouseMoveHandler MouseMove;
+        public event MouseClickHandler MouseClick;
+        public event MouseWheelHandler MouseWheel;
+        public event KeyEventHandler KeyEvent;
+
         public bool IsActive => isActive;
 
         public bool IsPresented => isPresented;
-
-        public VisualObject Parent
-        {
-            set => parent = value;
-            get => parent;
-        }
 
         public List<VisualObject> Children
         {

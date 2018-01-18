@@ -16,7 +16,7 @@ namespace Presenter
         private static int layerCount ;
         private static List<SharpDX.Direct2D1.Layer> layerList;
 
-        private static Matrix3x2 transformMatrix;
+        private static Matrix3x2 transformMatrix = Matrix3x2.Identity;
 
         static Canvas()
         {

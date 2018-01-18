@@ -30,6 +30,8 @@ namespace Presenter
                 new SharpDX.Size2F((right = Right) - (left = Left), (bottom = Bottom) - (top = Top)));
         }
 
+        internal SharpDX.Direct2D1.Layer LayerSource => layer;
+
         public float Left => left;
         public float Top => top;
         public float Right => right;
