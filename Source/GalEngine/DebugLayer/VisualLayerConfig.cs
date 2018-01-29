@@ -40,7 +40,7 @@ namespace GalEngine
         /// <summary>
         /// The MouseScroll offset speed (relative VisualLayer Height).
         /// </summary>
-        private const float offsetSpeed = 0.02f;
+        private const float offsetSpeed = 0.001f;
 
         /// <summary>
         /// The Border Brush RGBA(0, 0, 0, 1).

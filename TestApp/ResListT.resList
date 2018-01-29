@@ -1,8 +1,3 @@
-[Type = Image, Tag = "A", FilePath = "Name"]
+[Type = Brush, Tag = "Red", Red = 1, Green = 0, Blue = 0, Alpha = 1]
 
-[Type = Audio, Tag = "AC", FilePath = "Name"]
-
-[Type = TextFormat, Tag = "2", Fontface = "Consolas", Size = 1, Weight = 400]
-
-[Type = Brush, Tag = "s", Red = 1, Green = 1, Blue = 1, Alpha = 1]
-
+[Type = Brush, Tag = "White", Red = 1, Green = 1, Blue = 1, Alpha = 1]

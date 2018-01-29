@@ -8,7 +8,6 @@ So we should have VisualObject to do this, you can think it is `Control`.
 Our VisualObjects like button inherit from VisualObejct.
 The VisualObject have some functions need to finish.
 
-- `Active():` Active this VisualObject, we will load the resource of this VisualObject(**In fact, we only add count in resource**).
 - `Dispose():` Dispose this VisualObject, if you want to release the resource this VisualObject used, you can use this(**In fact, we only subtract count in resource**).
 - `SetMemberValue(string, object):` Set a value by member's name.
 - `GetMemberValue(string):` Get a value by member's name.
@@ -37,7 +36,8 @@ There are default member values:
 - `PositionX`: position-X.
 - `PositionY`: position-Y. 
 - `BorderSize`: border's size.
-- `opacity`: opacity.
+- `Opacity`: opacity.
+- `IsPresented`: If it is false, we disable this visualobject,else we enable it.
 
 **Also support the Resource Member. You can set which resource you want to use by this function.**
 
@@ -68,3 +68,10 @@ We can put VisualObjects on our page.
 And our VisualObjects can get events such ClickEvent, MouseHoverEvent and so on.
 
 **When we get event, we will do parents's event first.**
+
+### Event Conditions
+
+There are some conditions of triggering events.
+
+- `KeyEvent`: The VisualObject must be focused(**IsFocus is true**).
+- `MouseEvent`: The VisualObject must contain mouse(**IsMouseHover is true**).

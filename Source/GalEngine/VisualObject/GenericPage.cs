@@ -8,7 +8,7 @@ using Builder;
 
 namespace GalEngine
 {
-    public abstract class GenericPage
+    public class GenericPage
     {
         private string tag;
 
@@ -81,19 +81,37 @@ namespace GalEngine
             }
         }
 
+        internal void ProcessRender(object sender)
+        {
+            foreach (var item in visualObjects)
+            {
+                item.OnRender();
+            }
+        }
+
         public GenericPage(string Tag)
         {
             tag = Tag;
 
-            PageList.AddPage(tag, this);
+            PageList.AddPage(this);
         }
 
-        public abstract void OnKeyEvent(object sender, KeyEventArgs e);
-        public abstract void OnMouseClick(object sender, MouseClickEventArgs e);
-        public abstract void OnMouseMove(object sender, MouseMoveEventArgs e);
-        public abstract void OnMouseWheel(object sender, MouseWheelEventArgs e);
-        public abstract void OnSizeChange(object sender, SizeChangeEventArgs e);
-        public abstract void OnUpdate(object sender);
+        public void AddVisualObject(string tag)
+        {
+            visualObjects.Add(VisualObjectList.Element[tag]);
+        }
+
+        public void RemoveVisualObject(string tag)
+        {
+            visualObjects.Remove(VisualObjectList.Element[tag]);
+        }
+
+        public virtual void OnKeyEvent(object sender, KeyEventArgs e) { }
+        public virtual void OnMouseClick(object sender, MouseClickEventArgs e) { }
+        public virtual void OnMouseMove(object sender, MouseMoveEventArgs e) { }
+        public virtual void OnMouseWheel(object sender, MouseWheelEventArgs e) { }
+        public virtual void OnSizeChange(object sender, SizeChangeEventArgs e) { }
+        public virtual void OnUpdate(object sender) { }
 
         public event UpdateHandler Update;
         public event MouseMoveHandler MouseMove;

@@ -10,9 +10,9 @@ namespace GalEngine
     {
         private static Dictionary<string, GenericPage> pageList = new Dictionary<string, GenericPage>();
 
-        public static void AddPage(string tag, GenericPage page)
+        internal static void AddPage(GenericPage page)
         {
-            pageList[tag] = page;
+            pageList[page.Tag] = page;
         }
 
         public static Dictionary<string, GenericPage> Element => pageList;

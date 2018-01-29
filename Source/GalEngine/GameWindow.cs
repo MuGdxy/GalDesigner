@@ -90,6 +90,8 @@ namespace GalEngine
 
             Canvas.BeginDraw(GalEngine.RenderSurface);
 
+            currentPage?.ProcessRender(currentPage);
+
             //Render Debug Visual Layer
             if (VisualLayer.IsEnable is true)
                 VisualLayer.OnRender();
@@ -229,7 +231,7 @@ namespace GalEngine
             GalEngine.PresentSurface.SwapBuffer(true);
 #endif
 
-            currentPage?.OnUpdate(currentPage);
+            currentPage?.ProcessUpdate(currentPage);
         }
         
         public void SetCurrentPage(GenericPage page)

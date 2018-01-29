@@ -85,7 +85,7 @@ namespace Builder
         private IntPtr ProcessMessage(IntPtr Hwnd, uint message, IntPtr wParam, IntPtr lParam)
         {
             APILibrary.Win32.WinMsg type = (APILibrary.Win32.WinMsg)message;
-
+            
             switch (type)
             {
                 case APILibrary.Win32.WinMsg.WM_MOUSEMOVE:
@@ -177,9 +177,10 @@ namespace Builder
                     break;
                 case APILibrary.Win32.WinMsg.WM_MOUSEWHEEL:
                     int window_offset = (short)APILibrary.Win32.Message.HighWord(wParam);
+
                     PrivateMouseWheel(this, new MouseWheelEventArgs()
                     {
-                        offset = window_offset > 0 ? window_offset / 120 : (window_offset / 120),
+                        offset = window_offset,
                         x = APILibrary.Win32.Message.GetXFromLparam(lParam) - positionx,
                         y = APILibrary.Win32.Message.GetYFromLparam(lParam) - positiony
                     });

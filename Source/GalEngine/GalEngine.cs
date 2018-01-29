@@ -41,7 +41,7 @@ namespace GalEngine
 
         }
 
-        public static void Run()
+        public static void Initialize()
         {
             BuildListAnalyser.LoadAllBuildList();
 
@@ -51,7 +51,10 @@ namespace GalEngine
             });
 
             SetResolution(gameWindow.Width, gameWindow.Height);
+        }
 
+        public static void Run()
+        {
             Application.RunLoop();
 
             BuildListAnalyser.SaveAllBuildList();

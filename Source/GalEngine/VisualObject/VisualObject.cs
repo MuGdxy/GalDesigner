@@ -38,7 +38,9 @@ namespace GalEngine
         private Dictionary<string, object> memberValueList = new Dictionary<string, object>();
 
         private bool isActive = false;
-        private bool isPresented = false;
+        private bool isPresented = true;
+        private bool isFocus = false;
+        private bool isMouseHover = false;
 
         private int width;
         private int height;
@@ -51,6 +53,8 @@ namespace GalEngine
         private float opacity = 1;
 
         private string text = "";
+
+        private string tag = "";
         
         private List<VisualObject> children = new List<VisualObject>();
 
@@ -96,6 +100,10 @@ namespace GalEngine
 
         internal void OnRender()
         {
+            if (isPresented is false) return;
+
+            if (width == 0 || height == 0) return;
+
             Active();
 
             Matrix3x2 oldMatrix = Canvas.Transform;
@@ -105,14 +113,16 @@ namespace GalEngine
             if (opacity != 1.0f)
                 Canvas.PushLayer(0, 0, width, height, opacity);
 
-            Canvas.DrawRectangle(0, 0, width, height, memberResource[(int)MemberResource.BorderBrush] as CanvasBrush, borderSize);
+            if (borderSize != 0f)
+                Canvas.DrawRectangle(0, 0, width, height, memberResource[(int)MemberResource.BorderBrush] as CanvasBrush, borderSize);
 
             if (memberResourceTag[(int)MemberResource.BackGroundImage] is null)
                 Canvas.FillRectangle(0, 0, width, height, memberResource[(int)MemberResource.BackGroundBrush] as CanvasBrush);
             else
                 Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
 
-            Canvas.DrawText(0, 0, textInstance, memberResource[(int)MemberResource.TextBrush] as CanvasBrush);
+            if (text != "")
+                Canvas.DrawText(0, 0, textInstance, memberResource[(int)MemberResource.TextBrush] as CanvasBrush);
 
             foreach (var item in children)
             {
@@ -127,45 +137,100 @@ namespace GalEngine
 
         internal void PrivateOnKeyEvent(object sender, KeyEventArgs e)
         {
+            if (isFocus is false) return;
+
             OnKeyEvent(sender, e);
 
             KeyEvent?.Invoke(sender, e);
+
+            foreach (var item in children)
+            {
+                item.PrivateOnKeyEvent(item, e);
+            }
         }
 
         internal void PrivateOnMouseClick(object sender, MouseClickEventArgs e)
         {
+            if (isMouseHover is false)
+            {
+                if (e.Which is MouseButton.LeftButton)
+                    isFocus = false;
+
+                return;
+            }
+
+            if (e.Which is MouseButton.LeftButton)
+                isFocus = true;
+
             OnMouseClick(sender, e);
 
             MouseClick?.Invoke(sender, e);
+
+            foreach (var item in children)
+            {
+                item.PrivateOnMouseClick(item, e);
+            }
         }
 
         internal void PrivateOnMouseMove(object sender, MouseMoveEventArgs e)
         {
+            if (isPresented is false) return;
+
+            if (Contains(e.X, e.Y) is true)
+                isMouseHover = true;
+            else
+            {
+                isMouseHover = false;
+
+                return;
+            }
+
             OnMouseMove(sender, e);
 
             MouseMove?.Invoke(sender, e);
+
+            foreach (var item in children)
+            {
+                item.PrivateOnMouseMove(item, e);
+            }
         }
 
         internal void PrivateOnMouseWheel(object sender, MouseWheelEventArgs e)
         {
+            if (isMouseHover is false) return;
+
             OnMouseWheel(sender, e);
 
             MouseWheel?.Invoke(sender, e);
+
+            foreach (var item in children)
+            {
+                item.PrivateOnMouseWheel(item, e);
+            }
         }
 
         internal void PrivateOnUpdate(object sender)
         {
+            if (isPresented is false) return;
+
             OnUpdate(sender);
 
             Update?.Invoke(sender);
 
-            OnRender();
+            foreach (var item in children)
+            {
+                item.OnUpdate(item);
+            }
         }
 
-        public VisualObject(int Width, int Height)
+        public VisualObject(string Tag, int Width, int Height)
         {
+            tag = Tag;
+
             width = Width;
             height = Height;
+
+            VisualObjectList.AddVisualObject(this);
         }
 
         public void Dispose()
@@ -221,6 +286,9 @@ namespace GalEngine
                 case "Opacity":
                     return (T)AsObject(opacity);
 
+                case "IsPresented":
+                    return (T)AsObject(isPresented);
+
                 case "TextBrush":
                 case "TextFormat":
                 case "BorderBrush":
@@ -239,31 +307,35 @@ namespace GalEngine
             switch (memberName)
             {
                 case "Width":
-                    UpdateLayOut(text, (int)value, height);
+                    Width = (int)value;
                     return;
 
                 case "Height":
-                    UpdateLayOut(text, width, (int)value);
+                    Height = (int)value;
                     return;
 
                 case "Text":
-                    UpdateLayOut((string)value, width, height);
+                    Text = (string)value;
                     return;
 
                 case "PositionX":
-                    positionX = (int)value;
+                    PositionX = (int)value;
                     return;
 
                 case "PositionY":
-                    positionY = (int)value;
+                    PositionY = (int)value;
                     return;
 
                 case "BorderSize":
-                    borderSize = (float)value;
+                    BorderSize = (float)value;
                     return;
 
                 case "Opacity":
-                    opacity = (float)value;
+                    Opacity = (float)value;
+                    return;
+
+                case "IsPresented":
+                    IsPresented = (bool)value;
                     return;
 
                 case "TextBrush":
@@ -300,15 +372,27 @@ namespace GalEngine
                 pointY > positionY && pointY < positionY + height;
         }
 
+        public void AddChildren(string tag)
+        {
+            children.Add(VisualObjectList.Element[tag]);
+        }
+
+        public void RemoveChildren(string tag)
+        {
+            children.Remove(VisualObjectList.Element[tag]);
+        }
+
         public event UpdateHandler Update;
         public event MouseMoveHandler MouseMove;
         public event MouseClickHandler MouseClick;
         public event MouseWheelHandler MouseWheel;
         public event KeyEventHandler KeyEvent;
+      
+        public bool IsFocus => isFocus;
 
-        public bool IsActive => isActive;
+        public bool IsMouseHover => isMouseHover;
 
-        public bool IsPresented => isPresented;
+        public string Tag => tag; 
 
         public List<VisualObject> Children
         {
@@ -349,6 +433,20 @@ namespace GalEngine
         {
             set => opacity = value;
             get => opacity;
+        }
+
+        public bool IsPresented
+        {
+            set
+            {
+                isPresented = value;
+                if (isPresented is false)
+                {
+                    isFocus = false;
+                    isMouseHover = false;
+                }
+            }
+            get => isPresented;
         }
 
         public string Text
