@@ -360,11 +360,11 @@ namespace GalEngine
             }
         }
 
-        public virtual void OnKeyEvent(object sender, KeyEventArgs e) { }
-        public virtual void OnMouseClick(object sender, MouseClickEventArgs e) { }
-        public virtual void OnMouseMove(object sender, MouseMoveEventArgs e) { }
-        public virtual void OnMouseWheel(object sender, MouseWheelEventArgs e) { }
-        public virtual void OnUpdate(object sender) { }
+        internal virtual void OnKeyEvent(object sender, KeyEventArgs e) { }
+        internal virtual void OnMouseClick(object sender, MouseClickEventArgs e) { }
+        internal virtual void OnMouseMove(object sender, MouseMoveEventArgs e) { }
+        internal virtual void OnMouseWheel(object sender, MouseWheelEventArgs e) { }
+        internal virtual void OnUpdate(object sender) { }
 
         public bool Contains(int pointX,int pointY)
         {

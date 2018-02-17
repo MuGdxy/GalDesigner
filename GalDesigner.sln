@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{4698C6F6-8029-4408-BF78-AE7F34F9B309}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,11 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{
 		Documents\GalEngine.Event.md = Documents\GalEngine.Event.md
 		Documents\GalEngine.md = Documents\GalEngine.md
 		Documents\GalEngine.Page.md = Documents\GalEngine.Page.md
-		Documents\GalEngine.ProgramAndScript.md = Documents\GalEngine.ProgramAndScript.md
 		Documents\GalEngine.Resource.md = Documents\GalEngine.Resource.md
-		Documents\GalEngine.Script.Character.md = Documents\GalEngine.Script.Character.md
-		Documents\GalEngine.Script.md = Documents\GalEngine.Script.md
-		Documents\GalEngine.Script.State.md = Documents\GalEngine.Script.State.md
 		Documents\GalEngine.VisualObject.md = Documents\GalEngine.VisualObject.md
 	EndProjectSection
 EndProject

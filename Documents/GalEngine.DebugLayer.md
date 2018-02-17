@@ -37,18 +37,10 @@ For example:
     DebugLayer.RegisterError(errorType, "We get error {1} in line {2}.");
 ```
 
-## About Watch
-
-We have a surface to draw value for watching and debug.
-
-We use `Tab` to enable or disable it. 
-
-We can use `DebugLayer.Watch(ValueTag)`,`DebugLayer.UnWatch(ValueTag)` to add or remove a value to watch.
-
-
 ## About DebugCommand
 
-We can send some command by using DebugCommand to our game.
+We can send some command by using DebugCommand to our game. 
+And you can use `Tab` to enable or disable it.
 
 ### Support Command
 
@@ -58,8 +50,6 @@ Command | Format | Description
 ------- | ------ | -----------
 Set     | Set value's name value | Set value, the value must be in GlobalValue or GlobalConfig.
 Get     | Get value's name       | Get value, the value must be in GlobalValue or GlobalConfig.
-Watch   | Watch value's name     | Add a value to WatchPad, the value must be in GlobalValue or GlobalConfig.
-UnWatch | UnWatch value's name   | Remove a value from WatchPad.
 Clear   | Clear                  | Clear Command.
 
 

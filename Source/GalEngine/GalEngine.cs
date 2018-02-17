@@ -35,10 +35,9 @@ namespace GalEngine
                 presentSurface.IsFullScreen = true;
             }
 
-            if (VisualLayer.IsEnable is true)
-                //When we change the resolution, we need to update something.
-                VisualLayer.OnResolutionChange(Width, Height);
+            Internal.ResourceList.ReSizeResource(Width, Height);
 
+            DebugCommand.ReSize(Width, Height);
         }
 
         public static void Initialize()

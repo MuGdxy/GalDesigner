@@ -92,10 +92,9 @@ namespace GalEngine
 
             currentPage?.ProcessRender(currentPage);
 
-            //Render Debug Visual Layer
-            if (VisualLayer.IsEnable is true)
-                VisualLayer.OnRender();
-
+            if (DebugCommand.IsEnable is true)
+                DebugCommand.OnRender();
+            
             Canvas.EndDraw();
 
             Canvas.BeginDraw(GalEngine.PresentSurface);
@@ -151,11 +150,7 @@ namespace GalEngine
                 switch (e.KeyCode)
                 {
                     case KeyCode.Tab:
-                        VisualLayer.IsEnable ^= true;
-
-                        if (VisualLayer.IsEnable is true)
-                            VisualLayer.OnResolutionChange(GlobalConfig.Width, GlobalConfig.Height);
-
+                        DebugCommand.IsEnable ^= true;
                         break;
                     default:
                         break;
@@ -163,10 +158,8 @@ namespace GalEngine
 
             }
 
-            if (VisualLayer.IsEnable is true)
-            {
-                VisualLayer.OnKeyEvent(e);
-            }
+            if (DebugCommand.IsEnable is true)
+                DebugCommand.OnKeyEvent(e);
 
             currentPage?.ProcessKeyEvent(currentPage, e);
         }
@@ -205,12 +198,9 @@ namespace GalEngine
 
             ComputeMousePos(gameRect, e.X, e.Y, ref mousePosX, ref mousePosY);
 
-            if (VisualLayer.IsEnable is true)
-            {
-                VisualLayer.OnMouseScroll(mousePosX, mousePosY, e.Offset);
-            }
-
             e.UpdatePosition(mousePosX, mousePosY);
+
+            DebugCommand.OnMouseScroll(e.Offset);
 
             currentPage?.ProcessMouseWheel(currentPage, e);
         }

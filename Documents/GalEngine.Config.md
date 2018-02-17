@@ -35,3 +35,7 @@ But we only support this format: `bool`, `int`, `float`, `string`.
 We can use `SetValue` to set the value and `GetValue` to get the value in C# script.
 
 **The value's name can not be same as Keyword.** 
+
+## Notice
+
+The keyword in `GlobalConfig` is also in `GlobalValue`.

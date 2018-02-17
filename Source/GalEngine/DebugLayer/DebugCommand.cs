@@ -10,7 +10,6 @@ using Presenter;
 
 namespace GalEngine
 {
-    using LayerConfig = VisualLayerConfig;
     using ResourceList = Internal.ResourceList;
 
     /// <summary>
@@ -28,34 +27,48 @@ namespace GalEngine
         /// <summary>
         /// The default distance to DebugCommand border-X (relative DebugCommand).
         /// </summary>
-        private const float borderX = 0.01f;
+        private const float borderX = 0.02f;
 
         /// <summary>
         /// The default distance to DebugCommand border-Y (relative DebugCommand).
         /// </summary>
-        private const float borderY = 0.01f;
+        private const float borderY = 0.02f;
+
+        /// <summary>
+        /// The border size. (relative DebugCommand)
+        /// </summary>
+        private const float borderSize = 0.001f;
 
         /// <summary>
         /// The cursor show timespan (s).
         /// </summary>
-        private const float cursorShowTimeSpan = 0.5f; 
-        
+        private const float cursorShowTimeSpan = 0.5f;
+
+        /// <summary>
+        /// The cursor size. (relative DebugCommand Width) 
+        /// </summary>
+        private const float cursorStrokeSize = 0.001f;
+
+        /// <summary>
+        /// The MouseScroll offset speed (relative DebugCommand Height).
+        /// </summary>
+        private const float offsetSpeed = 0.001f;
+
+        /// <summary>
+        /// DebugCommand Border Brush.
+        /// </summary>
+        private static CanvasBrush BorderBrush => ResourceList.BlackBrush;
+
+        /// <summary>
+        /// DebugCommand Text Brush.
+        /// </summary>
+        private static CanvasBrush TextBrush => ResourceList.BlackBrush;
+
         /// <summary>
         /// Command Message Item. We use this to show the command.
         /// </summary>
         private class CommandItem
         {
-            /// <summary>
-            /// The Text Brush.
-            /// </summary>
-            private static CanvasBrush TextBrush => ResourceList.BlackBrush;
-
-            /// <summary>
-            /// The Border Brush.
-            /// </summary>
-            private static CanvasBrush BorderBrush => ResourceList.BlackBrush;
-
-
             /// <summary>
             /// The distance from text border-Y to CommandItem's border-Y (relative text's size).
             /// </summary>
@@ -82,6 +95,11 @@ namespace GalEngine
             private TextMetrics textMetrics;
 
             /// <summary>
+            /// The Text Brush.
+            /// </summary>
+            private CanvasBrush textBrush = ResourceList.BlackBrush;
+
+            /// <summary>
             /// Create a CommmandItem.
             /// </summary>
             /// <param name="Text">The CommandItem text.</param>
@@ -90,7 +108,7 @@ namespace GalEngine
             {
                 text = Text;
 
-                commandText = new CanvasText("> " + text, width = Width, 0, LayerConfig.TextFormat);
+                commandText = new CanvasText("> " + text, width = Width, 0, ResourceList.DefaultTextFormat);
 
                 textMetrics = commandText.Metrics;
 
@@ -146,7 +164,12 @@ namespace GalEngine
             /// <summary>
             /// CommandItem height (pixel).
             /// </summary>
-            public float Height => textMetrics.Height + borderY * LayerConfig.TextFormat.Size * 2;
+            public float Height => textMetrics.Height + borderY * ResourceList.DefaultTextFormat.Size * 2;
+
+            /// <summary>
+            /// The Text Brush.
+            /// </summary>
+            public CanvasBrush TextBrush { get => textBrush; set => textBrush = value; }
         }
 
         /// <summary>
@@ -173,44 +196,24 @@ namespace GalEngine
         }
 
         /// <summary>
-        /// DebugCommmand width (relative VisualLayer).
+        /// Enable or Disable the DebugCommand.
         /// </summary>
-        private static float width;
-        
-        /// <summary>
-        /// DebugCommand height (relative VisualLayer).
-        /// </summary>
-        private static float height;
-
-        /// <summary>
-        /// DebugCommand position-X (relative VisualLayer).
-        /// </summary>
-        private static float positionX;
-
-        /// <summary>
-        /// DebugCommand position-Y (relative VisualLayer).
-        /// </summary>
-        private static float positionY;
+        private static bool isEnable = false;
 
         /// <summary>
         /// DebugCommand width (pixel).
         /// </summary>
-        private static float realWidth;
+        private static float width;
 
         /// <summary>
         /// DebugCommand height (pixel).
         /// </summary>
-        private static float realHeight;
+        private static float height;
 
         /// <summary>
-        /// DebugCommand position-X (pixel).
+        /// The VisualLayer opacity.
         /// </summary>
-        private static float realPositionX;
-
-        /// <summary>
-        /// DebugCommmand position-Y (pixel).
-        /// </summary>
-        private static float realPositionY;
+        private static float opacity = 0.5f;
 
         /// <summary>
         /// The input cursor position (char).
@@ -241,7 +244,7 @@ namespace GalEngine
         /// The input command instance.
         /// </summary>
         private static CanvasText inputCommand = new CanvasText("", float.MaxValue,
-            CommandInputPadHeight, LayerConfig.TextFormat);
+            CommandInputPadHeight, ResourceList.DefaultTextFormat);
 
         /// <summary>
         /// The input command rect (relative DebugCommand, pixel).
@@ -264,20 +267,14 @@ namespace GalEngine
         private static Dictionary<CommandErrorType, string> CommandErrorText = new Dictionary<CommandErrorType, string>();
 
         /// <summary>
-        /// See this: 
-        /// <see cref="VisualLayer.VisualPad.currentContentStart"/>
         /// </summary>
         private static float currentCommandListStart;
 
         /// <summary>
-        /// See this:
-        /// <see cref="VisualLayer.VisualPad.currentContentEnd"/>
         /// </summary>
         private static float currentCommandListEnd;
 
         /// <summary>
-        /// See this:
-        /// <see cref="VisualLayer.VisualPad.maxItemHeight"/>
         /// </summary>
         private static float maxCommandListHeight;
 
@@ -347,11 +344,11 @@ namespace GalEngine
 
             if (cursorState is true)
             {
-                float inputStartPosition = realHeight - CommandInputPadHeight;
-                float offset = (CommandInputPadHeight - LayerConfig.TextFormat.Size) / 2.3f;
+                float inputStartPosition = height - CommandInputPadHeight;
+                float offset = (CommandInputPadHeight - ResourceList.DefaultTextFormat.Size) / 2.3f;
 
                 Canvas.DrawLine(inputCommandRect.Left + cursorRealPosition, inputStartPosition + offset,
-                    inputCommandRect.Left + cursorRealPosition, realHeight - offset, cursorBrush, LayerConfig.BorderSize);
+                    inputCommandRect.Left + cursorRealPosition, height - offset, cursorBrush, width * cursorStrokeSize);
             }
         }
 
@@ -371,7 +368,7 @@ namespace GalEngine
         private static void Remove()
         {
             if (cursorPosition is 0) return;
-            
+
             CursorMoveLeft();
             inputCommand.Remove(cursorPosition, 1);
         }
@@ -462,31 +459,6 @@ namespace GalEngine
 
                     return true;
 
-                case "Watch":
-                    if (Assert(commandParameters.Length != 2, CommandErrorType.CommandParametersCount) is true)
-                        return true;
-
-                    if (Assert(GlobalValue.Contains(commandParameters[1]) is false, CommandErrorType.CommandGlobalValueExist) is true)
-                        return true;
-
-                    DebugLayer.Watch(commandParameters[1]);
-
-                    return true;
-
-                case "UnWatch":
-                    if (Assert(commandParameters.Length != 2, CommandErrorType.CommandParametersCount) is true)
-                        return true;
-
-                    if (Assert(GlobalValue.Contains(commandParameters[1]) is false, CommandErrorType.CommandGlobalValueExist) is true)
-                        return true;
-
-                    if (Assert(DebugLayer.WatchList.Contains(commandParameters[1]) is false, CommandErrorType.CommandWatchValueExist)
-                        is true) return true;
-
-                    DebugLayer.UnWatch(commandParameters[1]);
-
-                    return true;
-
                 case "Clear":
                     if (Assert(commandParameters.Length != 1, CommandErrorType.CommandParametersCount) is true)
                         return true;
@@ -522,10 +494,7 @@ namespace GalEngine
         /// <returns></returns>
         internal static bool Contains(int realPositionX, int realPositionY)
         {
-            float positionX = realPositionX - DebugCommand.realPositionX;
-            float positionY = realPositionY - DebugCommand.realPositionY;
-
-            return commandListRect.Contains(positionX, positionY);
+            return commandListRect.Contains(realPositionX, realPositionY);
         }
 
         /// <summary>
@@ -534,7 +503,8 @@ namespace GalEngine
         /// <param name="offset">Offset</param>
         internal static void OnMouseScroll(float offset)
         {
-            offset *= LayerConfig.OffsetSpeed;
+            offset *= height * offsetSpeed;
+            offset *= -1;
 
             float commandListHeight = commandListRect.Bottom - commandListRect.Top;
 
@@ -589,7 +559,7 @@ namespace GalEngine
                     case KeyCode.Enter:
                         SendCommand(inputCommand.Text);
 
-                        inputCommand.Reset("", float.MaxValue, CommandInputPadHeight, LayerConfig.TextFormat);
+                        inputCommand.Reset("", float.MaxValue, CommandInputPadHeight, ResourceList.DefaultTextFormat);
 
                         inputCommandOffset = 0;
                         cursorPosition = 0;
@@ -603,7 +573,7 @@ namespace GalEngine
                     default:
                         break;
                 }
-                
+
                 bool specialMode = Application.IsCapsLock ^ Application.IsKeyDown(KeyCode.ShiftKey);
 
                 if (e.KeyCode >= KeyCode.A && e.KeyCode <= KeyCode.Z)
@@ -623,21 +593,17 @@ namespace GalEngine
         /// </summary>
         internal static void OnRender()
         {
-            Matrix3x2 transform = Matrix3x2.CreateTranslation(new Vector2(realPositionX,
-                realPositionY));
+            Canvas.PushLayer(0, 0, width, height, opacity);
 
-            //Transform 
-            Canvas.Transform = transform;
-
-            //Render Command Border
-            Canvas.DrawRectangle(0, 0, realWidth, realHeight, LayerConfig.BorderBrush, LayerConfig.BorderSize);
+            Canvas.ClearBuffer(ResourceList.DefaultBackGroundBrush.Red, ResourceList.DefaultBackGroundBrush.Green,
+                ResourceList.DefaultBackGroundBrush.Blue, ResourceList.DefaultBackGroundBrush.Alpha);
 
             //Render CommandText
             if (commandList.Count != 0)
             {
                 Canvas.PushAxisAlignedClip(commandListRect.Left, commandListRect.Top, commandListRect.Right, commandListRect.Bottom);
 
-                Matrix3x2 currentTransform = transform * Matrix3x2.CreateTranslation(new Vector2(commandListRect.Left,
+                Matrix3x2 currentTransform = Matrix3x2.CreateTranslation(new Vector2(commandListRect.Left,
                     commandListRect.Top));
 
                 Canvas.Transform = currentTransform;
@@ -669,23 +635,22 @@ namespace GalEngine
                 }
 
                 Canvas.PopAxisAlignedClip();
-
-                Canvas.Transform = transform;
             }
 
+            Canvas.Transform = Matrix3x2.Identity;
 
-            float inputStartPosition = realHeight - CommandInputPadHeight;
+            float inputStartPosition = height - CommandInputPadHeight;
 
             //Render Command Input Rect
-            Canvas.DrawRectangle(0, inputStartPosition, realWidth,
-                realHeight, LayerConfig.BorderBrush, LayerConfig.BorderSize);
+            Canvas.DrawRectangle(0, inputStartPosition, width,
+                height, BorderBrush, borderSize * width);
 
             //Render CommandText
-            Canvas.PushAxisAlignedClip(inputCommandRect.Left - LayerConfig.BorderSize,
-                inputCommandRect.Top, inputCommandRect.Right + LayerConfig.BorderSize, inputCommandRect.Bottom);
+            Canvas.PushAxisAlignedClip(inputCommandRect.Left - borderSize * width,
+                inputCommandRect.Top, inputCommandRect.Right + borderSize * width, inputCommandRect.Bottom);
 
             Canvas.DrawText(inputCommandRect.Left + inputCommandOffset, inputStartPosition,
-                inputCommand, LayerConfig.TextBrush);
+                inputCommand, TextBrush);
 
             //Render and Update Cursor
             CursorStateUpdate();
@@ -693,29 +658,25 @@ namespace GalEngine
             Canvas.PopAxisAlignedClip();
 
             Canvas.Transform = Matrix3x2.Identity;
+
+            Canvas.PopLayer();
         }
 
         /// <summary>
-        /// Set DebugCommand Size.
+        /// Reset the DebugCommand Size.
         /// </summary>
-        /// <param name="Width">New width (relative VisualLayer).</param>
-        /// <param name="Height">New height (relative VisualLayer).</param>
-        internal static void SetArea(float Width, float Height)
+        /// <param name="newWidth">New Width. (pixel)</param>
+        /// <param name="newHeight">New Height. (pixel)</param>
+        internal static void ReSize(int newWidth, int newHeight)
         {
-            width = Width;
-            height = Height;
+            width = newWidth;
+            height = newHeight;
 
-            realWidth = VisualLayer.Width * width;
-            realHeight = VisualLayer.Height * height;
+            commandListRect = new Rect(borderX * width * 0.5f,
+                borderY * height, width, height - CommandInputPadHeight);
 
-            realPositionX = VisualLayer.Width * positionX;
-            realPositionY = VisualLayer.Height * positionY;
-
-            commandListRect = new Rect(borderX * realWidth / 2, borderY * realHeight, realWidth,
-                realHeight - CommandInputPadHeight);
-
-            inputCommandRect = new Rect(borderX * realWidth, realHeight - CommandInputPadHeight,
-                realWidth * (1 - borderX), realHeight);
+            inputCommandRect = new Rect(borderX * width, height - CommandInputPadHeight,
+                width * (1 - borderX), height);
 
             //Make sure the InputCommand is right
             inputCommand.Reset(inputCommand.Text, float.MaxValue, CommandInputPadHeight);
@@ -734,17 +695,28 @@ namespace GalEngine
         }
 
         /// <summary>
-        /// Set DebugCommand position.
+        /// Write a command to Command List.
         /// </summary>
-        /// <param name="newStartPosX">New position-X (relative VisualLayer).</param>
-        /// <param name="newStartPosY">New position-Y (relative VisualLayer).</param>
-        internal static void SetPosition(float newStartPosX, float newStartPosY)
+        /// <param name="command">Command.</param>
+        /// <param name="brush">Command Text Brush.</param>
+        /// <param name="isGoBottom">Is go bottom.</param>
+        public static void WriteCommand(string command, CanvasBrush brush, bool isGoBottom = true)
         {
-            positionX = newStartPosX;
-            positionY = newStartPosY;
+            CommandItem newItem = new CommandItem(command, commandListRect.Right - commandListRect.Left);
 
-            realPositionX = VisualLayer.Width * positionX;
-            realPositionY = VisualLayer.Height * positionY;
+            if (brush is null)
+                newItem.TextBrush = ResourceList.BlackBrush;
+            else newItem.TextBrush = brush;
+
+            commandList.Add(newItem);
+
+            maxCommandListHeight += newItem.Height;
+
+            if (isGoBottom is true)
+            {
+                currentCommandListEnd = maxCommandListHeight;
+                currentCommandListStart = currentCommandListEnd - (commandListRect.Bottom - commandListRect.Top);
+            }
         }
 
         /// <summary>
@@ -767,17 +739,7 @@ namespace GalEngine
         /// <param name="isGoBottom">Is go bottom.</param>
         public static void WriteCommand(string command, bool isGoBottom = true)
         {
-            CommandItem newItem = new CommandItem(command, commandListRect.Right - commandListRect.Left);
-
-            commandList.Add(newItem);
-
-            maxCommandListHeight += newItem.Height;
-
-            if (isGoBottom is true)
-            {
-                currentCommandListEnd = maxCommandListHeight;
-                currentCommandListStart = currentCommandListEnd - (commandListRect.Bottom - commandListRect.Top);
-            }
+            WriteCommand(command, ResourceList.BlackBrush);
         }
 
         /// <summary>
@@ -791,7 +753,7 @@ namespace GalEngine
             bool result = AnalyseCommand(command);
 
             if (result is false)
-                WriteCommand("No Command Support!");
+                WriteCommand("No Command Support!", Internal.ResourceList.RedBrush);
         }
 
         /// <summary>
@@ -809,11 +771,18 @@ namespace GalEngine
         /// <summary>
         /// CommandItem height (pixel).
         /// </summary>
-        private static float CommandInputPadHeight => LayerConfig.TextFormat.Size * 2.5f;
+        private static float CommandInputPadHeight => ResourceList.DefaultTextFormat.Size * 2.5f;
+
+        /// <summary>
+        /// Enable or Disable the DebugCommand.
+        /// </summary>
+        public static bool IsEnable { get => isEnable; set => isEnable = value; }
 
         /// <summary>
         /// Command Analyser.
         /// </summary>
         public static event CommandHandle CommandAnalyser;
+
+
     }
 }

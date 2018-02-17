@@ -17,11 +17,7 @@ namespace GalEngine.Internal
         private static CanvasBrush greenBrush = new CanvasBrush(0, 1, 0, 1);
         private static CanvasBrush whiteBrush = new CanvasBrush(1, 1, 1, 1);
 
-        private static CanvasTextFormat defaultTextFormat = new CanvasTextFormat("Consolas", 10)
-        {
-            ParagraphAlignment = ParagraphAlignment.Center,
-            TextAlignment = TextAlignment.Center
-        };
+        private static CanvasTextFormat defaultTextFormat = new CanvasTextFormat("Consolas", 10);
 
         public static CanvasBrush BlackBrush => blackBrush;
         public static CanvasBrush BlueBrush => blueBrush;
@@ -30,5 +26,13 @@ namespace GalEngine.Internal
         public static CanvasBrush WhiteBrush => whiteBrush;
 
         public static CanvasTextFormat DefaultTextFormat => defaultTextFormat;
+
+        public static CanvasBrush DefaultBackGroundBrush => whiteBrush;
+        
+        public static void ReSizeResource(int newWidth, int newHeight)
+        {
+            defaultTextFormat.Reset("Consolas", newHeight * 0.027f);
+            defaultTextFormat.ParagraphAlignment = ParagraphAlignment.Center;
+        }
     }
 }

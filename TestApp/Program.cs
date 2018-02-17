@@ -13,6 +13,15 @@ namespace TestApp
     {
         public static string AppName => "TestApp";
 
+        private class PageSample : GenericPage
+        {
+            public PageSample(string Tag) : base(Tag)
+            {
+
+            }
+        }
+
+
         static void Main(string[] args)
         {
 #if false
@@ -20,15 +29,8 @@ namespace TestApp
 #else
             GalEngine.GalEngine.Initialize();
 
-            DebugLayer.Watch("Width");
-            DebugLayer.Watch("Height");
-            DebugLayer.Watch("FullScreen");
-            DebugLayer.Watch("AppName");
+            GenericPage genericPage = new PageSample("MainPage");
 
-            DebugCommand.CommandAnalyser += DebugCommand_CommandAnalyser;
-            DebugCommand.CommandAnalyser += DebugCommand_CommandAnalyser1;
-
-            GenericPage genericPage = new GenericPage("MainPage");
             VisualObject visualObject1 = new VisualObject("Object1", 100, 100)
             {
                 PositionX = 0,
@@ -37,6 +39,9 @@ namespace TestApp
                 Opacity = 1,
                 Text = "Hello"
             };
+
+            visualObject1.MouseClick += VisualObject1_MouseClick;
+
             VisualObject visualObject2 = new VisualObject("Object2", 100, 100)
             {
                 PositionX = 0,
@@ -47,15 +52,27 @@ namespace TestApp
             };
 
             visualObject1.SetMemberValue("TextBrush", "White");
+            visualObject1.SetMemberValue("BackGroundBursh", "Blue");
             visualObject2.SetMemberValue("BackGroundBrush", "Red");
-
-            visualObject1.AddChildren(visualObject2.Tag);
+            
             genericPage.AddVisualObject(visualObject1.Tag);
+            //genericPage.AddVisualObject(visualObject2.Tag);
+
+            DebugLayer.RegisterWarning(0, "2333");
+            DebugLayer.ReportWarning(0, null);
 
             GalEngine.GalEngine.TurnToPage("MainPage");
             
             GalEngine.GalEngine.Run();
 #endif
+        }
+
+        private static void VisualObject1_MouseClick(object sender, Builder.MouseClickEventArgs e)
+        {
+            if (e.IsDown is true)
+            {
+                (sender as VisualObject).IsPresented ^= true;
+            }
         }
 
         private static bool DebugCommand_CommandAnalyser1(string[] commandParameters)

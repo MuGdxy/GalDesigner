@@ -27,11 +27,6 @@ namespace GalEngine
         private static List<WarningMessage> warningList = new List<WarningMessage>();
 
         /// <summary>
-        /// Record the value we are watching.
-        /// </summary>
-        private static List<string> watchList = new List<string>();
-
-        /// <summary>
         /// Set the params to a text.
         /// </summary>
         /// <param name="text">text.</param>
@@ -99,7 +94,7 @@ namespace GalEngine
             var message = new WarningMessage(SetParamsToString(warningText[warningType], value), DateTime.Now);
             warningList.Add(message);
 
-            VisualLayer.SetPadItem(message.WarningText, message.WarningText, VisualLayer.PadType.WarningPad);
+            DebugCommand.WriteCommand(message.WarningText, Internal.ResourceList.RedBrush);
         }
 
         /// <summary>
@@ -147,30 +142,6 @@ namespace GalEngine
         {
             warningText[warningType] = messageText;
         }
-
-        /// <summary>
-        /// Add a vaule to watch. The value must be in GlobalValue.
-        /// </summary>
-        /// <param name="Tag">Value's tag.</param>
-        public static void Watch(string Tag)
-        {
-            if (watchList.Contains(Tag) is true) return;
-
-            watchList.Add(Tag);
-
-            VisualLayer.SetPadItem(Tag, Tag + " = " + GlobalValue.GetValue(Tag), VisualLayer.PadType.WatchPad);
-        }
-
-        /// <summary>
-        /// Remove a value from watch. The value must be watching.
-        /// </summary>
-        /// <param name="Tag">Value's tag.</param>
-        public static void UnWatch(string Tag)
-        {
-            watchList.Remove(Tag);
-
-            VisualLayer.RemovePadItem(Tag, VisualLayer.PadType.WatchPad);
-        }
         
         /// <summary>
         /// Get a Waring.
@@ -183,10 +154,5 @@ namespace GalEngine
         /// Get Waring List.
         /// </summary>
         public static List<WarningMessage> WarningMessageList => warningList;
-
-        /// <summary>
-        /// Get Watch List.
-        /// </summary>
-        public static List<string> WatchList => watchList;
     }
 }
