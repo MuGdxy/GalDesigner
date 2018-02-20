@@ -356,8 +356,9 @@ namespace GalEngine
                         memberResource[(int)which] = GlobalResource.GetValue<ResourceTag>(value as string).Use() as CanvasResource;
                     
                     return;
-
             }
+
+            memberValueList[memberName] = value;
         }
 
         internal virtual void OnKeyEvent(object sender, KeyEventArgs e) { }

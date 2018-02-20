@@ -29,10 +29,7 @@ namespace GalEngine
 
         protected override void DiposeResource(ref object resource)
         {
-            if (resource is null) return;
-
-            (resource as CanvasBrush).Dispose();
-            resource = null;
+            Utilities.Dipose(ref resource);
         }
 
         public Vector4 Color => brushColor;

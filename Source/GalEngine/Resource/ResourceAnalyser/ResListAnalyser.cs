@@ -186,9 +186,9 @@ namespace GalEngine
             string currentString = "";
             bool inString = false;
 
-#if DEBUG
+
             bool inSentence = false;
-#endif
+
             int line = 0;
 
             foreach (var item in contents)
@@ -207,27 +207,27 @@ namespace GalEngine
 
                 if (item is '[')
                 {
-#if DEBUG
+
                     DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileTag);
                     
                     inSentence = true;
-#endif
+
                     currentSentence = new Sentence(); continue;
                 }
 
                 if (item is ']')
                 {
-#if DEBUG
+
                     DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileTag);
                     inSentence = false;
-#endif
+
 
                     ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
 
-#if DEBUG
+
                     DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
                         currentSentence.ToString());
-#endif
+
                     sentences.Add(currentSentence); continue;
                 }
 
@@ -240,10 +240,10 @@ namespace GalEngine
                 }
             }
 
-#if DEBUG
+
             DebugLayer.Assert(inSentence is true | inString is true, ErrorType.InvalidResourceFormat,
                 contents.Length, FileTag);
-#endif
+
 
         }
 

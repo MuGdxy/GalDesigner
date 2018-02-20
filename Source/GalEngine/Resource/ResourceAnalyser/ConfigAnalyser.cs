@@ -179,9 +179,7 @@ namespace GalEngine
 
                 if (item is '{')
                 {
-#if DEBUG
                     DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, Tag);
-#endif
 
                     inCodeBlock = true;
                     continue;
@@ -190,15 +188,11 @@ namespace GalEngine
                 //Find Block
                 if (item is '}')
                 {
-#if DEBUG
                     DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, Tag);
-#endif
 
                     inCodeBlock = false;
-
-#if DEBUG
+                    
                     DebugLayer.Assert(currentString is "", ErrorType.InvalidResourceFormat, line, Tag);
-#endif
 
                     ProcessSentenceValue(ref currentString, line, Tag); continue;
                 }

@@ -22,14 +22,12 @@ namespace GalEngine
         
         public static ResourceAnalyser GetValue(string Tag)
         {
-            DebugLayer.Assert(analyserList.ContainsKey(Tag), ErrorType.InvaildTag, "GlobalAnalyser");
-
-            return analyserList[Tag];
+            return GetValue<ResourceAnalyser>(Tag);
         }
 
         public static T GetValue<T>(string Tag) where T : ResourceAnalyser
         {
-            DebugLayer.Assert(analyserList.ContainsKey(Tag), ErrorType.InvaildTag, "GlobalAnalyser");
+            DebugLayer.Assert(analyserList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlobalAnalyser");
 
             return analyserList[Tag] as T;
         }

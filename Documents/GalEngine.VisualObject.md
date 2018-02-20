@@ -14,7 +14,7 @@ The VisualObject have some functions need to finish.
 
 ### Resource Member
 
-- `BackGround`: A image. Default is null.
+- `BackGroundImage`: A image. Default is null.
 - `TextBrush`: Text Brush. Default is black.
 - `BackGroundBrush`: BackGround Brush(only use when `BackGround` is null). Default is null.
 - `BorderBrush`: Border Brush. Default is black.

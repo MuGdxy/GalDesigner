@@ -21,10 +21,7 @@ namespace GalEngine
         {
             if (resource is null)
             {
-
-#if DEBUG
-                DebugLayer.Assert(System.IO.File.Exists(filePath), ErrorType.FileIsNotExist, filePath);
-#endif
+                DebugLayer.Assert(System.IO.File.Exists(filePath) is false, ErrorType.FileIsNotExist, filePath);
 
                 resource = new CanvasImage(filePath);
             }
@@ -32,10 +29,7 @@ namespace GalEngine
 
         protected override void DiposeResource(ref object resource)
         {
-            if (resource is null) return;
-
-            (resource as CanvasImage).Dispose();
-            resource = null;
+            Utilities.Dipose(ref resource);
         }
 
         public string FilePath => filePath;

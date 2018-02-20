@@ -14,6 +14,7 @@ namespace GalEngine
         {
             valueList = new Dictionary<string, object>();
 
+            //default value
             SetValue(GlobalConfig.WidthName, 800);
             SetValue(GlobalConfig.HeightName, 600);
             SetValue(GlobalConfig.ApplicationName, "GalEngine");
@@ -33,16 +34,14 @@ namespace GalEngine
 
         public static object GetValue(string Tag)
         {
-            DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlovalValue");
-
-            return valueList[Tag];
+            return GetValue<object>(Tag);
         }
 
         public static T GetValue<T>(string Tag)
         {
             DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlovalValue");
 
-            return (T)GetValue(Tag);
+            return (T)valueList[Tag];
         }
 
         public static bool Contains(string Tag)

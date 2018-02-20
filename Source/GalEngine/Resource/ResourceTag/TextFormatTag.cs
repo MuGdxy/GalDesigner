@@ -31,10 +31,7 @@ namespace GalEngine
 
         protected override void DiposeResource(ref object resource)
         {
-            if (resource is null) return;
-
-            (resource as CanvasTextFormat).Dispose();
-            resource = null;
+            Utilities.Dipose(ref resource);
         }
 
         public string Fontface => fontFace;

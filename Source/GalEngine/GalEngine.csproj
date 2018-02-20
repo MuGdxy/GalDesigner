@@ -68,6 +68,7 @@
     <Compile Include="Resource\GlobalResource.cs" />
     <Compile Include="Resource\ResourceTag\ImageTag.cs" />
     <Compile Include="Resource\ResourceTag\ResourceTag.cs" />
+    <Compile Include="SystemProperty.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="VisualObject\GenericPage.cs" />

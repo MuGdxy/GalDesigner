@@ -15,9 +15,13 @@ namespace TestApp
 
         private class PageSample : GenericPage
         {
+            private VisualObject ImageObject = new VisualObject("ImageObject", 1280, 720);
+
             public PageSample(string Tag) : base(Tag)
             {
+                ImageObject.SetMemberValue(SystemProperty.BackGroundImage, "BackGround");
 
+                AddVisualObject(ImageObject.Tag);
             }
         }
 
@@ -30,36 +34,6 @@ namespace TestApp
             GalEngine.GalEngine.Initialize();
 
             GenericPage genericPage = new PageSample("MainPage");
-
-            VisualObject visualObject1 = new VisualObject("Object1", 100, 100)
-            {
-                PositionX = 0,
-                PositionY = 0,
-                BorderSize = 1,
-                Opacity = 1,
-                Text = "Hello"
-            };
-
-            visualObject1.MouseClick += VisualObject1_MouseClick;
-
-            VisualObject visualObject2 = new VisualObject("Object2", 100, 100)
-            {
-                PositionX = 0,
-                PositionY = 0,
-                BorderSize = 1,
-                Opacity = 0.5f,
-                Text = ""
-            };
-
-            visualObject1.SetMemberValue("TextBrush", "White");
-            visualObject1.SetMemberValue("BackGroundBursh", "Blue");
-            visualObject2.SetMemberValue("BackGroundBrush", "Red");
-            
-            genericPage.AddVisualObject(visualObject1.Tag);
-            //genericPage.AddVisualObject(visualObject2.Tag);
-
-            DebugLayer.RegisterWarning(0, "2333");
-            DebugLayer.ReportWarning(0, null);
 
             GalEngine.GalEngine.TurnToPage("MainPage");
             

@@ -154,9 +154,8 @@ namespace GalEngine
 
                     case '{':
                         //Block's begining
-#if DEBUG
                         DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, FilePath);
-#endif
+
                         inCodeBlock = true;
 
                         //get the "{" 's line.
@@ -165,9 +164,8 @@ namespace GalEngine
 
                     case '}':
                         //Block's ending
-#if DEBUG
+
                         DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, FilePath);
-#endif
 
                         BlockType blockType = GetBlockType(typeName, blockStartLine, Tag);
 
