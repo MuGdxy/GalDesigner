@@ -11,5 +11,9 @@ namespace GalEngine
     /// </summary>
     public enum WarningType : int
     {
+        /// <summary>
+        /// Can not find the target value on starting animation(Name: {0}).
+        /// </summary>
+        NoTargetOfAnimation
     }
 }

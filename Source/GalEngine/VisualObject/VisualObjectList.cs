@@ -10,9 +10,14 @@ namespace GalEngine
     {
         private static Dictionary<string, VisualObject> visualObjectList = new Dictionary<string, VisualObject>();
 
-        internal static void AddVisualObject(VisualObject visualObject)
+        internal static void Add(VisualObject visualObject)
         {
             visualObjectList[visualObject.Tag] = visualObject;
+        }
+
+        internal static void Remove(VisualObject visualObject)
+        {
+            visualObjectList.Remove(visualObject.Tag);
         }
 
         public static Dictionary<string, VisualObject> Element => visualObjectList;

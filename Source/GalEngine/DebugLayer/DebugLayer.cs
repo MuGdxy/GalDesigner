@@ -61,6 +61,8 @@ namespace GalEngine
             errorText.Add(ErrorType.InvaildFileType, "The file's type is not support. At line: {0}, FileTag: {1}.");
             errorText.Add(ErrorType.InvaildTag, "The tag is invaild in {0}.");
             errorText.Add(ErrorType.InvaildMemberValueName, "The member value's name {0} is not contained.");
+
+            warningText.Add(WarningType.NoTargetOfAnimation, "Can not find the target value on starting animation(Name: {0}).");
         }
 
         /// <summary>

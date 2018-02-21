@@ -77,7 +77,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BackGround.png">
+    <Content Include="BackGround.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

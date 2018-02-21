@@ -4,4 +4,4 @@
 
 [Type = Brush, Tag = "Blue", Red = 0, Green = 0, Blue = 1, Alpha = 1]
 
-[Type = Image, Tag = "BackGround", FilePath = "BackGround.png"]
+[Type = Image, Tag = "BackGround", FilePath = "BackGround.jpg"]

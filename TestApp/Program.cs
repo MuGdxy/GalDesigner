@@ -15,7 +15,7 @@ namespace TestApp
 
         private class PageSample : GenericPage
         {
-            private VisualObject ImageObject = new VisualObject("ImageObject", 1280, 720);
+            private VisualObject ImageObject = new VisualObject("ImageObject", 1920, 1080);
 
             public PageSample(string Tag) : base(Tag)
             {
@@ -27,7 +27,7 @@ namespace TestApp
 
 
         static void Main(string[] args)
-        {
+        { 
 #if false
 
 #else

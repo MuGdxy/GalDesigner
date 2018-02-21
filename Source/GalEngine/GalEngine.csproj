@@ -71,6 +71,7 @@
     <Compile Include="SystemProperty.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="VisualObject\Animation.cs" />
     <Compile Include="VisualObject\GenericPage.cs" />
     <Compile Include="VisualObject\PageList.cs" />
     <Compile Include="VisualObject\VisualObject.cs" />

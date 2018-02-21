@@ -230,7 +230,7 @@ namespace GalEngine
             width = Width;
             height = Height;
 
-            VisualObjectList.AddVisualObject(this);
+            VisualObjectList.Add(this);
         }
 
         public void Dispose()
@@ -249,6 +249,8 @@ namespace GalEngine
             }
 
             Utilities.Dipose(ref textInstance);
+
+            VisualObjectList.Remove(this);
 
             foreach (var item in children)
             {

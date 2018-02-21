@@ -41,7 +41,7 @@ There are default member values:
 
 **Also support the Resource Member. You can set which resource you want to use by this function.**
 
-## Children and Parent
+## Children
 
 We can combine VisualObjects as a new VisualObject.
 
@@ -51,14 +51,18 @@ A VisualObject can only have one parent, but it can have many children.
 
 ## Animation
 
-Our VisualObject can run Animations. 
+Our VisualObject can run Animations.
+Before you run it, you must add it to VisualObject.
+And you also can remove it.
 
 ```C#
-    VisualObject.StartAnimation(string valueName, Animation animation);
+    VisualObject.AddAnimation(string valueName, Animation animation);
+    VisualObject.RemoveAnimation(Animation animation);
 ```
 
 The first value is the target of this animation.
 For an animation, it can transform value. So we need tell the animation which will be transformed.
+So the value must be MemberValue.
 
 The second value is the animation. **An animation instance can only run with one VisualObject.**
 

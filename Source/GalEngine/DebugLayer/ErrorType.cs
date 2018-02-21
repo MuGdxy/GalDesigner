@@ -42,6 +42,10 @@ namespace GalEngine
         /// <summary>
         /// The member value's name {0} is not contained.
         /// </summary>
-        InvaildMemberValueName
+        InvaildMemberValueName,
+        /// <summary>
+        /// The Animation(Name: {0}) has been added to {1}.
+        /// </summary>
+        AnimationIsAdded
     }
 }
