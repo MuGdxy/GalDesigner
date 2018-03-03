@@ -22,7 +22,7 @@ namespace GalEngine
         {
             public ResourceType Type = ResourceType.Unknown;
             public string FilePath = null;
-            public string Tag = null;
+            public string Name = null;
             public string Fontface = null;
             public float Size = 0;
             public int Weight = 0;
@@ -33,7 +33,7 @@ namespace GalEngine
                 string result = "";
 
                 result += "Type = " + Type;
-                result += ", Tag = " + Include(Tag);
+                result += ", Name = " + Include(Name);
 
                 switch (Type)
                 {
@@ -67,7 +67,7 @@ namespace GalEngine
 
             public bool IsError()
             {
-                if (Tag is null) return true;
+                if (Name is null) return true;
 
                 switch (Type)
                 {
@@ -118,9 +118,9 @@ namespace GalEngine
             }
         }
 
-        private Dictionary<string, ResourceTag> resourceList;
+        private Dictionary<string, ResourceView> resourceList;
 
-        private void ProcessSentenceValue(ref Sentence sentence, ref string value, int Line, string FileTag)
+        private void ProcessSentenceValue(ref Sentence sentence, ref string value, int Line, string FileName)
         {
             var result = value.Split(new char[] { '=' }, 2);
 
@@ -132,8 +132,8 @@ namespace GalEngine
                     sentence.Type = Sentence.GetType(right);
                     break;
 
-                case "Tag":
-                    sentence.Tag = Sentence.Unclude(right);
+                case "Name":
+                    sentence.Name = Sentence.Unclude(right);
                     break;
 
                 case "FilePath":
@@ -170,14 +170,14 @@ namespace GalEngine
 
 
                 default:
-                    DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
+                    DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileName);
                     break;
             }
 
             value = "";
         }
 
-        private void BuildSentenceFromFile(string contents, string FileTag, out List<Sentence> sentences)
+        private void BuildSentenceFromFile(string contents, string FileName, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
 
@@ -195,7 +195,7 @@ namespace GalEngine
             {
                 if (item is '\n') { line++; continue; }
 
-                //Find String Value's Tag
+                //Find String Value's Name
                 if (item is '"') { currentString += item; inString ^= true; continue; }
 
                 //Build String for making Sentence
@@ -208,7 +208,7 @@ namespace GalEngine
                 if (item is '[')
                 {
 
-                    DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileTag);
+                    DebugLayer.Assert(inSentence is true, ErrorType.InvalidResourceFormat, line, FileName);
                     
                     inSentence = true;
 
@@ -218,11 +218,11 @@ namespace GalEngine
                 if (item is ']')
                 {
 
-                    DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileTag);
+                    DebugLayer.Assert(inSentence is false, ErrorType.InvalidResourceFormat, line, FileName);
                     inSentence = false;
 
 
-                    ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
+                    ProcessSentenceValue(ref currentSentence, ref currentString, line, FileName);
 
 
                     DebugLayer.Assert(currentSentence.IsError(), ErrorType.InconsistentResourceParameters,
@@ -234,7 +234,7 @@ namespace GalEngine
                 //Find a value
                 if (item is ',')
                 {
-                    ProcessSentenceValue(ref currentSentence, ref currentString, line, FileTag);
+                    ProcessSentenceValue(ref currentSentence, ref currentString, line, FileName);
 
                     continue;
                 }
@@ -242,12 +242,12 @@ namespace GalEngine
 
 
             DebugLayer.Assert(inSentence is true | inString is true, ErrorType.InvalidResourceFormat,
-                contents.Length, FileTag);
+                contents.Length, FileName);
 
 
         }
 
-        private void BuildSentenceFromList(Dictionary<string, ResourceTag> resourceList, out List<Sentence> sentences)
+        private void BuildSentenceFromList(Dictionary<string, ResourceView> resourceList, out List<Sentence> sentences)
         {
             sentences = new List<Sentence>();
 
@@ -255,31 +255,31 @@ namespace GalEngine
             {
                 Sentence sentence = new Sentence
                 {
-                    Tag = item.Key
+                    Name = item.Key
                 };
 
                 switch (item.Value)
                 {
-                    case ImageTag imageTag:
+                    case ImageView imageView:
                         sentence.Type = ResourceType.Image;
-                        sentence.FilePath = imageTag.FilePath;
+                        sentence.FilePath = imageView.FilePath;
                         break;
 
-                    case AudioTag audioTag:
+                    case AudioView audioView:
                         sentence.Type = ResourceType.Audio;
-                        sentence.FilePath = audioTag.FilePath;
+                        sentence.FilePath = audioView.FilePath;
                         break;
 
-                    case TextFormatTag textFormatTag:
+                    case TextFormatView textFormatView:
                         sentence.Type = ResourceType.TextFormat;
-                        sentence.Fontface = textFormatTag.Fontface;
-                        sentence.Size = textFormatTag.Size;
-                        sentence.Weight = textFormatTag.Weight;
+                        sentence.Fontface = textFormatView.Fontface;
+                        sentence.Size = textFormatView.Size;
+                        sentence.Weight = textFormatView.Weight;
                         break;
 
-                    case BrushTag brushTag:
+                    case BrushView brushView:
                         sentence.Type = ResourceType.Brush;
-                        sentence.Color = brushTag.Color;
+                        sentence.Color = brushView.Color;
                         break;
 
                     default:
@@ -291,9 +291,9 @@ namespace GalEngine
             }
         }
 
-        internal ResListAnalyser(string Tag, string FilePath) : base(Tag, FilePath)
+        internal ResListAnalyser(string Name, string FilePath) : base(Name, FilePath)
         {
-            resourceList = new Dictionary<string, ResourceTag>();
+            resourceList = new Dictionary<string, ResourceView>();
         }
 
         protected override void ProcessReadFile(ref string contents)
@@ -309,19 +309,19 @@ namespace GalEngine
                         break;
 
                     case ResourceType.Image:
-                        resourceList.Add(item.Tag, new ImageTag(item.Tag, item.FilePath));
+                        resourceList.Add(item.Name, new ImageView(item.Name, item.FilePath));
                         break;
 
                     case ResourceType.Audio:
-                        resourceList.Add(item.Tag, new AudioTag(item.Tag, item.FilePath));
+                        resourceList.Add(item.Name, new AudioView(item.Name, item.FilePath));
                         break;
 
                     case ResourceType.TextFormat:
-                        resourceList.Add(item.Tag, new TextFormatTag(item.Tag, item.Fontface, item.Size, item.Weight));
+                        resourceList.Add(item.Name, new TextFormatView(item.Name, item.Fontface, item.Size, item.Weight));
                         break;
 
                     case ResourceType.Brush:
-                        resourceList.Add(item.Tag, new BrushTag(item.Tag, item.Color));
+                        resourceList.Add(item.Name, new BrushView(item.Name, item.Color));
                         break;
 
                     default:

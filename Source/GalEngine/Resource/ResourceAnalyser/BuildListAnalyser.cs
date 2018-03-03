@@ -17,7 +17,7 @@ namespace GalEngine
 
         private class Sentence
         {
-            public string Tag;
+            public string Name;
             public string FilePath;
 
             public static string Include(string input) => '"' + input + '"';
@@ -26,7 +26,7 @@ namespace GalEngine
 
             public override string ToString()
             {
-                return Tag + " = " + Include(FilePath);
+                return Name + " = " + Include(FilePath);
             }
         }
 
@@ -35,35 +35,35 @@ namespace GalEngine
         private Dictionary<string, ResourceAnalyser> resList;
         private Dictionary<string, ResourceAnalyser> configList;
 
-        private void ProcessSentenceValue(ref string value, BlockType blockType, int Line, string FileTag)
+        private void ProcessSentenceValue(ref string value, BlockType blockType, int Line, string FileName)
         {
             Sentence sentence = new Sentence();
 
-            //Build Sentence, left is Tag, right is FilePath
+            //Build Sentence, left is Name, right is FilePath
             var result = value.Split(new char[] { '=' }, 2);
 
-            sentence.Tag = result[0]; sentence.FilePath = Sentence.Unclude(result[1]);
+            sentence.Name = result[0]; sentence.FilePath = Sentence.Unclude(result[1]);
 
             switch (blockType)
             {
                 case BlockType.Unknown:
-                    DebugLayer.ReportError(ErrorType.InvaildFileType, Line, FileTag);
+                    DebugLayer.ReportError(ErrorType.InvaildFileType, Line, FileName);
                     break;
 
                 case BlockType.resList:
                     //In resList Block, create resListAnalyser and load it.
-                    var resListAnalyser = new ResListAnalyser(sentence.Tag, sentence.FilePath);
+                    var resListAnalyser = new ResListAnalyser(sentence.Name, sentence.FilePath);
                     resListAnalyser.LoadAnalyser();
 
-                    resList.Add(sentence.Tag, resListAnalyser);
+                    resList.Add(sentence.Name, resListAnalyser);
                     break;
 
                 case BlockType.gsConfig:
                     //In config Block, create configAnalyser and load it.
-                    var configAnalyser = new ConfigAnalyser(sentence.Tag, sentence.FilePath);
+                    var configAnalyser = new ConfigAnalyser(sentence.Name, sentence.FilePath);
                     configAnalyser.LoadAnalyser();
 
-                    configList.Add(sentence.Tag, configAnalyser);
+                    configList.Add(sentence.Name, configAnalyser);
                     break;
 
                 default:
@@ -73,7 +73,7 @@ namespace GalEngine
             value = "";
         }
 
-        private void ProcessBlock(ref string blockContents, BlockType blockType, int Line, string FileTag)
+        private void ProcessBlock(ref string blockContents, BlockType blockType, int Line, string FileName)
         {
             bool inString = false;
 
@@ -97,19 +97,19 @@ namespace GalEngine
                 //Finish a sentence, we need to process it.
                 if (item is ',')
                 {
-                    ProcessSentenceValue(ref currentString, blockType, Line, FileTag);
+                    ProcessSentenceValue(ref currentString, blockType, Line, FileName);
                     continue;
                 }
 
             }
 
             //The end
-            ProcessSentenceValue(ref currentString, blockType, Line, FileTag);
+            ProcessSentenceValue(ref currentString, blockType, Line, FileName);
 
             blockContents = "";
         }
 
-        private static BlockType GetBlockType(string typeName, int Line, string FileTag)
+        private static BlockType GetBlockType(string typeName, int Line, string FileName)
         {
             switch (typeName)
             {
@@ -118,12 +118,12 @@ namespace GalEngine
                 case "gsConfig":
                     return BlockType.gsConfig;
                 default:
-                    DebugLayer.ReportError(ErrorType.InvaildFileType, Line, FileTag);
+                    DebugLayer.ReportError(ErrorType.InvaildFileType, Line, FileName);
                     return BlockType.Unknown;
             }
         }
 
-        internal BuildListAnalyser(string Tag, string FilePath) : base(Tag, FilePath)
+        internal BuildListAnalyser(string Name, string FilePath) : base(Name, FilePath)
         {
             resList = new Dictionary<string, ResourceAnalyser>();
             configList = new Dictionary<string, ResourceAnalyser>();
@@ -167,10 +167,10 @@ namespace GalEngine
 
                         DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, FilePath);
 
-                        BlockType blockType = GetBlockType(typeName, blockStartLine, Tag);
+                        BlockType blockType = GetBlockType(typeName, blockStartLine, Name);
 
                         //Process a block
-                        ProcessBlock(ref currentBlock, blockType, blockStartLine, Tag);
+                        ProcessBlock(ref currentBlock, blockType, blockStartLine, Name);
 
                         //clean up
                         typeName = "";
@@ -202,7 +202,7 @@ namespace GalEngine
 
                 var sentence = new Sentence()
                 {
-                    Tag = item.Key,
+                    Name = item.Key,
                     FilePath = item.Value.FilePath
                 };
 
@@ -226,7 +226,7 @@ namespace GalEngine
 
                 var sentence = new Sentence()
                 {
-                    Tag = item.Key,
+                    Name = item.Key,
                     FilePath = item.Value.FilePath
                 };
 

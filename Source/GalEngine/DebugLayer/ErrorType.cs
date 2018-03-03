@@ -16,11 +16,11 @@ namespace GalEngine
         /// </summary>
         UnknownResourceType,
         /// <summary>
-        /// Resource Parameters are inconsistent. At Line: {0}, FileTag: {1}.
+        /// Resource Parameters are inconsistent. At Line: {0}, FileName: {1}.
         /// </summary>
         InconsistentResourceParameters,
         /// <summary>
-        /// The Resource format is not right. At Line: {0}, FileTag: {1}.
+        /// The Resource format is not right. At Line: {0}, FileName: {1}.
         /// </summary>
         InvalidResourceFormat,
         /// <summary>
@@ -32,20 +32,16 @@ namespace GalEngine
         /// </summary>
         InvalidValueType,
         /// <summary>
-        /// The file's type is not support. At line: {0}, FileTag: {1}.
+        /// The file's type is not support. At line: {0}, FileName: {1}.
         /// </summary>
         InvaildFileType,
         /// <summary>
-        /// The tag is invaild in {0}.
+        /// The name is invaild in {0}.
         /// </summary>
-        InvaildTag,
+        InvaildName,
         /// <summary>
         /// The member value's name {0} is not contained.
         /// </summary>
-        InvaildMemberValueName,
-        /// <summary>
-        /// The Animation(Name: {0}) has been added to {1}.
-        /// </summary>
-        AnimationIsAdded
+        InvaildMemberValueName
     }
 }

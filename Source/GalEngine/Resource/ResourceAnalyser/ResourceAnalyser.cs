@@ -9,14 +9,14 @@ namespace GalEngine
     public abstract class ResourceAnalyser
     {
         private string filePath;
-        private string tag;
+        private string name;
 
         protected abstract void ProcessReadFile(ref string contents);
         protected abstract void ProcessWriteFile(out string contents);
 
-        internal ResourceAnalyser(string Tag, string FilePath)
+        internal ResourceAnalyser(string Name, string FilePath)
         {
-            tag = Tag;
+            name = Name;
             filePath = FilePath;
 
             GlobalAnalyser.SetValue(this);
@@ -39,7 +39,7 @@ namespace GalEngine
             System.IO.File.WriteAllText(filePath, contents);
         }
 
-        public string Tag => tag;
+        public string Name => name;
         public string FilePath => filePath;
     }
 

@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    abstract class ResourceTag
+    abstract class ResourceView
     {
         private int count;
-        private string tag;
+        private string name;
         private object resource;
 
         protected abstract void ActiveResource(ref object resource);
         protected abstract void DiposeResource(ref object resource);
         
-        public ResourceTag(string Tag)
+        public ResourceView(string Name)
         {
-            tag = Tag;
+            name = Name;
             resource = null;
 
             GlobalResource.SetValue(this);
@@ -39,7 +39,7 @@ namespace GalEngine
             resource = null;
         }
 
-        public string Tag => tag;
+        public string Name => name;
         public int Count => count;
     }
 }

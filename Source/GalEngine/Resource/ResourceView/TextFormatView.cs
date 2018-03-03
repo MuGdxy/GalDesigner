@@ -8,13 +8,13 @@ using Presenter;
 
 namespace GalEngine
 {
-    class TextFormatTag : ResourceTag
+    class TextFormatView : ResourceView
     {
         private string fontFace;
         private float fontSize;
         private int fontWeight;
 
-        public TextFormatTag(string Tag, string Fontface, float Size, int Weight) : base(Tag)
+        public TextFormatView(string name, string Fontface, float Size, int Weight) : base(name)
         {
             fontFace = Fontface;
             fontSize = Size;

@@ -54,7 +54,7 @@ namespace GalEngine
 
         private string text = "";
 
-        private string tag = "";
+        private string name = "";
         
         private List<VisualObject> children = new List<VisualObject>();
 
@@ -90,7 +90,7 @@ namespace GalEngine
             {
                 if (memberResourceTag[i] is null)
                     memberResource[i] = defaultResource[i];
-                else memberResource[i] = GlobalResource.GetValue<ResourceTag>(memberResourceTag[i]).Use() as CanvasResource;
+                else memberResource[i] = GlobalResource.GetValue<ResourceView>(memberResourceTag[i]).Use() as CanvasResource;
             }
 
             Utilities.Dipose(ref textInstance);
@@ -225,7 +225,7 @@ namespace GalEngine
 
         public VisualObject(string Tag, int Width, int Height)
         {
-            tag = Tag;
+            name = Tag;
 
             width = Width;
             height = Height;
@@ -243,7 +243,7 @@ namespace GalEngine
             {
                 if (memberResourceTag[i] != null)
                 {
-                    GlobalResource.GetValue<ResourceTag>(memberResourceTag[i]).UnUse();
+                    GlobalResource.GetValue<ResourceView>(memberResourceTag[i]).UnUse();
                     memberResourceTag[i] = null;
                 }
             }
@@ -348,14 +348,14 @@ namespace GalEngine
                     var which = Enum.Parse(typeof(MemberResource), memberName);
 
                     if (memberResourceTag[(int)which] != null)
-                        GlobalResource.GetValue<ResourceTag>(memberResourceTag[(int)which]).UnUse();
+                        GlobalResource.GetValue<ResourceView>(memberResourceTag[(int)which]).UnUse();
 
                     memberResourceTag[(int)which] = value as string;
 
                     if (value is null)
                         memberResource[(int)which] = defaultResource[(int)which];
                     else
-                        memberResource[(int)which] = GlobalResource.GetValue<ResourceTag>(value as string).Use() as CanvasResource;
+                        memberResource[(int)which] = GlobalResource.GetValue<ResourceView>(value as string).Use() as CanvasResource;
                     
                     return;
             }
@@ -395,7 +395,7 @@ namespace GalEngine
 
         public bool IsMouseHover => isMouseHover;
 
-        public string Tag => tag; 
+        public string Name => name; 
 
         public List<VisualObject> Children
         {

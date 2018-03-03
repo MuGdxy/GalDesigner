@@ -54,12 +54,12 @@ namespace GalEngine
         static DebugLayer()
         {
             errorText.Add(ErrorType.UnknownResourceType, "Get Unknown Resource Type in resList.");
-            errorText.Add(ErrorType.InconsistentResourceParameters, "Resource Parameters are inconsistent. At Line: {0}, FileTag: {1}.");
-            errorText.Add(ErrorType.InvalidResourceFormat, "The Resource format is not right. At Line: {0}, FileTag: {1}.");
+            errorText.Add(ErrorType.InconsistentResourceParameters, "Resource Parameters are inconsistent. At Line: {0}, FileName: {1}.");
+            errorText.Add(ErrorType.InvalidResourceFormat, "The Resource format is not right. At Line: {0}, FileName: {1}.");
             errorText.Add(ErrorType.FileIsNotExist, "The FilePath {0} is not exist.");
             errorText.Add(ErrorType.InvalidValueType, "The value's type is not support.");
-            errorText.Add(ErrorType.InvaildFileType, "The file's type is not support. At line: {0}, FileTag: {1}.");
-            errorText.Add(ErrorType.InvaildTag, "The tag is invaild in {0}.");
+            errorText.Add(ErrorType.InvaildFileType, "The file's type is not support. At line: {0}, FileName: {1}.");
+            errorText.Add(ErrorType.InvaildName, "The name is invaild in {0}.");
             errorText.Add(ErrorType.InvaildMemberValueName, "The member value's name {0} is not contained.");
 
             warningText.Add(WarningType.NoTargetOfAnimation, "Can not find the target value on starting animation(Name: {0}).");

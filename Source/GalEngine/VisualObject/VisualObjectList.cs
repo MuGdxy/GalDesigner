@@ -12,12 +12,12 @@ namespace GalEngine
 
         internal static void Add(VisualObject visualObject)
         {
-            visualObjectList[visualObject.Tag] = visualObject;
+            visualObjectList[visualObject.Name] = visualObject;
         }
 
         internal static void Remove(VisualObject visualObject)
         {
-            visualObjectList.Remove(visualObject.Tag);
+            visualObjectList.Remove(visualObject.Name);
         }
 
         public static Dictionary<string, VisualObject> Element => visualObjectList;

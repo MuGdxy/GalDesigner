@@ -48,7 +48,7 @@ namespace GalEngine
                 }
             }
 
-            public static ValueType GetType(string value, int Line, string FileTag)
+            public static ValueType GetType(string value, int Line, string FileName)
             {
                 //Test String
                 if (value[0] is '"' && value[value.Length - 1] is '"') return ValueType.String;
@@ -65,12 +65,12 @@ namespace GalEngine
                     {
                         PointCount++;
 
-                        if (PointCount > 1) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
+                        if (PointCount > 1) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileName);
 
                         continue;
                     }
 
-                    if (Utilities.IsNumber(item) is false) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileTag);
+                    if (Utilities.IsNumber(item) is false) DebugLayer.ReportError(ErrorType.InconsistentResourceParameters, Line, FileName);
                 }
 
                 if (value.Contains('.')) return ValueType.Float;
@@ -109,7 +109,7 @@ namespace GalEngine
 
         private Dictionary<string, object> valueList;
 
-        private void ProcessSentenceValue(ref string value, int Line, string FileTag)
+        private void ProcessSentenceValue(ref string value, int Line, string FileName)
         {
             Sentence sentence = new Sentence();
 
@@ -118,7 +118,7 @@ namespace GalEngine
             var left = result[0]; var right = result[1];
 
             sentence.ValueName = left;
-            sentence.Type = Sentence.GetType(right, Line, FileTag);
+            sentence.Type = Sentence.GetType(right, Line, FileName);
 
             switch (sentence.Type)
             {
@@ -150,7 +150,7 @@ namespace GalEngine
             value = "";
         }
 
-        internal ConfigAnalyser(string Tag, string FilePath) : base(Tag, FilePath)
+        internal ConfigAnalyser(string Name, string FilePath) : base(Name, FilePath)
         {
             valueList = new Dictionary<string, object>();   
         }
@@ -179,7 +179,7 @@ namespace GalEngine
 
                 if (item is '{')
                 {
-                    DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, Tag);
+                    DebugLayer.Assert(inCodeBlock is true, ErrorType.InvalidResourceFormat, line, Name);
 
                     inCodeBlock = true;
                     continue;
@@ -188,24 +188,24 @@ namespace GalEngine
                 //Find Block
                 if (item is '}')
                 {
-                    DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, Tag);
+                    DebugLayer.Assert(inCodeBlock is false, ErrorType.InvalidResourceFormat, line, Name);
 
                     inCodeBlock = false;
                     
-                    DebugLayer.Assert(currentString is "", ErrorType.InvalidResourceFormat, line, Tag);
+                    DebugLayer.Assert(currentString is "", ErrorType.InvalidResourceFormat, line, Name);
 
-                    ProcessSentenceValue(ref currentString, line, Tag); continue;
+                    ProcessSentenceValue(ref currentString, line, Name); continue;
                 }
 
                 if (item is ',')
                 {
-                    ProcessSentenceValue(ref currentString, line, Tag); continue;
+                    ProcessSentenceValue(ref currentString, line, Name); continue;
                 }
 
             }
 
             if (inCodeBlock is true || inString is true)
-                DebugLayer.ReportError(ErrorType.InvalidResourceFormat, line, Tag);
+                DebugLayer.ReportError(ErrorType.InvalidResourceFormat, line, Name);
         }
 
         protected override void ProcessWriteFile(out string contents)

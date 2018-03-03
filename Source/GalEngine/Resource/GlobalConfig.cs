@@ -17,14 +17,14 @@ namespace GalEngine
         { 
         }
 
-        public static void SetValue(string Tag, object value)
+        public static void SetValue(string Name, object value)
         {
-            GlobalValue.SetValue(Tag, value);
+            GlobalValue.SetValue(Name, value);
         }
 
-        public static object GetValue(string Tag) => GlobalValue.GetValue(Tag);
+        public static object GetValue(string Name) => GlobalValue.GetValue(Name);
 
-        public static T GetValue<T>(string Tag) => GlobalValue.GetValue<T>(Tag);
+        public static T GetValue<T>(string Name) => GlobalValue.GetValue<T>(Name);
 
         public static int Width
         {

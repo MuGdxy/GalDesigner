@@ -18,18 +18,18 @@ namespace GalEngine
         internal static Dictionary<string, ResourceAnalyser> AnalyserList => analyserList;
 
         public static void SetValue(ResourceAnalyser resourceAnalyser)
-            => analyserList[resourceAnalyser.Tag] = resourceAnalyser;
+            => analyserList[resourceAnalyser.Name] = resourceAnalyser;
         
-        public static ResourceAnalyser GetValue(string Tag)
+        public static ResourceAnalyser GetValue(string Name)
         {
-            return GetValue<ResourceAnalyser>(Tag);
+            return GetValue<ResourceAnalyser>(Name);
         }
 
-        public static T GetValue<T>(string Tag) where T : ResourceAnalyser
+        public static T GetValue<T>(string Name) where T : ResourceAnalyser
         {
-            DebugLayer.Assert(analyserList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlobalAnalyser");
+            DebugLayer.Assert(analyserList.ContainsKey(Name) is false, ErrorType.InvaildName, "GlobalAnalyser");
 
-            return analyserList[Tag] as T;
+            return analyserList[Name] as T;
         }
     }
 }

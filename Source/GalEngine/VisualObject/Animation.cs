@@ -33,63 +33,7 @@ namespace GalEngine
 
         private Type templateType = null;
 
-        private int currentPreFrame = 0; // < TimePos
-        private int currentLastFrame = 0; // >=TimePos
-        private float currentTimePos = 0;
-
-        private bool isStarting = false;
-        private bool isLooping = false;
-
-        private object target = null;
-
         private string name = null;
-
-        internal void OnAdd(object who)
-        {
-            DebugLayer.Assert(who != null, ErrorType.AnimationIsAdded, name, target);
-
-            target = who;
-        }
-
-        internal void OnRemove()
-        {
-            target = null;
-        }
-
-        internal void LoopCurrentTime()
-        {
-            while (currentTimePos - EndTime > 0)
-                currentTimePos -= EndTime;
-        }
-
-        internal void Update(ref T value, float passTime)
-        {
-            if (isStarting is false) return;
-
-            currentTimePos += passTime;
-
-            if (currentTimePos > EndTime)
-            {
-                if (isLooping is true)
-                    LoopCurrentTime();
-                else
-                {
-                    Stop();
-                    return;
-                }
-            }
-
-            while (currentPreFrame < frames.Count)
-            {
-                if (currentTimePos > frames[currentPreFrame].TimePos)
-                    currentPreFrame++;
-                else break;
-            }
-
-            currentLastFrame = currentPreFrame + 1;
-
-            value = GetFrame(currentTimePos, frames[currentPreFrame], frames[currentLastFrame]).Value;
-        }
 
         protected virtual KeyFrame<T> GetFrame(float timePos,
             KeyFrame<T> preFrame, KeyFrame<T> lastFrame)
@@ -135,57 +79,8 @@ namespace GalEngine
             name = animationName;
         }
 
-        public void Start(float startTime = 0)
-        {
-            DebugLayer.Assert(target is null, WarningType.NoTargetOfAnimation, name);
-
-            currentTimePos = startTime;
-
-            isStarting = true;
-
-            //the startTime > EndTime
-            if (currentTimePos > EndTime)
-            {
-                if (isLooping is true)
-                    LoopCurrentTime();
-                else
-                {
-                    isStarting = false;
-                    return;
-                }
-            }
-
-            for (int i = 0; i < frames.Count; i++)
-            {
-                if (frames[i].TimePos >= currentTimePos)
-                {
-                    currentLastFrame = i;
-                    currentPreFrame = i - 1;
-                    break;
-                }
-            }
-        }
-
-        public void Continue()
-        {
-            DebugLayer.Assert(target is null, WarningType.NoTargetOfAnimation, name);
-
-            isStarting = true;
-        }
-
-        public void Stop()
-        {
-            isStarting = false;
-        }
-
         public float EndTime => frames[frames.Count - 1].TimePos;
 
-        public bool IsStarting => IsStarting;
-
-        public bool IsLooping
-        {
-            set => isLooping = value;
-            get => isLooping;
-        }
+        public string Name => name;
     }
 }

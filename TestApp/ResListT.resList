@@ -1,7 +1,7 @@
-[Type = Brush, Tag = "Red", Red = 1, Green = 0, Blue = 0, Alpha = 1]
+[Type = Brush, Name = "Red", Red = 1, Green = 0, Blue = 0, Alpha = 1]
 
-[Type = Brush, Tag = "White", Red = 1, Green = 1, Blue = 1, Alpha = 1]
+[Type = Brush, Name = "White", Red = 1, Green = 1, Blue = 1, Alpha = 1]
 
-[Type = Brush, Tag = "Blue", Red = 0, Green = 0, Blue = 1, Alpha = 1]
+[Type = Brush, Name = "Blue", Red = 0, Green = 0, Blue = 1, Alpha = 1]
 
-[Type = Image, Tag = "BackGround", FilePath = "BackGround.jpg"]
+[Type = Image, Name = "BackGround", FilePath = "BackGround.jpg"]

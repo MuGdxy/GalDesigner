@@ -21,7 +21,7 @@ namespace TestApp
             {
                 ImageObject.SetMemberValue(SystemProperty.BackGroundImage, "BackGround");
 
-                AddVisualObject(ImageObject.Tag);
+                AddVisualObject(ImageObject.Name);
             }
         }
 

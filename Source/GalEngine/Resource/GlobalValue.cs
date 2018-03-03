@@ -39,7 +39,7 @@ namespace GalEngine
 
         public static T GetValue<T>(string Tag)
         {
-            DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildTag, "GlovalValue");
+            DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildName, "GlovalValue");
 
             return (T)valueList[Tag];
         }

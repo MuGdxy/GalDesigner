@@ -62,12 +62,12 @@
     <Compile Include="Resource\ResourceAnalyser\ConfigAnalyser.cs" />
     <Compile Include="Resource\ResourceAnalyser\ResListAnalyser.cs" />
     <Compile Include="Resource\ResourceAnalyser\ResourceAnalyser.cs" />
-    <Compile Include="Resource\ResourceTag\AudioTag.cs" />
-    <Compile Include="Resource\ResourceTag\BrushTag.cs" />
-    <Compile Include="Resource\ResourceTag\TextFormatTag.cs" />
     <Compile Include="Resource\GlobalResource.cs" />
-    <Compile Include="Resource\ResourceTag\ImageTag.cs" />
-    <Compile Include="Resource\ResourceTag\ResourceTag.cs" />
+    <Compile Include="Resource\ResourceView\AudioView.cs" />
+    <Compile Include="Resource\ResourceView\BrushView.cs" />
+    <Compile Include="Resource\ResourceView\ImageView.cs" />
+    <Compile Include="Resource\ResourceView\ResourceView.cs" />
+    <Compile Include="Resource\ResourceView\TextFormatView.cs" />
     <Compile Include="SystemProperty.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Utilities.cs" />

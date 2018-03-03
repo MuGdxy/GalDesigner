@@ -8,12 +8,15 @@ using Presenter;
 
 namespace GalEngine
 {
-    class ImageTag : ResourceTag
+    class AudioView : ResourceView
     {
+        private VoicePlayer voicePlayer;
+
         private string filePath;
 
-        public ImageTag(string Tag, string FilePath) : base(Tag)
+        public AudioView(string name, string FilePath) : base(name)
         {
+            voicePlayer = null;
             filePath = FilePath;
         }
 
@@ -21,16 +24,21 @@ namespace GalEngine
         {
             if (resource is null)
             {
-                DebugLayer.Assert(System.IO.File.Exists(filePath) is false, ErrorType.FileIsNotExist, filePath);
+                DebugLayer.Assert(System.IO.File.Exists(filePath) is false,
+                     ErrorType.FileIsNotExist, filePath);
 
-                resource = new CanvasImage(filePath);
+                resource = new VoiceBuffer(filePath);
+                voicePlayer = new VoicePlayer(resource as VoiceBuffer);
             }
         }
 
         protected override void DiposeResource(ref object resource)
-        {
+        { 
+            Utilities.Dipose(ref voicePlayer);
             Utilities.Dipose(ref resource);
         }
+
+        public VoicePlayer VoicePlayer => voicePlayer;
 
         public string FilePath => filePath;
     }
