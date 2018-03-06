@@ -12,7 +12,7 @@ namespace GalEngine
 
         internal static void AddPage(GenericPage page)
         {
-            pageList[page.Tag] = page;
+            pageList[page.Name] = page;
         }
 
         public static Dictionary<string, GenericPage> Element => pageList;

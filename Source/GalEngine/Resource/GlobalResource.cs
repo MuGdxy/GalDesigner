@@ -8,11 +8,11 @@ namespace GalEngine
 {
     static class GlobalResource
     {
-        private static Dictionary<string, ResourceView> resourceTagList = new Dictionary<string, ResourceView>();
+        private static Dictionary<string, ResourceView> resourceViewList = new Dictionary<string, ResourceView>();
 
         public static void SetValue(ResourceView resourceTag)
         {
-            resourceTagList[resourceTag.Name] = resourceTag;
+            resourceViewList[resourceTag.Name] = resourceTag;
         }
 
         public static ResourceView GetValue(string Tag)
@@ -22,9 +22,9 @@ namespace GalEngine
 
         public static T GetValue<T>(string Tag) where T : ResourceView
         {
-            DebugLayer.Assert(resourceTagList.ContainsKey(Tag) is false, ErrorType.InvaildName, "GlobalResource");
+            DebugLayer.Assert(resourceViewList.ContainsKey(Tag) is false, ErrorType.InvaildName, "GlobalResource");
 
-            return resourceTagList[Tag] as T;
+            return resourceViewList[Tag] as T;
         }
     }
 }

@@ -33,7 +33,7 @@ namespace GalEngine
 
         private CanvasResource[] memberResource = new CanvasResource[(int)MemberResource.Count];
 
-        private string[] memberResourceTag = new string[(int)MemberResource.Count];
+        private string[] memberResourceView = new string[(int)MemberResource.Count];
 
         private Dictionary<string, object> memberValueList = new Dictionary<string, object>();
 
@@ -88,9 +88,9 @@ namespace GalEngine
 
             for (int i = 0; i < (int)MemberResource.Count; i++)
             {
-                if (memberResourceTag[i] is null)
+                if (memberResourceView[i] is null)
                     memberResource[i] = defaultResource[i];
-                else memberResource[i] = GlobalResource.GetValue<ResourceView>(memberResourceTag[i]).Use() as CanvasResource;
+                else memberResource[i] = GlobalResource.GetValue<ResourceView>(memberResourceView[i]).Use() as CanvasResource;
             }
 
             Utilities.Dipose(ref textInstance);
@@ -116,7 +116,7 @@ namespace GalEngine
             if (borderSize != 0f)
                 Canvas.DrawRectangle(0, 0, width, height, memberResource[(int)MemberResource.BorderBrush] as CanvasBrush, borderSize);
 
-            if (memberResourceTag[(int)MemberResource.BackGroundImage] is null)
+            if (memberResourceView[(int)MemberResource.BackGroundImage] is null)
                 Canvas.FillRectangle(0, 0, width, height, memberResource[(int)MemberResource.BackGroundBrush] as CanvasBrush);
             else
                 Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
@@ -223,9 +223,9 @@ namespace GalEngine
             }
         }
 
-        public VisualObject(string Tag, int Width, int Height)
+        public VisualObject(string Name, int Width, int Height)
         {
-            name = Tag;
+            name = Name;
 
             width = Width;
             height = Height;
@@ -241,10 +241,10 @@ namespace GalEngine
 
             for (int i = 0; i < (int)MemberResource.Count; i++)
             {
-                if (memberResourceTag[i] != null)
+                if (memberResourceView[i] != null)
                 {
-                    GlobalResource.GetValue<ResourceView>(memberResourceTag[i]).UnUse();
-                    memberResourceTag[i] = null;
+                    GlobalResource.GetValue<ResourceView>(memberResourceView[i]).UnUse();
+                    memberResourceView[i] = null;
                 }
             }
 
@@ -347,10 +347,10 @@ namespace GalEngine
                 case "BackGroundBrush":
                     var which = Enum.Parse(typeof(MemberResource), memberName);
 
-                    if (memberResourceTag[(int)which] != null)
-                        GlobalResource.GetValue<ResourceView>(memberResourceTag[(int)which]).UnUse();
+                    if (memberResourceView[(int)which] != null)
+                        GlobalResource.GetValue<ResourceView>(memberResourceView[(int)which]).UnUse();
 
-                    memberResourceTag[(int)which] = value as string;
+                    memberResourceView[(int)which] = value as string;
 
                     if (value is null)
                         memberResource[(int)which] = defaultResource[(int)which];
@@ -375,14 +375,14 @@ namespace GalEngine
                 pointY > positionY && pointY < positionY + height;
         }
 
-        public void AddChildren(string tag)
+        public void AddChildren(string name)
         {
-            children.Add(VisualObjectList.Element[tag]);
+            children.Add(VisualObjectList.GetVisualObject(name));
         }
 
-        public void RemoveChildren(string tag)
+        public void RemoveChildren(string name)
         {
-            children.Remove(VisualObjectList.Element[tag]);
+            children.Remove(VisualObjectList.GetVisualObject(name));
         }
 
         public event UpdateHandler Update;

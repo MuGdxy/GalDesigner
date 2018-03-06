@@ -47,6 +47,12 @@ protected virtual KeyFrame<T> GetFrame(float timePos,
     }
 ```
 
+## Create an Animation
+
+If you want to create an animation, you can use `new` to create it with `KeyFrames` and `AnimationName`.
+But you should notice if the `KeyFrames` contains a keyframe whose `TimePos` is `0`.
+If not, we will add a keyframe(`TimePos = 0, value = CurrentValue`).
+
 ## How to Use Animation
 
 The Animation only define a way to get frame data.

@@ -20,6 +20,9 @@ namespace GalEngine
             visualObjectList.Remove(visualObject.Name);
         }
 
-        public static Dictionary<string, VisualObject> Element => visualObjectList;
+        public static VisualObject GetVisualObject(string name)
+        {
+            return visualObjectList[name];
+        }
     }
 }

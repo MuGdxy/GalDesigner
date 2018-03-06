@@ -10,7 +10,7 @@ namespace GalEngine
 {
     public class GenericPage
     {
-        private string tag;
+        private string name;
 
         private List<VisualObject> visualObjects = new List<VisualObject>();
 
@@ -89,21 +89,21 @@ namespace GalEngine
             }
         }
 
-        public GenericPage(string Tag)
+        public GenericPage(string Name)
         {
-            tag = Tag;
+            name = Name;
 
             PageList.AddPage(this);
         }
 
-        public void AddVisualObject(string tag)
+        public void AddVisualObject(string name)
         {
-            visualObjects.Add(VisualObjectList.Element[tag]);
+            visualObjects.Add(VisualObjectList.GetVisualObject(name));
         }
 
-        public void RemoveVisualObject(string tag)
+        public void RemoveVisualObject(string name)
         {
-            visualObjects.Remove(VisualObjectList.Element[tag]);
+            visualObjects.Remove(VisualObjectList.GetVisualObject(name));
         }
 
         public virtual void OnKeyEvent(object sender, KeyEventArgs e) { }
@@ -120,6 +120,6 @@ namespace GalEngine
         public event KeyEventHandler KeyEvent;
         public event SizeChangeEventHandler SizeChange;
 
-        public string Tag => tag;
+        public string Name => name;
     }
 }

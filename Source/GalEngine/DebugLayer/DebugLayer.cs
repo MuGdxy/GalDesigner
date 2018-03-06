@@ -62,6 +62,7 @@ namespace GalEngine
             errorText.Add(ErrorType.InvaildName, "The name is invaild in {0}.");
             errorText.Add(ErrorType.InvaildMemberValueName, "The member value's name {0} is not contained.");
 
+            warningText.Add(WarningType.NoFramesInAnimation, "The Animation named {0} has not any KeyFrames.");
             warningText.Add(WarningType.NoTargetOfAnimation, "Can not find the target value on starting animation(Name: {0}).");
         }
 
