@@ -74,6 +74,7 @@ namespace GalEngine
                 else return frames[frames.Count - 1].TimePos;
             }
         }
+
         public string Name => name;
     }
 }

@@ -27,7 +27,7 @@ namespace TestApp
 
 
         static void Main(string[] args)
-        { 
+        {
 #if false
 
 #else

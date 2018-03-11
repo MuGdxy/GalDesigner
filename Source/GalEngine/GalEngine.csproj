@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseStruct\Conditions.cs" />
+    <Compile Include="BaseStruct\Graph.cs" />
     <Compile Include="BaseStruct\Rect.cs" />
     <Compile Include="DebugLayer\DebugCommand.cs" />
     <Compile Include="DebugLayer\DebugLayer.cs" />
