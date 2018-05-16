@@ -21,7 +21,7 @@ namespace GalEngine
         {
             Utilities.Dipose(ref renderSurface);
             Utilities.Dipose(ref templateSurface);
-
+            
             renderSurface = new TextureFace(Width, Height);
             templateSurface = new TextureFace(Width, Height);
 

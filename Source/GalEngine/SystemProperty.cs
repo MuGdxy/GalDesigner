@@ -8,6 +8,8 @@ namespace GalEngine
 {
     public static class SystemProperty
     {
+        private static string specialThanksName = null;
+
         public static string Width => "Width";
         public static string Height => "Height";
         public static string AppName => "AppName";
@@ -25,5 +27,12 @@ namespace GalEngine
         public static string BorderSize => "BorderSize";
         public static string Opacity => "Opacity";
         public static string IsPresented => "IsPresented";
+
+        public static string SpecialThanksName => specialThanksName;
+
+        static SystemProperty()
+        {
+            specialThanksName = Encoding.UTF8.GetString(Properties.Resources.SpecialThanks);
+        }
     }
 }

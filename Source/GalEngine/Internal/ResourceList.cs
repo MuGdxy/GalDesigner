@@ -16,6 +16,7 @@ namespace GalEngine.Internal
         private static CanvasBrush redBrush = new CanvasBrush(1, 0, 0, 1);
         private static CanvasBrush greenBrush = new CanvasBrush(0, 1, 0, 1);
         private static CanvasBrush whiteBrush = new CanvasBrush(1, 1, 1, 1);
+        private static CanvasBrush goldBrush = new CanvasBrush(1, 0.8431f, 0, 1);
 
         private static CanvasTextFormat defaultTextFormat = new CanvasTextFormat("Consolas", 10);
 
@@ -24,6 +25,7 @@ namespace GalEngine.Internal
         public static CanvasBrush RedBrush => redBrush;
         public static CanvasBrush GreenBrush => greenBrush;
         public static CanvasBrush WhiteBrush => whiteBrush;
+        public static CanvasBrush GoldBrush => goldBrush;
 
         public static CanvasTextFormat DefaultTextFormat => defaultTextFormat;
 

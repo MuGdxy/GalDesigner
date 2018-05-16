@@ -466,6 +466,11 @@ namespace GalEngine
                     ClearCommandList();
 
                     return true;
+                case "SpecialThanks":
+                    WriteCommand(SystemProperty.SpecialThanksName, ResourceList.GoldBrush);
+
+                    return true;
+
                 default:
                     break;
             }
