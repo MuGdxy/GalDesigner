@@ -45,6 +45,7 @@
     <Compile Include="BaseStruct\Conditions.cs" />
     <Compile Include="BaseStruct\Graph.cs" />
     <Compile Include="BaseStruct\Rect.cs" />
+    <Compile Include="BaseStruct\Timer.cs" />
     <Compile Include="DebugLayer\DebugCommand.cs" />
     <Compile Include="DebugLayer\DebugLayer.cs" />
     <Compile Include="DebugLayer\ErrorType.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="VisualObject\Animation.cs" />
     <Compile Include="VisualObject\AnimationList.cs" />
     <Compile Include="VisualObject\Animator.cs" />
+    <Compile Include="VisualObject\AnimatorList.cs" />
     <Compile Include="VisualObject\GenericPage.cs" />
     <Compile Include="VisualObject\PageList.cs" />
     <Compile Include="VisualObject\VisualObject.cs" />

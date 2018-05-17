@@ -42,6 +42,14 @@ namespace GalEngine
         /// <summary>
         /// The member value's name {0} is not contained.
         /// </summary>
-        InvaildMemberValueName
+        InvaildMemberValueName,
+        /// <summary>
+        /// You can not add the animation: {0} when the animator: {1} is running.
+        /// </summary>
+        CanNotAddAnimationWhenAnimatorRun,
+        /// <summary>
+        /// The Animation named {0} must have more than two keyframes.
+        /// </summary>
+        MoreFramesNeedInAnimation
     }
 }

@@ -61,8 +61,9 @@ namespace GalEngine
             errorText.Add(ErrorType.InvaildFileType, "The file's type is not support. At line: {0}, FileName: {1}.");
             errorText.Add(ErrorType.InvaildName, "The name is invaild in {0}.");
             errorText.Add(ErrorType.InvaildMemberValueName, "The member value's name {0} is not contained.");
+            errorText.Add(ErrorType.CanNotAddAnimationWhenAnimatorRun, "You can not add the animation: {0} when the animator: {1} is running.");
+            errorText.Add(ErrorType.MoreFramesNeedInAnimation, "The Animation named {0} must have more than two keyframes.");
 
-            warningText.Add(WarningType.NoFramesInAnimation, "The Animation named {0} has not any KeyFrames.");
             warningText.Add(WarningType.NoTargetOfAnimation, "Can not find the target value on starting animation(Name: {0}).");
         }
 

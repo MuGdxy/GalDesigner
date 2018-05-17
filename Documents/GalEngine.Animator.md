@@ -9,9 +9,21 @@ An animator is an animation group. It cantains some animations and we run these 
 
 There are some function:
 
-- Add(Animation animation): Add an animation into the animator.
-- Remove(Animation animation): Remove an animation from the animator(if there more than one, removes all).
-- Run(): Start the animator.
+- Add(string targetObject, string targetMember, Animation animation, float startTime);
+- Run();
+
+### Add
+
+- targetObject: Which VisualObject that we want to use the animation.
+- targetMember: Which MemberValue in the VisualObject that we want to transform.
+- animation: Which animation.
+- startTime: The time we start the animation
+
+## The Behavior
+
+When we start the animator, the timer start to count. If it passes an animation's start time, we will add it into the processing list.
+
+If an animation is in the processing list, we will start the animation.
 
 ## Why We do not Use the Graph ?
 

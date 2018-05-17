@@ -213,6 +213,9 @@ namespace GalEngine
             //Check State
             CheckConfigValue();
 
+            //Update Animator
+            AnimatorList.Update();
+
             //Render And Present
             OnRender();
 #if DEBUG

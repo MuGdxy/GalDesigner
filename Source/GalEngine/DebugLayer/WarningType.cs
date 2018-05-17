@@ -14,10 +14,6 @@ namespace GalEngine
         /// <summary>
         /// Can not find the target value on starting animation(Name: {0}).
         /// </summary>
-        NoTargetOfAnimation,
-        /// <summary>
-        /// The Animation named {0} has not any KeyFrames.
-        /// </summary>
-        NoFramesInAnimation
+        NoTargetOfAnimation
     }
 }

@@ -33,7 +33,20 @@ namespace GalEngine
         
         private string name = null;
 
-        protected virtual KeyFrame GetFrame(float timePos,
+        internal List<KeyFrame> Frames => frames;
+
+        public float EndTime
+        {
+            get
+            {
+                if (frames.Count is 0) return 0;
+                return frames[frames.Count - 1].TimePos;
+            }
+        }
+
+        public string Name => name;
+
+        internal virtual KeyFrame GetFrame(float timePos,
             KeyFrame preFrame, KeyFrame lastFrame)
         {
             float preDistance = timePos - preFrame.TimePos;
@@ -59,22 +72,11 @@ namespace GalEngine
             frames = Frames;
             frames.Sort();
 
-            DebugLayer.Assert(frames.Count is 0, WarningType.NoFramesInAnimation, animationName);
+            DebugLayer.Assert(frames.Count < 2, ErrorType.MoreFramesNeedInAnimation, animationName);
 
             name = animationName;
 
             AnimationList.Add(this);
         }
-
-        public float EndTime
-        {
-            get
-            {
-                if (frames.Count is 0) return 0;
-                else return frames[frames.Count - 1].TimePos;
-            }
-        }
-
-        public string Name => name;
     }
 }

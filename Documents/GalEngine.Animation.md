@@ -20,31 +20,16 @@ A keyFrame must contain TimePos and Data.
 There is a default way to get frame, but you also can rewrite it.
 
 ```C#
-protected virtual KeyFrame<T> GetFrame(float timePos,
-    KeyFrame<T> preFrame, KeyFrame<T> lastFrame)
-    {
-        //int and float, we use the linear.
-        switch (templateType.Name)
+        protected virtual KeyFrame GetFrame(float timePos,
+            KeyFrame preFrame, KeyFrame lastFrame)
         {
-            case "Int32":
-            case "Single":
-                float linearScale = (timePos - preFrame.TimePos) / (lastFrame.TimePos - preFrame.TimePos);
-                float preValue = (float)(preFrame.Value as object);
-                float lastValue = (float)(lastFrame.Value as object);
-                float result = (lastValue - preValue) * linearScale;
-                    
-                return new KeyFrame<T>((T)(result as object), timePos);
-            default:
-                break;
+            float preDistance = timePos - preFrame.TimePos;
+            float lastDistance = lastFrame.TimePos - timePos;
+
+            if (preDistance <= lastDistance)
+                return preFrame;
+            else return lastFrame;
         }
-
-        float preDistance = timePos - preFrame.TimePos;
-        float lastDistance = lastFrame.TimePos - timePos;
-
-        if (preDistance <= lastDistance)
-            return preFrame;
-        else return lastFrame;
-    }
 ```
 
 ## Create an Animation
