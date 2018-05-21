@@ -75,7 +75,6 @@ namespace Presenter
 
         ~VoicePlayer()
         {
-            sourceVoice.DestroyVoice();
             sourceVoice.Dispose();
         }
 

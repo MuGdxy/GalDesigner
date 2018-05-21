@@ -259,3 +259,11 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/TestApp/Resource/小小恋歌.wav
+/TestApp/Resource/婚礼进行曲.wav
+/TestApp/Resource/RightSayingBox.png
+/TestApp/Resource/Player3.png
+/TestApp/Resource/Player2.png
+/TestApp/Resource/Player1.png
+/TestApp/Resource/LeftSayingBox.png
+/TestApp/Resource/BackGround.jpg

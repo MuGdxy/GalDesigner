@@ -8,7 +8,7 @@ using Builder;
 
 namespace GalEngine
 {
-    public class GenericPage
+    public class GenericScene
     {
         private string name;
 
@@ -89,11 +89,11 @@ namespace GalEngine
             }
         }
 
-        public GenericPage(string Name)
+        public GenericScene(string Name)
         {
             name = Name;
 
-            PageList.AddPage(this);
+            SceneList.AddScene(this);
         }
 
         public void AddVisualObject(string name)

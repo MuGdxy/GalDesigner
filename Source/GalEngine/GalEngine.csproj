@@ -83,8 +83,8 @@
     <Compile Include="VisualObject\AnimationList.cs" />
     <Compile Include="VisualObject\Animator.cs" />
     <Compile Include="VisualObject\AnimatorList.cs" />
-    <Compile Include="VisualObject\GenericPage.cs" />
-    <Compile Include="VisualObject\PageList.cs" />
+    <Compile Include="VisualObject\GenericScene.cs" />
+    <Compile Include="VisualObject\SceneList.cs" />
     <Compile Include="VisualObject\VisualObject.cs" />
     <Compile Include="VisualObject\VisualObjectList.cs" />
   </ItemGroup>

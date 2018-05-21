@@ -48,6 +48,7 @@ namespace GalEngine
 
                     if (nextFrame == animation.Frames.Count)
                     {
+                        target.SetMemberValue(targetMember, animation.Frames[preFrame].Value);
                         Reset(); return;
                     }
                 }
@@ -78,6 +79,8 @@ namespace GalEngine
 
         private float endTime = 0;
 
+        private float speed = 1;
+
         private Timer timer = new Timer();
 
         private List<AnimationItem> animationItems = new List<AnimationItem>();
@@ -89,12 +92,25 @@ namespace GalEngine
         public bool IsRun { get => isRun; }
 
         public bool IsRepeat { get => isRepeat; set => isRepeat = value; }
+        public float Speed { get => speed; set => speed = value; }
 
         internal void Update(float passTime)
         {
             if (isRun is false) return;
 
-            timer.Pass(passTime);
+            foreach (var item in animationItems)
+            {
+                if (timer.PassTime > item.Animation.EndTime + item.StartTime)
+                {
+                    if (timer.LastPassTime <= item.Animation.EndTime + item.StartTime)
+                        item.ProcessAnimation(item.Animation.EndTime);
+                    continue;
+                }
+
+                if (timer.PassTime < item.StartTime) break;
+
+                item.ProcessAnimation(timer.PassTime - item.StartTime);
+            }
 
             if (timer.PassTime > endTime)
             {
@@ -106,15 +122,7 @@ namespace GalEngine
                 }
             }
 
-            foreach (var item in animationItems)
-            {
-                if (item.StartTime > timer.PassTime) break;
-
-                if (timer.PassTime > item.Animation.EndTime + item.StartTime)
-                    continue;
-
-                item.ProcessAnimation(timer.PassTime - item.StartTime);
-            }
+            timer.Pass(passTime * speed);
         }
 
         public Animator(string Name)

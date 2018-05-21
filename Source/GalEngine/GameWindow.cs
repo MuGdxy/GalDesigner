@@ -15,7 +15,7 @@ namespace GalEngine
         private int mousePosX;
         private int mousePosY;
 
-        private GenericPage currentPage = null;
+        private GenericScene currentScene = null;
 
         private Internal.FpsCounter fpsCounter = new Internal.FpsCounter();
 
@@ -90,7 +90,7 @@ namespace GalEngine
 
             Canvas.BeginDraw(GalEngine.RenderSurface);
 
-            currentPage?.ProcessRender(currentPage);
+            currentScene?.ProcessRender(currentScene);
 
             if (DebugCommand.IsEnable is true)
                 DebugCommand.OnRender();
@@ -140,7 +140,7 @@ namespace GalEngine
                 GalEngine.PresentSurface.ResizeBuffer(e.NextWidth, e.NextHeight);
             }
 
-            currentPage?.ProcessSizeChange(currentPage, e);
+            currentScene?.ProcessSizeChange(currentScene, e);
         }
 
         public override void OnKeyEvent(object sender, KeyEventArgs e)
@@ -161,7 +161,7 @@ namespace GalEngine
             if (DebugCommand.IsEnable is true)
                 DebugCommand.OnKeyEvent(e);
 
-            currentPage?.ProcessKeyEvent(currentPage, e);
+            currentScene?.ProcessKeyEvent(currentScene, e);
         }
 
         public override void OnMouseClick(object sender, MouseClickEventArgs e)
@@ -174,7 +174,7 @@ namespace GalEngine
 
             e.UpdatePosition(mousePosX, mousePosY);
 
-            currentPage?.ProcessMouseClick(currentPage, e);
+            currentScene?.ProcessMouseClick(currentScene, e);
         }
 
         public override void OnMouseMove(object sender, MouseMoveEventArgs e)
@@ -187,7 +187,7 @@ namespace GalEngine
 
             e.UpdatePosition(mousePosX, mousePosY);
 
-            currentPage?.ProcessMouseMove(currentPage, e);
+            currentScene?.ProcessMouseMove(currentScene, e);
         }
 
         public override void OnMouseWheel(object sender, MouseWheelEventArgs e)
@@ -202,7 +202,7 @@ namespace GalEngine
 
             DebugCommand.OnMouseScroll(e.Offset);
 
-            currentPage?.ProcessMouseWheel(currentPage, e);
+            currentScene?.ProcessMouseWheel(currentScene, e);
         }
 
         public override void OnUpdate(object sender)
@@ -224,12 +224,12 @@ namespace GalEngine
             GalEngine.PresentSurface.SwapBuffer(true);
 #endif
 
-            currentPage?.ProcessUpdate(currentPage);
+            currentScene?.ProcessUpdate(currentScene);
         }
         
-        public void SetCurrentPage(GenericPage page)
+        public void SetCurrentScene(GenericScene scene)
         {
-            currentPage = page;
+            currentScene = scene;
         }
 
         public int MousePosX => mousePosX;
@@ -244,10 +244,10 @@ namespace GalEngine
             get => GalEngine.PresentSurface.IsFullScreen;
         }
 
-        public GenericPage CurrentPage
+        public GenericScene CurrentScene
         {
-            set => currentPage = value;
-            get => currentPage;
+            set => currentScene = value;
+            get => currentScene;
         }
     }
 }

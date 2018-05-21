@@ -27,6 +27,7 @@ namespace GalEngine
         public static string BorderSize => "BorderSize";
         public static string Opacity => "Opacity";
         public static string IsPresented => "IsPresented";
+        public static string Angle => "Angle";
 
         public static string SpecialThanksName => specialThanksName;
 

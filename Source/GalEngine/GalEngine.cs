@@ -61,9 +61,9 @@ namespace GalEngine
             Engine.Stop();
         }
 
-        public static void TurnToPage(string pageTag)
+        public static void TurnToScene(string sceneName)
         {
-            gameWindow.CurrentPage = PageList.Element[pageTag];
+            gameWindow.CurrentScene = SceneList.Element[sceneName];
         }
 
         internal static GameWindow GameWindow => gameWindow;

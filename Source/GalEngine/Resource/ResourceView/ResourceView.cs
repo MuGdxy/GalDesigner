@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    abstract class ResourceView
+    abstract class ResourceView : IDisposable
     {
         private int count;
         private string name;
@@ -25,18 +25,21 @@ namespace GalEngine
 
         public object Use()
         {
-            if (count is 0) ActiveResource(ref resource);
-
+            if (resource is null) ActiveResource(ref resource);
+            
             count++;
+
             return resource;
         }
 
         public void UnUse()
         {
             count--;
+        }
 
-            if (count is 0) DiposeResource(ref resource);
-            resource = null;
+        public void Dispose()
+        {
+            DiposeResource(ref resource);
         }
 
         public string Name => name;

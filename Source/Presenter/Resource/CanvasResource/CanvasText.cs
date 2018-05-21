@@ -77,6 +77,9 @@ namespace Presenter
         {
             SharpDX.Utilities.Dispose(ref textLayout);
 
+            if (tText == text && tWidth == width && tHeight == height
+                && textFormat == format && textLayout != null) return;
+
             if (format != null) textFormat = format;
 
             textLayout = new SharpDX.DirectWrite.TextLayout(Engine.WriteFactory,

@@ -28,7 +28,7 @@ namespace GalEngine
             Internal.ResourceList.DefaultTextFormat,
             Internal.ResourceList.BlackBrush,
             null,
-            Internal.ResourceList.BlackBrush,
+            Internal.ResourceList.WhiteBrush,
         };
 
         private CanvasResource[] memberResource = new CanvasResource[(int)MemberResource.Count];
@@ -48,9 +48,11 @@ namespace GalEngine
         private int positionX = 0;
         private int positionY = 0;
 
-        private float borderSize = 1;
+        private float borderSize = 0;
 
         private float opacity = 1;
+
+        private float angle = 0;
 
         private string text = "";
 
@@ -60,6 +62,79 @@ namespace GalEngine
 
         private CanvasText textInstance;
 
+        public bool IsFocus => isFocus;
+
+        public bool IsMouseHover => isMouseHover;
+
+        public string Name => name;
+
+        public List<VisualObject> Children
+        {
+            get => children;
+        }
+
+        public int Width
+        {
+            set => UpdateLayOut(text, value, height);
+            get => width;
+        }
+
+        public int Height
+        {
+            set => UpdateLayOut(text, width, value);
+            get => height;
+        }
+
+        public int PositionX
+        {
+            set => positionX = value;
+            get => positionX;
+        }
+
+        public int PositionY
+        {
+            set => positionY = value;
+            get => positionY;
+        }
+
+        public float BorderSize
+        {
+            set => borderSize = value;
+            get => borderSize;
+        }
+
+        public float Opacity
+        {
+            set => opacity = value;
+            get => opacity;
+        }
+
+        public bool IsPresented
+        {
+            set
+            {
+                isPresented = value;
+                if (isPresented is false)
+                {
+                    isFocus = false;
+                    isMouseHover = false;
+                }
+            }
+            get => isPresented;
+        }
+
+        public string Text
+        {
+            set => UpdateLayOut(value, width, height);
+            get => text;
+        }
+
+        public float Angle
+        {
+            set => angle = value;
+            get => angle;
+        }
+
         private void UpdateLayOut(string newText, int newWidth, int newHeight)
         {
             text = newText;
@@ -68,7 +143,7 @@ namespace GalEngine
 
             if (isActive is true)
             {
-                textInstance.Reset(text, width, height);
+                textInstance.Reset(text, width, height, memberResource[(int)MemberResource.TextFormat] as CanvasTextFormat);
             }
         }
 
@@ -108,7 +183,8 @@ namespace GalEngine
 
             Matrix3x2 oldMatrix = Canvas.Transform;
 
-            Canvas.Transform *= Matrix3x2.CreateTranslation(new Vector2(positionX, positionY));
+            Canvas.Transform = Matrix3x2.CreateRotation(angle, new Vector2(width / 2, height / 2))
+                * Matrix3x2.CreateTranslation(new Vector2(positionX, positionY)) * oldMatrix;
 
             if (opacity != 1.0f)
                 Canvas.PushLayer(0, 0, width, height, opacity);
@@ -291,6 +367,9 @@ namespace GalEngine
                 case "IsPresented":
                     return (T)AsObject(isPresented);
 
+                case "Angle":
+                    return (T)AsObject(angle);
+
                 case "TextBrush":
                 case "TextFormat":
                 case "BorderBrush":
@@ -309,35 +388,39 @@ namespace GalEngine
             switch (memberName)
             {
                 case "Width":
-                    Width = (int)value;
+                    Width = Convert.ToInt32(value);
                     return;
 
                 case "Height":
-                    Height = (int)value;
+                    Height = Convert.ToInt32(value);
                     return;
 
                 case "Text":
-                    Text = (string)value;
+                    Text = Convert.ToString(value);
                     return;
 
                 case "PositionX":
-                    PositionX = (int)value;
+                    PositionX = Convert.ToInt32(value);
                     return;
 
                 case "PositionY":
-                    PositionY = (int)value;
+                    PositionY = Convert.ToInt32(value);
                     return;
 
                 case "BorderSize":
-                    BorderSize = (float)value;
+                    BorderSize = Convert.ToSingle(value);
                     return;
 
                 case "Opacity":
-                    Opacity = (float)value;
+                    Opacity = Convert.ToSingle(value);
                     return;
 
                 case "IsPresented":
-                    IsPresented = (bool)value;
+                    IsPresented = Convert.ToBoolean(value);
+                    return;
+
+                case "Angle":
+                    angle = Convert.ToSingle(value);
                     return;
 
                 case "TextBrush":
@@ -356,7 +439,10 @@ namespace GalEngine
                         memberResource[(int)which] = defaultResource[(int)which];
                     else
                         memberResource[(int)which] = GlobalResource.GetValue<ResourceView>(value as string).Use() as CanvasResource;
-                    
+
+                    if ((MemberResource)which== MemberResource.TextFormat)
+                        UpdateLayOut(text, width, height);
+
                     return;
             }
 
@@ -390,72 +476,6 @@ namespace GalEngine
         public event MouseClickHandler MouseClick;
         public event MouseWheelHandler MouseWheel;
         public event KeyEventHandler KeyEvent;
-      
-        public bool IsFocus => isFocus;
-
-        public bool IsMouseHover => isMouseHover;
-
-        public string Name => name; 
-
-        public List<VisualObject> Children
-        {
-            get => children;
-        }
-
-        public int Width
-        {
-            set => UpdateLayOut(text, value, height);
-            get => width;
-        }
-
-        public int Height
-        {
-            set => UpdateLayOut(text, width, value);
-            get => height;
-        }
-
-        public int PositionX
-        {
-            set => positionX = value;
-            get => positionX;
-        }
-
-        public int PositionY
-        {
-            set => positionY = value;
-            get => positionY;
-        }
-
-        public float BorderSize
-        {
-            set => borderSize = value;
-            get => borderSize;
-        }
-
-        public float Opacity
-        {
-            set => opacity = value;
-            get => opacity;
-        }
-
-        public bool IsPresented
-        {
-            set
-            {
-                isPresented = value;
-                if (isPresented is false)
-                {
-                    isFocus = false;
-                    isMouseHover = false;
-                }
-            }
-            get => isPresented;
-        }
-
-        public string Text
-        {
-            set => UpdateLayOut(value, width, height);
-            get => text;
-        }
+     
     }
 }

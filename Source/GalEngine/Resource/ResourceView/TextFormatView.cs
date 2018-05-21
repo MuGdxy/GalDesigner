@@ -25,7 +25,11 @@ namespace GalEngine
         {
             if (resource is null)
             {
-                resource = new CanvasTextFormat(fontFace, fontSize, fontWeight);
+                resource = new CanvasTextFormat(fontFace, fontSize, fontWeight)
+                {
+                    TextAlignment = TextAlignment.Center,
+                    ParagraphAlignment = ParagraphAlignment.Center
+                };
             }
         }
 

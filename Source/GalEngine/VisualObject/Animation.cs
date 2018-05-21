@@ -46,15 +46,11 @@ namespace GalEngine
 
         public string Name => name;
 
-        internal virtual KeyFrame GetFrame(float timePos,
+        internal protected virtual KeyFrame GetFrame(float timePos,
             KeyFrame preFrame, KeyFrame lastFrame)
         {
-            float preDistance = timePos - preFrame.TimePos;
-            float lastDistance = lastFrame.TimePos - timePos;
-
-            if (preDistance <= lastDistance)
-                return preFrame;
-            else return lastFrame;
+            if (timePos == lastFrame.TimePos) return lastFrame;
+            return preFrame;
         }
 
         public void Dispose()
