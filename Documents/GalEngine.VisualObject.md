@@ -37,7 +37,12 @@ There are default member values:
 - `PositionY`: position-Y. 
 - `BorderSize`: border's size.
 - `Opacity`: opacity.
+- `Angle`: angle.
+- `ScaleX`: scale-X.
+- `ScaleY`: scale-Y.
 - `IsPresented`: If it is false, we disable this visualobject,else we enable it.
+
+The `Scale` only is used for the render.
 
 **Also support the Resource Member. You can set which resource you want to use by this function.**
 

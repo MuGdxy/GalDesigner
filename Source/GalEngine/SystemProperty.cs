@@ -28,6 +28,8 @@ namespace GalEngine
         public static string Opacity => "Opacity";
         public static string IsPresented => "IsPresented";
         public static string Angle => "Angle";
+        public static string ScaleX => "ScaleX";
+        public static string ScaleY => "ScaleY";
 
         public static string SpecialThanksName => specialThanksName;
 

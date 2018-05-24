@@ -21,8 +21,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GalEngine", "GalEngine", "{
 		Documents\GalEngine.DebugLayer.md = Documents\GalEngine.DebugLayer.md
 		Documents\GalEngine.Event.md = Documents\GalEngine.Event.md
 		Documents\GalEngine.md = Documents\GalEngine.md
-		Documents\GalEngine.Page.md = Documents\GalEngine.Page.md
 		Documents\GalEngine.Resource.md = Documents\GalEngine.Resource.md
+		Documents\GalEngine.Scene.md = Documents\GalEngine.Scene.md
+		Documents\GalEngine.ScriptLayer.md = Documents\GalEngine.ScriptLayer.md
 		Documents\GalEngine.VisualObject.md = Documents\GalEngine.VisualObject.md
 	EndProjectSection
 EndProject
@@ -53,6 +54,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chinese", "Chinese", "{861BE8FD-A18A-4AF4-A54E-585A5A88F05B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{B6D1859F-5A9C-4679-AFF5-080533F9290D}"
+	ProjectSection(SolutionItems) = preProject
+		Documents\GalEngine.Script.Resource.md = Documents\GalEngine.Script.Resource.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -92,6 +98,7 @@ Global
 		{856D69C7-4EBF-4DED-8410-9691179CF021} = {99839C46-350B-45F7-BA2A-745C2D275690}
 		{9F6B254E-6770-4A79-97F3-671D98618AC0} = {99839C46-350B-45F7-BA2A-745C2D275690}
 		{861BE8FD-A18A-4AF4-A54E-585A5A88F05B} = {4698C6F6-8029-4408-BF78-AE7F34F9B309}
+		{B6D1859F-5A9C-4679-AFF5-080533F9290D} = {CFFD0A1F-7120-4C40-A35A-DCEE997DD36A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {61ACECAF-B6E4-40A6-BDAD-1619F5C966DD}

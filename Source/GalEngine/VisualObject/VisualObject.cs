@@ -54,6 +54,10 @@ namespace GalEngine
 
         private float angle = 0;
 
+        private float scaleX = 1;
+
+        private float scaleY = 1;
+
         private string text = "";
 
         private string name = "";
@@ -135,6 +139,18 @@ namespace GalEngine
             get => angle;
         }
 
+        public float ScaleX
+        {
+            set => scaleX = value;
+            get => scaleX;
+        }
+
+        public float ScaleY
+        {
+            set => scaleY = value;
+            get => scaleY;
+        }
+
         private void UpdateLayOut(string newText, int newWidth, int newHeight)
         {
             text = newText;
@@ -183,7 +199,9 @@ namespace GalEngine
 
             Matrix3x2 oldMatrix = Canvas.Transform;
 
-            Canvas.Transform = Matrix3x2.CreateRotation(angle, new Vector2(width / 2, height / 2))
+            var center = new Vector2(width / 2, height / 2);
+
+            Canvas.Transform = Matrix3x2.CreateScale(scaleX, scaleY, center) * Matrix3x2.CreateRotation(angle, center)
                 * Matrix3x2.CreateTranslation(new Vector2(positionX, positionY)) * oldMatrix;
 
             if (opacity != 1.0f)
@@ -370,6 +388,12 @@ namespace GalEngine
                 case "Angle":
                     return (T)AsObject(angle);
 
+                case "ScaleX":
+                    return (T)AsObject(scaleX);
+
+                case "ScaleY":
+                    return (T)AsObject(scaleY);
+
                 case "TextBrush":
                 case "TextFormat":
                 case "BorderBrush":
@@ -421,6 +445,14 @@ namespace GalEngine
 
                 case "Angle":
                     angle = Convert.ToSingle(value);
+                    return;
+
+                case "ScaleX":
+                    scaleX = Convert.ToSingle(value);
+                    return;
+
+                case "ScaleY":
+                    scaleY = Convert.ToSingle(value);
                     return;
 
                 case "TextBrush":
