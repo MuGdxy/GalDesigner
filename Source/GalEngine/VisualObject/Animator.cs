@@ -53,7 +53,7 @@ namespace GalEngine
                     }
                 }
 
-                var frame = animation.GetFrame(timePos, animation.Frames[preFrame],
+                var frame = animation.FrameProcessUnit(timePos, animation.Frames[preFrame],
                     animation.Frames[nextFrame]);
 
                 target.SetMemberValue(targetMember, frame.Value);

@@ -8,7 +8,7 @@ using Builder;
 
 namespace GalEngine
 {
-    public class GenericScene
+    public class Scene
     {
         private string name;
 
@@ -83,13 +83,22 @@ namespace GalEngine
 
         internal void ProcessRender(object sender)
         {
+            var list = new List<VisualObject>();
+            
             foreach (var item in visualObjects)
+            {
+                list.Add(item);
+            }
+
+            list.Sort((item1, item2) => item1.PositionZ.CompareTo(item2.PositionZ));
+
+            foreach (var item in list)
             {
                 item.OnRender();
             }
         }
 
-        public GenericScene(string Name)
+        public Scene(string Name)
         {
             name = Name;
 

@@ -10,7 +10,7 @@ namespace TestApp
 {
     public class LinearAnimation : Animation
     {
-        protected override KeyFrame GetFrame(float timePos, KeyFrame preFrame, KeyFrame lastFrame)
+        private static KeyFrame GetFrame(float timePos, KeyFrame preFrame, KeyFrame lastFrame)
         {
             float scale = (timePos - preFrame.TimePos) / (lastFrame.TimePos - preFrame.TimePos);
 
@@ -20,9 +20,14 @@ namespace TestApp
             return new KeyFrame(preValue + (lastValue - preValue) * scale, timePos);
         }
 
+        static LinearAnimation()
+        { 
+
+        }
+
         public LinearAnimation(List<KeyFrame> Frames, string animationName) : base(Frames, animationName)
         {
-
+            FrameProcessUnit = GetFrame;
         }
 
         public static LinearAnimation LoadAnimation(string fileName, string animationName)

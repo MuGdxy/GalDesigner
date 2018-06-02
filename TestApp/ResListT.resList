@@ -4,21 +4,15 @@
 
 [Type = Brush, Name = "Blue", Red = 0, Green = 0, Blue = 1, Alpha = 1]
 
-[Type = Image, Name = "BackGround", FilePath = "./Resource/BackGround.jpg"]
+[Type = Brush, Name = "Black", Red = 0, Green = 0, Blue = 0, Alpha = 1]
 
-[Type = Image, Name = "Player1", FilePath = "./Resource/Player1.png"]
+[Type = Image, Name = "Frame", FilePath = "./Resource/window_frame.png"]
 
-[Type = Image, Name = "Player2", FilePath = "./Resource/Player2.png"]
+[Type = Image, Name = "AllMenu", FilePath = "./Resource/window_menu.png"]
 
-[Type = Image, Name = "Player3", FilePath = "./Resource/Player3.png"]
+[Type = Image, Name = "Window", FilePath = "./Resource/window.png"]
 
-[Type = Image, Name = "LeftSayingBox", FilePath = "./Resource/LeftSayingBox.png"]
-
-[Type = Image, Name = "RightSayingBox", FilePath = "./Resource/RightSayingBox.png"]
-
-[Type = Audio, Name = "Music2", FilePath = "./Resource/小小恋歌.wav"]
-
-[Type = Audio, Name = "Music1", FilePath = "./Resource/婚礼进行曲.wav"]
+[Type = Image, Name = "BackGround", FilePath = "./Resource/ev09a.bmp"]
 
 [Type = TextFormat, Name = "FirstFont", Fontface = "仿宋", Size = 50, Weight = 400]
 

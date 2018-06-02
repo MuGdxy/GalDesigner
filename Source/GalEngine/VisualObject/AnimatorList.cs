@@ -12,7 +12,7 @@ namespace GalEngine
 
         internal static void Add(Animator animator)
         {
-            animatorList[animator.Name] = animator;
+            animatorList.Add(animator.Name, animator);
         }
 
         internal static void Remove(Animator animator)

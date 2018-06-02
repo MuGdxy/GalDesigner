@@ -8,13 +8,13 @@ namespace GalEngine
 {
     internal static class SceneList
     {
-        private static Dictionary<string, GenericScene> sceneList = new Dictionary<string, GenericScene>();
+        private static Dictionary<string, Scene> sceneList = new Dictionary<string, Scene>();
 
-        internal static void AddScene(GenericScene scene)
+        internal static void AddScene(Scene scene)
         {
-            sceneList[scene.Name] = scene;
+            sceneList.Add(scene.Name, scene);
         }
 
-        public static Dictionary<string, GenericScene> Element => sceneList;
+        public static Dictionary<string, Scene> Element => sceneList;
     }
 }

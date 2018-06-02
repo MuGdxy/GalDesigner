@@ -48,6 +48,16 @@ namespace Presenter
                 new SharpDX.Size2(iWidth = width, iHeight = height));
         }
 
+        public CanvasImage CopyTo(int left, int top, int right, int bottom)
+        {
+            var result = new CanvasImage(right - left, bottom - top);
+
+            result.bitmap.CopyFromBitmap(bitmap, new SharpDX.Mathematics.Interop.RawPoint(0, 0),
+                new SharpDX.Mathematics.Interop.RawRectangle(left, top, right, bottom));
+
+            return result;
+        }
+
         public override void Dispose()
         {
             SharpDX.Utilities.Dispose(ref bitmap);

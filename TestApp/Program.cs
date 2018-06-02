@@ -18,18 +18,16 @@ namespace TestApp
 
         public static float StartTime => 0;
 
-        private class PageSample : GenericScene
+        private class PageSample : Scene
         {
             private Timer timer = new Timer(StartTime);
 
-            bool isPlaying = false;
+            private VisualObject backGround = new VisualObject("BackGround", 1920, 1080);
+            private VisualObject frame = new VisualObject("Frame", 1920, 450);
+            private VisualObject window = new VisualObject("window", 1725, 234);
 
             public override void OnUpdate(object sender)
             {
-                if (isPlaying is true)
-                {
-                    timer.Pass(Time.DeltaSeconds * Speed);
-                }
                 base.OnUpdate(sender);
             }
 
@@ -40,6 +38,22 @@ namespace TestApp
 
             public PageSample(string Tag) : base(Tag)
             {
+                backGround.SetMemberValue(SystemProperty.BackGroundImage, "BackGround");
+                frame.SetMemberValue(SystemProperty.BackGroundImage, "Frame");
+                window.SetMemberValue(SystemProperty.BackGroundImage, "Window");
+
+                window.PositionX = (1920 - window.Width) / 2;
+                window.PositionY = 1080 - frame.Height - 20 + 180;
+                window.PositionZ = 2;
+
+                window.Opacity = 0.5f;
+
+                frame.PositionY = 1080 - frame.Height - 20;
+                frame.PositionZ = 3;
+
+                AddVisualObject(window.Name);
+                AddVisualObject(frame.Name);
+                AddVisualObject(backGround.Name);
             }
         }
 
@@ -51,7 +65,7 @@ namespace TestApp
 #else
             GalEngine.GalEngine.Initialize();
 
-            GenericScene genericPage = new PageSample("MainPage");
+            Scene genericPage = new PageSample("MainPage");
 
             GalEngine.GalEngine.TurnToScene("MainPage");
             

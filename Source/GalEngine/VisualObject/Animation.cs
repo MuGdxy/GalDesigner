@@ -33,24 +33,24 @@ namespace GalEngine
         
         private string name = null;
 
+        private FrameProcessUnit frameProcessUnit = AnimationExtension.Default;
+
         internal List<KeyFrame> Frames => frames;
 
         public float EndTime
         {
             get
-            {
-                if (frames.Count is 0) return 0;
+            { 
                 return frames[frames.Count - 1].TimePos;
             }
         }
 
         public string Name => name;
 
-        internal protected virtual KeyFrame GetFrame(float timePos,
-            KeyFrame preFrame, KeyFrame lastFrame)
+        public FrameProcessUnit FrameProcessUnit
         {
-            if (timePos == lastFrame.TimePos) return lastFrame;
-            return preFrame;
+            set => frameProcessUnit = value;
+            get => frameProcessUnit;
         }
 
         public void Dispose()
@@ -62,17 +62,22 @@ namespace GalEngine
         /// Create a Animation.
         /// </summary>
         /// <param name="Frames">Frame data.</param>
-        /// <param name="animationName">The animation's name.</param>
-        public Animation(List<KeyFrame> Frames, string animationName)
+        /// <param name="AnimationName">The animation's name.</param>
+        public Animation(List<KeyFrame> Frames, string AnimationName)
         {
             frames = Frames;
             frames.Sort();
 
-            DebugLayer.Assert(frames.Count < 2, ErrorType.MoreFramesNeedInAnimation, animationName);
+            DebugLayer.Assert(frames.Count < 2, ErrorType.MoreFramesNeedInAnimation, AnimationName);
 
-            name = animationName;
+            name = AnimationName;
 
             AnimationList.Add(this);
+        }
+
+        public Animation(List<KeyFrame> Frames, string AnimationName, string ProcessUnitName) : this(Frames, AnimationName)
+        {
+            frameProcessUnit = AnimationExtension.GetProcessUnit(ProcessUnitName);
         }
     }
 }

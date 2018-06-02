@@ -42,11 +42,12 @@ namespace GalEngine
         private bool isFocus = false;
         private bool isMouseHover = false;
 
-        private int width;
-        private int height;
+        private int width = 0;
+        private int height = 0;
 
         private int positionX = 0;
         private int positionY = 0;
+        private int positionZ = 1;
 
         private float borderSize = 0;
 
@@ -99,6 +100,12 @@ namespace GalEngine
         {
             set => positionY = value;
             get => positionY;
+        }
+
+        public int PositionZ
+        {
+            get => positionZ;
+            set => positionZ = value;
         }
 
         public float BorderSize
@@ -376,6 +383,9 @@ namespace GalEngine
                 case "PositionY":
                     return (T)AsObject(positionY);
 
+                case "PositionZ":
+                    return (T)AsObject(positionZ);
+
                 case "BorderSize":
                     return (T)AsObject(borderSize);
 
@@ -429,6 +439,10 @@ namespace GalEngine
 
                 case "PositionY":
                     PositionY = Convert.ToInt32(value);
+                    return;
+
+                case "PositionZ":
+                    positionZ = Convert.ToInt32(value);
                     return;
 
                 case "BorderSize":
@@ -508,6 +522,5 @@ namespace GalEngine
         public event MouseClickHandler MouseClick;
         public event MouseWheelHandler MouseWheel;
         public event KeyEventHandler KeyEvent;
-     
     }
 }

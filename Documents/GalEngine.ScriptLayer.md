@@ -48,4 +48,29 @@ The code block `animation{}` and `animator{}` we can see more in [GalEngine.Scri
 
 The `script{}` code block.
 
+Before we run an script, we must set some value.
+
+- `Name`: The script block's name.
+
+There are some grammar.
+
 - `left = right`: This code is used to set value. Left is the value's name and right is the value. 
+- `name.function_name()`: This code is used to run some default function.
+- `name.member`: This code is used to get or set the member value.
+
+For example.
+
+```gs
+
+script{
+    Name = "script1";
+
+    visualObject1.PositionX = 10;
+    visualObject2.PositionY = 10;
+
+    animator1.RunAndWait();
+}
+
+```
+
+This code means we set the position of a VisualObject called visualObject1 then run a group of animations and wait it ends.

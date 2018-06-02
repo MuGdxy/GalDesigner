@@ -34,7 +34,8 @@ There are default member values:
 - `Width`: width.
 - `Height`: height.
 - `PositionX`: position-X.
-- `PositionY`: position-Y. 
+- `PositionY`: position-Y.
+- `PositionZ`: position-Z(for this version, it is only used for ordering). 
 - `BorderSize`: border's size.
 - `Opacity`: opacity.
 - `Angle`: angle.

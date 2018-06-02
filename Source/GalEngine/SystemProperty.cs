@@ -24,6 +24,7 @@ namespace GalEngine
         public static string Text => "Text";
         public static string PositionX => "PositionX";
         public static string PositionY => "PositionY";
+        public static string PositionZ => "PositionZ";
         public static string BorderSize => "BorderSize";
         public static string Opacity => "Opacity";
         public static string IsPresented => "IsPresented";

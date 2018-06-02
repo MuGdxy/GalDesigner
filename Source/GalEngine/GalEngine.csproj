@@ -80,10 +80,11 @@
     <Compile Include="Time.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="VisualObject\Animation.cs" />
+    <Compile Include="VisualObject\AnimationExtension.cs" />
     <Compile Include="VisualObject\AnimationList.cs" />
     <Compile Include="VisualObject\Animator.cs" />
     <Compile Include="VisualObject\AnimatorList.cs" />
-    <Compile Include="VisualObject\GenericScene.cs" />
+    <Compile Include="VisualObject\Scene.cs" />
     <Compile Include="VisualObject\SceneList.cs" />
     <Compile Include="VisualObject\VisualObject.cs" />
     <Compile Include="VisualObject\VisualObjectList.cs" />

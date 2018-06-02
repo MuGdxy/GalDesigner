@@ -50,6 +50,10 @@ namespace GalEngine
         /// <summary>
         /// The Animation named {0} must have more than two keyframes.
         /// </summary>
-        MoreFramesNeedInAnimation
+        MoreFramesNeedInAnimation,
+        /// <summary>
+        ///  The Frame Process Unit named {0} is not exist.
+        /// </summary>
+        InvaildFrameProcessUnit
     }
 }

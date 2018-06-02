@@ -15,7 +15,7 @@ namespace GalEngine
         private int mousePosX;
         private int mousePosY;
 
-        private GenericScene currentScene = null;
+        private Scene currentScene = null;
 
         private Internal.FpsCounter fpsCounter = new Internal.FpsCounter();
 
@@ -227,7 +227,7 @@ namespace GalEngine
             currentScene?.ProcessUpdate(currentScene);
         }
         
-        public void SetCurrentScene(GenericScene scene)
+        public void SetCurrentScene(Scene scene)
         {
             currentScene = scene;
         }
@@ -244,7 +244,7 @@ namespace GalEngine
             get => GalEngine.PresentSurface.IsFullScreen;
         }
 
-        public GenericScene CurrentScene
+        public Scene CurrentScene
         {
             set => currentScene = value;
             get => currentScene;

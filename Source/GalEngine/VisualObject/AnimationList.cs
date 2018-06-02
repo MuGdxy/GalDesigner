@@ -12,7 +12,7 @@ namespace GalEngine
 
         internal static void Add(Animation animation)
         {
-            animationList[animation.Name] = animation;
+            animationList.Add(animation.Name, animation);
         }
 
         internal static void Remove(Animation animation)

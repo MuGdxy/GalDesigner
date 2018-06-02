@@ -57,7 +57,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chinese", "Chinese", "{861B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{B6D1859F-5A9C-4679-AFF5-080533F9290D}"
 	ProjectSection(SolutionItems) = preProject
+		Documents\GalEngine.Script.Animation.md = Documents\GalEngine.Script.Animation.md
+		Documents\GalEngine.Script.ProcessUnit.md = Documents\GalEngine.Script.ProcessUnit.md
 		Documents\GalEngine.Script.Resource.md = Documents\GalEngine.Script.Resource.md
+		Documents\GalEngine.Script.VisualObject.md = Documents\GalEngine.Script.VisualObject.md
 	EndProjectSection
 EndProject
 Global

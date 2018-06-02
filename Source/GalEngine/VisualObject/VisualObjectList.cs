@@ -12,7 +12,7 @@ namespace GalEngine
 
         internal static void Add(VisualObject visualObject)
         {
-            visualObjectList[visualObject.Name] = visualObject;
+            visualObjectList.Add(visualObject.Name, visualObject);
         }
 
         internal static void Remove(VisualObject visualObject)
