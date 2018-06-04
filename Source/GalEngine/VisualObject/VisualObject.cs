@@ -32,8 +32,7 @@ namespace GalEngine
         };
 
         private CanvasResource[] memberResource = new CanvasResource[(int)MemberResource.Count];
-
-        private string[] memberResourceView = new string[(int)MemberResource.Count];
+        private ResourceView[] memberResourceView = new ResourceView[(int)MemberResource.Count];
 
         private Dictionary<string, object> memberValueList = new Dictionary<string, object>();
 
@@ -188,7 +187,7 @@ namespace GalEngine
             {
                 if (memberResourceView[i] is null)
                     memberResource[i] = defaultResource[i];
-                else memberResource[i] = GlobalResource.GetValue<ResourceView>(memberResourceView[i]).Use() as CanvasResource;
+                else memberResource[i] = memberResourceView[i].Resource as CanvasResource;
             }
 
             Utilities.Dipose(ref textInstance);
@@ -220,7 +219,17 @@ namespace GalEngine
             if (memberResourceView[(int)MemberResource.BackGroundImage] is null)
                 Canvas.FillRectangle(0, 0, width, height, memberResource[(int)MemberResource.BackGroundBrush] as CanvasBrush);
             else
-                Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
+            {
+                if ((memberResourceView[(int)MemberResource.BackGroundImage] as ImageView).Size is 0)
+                    Canvas.DrawImage(0, 0, width, height, memberResource[(int)MemberResource.BackGroundImage] as CanvasImage);
+                else
+                {
+                    var resourceView = memberResourceView[(int)MemberResource.BackGroundImage] as ImageView;
+
+                    Canvas.DrawImage(0, 0, width, height, resourceView.Source, resourceView.Left,
+                        resourceView.Top, resourceView.Right, resourceView.Bottom);
+                }
+            }
 
             if (text != "")
                 Canvas.DrawText(0, 0, textInstance, memberResource[(int)MemberResource.TextBrush] as CanvasBrush);
@@ -344,7 +353,6 @@ namespace GalEngine
             {
                 if (memberResourceView[i] != null)
                 {
-                    GlobalResource.GetValue<ResourceView>(memberResourceView[i]).UnUse();
                     memberResourceView[i] = null;
                 }
             }
@@ -476,15 +484,12 @@ namespace GalEngine
                 case "BackGroundBrush":
                     var which = Enum.Parse(typeof(MemberResource), memberName);
 
-                    if (memberResourceView[(int)which] != null)
-                        GlobalResource.GetValue<ResourceView>(memberResourceView[(int)which]).UnUse();
-
-                    memberResourceView[(int)which] = value as string;
+                    memberResourceView[(int)which] = GlobalResource.GetValue(value as string);
 
                     if (value is null)
                         memberResource[(int)which] = defaultResource[(int)which];
                     else
-                        memberResource[(int)which] = GlobalResource.GetValue<ResourceView>(value as string).Use() as CanvasResource;
+                        memberResource[(int)which] = memberResourceView[(int)which].Resource as CanvasResource; ;
 
                     if ((MemberResource)which== MemberResource.TextFormat)
                         UpdateLayOut(text, width, height);

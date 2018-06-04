@@ -21,32 +21,32 @@ namespace GalEngine
             SetValue(GlobalConfig.FullScreenName, false);
         }
 
-        public static void SetValue(string Tag, object value)
+        public static void SetValue(string name, object value)
         {
             //make value same.
-            if (Tag == GlobalConfig.FullScreenName && GalEngine.GameWindow != null)
+            if (name == GlobalConfig.FullScreenName && GalEngine.GameWindow != null)
             {
                 GalEngine.GameWindow.IsFullScreen = (bool)value;
             }
 
-            valueList[Tag] = value;
+            valueList[name] = value;
         }
 
-        public static object GetValue(string Tag)
+        public static object GetValue(string name)
         {
-            return GetValue<object>(Tag);
+            return GetValue<object>(name);
         }
 
-        public static T GetValue<T>(string Tag)
+        public static T GetValue<T>(string name)
         {
-            DebugLayer.Assert(valueList.ContainsKey(Tag) is false, ErrorType.InvaildName, "GlovalValue");
+            DebugLayer.Assert(valueList.ContainsKey(name) is false, ErrorType.InvaildName, "GlovalValue");
 
-            return (T)valueList[Tag];
+            return (T)valueList[name];
         }
 
-        public static bool Contains(string Tag)
+        public static bool Contains(string name)
         {
-            return valueList.ContainsKey(Tag);
+            return valueList.ContainsKey(name);
         }
 
         internal static Dictionary<string, object> ValueList => valueList;

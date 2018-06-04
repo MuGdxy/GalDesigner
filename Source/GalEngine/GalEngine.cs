@@ -42,6 +42,9 @@ namespace GalEngine
 
         public static void Initialize()
         {
+            FileManager.Initialize();
+            ScriptManager.Initialize();
+
             BuildListAnalyser.LoadAllBuildList();
 
             Application.Add(gameWindow = new GameWindow(GlobalConfig.AppName, GlobalConfig.Width, GlobalConfig.Height)

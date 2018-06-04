@@ -10,21 +10,21 @@ namespace GalEngine
     {
         private static Dictionary<string, ResourceView> resourceViewList = new Dictionary<string, ResourceView>();
 
-        public static void SetValue(ResourceView resourceTag)
+        public static void SetValue(ResourceView resourceView)
         {
-            resourceViewList[resourceTag.Name] = resourceTag;
+            resourceViewList[resourceView.Name] = resourceView;
         }
 
-        public static ResourceView GetValue(string Tag)
+        public static ResourceView GetValue(string name)
         {
-            return GetValue<ResourceView>(Tag);
+            return GetValue<ResourceView>(name);
         }
 
-        public static T GetValue<T>(string Tag) where T : ResourceView
+        public static T GetValue<T>(string name) where T : ResourceView
         {
-            DebugLayer.Assert(resourceViewList.ContainsKey(Tag) is false, ErrorType.InvaildName, "GlobalResource");
+            DebugLayer.Assert(resourceViewList.ContainsKey(name) is false, ErrorType.InvaildName, "GlobalResource");
 
-            return resourceViewList[Tag] as T;
+            return resourceViewList[name] as T;
         }
     }
 }

@@ -31,18 +31,22 @@ We must write the code in a code block and the code block have some type.
 
 - `brush{}`: for making brush.
 - `image{}`: for making image.
-- `audio{}`: for making audio.
+- `voice{}`: for making audio.
 - `textformat{}`: for making textformat.
 - `visualobject{}`: for making visual object.
 - `script{}`: common script and only support the common code.
 - `animation{}`: for making animation.
 - `animator{}`: for making animator.
+- `scene{}:` for making scene.
+- `config{}:` for setting the config.
 
-The code block `brush{}`, `image{}`, `audio{}` and `textformat{}` we can see more in [GalEngine.Script.Resource]().
+The code block `brush{}`, `image{}`, `voice{}` and `textformat{}` we can see more in [GalEngine.Script.Resource]().
 
 The code block `visualobject{}` we can see more in [GalEngine.Script.VisualObject]().
 
 The code block `animation{}` and `animator{}` we can see more in [GalEngine.Script.Animation]().
+
+The code block `scene{}` se can see more in [GalEngine.Script.Scene]().
 
 ## Script
 
@@ -67,10 +71,32 @@ script{
 
     visualObject1.PositionX = 10;
     visualObject2.PositionY = 10;
-
-    animator1.RunAndWait();
 }
 
 ```
 
-This code means we set the position of a VisualObject called visualObject1 then run a group of animations and wait it ends.
+This code means we set the position of a VisualObject called visualObject1.
+
+## Config
+
+In config code block, we can set the system value(the value in the GlobalValue).
+
+See more in [GalEngine.Config]().
+
+### Example
+
+```gs
+
+config{
+    AppName = "GalEngine";
+    Width = 800;
+    Height = 600;
+
+    IT = 2;
+}
+
+```
+
+The value called `IT` is not a default value, but we also can set it(it means we create it).
+
+

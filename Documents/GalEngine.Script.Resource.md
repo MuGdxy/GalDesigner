@@ -47,6 +47,15 @@ There are some properties that we must set.
 - `Name`: The image's name.
 - `FilePath`: The image's file path.
 
+There are some properties that we can set.
+
+- `Left`: The rectangle's left(default: 0).
+- `Top`: The rectangle's top(default: 0).
+- `Right`: The rectangle's right(default: 0).
+- `Bottom`: The rectangle's bottom(default: 0);
+
+The size is `(Right - Left) * (Bottom - Top)`. If the size is zero, we clip the full size of image.
+
 This is a example to create an image.
 
 ```gs
@@ -58,7 +67,7 @@ image{
 
 ```
 
-### Audio
+### Voice
 
 There are some properties that we must set.
 
@@ -69,9 +78,9 @@ This is a example to create an audio.
 
 ```gs
 
-audio{
-    Name = "audio";
-    FilePath = "./resource/audio.wav";
+voice{
+    Name = "voice";
+    FilePath = "./resource/voice.wav";
 }
 
 ```

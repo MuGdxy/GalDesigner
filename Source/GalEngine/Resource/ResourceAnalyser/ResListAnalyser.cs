@@ -265,7 +265,7 @@ namespace GalEngine
                         sentence.FilePath = imageView.FilePath;
                         break;
 
-                    case AudioView audioView:
+                    case VoiceView audioView:
                         sentence.Type = ResourceType.Audio;
                         sentence.FilePath = audioView.FilePath;
                         break;
@@ -313,7 +313,7 @@ namespace GalEngine
                         break;
 
                     case ResourceType.Audio:
-                        resourceList.Add(item.Name, new AudioView(item.Name, item.FilePath));
+                        resourceList.Add(item.Name, new VoiceView(item.Name, item.FilePath));
                         break;
 
                     case ResourceType.TextFormat:

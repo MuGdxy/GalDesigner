@@ -12,26 +12,25 @@ namespace GalEngine
     {
         private string filePath;
 
+        private float left = 0;
+        private float top = 0;
+        private float right = 0;
+        private float bottom = 0;
+
         public ImageView(string name, string FilePath) : base(name)
         {
             filePath = FilePath;
         }
 
-        protected override void ActiveResource(ref object resource)
-        {
-            if (resource is null)
-            {
-                DebugLayer.Assert(System.IO.File.Exists(filePath) is false, ErrorType.FileIsNotExist, filePath);
-
-                resource = new CanvasImage(filePath);
-            }
-        }
-
-        protected override void DiposeResource(ref object resource)
-        {
-            Utilities.Dipose(ref resource);
-        }
-
         public string FilePath => filePath;
+
+        public CanvasImage Source => Resource as CanvasImage;
+
+        public float Left { get => left; set => left = value; }
+        public float Top { get => top; set => top = value; }
+        public float Right { get => right; set => right = value; }
+        public float Bottom { get => bottom; set => bottom = value; }
+
+        public float Size => (right - left) * (bottom - top);
     }
 }

@@ -40,6 +40,28 @@ namespace Presenter
             SharpDX.Utilities.Dispose(ref decoder);
         }
 
+        public CanvasImage(System.IO.Stream stream)
+        {
+            SharpDX.WIC.BitmapDecoder decoder = new SharpDX.WIC.BitmapDecoder(Engine.ImagingFactory,
+                stream, SharpDX.WIC.DecodeOptions.CacheOnLoad);
+
+            SharpDX.WIC.BitmapFrameDecode frame = decoder.GetFrame(0);
+
+            SharpDX.WIC.FormatConverter converter = new SharpDX.WIC.FormatConverter(Engine.ImagingFactory);
+
+            converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPBGRA,
+                SharpDX.WIC.BitmapDitherType.None, null, 0, SharpDX.WIC.BitmapPaletteType.MedianCut);
+
+            bitmap = SharpDX.Direct2D1.Bitmap1.FromWicBitmap(Canvas.ID2D1DeviceContext, converter);
+
+            iWidth = (int)bitmap.Size.Width;
+            iHeight = (int)bitmap.Size.Height;
+
+            SharpDX.Utilities.Dispose(ref converter);
+            SharpDX.Utilities.Dispose(ref frame);
+            SharpDX.Utilities.Dispose(ref decoder);
+        }
+
         public void Reset(int width, int height)
         {
             SharpDX.Utilities.Dispose(ref bitmap);

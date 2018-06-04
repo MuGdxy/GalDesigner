@@ -54,6 +54,10 @@ namespace GalEngine
         /// <summary>
         ///  The Frame Process Unit named {0} is not exist.
         /// </summary>
-        InvaildFrameProcessUnit
+        InvaildFrameProcessUnit,
+        /// <summary>
+        /// The script format is not right. At Line: {0}, FileName: {1}.
+        /// </summary>
+        InvaildScriptFormat
     }
 }

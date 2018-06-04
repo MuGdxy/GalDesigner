@@ -21,25 +21,10 @@ namespace GalEngine
             fontWeight = Weight;
         }
 
-        protected override void ActiveResource(ref object resource)
-        {
-            if (resource is null)
-            {
-                resource = new CanvasTextFormat(fontFace, fontSize, fontWeight)
-                {
-                    TextAlignment = TextAlignment.Center,
-                    ParagraphAlignment = ParagraphAlignment.Center
-                };
-            }
-        }
-
-        protected override void DiposeResource(ref object resource)
-        {
-            Utilities.Dipose(ref resource);
-        }
-
         public string Fontface => fontFace;
         public float Size => fontSize;
         public int Weight => fontWeight;
+
+        public CanvasTextFormat Source => Resource as CanvasTextFormat;
     }
 }

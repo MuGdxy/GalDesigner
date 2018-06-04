@@ -6,15 +6,12 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    abstract class ResourceView : IDisposable
+    abstract class ResourceView
     {
-        private int count;
         private string name;
+
         private object resource;
 
-        protected abstract void ActiveResource(ref object resource);
-        protected abstract void DiposeResource(ref object resource);
-        
         public ResourceView(string Name)
         {
             name = Name;
@@ -23,26 +20,43 @@ namespace GalEngine
             GlobalResource.SetValue(this);
         }
 
-        public object Use()
+        public object Resource
         {
-            if (resource is null) ActiveResource(ref resource);
-            
-            count++;
+            set => resource = value;
+            get
+            {
+                if (resource is null)
+                {
+                    switch (this)
+                    {
+                        case ImageView imageView:
+                            ResourcePool.SetResourceTo(ref imageView);
 
-            return resource;
-        }
+                            break;
 
-        public void UnUse()
-        {
-            count--;
-        }
+                        case BrushView brushView:
+                            ResourcePool.SetResourceTo(ref brushView);
 
-        public void Dispose()
-        {
-            DiposeResource(ref resource);
+                            break;
+
+                        case VoiceView voiceView:
+                            ResourcePool.SetResourceTo(ref voiceView);
+
+                            break;
+
+                        case TextFormatView textFormatView:
+                            ResourcePool.SetResourceTo(ref textFormatView);
+
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                return resource;
+            }
         }
 
         public string Name => name;
-        public int Count => count;
     }
 }

@@ -38,6 +38,26 @@ visualobject{
 }
 ```
 
+## Children
+
+A visual object can have some children(visual object).
+
+We can use `+=` to add a visual object as its children.
+
+Grammar: `Children += VisualObjectName`.
+
+### Example
+
+```gs
+
+visualobject{
+    Name = "VisualObject1";
+
+    Children += "VisualObject2";
+}
+
+```
+
 ## Events 
 
 When we click a visual object or a visual object is created, we may want run some script for it.
