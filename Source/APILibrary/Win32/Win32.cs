@@ -7,17 +7,26 @@ using System.Runtime.InteropServices;
 
 namespace APILibrary.Win32
 {
+    public delegate int HookProc(int nCode, Int32 wParam, IntPtr lParam);
+
     public static class Internal
     {
         const string User32 = "user32.dll";
         const string Gdi32 = "gdi32.dll";
         const string kernel32 = "kernel32.dll";
+        const string Imm32 = "Imm32.dll";
 
         public delegate IntPtr WndProc(IntPtr Hwnd, uint message,
            IntPtr wParam, IntPtr lParam);
 
+        [DllImport(Imm32)]
+        public static extern bool ImmDisableIME(int idThread);
+
         [DllImport(User32)]
         public static extern int GetSystemMetrics(int nIndex);
+
+        [DllImport(kernel32)]
+        public static extern int GetLastError();
 
         [DllImport(kernel32)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
@@ -38,12 +47,6 @@ namespace APILibrary.Win32
             uint dwStyle, uint x, uint y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu,
             IntPtr hlnstance, IntPtr lpParam);
 
-        [DllImport(User32, CharSet =  CharSet.Auto)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport(kernel32)]
-        public static extern int GetLastError();
-
         [DllImport(User32)]
         public static extern bool DestroyWindow(IntPtr hWnd);
 
@@ -60,12 +63,24 @@ namespace APILibrary.Win32
         [DllImport(User32)]
         public static extern bool UpdateWindow(IntPtr hWnd);
 
+        [DllImport(User32)]
+        public static extern bool UnhookWindowsHookEx(int idHook);
+
         [DllImport(User32, CharSet = CharSet.Auto, EntryPoint = "SetWindowTextW")]
         public static extern bool SetWindowText(IntPtr hWnd, string lpString);
 
         [DllImport(User32)]
         public static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X,
             int Y, int cx, int cy, uint uFlags);
+
+        [DllImport(User32)]
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
+
+        [DllImport(User32)]
+        public static extern int SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
+
+        [DllImport(User32)]
+        public static extern int CallNextHookEx(int idHook, int nCode, int wParam, IntPtr lParam);
 
         [DllImport(User32)]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewlong);
@@ -75,6 +90,12 @@ namespace APILibrary.Win32
 
         [DllImport(User32)]
         public static extern bool GetWindowRect(IntPtr hWnd, ref Rect lpRect);
+
+        [DllImport(User32)]
+        public static extern int GetCurrentThreadId();
+
+        [DllImport(User32)]
+        public static extern IntPtr GetFocus();
 
         [DllImport(User32)]
         public static extern bool SetLayeredWindowAttributes(IntPtr hWnd, uint crKey,

@@ -42,6 +42,8 @@ namespace Builder
 
         static Application()
         {
+            APILibrary.Win32.Internal.ImmDisableIME(0);
+
             appinfo = new APILibrary.Win32.AppInfo()
             {
                 style = (uint)appstyle,

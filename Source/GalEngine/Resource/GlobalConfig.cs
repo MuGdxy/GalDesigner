@@ -8,11 +8,6 @@ namespace GalEngine
 {
     public static class GlobalConfig
     {
-        internal const string WidthName = "Width";
-        internal const string HeightName = "Height";
-        internal const string ApplicationName = "AppName";
-        internal const string FullScreenName = "FullScreen";
-
         static GlobalConfig()
         { 
         }
@@ -28,26 +23,32 @@ namespace GalEngine
 
         public static int Width
         {
-            set => GlobalValue.SetValue(WidthName, value);
-            get => GlobalValue.GetValue<int>(WidthName);
+            set => GlobalValue.SetValue(SystemProperty.Width, value);
+            get => GlobalValue.GetValue<int>(SystemProperty.Width);
         }
 
         public static int Height
         {
-            set => GlobalValue.SetValue(HeightName, value);
-            get => GlobalValue.GetValue<int>(HeightName);
+            set => GlobalValue.SetValue(SystemProperty.Height, value);
+            get => GlobalValue.GetValue<int>(SystemProperty.Height);
         }
 
         public static string AppName
         {
-            set => GlobalValue.SetValue(ApplicationName, value);
-            get => GlobalValue.GetValue<string>(ApplicationName);
+            set => GlobalValue.SetValue(SystemProperty.AppName, value);
+            get => GlobalValue.GetValue<string>(SystemProperty.AppName);
         }
 
         public static bool IsFullScreen
         {
-            set => GlobalValue.SetValue(FullScreenName, value);
-            get => GlobalValue.GetValue<bool>(FullScreenName);
+            set => GlobalValue.SetValue(SystemProperty.FullScreeen, value);
+            get => GlobalValue.GetValue<bool>(SystemProperty.FullScreeen);
+        }
+
+        public static bool IsExit
+        {
+            set => GlobalValue.SetValue(SystemProperty.IsExit, value);
+            get => GlobalValue.GetValue<bool>(SystemProperty.IsExit);
         }
     }
 }

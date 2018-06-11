@@ -225,6 +225,9 @@ namespace GalEngine
 #endif
 
             currentScene?.ProcessUpdate(currentScene);
+
+            if (GlobalConfig.IsExit is true)
+                Destory();
         }
         
         public void SetCurrentScene(Scene scene)

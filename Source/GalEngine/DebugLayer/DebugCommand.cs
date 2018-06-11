@@ -470,7 +470,11 @@ namespace GalEngine
                     WriteCommand(SystemProperty.SpecialThanksName, ResourceList.GoldBrush);
 
                     return true;
+                case "Exit":
 
+                    GlobalConfig.IsExit = true;
+
+                    return true;
                 default:
                     break;
             }

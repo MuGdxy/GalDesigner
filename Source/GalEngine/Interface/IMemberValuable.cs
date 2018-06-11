@@ -6,12 +6,38 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    interface IMemberValuable
+    public abstract class MemberValuable
     {
-        void SetMemberValue(string memberName, object value);
+        protected Dictionary<string, object> memberValueList = new Dictionary<string, object>();
 
-        object GetMemberValue(string memberName);
+        protected static object AsObject<T>(T value)
+        {
+            return Convert.ChangeType(value, value.GetType());
+        }
 
-        T GetMemberValue<T>(string memberName);
+        internal virtual void SetPrivateMemberValue(string memberName, object value)
+        {
+
+        }
+
+        internal virtual object GetPrivateMemberValue(string memberName)
+        {
+            return null;
+        }
+
+        public virtual void SetMemberValue(string memberName, object value)
+        {
+
+        }
+
+        public virtual object GetMemberValue(string memberName)
+        {
+            return null;
+        }
+
+        public T GetMemberValue<T>(string memberName)
+        {
+            return (T)GetMemberValue(memberName);
+        }
     }
 }

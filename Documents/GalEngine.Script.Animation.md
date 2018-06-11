@@ -29,7 +29,7 @@ We can write some code to return the pre frame at timepos or next frame. Also we
 
 ```gs
 
-animation{
+Animation{
     Name = "Animation1";
 
     Frames += Frame(1, 0);
@@ -59,7 +59,7 @@ Grammar: `Animations += Animation(animation's name, start time)` or `Animations 
 
 ```gs
 
-animator{
+Animator{
     Name = "Animator1";
 
     Animations += Animation("Animation1", 0);

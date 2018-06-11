@@ -64,7 +64,8 @@ namespace GalEngine
             errorText.Add(ErrorType.CanNotAddAnimationWhenAnimatorRun, "You can not add the animation: {0} when the animator: {1} is running.");
             errorText.Add(ErrorType.MoreFramesNeedInAnimation, "The Animation named {0} must have more than two keyframes.");
             errorText.Add(ErrorType.InvaildFrameProcessUnit, "The Frame Process Unit named {0} is not exist.");
-            errorText.Add(ErrorType.InvaildScriptFormat, "The script format is not right. At Line: {0}, FileName: {1}.");
+            errorText.Add(ErrorType.InvaildScriptFormat, "The script format is not right. At Line: {0}, FilePath: {1}.");
+            errorText.Add(ErrorType.InvaildScriptType, "The script type is not right. At Line: {0}, FilePath: {1}.");
 
             warningText.Add(WarningType.NoTargetOfAnimation, "Can not find the target value on starting animation(Name: {0}).");
         }

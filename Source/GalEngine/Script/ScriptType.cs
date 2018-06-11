@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    enum ScriptType
+    public enum ScriptType : int
     {
         Unknown,
         Brush,

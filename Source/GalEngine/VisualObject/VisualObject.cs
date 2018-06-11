@@ -10,7 +10,7 @@ using Presenter;
 
 namespace GalEngine
 {
-    public class VisualObject : IMemberValuable
+    public class VisualObject : MemberValuable
     {
         private enum MemberResource : int
         {
@@ -33,8 +33,6 @@ namespace GalEngine
 
         private CanvasResource[] memberResource = new CanvasResource[(int)MemberResource.Count];
         private ResourceView[] memberResourceView = new ResourceView[(int)MemberResource.Count];
-
-        private Dictionary<string, object> memberValueList = new Dictionary<string, object>();
 
         private bool isActive = false;
         private bool isPresented = true;
@@ -167,11 +165,6 @@ namespace GalEngine
             {
                 textInstance.Reset(text, width, height, memberResource[(int)MemberResource.TextFormat] as CanvasTextFormat);
             }
-        }
-
-        private object AsObject<T>(T value)
-        {
-            return Convert.ChangeType(value, value.GetType());
         }
 
         /// <summary>
@@ -367,65 +360,12 @@ namespace GalEngine
             }
         }
 
-        public object GetMemberValue(string memberName)
+        public override object GetMemberValue(string memberName)
         {
             return GetMemberValue<object>(memberName);
         }
 
-        public virtual T GetMemberValue<T>(string memberName)
-        {
-            switch (memberName)
-            {
-                case "Width":
-                    return (T)AsObject(width);
-
-                case "Height":
-                    return (T)AsObject(height);
-
-                case "Text":
-                    return (T)(text as object);
-
-                case "PositionX":
-                    return (T)AsObject(positionX);
-
-                case "PositionY":
-                    return (T)AsObject(positionY);
-
-                case "PositionZ":
-                    return (T)AsObject(positionZ);
-
-                case "BorderSize":
-                    return (T)AsObject(borderSize);
-
-                case "Opacity":
-                    return (T)AsObject(opacity);
-
-                case "IsPresented":
-                    return (T)AsObject(isPresented);
-
-                case "Angle":
-                    return (T)AsObject(angle);
-
-                case "ScaleX":
-                    return (T)AsObject(scaleX);
-
-                case "ScaleY":
-                    return (T)AsObject(scaleY);
-
-                case "TextBrush":
-                case "TextFormat":
-                case "BorderBrush":
-                case "BackGroundImage":
-                case "BackGroundBrush":
-                    return (T)(memberResource[(int)Enum.Parse(typeof(MemberResource), memberName)] as object);
-            }
-
-            if (memberValueList.ContainsKey(memberName) is false)
-                throw DebugLayer.GetErrorException(ErrorType.InvaildMemberValueName, memberName);
-            else return (T)memberValueList[memberName];
-        }
-
-        public virtual void SetMemberValue(string memberName, object value)
+        public override void SetMemberValue(string memberName, object value)
         {
             switch (memberName)
             {

@@ -10,27 +10,37 @@ namespace GalEngine
     {
         private static string specialThanksName = null;
 
-        public static string Width => "Width";
-        public static string Height => "Height";
-        public static string AppName => "AppName";
-        public static string FullScreeen => "FullScreen";
-        
-        public static string TextBrush => "TextBrush";
-        public static string TextFormat => "TextFormat";
-        public static string BorderBrush => "BorderBrush";
-        public static string BackGroundBrush => "BackGroundBrush";
-        public static string BackGroundImage => "BackGroundImage";
+        public const string Width = "Width";
+        public const string Height = "Height";
+        public const string AppName = "AppName";
+        public const string FullScreeen = "FullScreen";
+        public const string IsExit = "IsExit";
 
-        public static string Text => "Text";
-        public static string PositionX => "PositionX";
-        public static string PositionY => "PositionY";
-        public static string PositionZ => "PositionZ";
-        public static string BorderSize => "BorderSize";
-        public static string Opacity => "Opacity";
-        public static string IsPresented => "IsPresented";
-        public static string Angle => "Angle";
-        public static string ScaleX => "ScaleX";
-        public static string ScaleY => "ScaleY";
+        public const string TextBrush = "TextBrush";
+        public const string TextFormat = "TextFormat";
+        public const string BorderBrush = "BorderBrush";
+        public const string BackGroundBrush = "BackGroundBrush";
+        public const string BackGroundImage = "BackGroundImage";
+
+        public const string Name = "Name";
+        public const string Text = "Text";
+        public const string PositionX = "PositionX";
+        public const string PositionY = "PositionY";
+        public const string PositionZ = "PositionZ";
+        public const string BorderSize = "BorderSize";
+        public const string Opacity = "Opacity";
+        public const string IsPresented = "IsPresented";
+        public const string Angle = "Angle";
+        public const string ScaleX = "ScaleX";
+        public const string ScaleY = "ScaleY";
+
+        public const string Code = "Code";
+        public const string FilePath = "FilePath";
+
+        public const string Red = "Red";
+        public const string Green = "Green";
+        public const string Blue = "Blue";
+        public const string Alpha = "Alpha";
 
         public static string SpecialThanksName => specialThanksName;
 

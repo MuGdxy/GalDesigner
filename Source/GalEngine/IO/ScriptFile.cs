@@ -10,16 +10,26 @@ namespace GalEngine
     {
         private System.IO.Stream stream;
 
-        private string fileName;
+        private string filePath;
 
-        public ScriptFile(string FileName,System.IO.Stream Stream)
+        private string code;
+
+        public ScriptFile(string FilePath, System.IO.Stream Stream)
         {
-            fileName = FileName;
+            filePath = FilePath;
 
             stream = Stream;
+
+            var buffer = new byte[stream.Length];
+
+            stream.Read(buffer, 0, buffer.Length);
+
+            code = Encoding.UTF8.GetString(buffer);
         }
 
-        public string FileName => fileName;
+        public string FilePath => filePath;
+
+        public string Code => code;
 
         public System.IO.Stream Stream => stream;
     }

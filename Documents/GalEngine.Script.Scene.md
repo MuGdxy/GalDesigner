@@ -18,7 +18,7 @@ It is same as visual object.
 
 ```gs
 
-scene{
+Scene{
     Name = "Scene1";
 
     VisualObject += "VisualObject1";

@@ -31,7 +31,7 @@ This example can create a white brush. And we do not set the `Alpha`, so the `Al
 
 ```gs
 
-brush{
+Brush{
     Name = "White";
     Red = 1;
     Green = 1;
@@ -60,7 +60,7 @@ This is a example to create an image.
 
 ```gs
 
-image{
+Image{
     Name = "image";
     FilePath = "./resource/image.png";
 }
@@ -78,7 +78,7 @@ This is a example to create an audio.
 
 ```gs
 
-voice{
+Voice{
     Name = "voice";
     FilePath = "./resource/voice.wav";
 }
@@ -102,7 +102,7 @@ There is a example.
 
 ```gs
 
-textformat{
+TextFormat{
     Name = "textformat";
     Font = "Consolas";
     Size = "12";

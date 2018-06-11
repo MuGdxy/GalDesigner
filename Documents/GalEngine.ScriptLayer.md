@@ -12,7 +12,7 @@ There is a example.
 
 ```gs
 
-visualobject{
+VisualObject{
     Name = "visualObject1";
     PositionX = 1;
     PositionY = 2;
@@ -29,16 +29,16 @@ The code defines a VisualObject.
 
 We must write the code in a code block and the code block have some type.
 
-- `brush{}`: for making brush.
-- `image{}`: for making image.
-- `voice{}`: for making audio.
-- `textformat{}`: for making textformat.
-- `visualobject{}`: for making visual object.
-- `script{}`: common script and only support the common code.
-- `animation{}`: for making animation.
-- `animator{}`: for making animator.
-- `scene{}:` for making scene.
-- `config{}:` for setting the config.
+- `Brush{}`: for making brush.
+- `Image{}`: for making image.
+- `Voice{}`: for making audio.
+- `TextFormat{}`: for making textformat.
+- `VisualObject{}`: for making visual object.
+- `Script{}`: common script and only support the common code.
+- `Animation{}`: for making animation.
+- `Animator{}`: for making animator.
+- `Scene{}:` for making scene.
+- `Config{}:` for setting the config.
 
 The code block `brush{}`, `image{}`, `voice{}` and `textformat{}` we can see more in [GalEngine.Script.Resource]().
 

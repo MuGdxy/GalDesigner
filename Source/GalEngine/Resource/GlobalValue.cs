@@ -15,16 +15,17 @@ namespace GalEngine
             valueList = new Dictionary<string, object>();
 
             //default value
-            SetValue(GlobalConfig.WidthName, 800);
-            SetValue(GlobalConfig.HeightName, 600);
-            SetValue(GlobalConfig.ApplicationName, "GalEngine");
-            SetValue(GlobalConfig.FullScreenName, false);
+            SetValue(SystemProperty.Width, 800);
+            SetValue(SystemProperty.Height, 600);
+            SetValue(SystemProperty.AppName, "GalEngine");
+            SetValue(SystemProperty.FullScreeen, false);
+            SetValue(SystemProperty.IsExit, false);
         }
 
         public static void SetValue(string name, object value)
         {
             //make value same.
-            if (name == GlobalConfig.FullScreenName && GalEngine.GameWindow != null)
+            if (name == SystemProperty.FullScreeen && GalEngine.GameWindow != null)
             {
                 GalEngine.GameWindow.IsFullScreen = (bool)value;
             }

@@ -10,6 +10,7 @@ Some value have their own function.
 - `Height`: The window's height(Resolution).
 - `AppName`: The window's title.
 - `FullScreen`: IsFullScreen.
+- `IsExit`: IsExit;
 
 ## Custom Value
 

@@ -56,8 +56,12 @@ namespace GalEngine
         /// </summary>
         InvaildFrameProcessUnit,
         /// <summary>
-        /// The script format is not right. At Line: {0}, FileName: {1}.
+        /// The script format is not right. At Line: {0}, FilePath: {1}.
         /// </summary>
-        InvaildScriptFormat
+        InvaildScriptFormat,
+        /// <summary>
+        /// The script type is not right. At Line: {0}, FilePath: {1}.
+        /// </summary>
+        InvaildScriptType
     }
 }

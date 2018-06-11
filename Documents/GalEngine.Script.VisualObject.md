@@ -25,7 +25,7 @@ There are some we can set.
 
 ```gs
 
-visualobject{
+VisualObject{
     Name = "VisualObject";
 
     Width = 100;
@@ -50,7 +50,7 @@ Grammar: `Children += VisualObjectName`.
 
 ```gs
 
-visualobject{
+VisualObject{
     Name = "VisualObject1";
 
     Children += "VisualObject2";
@@ -82,7 +82,7 @@ Grammar: `Events += ScriptName`.
 
 ```gs
 
-visualobject{
+VisualObject{
     Name = "visualobject";
 
     OnClick += "ScirptName";

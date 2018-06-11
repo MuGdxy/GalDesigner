@@ -17,6 +17,9 @@ namespace GalEngine
         public static bool IsNumber(char value)
             => value >= '0' && value <= '9';
 
+        public static bool IsEscape(char value)
+            => value is '\n' || value is '\t' || value is '\r';
+
         public static bool IsAlphaOrNumber(char value) => IsAlpha(value) || IsNumber(value);
 
         public static string GetFileSuffix(string file)
@@ -38,6 +41,21 @@ namespace GalEngine
                 result += suffix[i];
 
             return result;
+        }
+
+        public static ScriptType StringToScriptType(string name)
+        {
+            try
+            {
+                var type = Enum.Parse(typeof(ScriptType), name);
+
+                return (ScriptType)type;
+            }
+
+            catch (ArgumentException)
+            {
+                return ScriptType.Unknown;
+            }
         }
 
         public static void Dipose<T>(ref T value) where T : class
