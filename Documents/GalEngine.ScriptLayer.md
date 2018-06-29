@@ -59,7 +59,6 @@ Before we run an script, we must set some value.
 There are some grammar.
 
 - `left = right`: This code is used to set value. Left is the value's name and right is the value. 
-- `name.function_name()`: This code is used to run some default function.
 - `name.member`: This code is used to get or set the member value.
 
 For example.
@@ -99,4 +98,15 @@ config{
 
 The value called `IT` is not a default value, but we also can set it(it means we create it).
 
+## Operation
+
+To analyser the script sentence, we need make a rule. For this engine, we use the operation to 
+distinguish the setence.
+
+There are some operations:
+
+- `=`: It is used to set value. (the right value is not allowed to be the member)
+- `.`: It means a member value.
+
+About complex sentence like `left.value = 12;` we can think the `left.value` is a left.
 

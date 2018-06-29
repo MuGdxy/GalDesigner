@@ -21,19 +21,6 @@ namespace GalEngine
         public float Blue => blue;
         public float Alpha => alpha;
 
-        private void ProcessSentence(string left, string right)
-        {
-            switch (left)
-            {
-                case SystemProperty.Name:
-                    name = right;
-
-                    break;
-                default:
-                    break;
-            }
-        }
-
         public BrushScript(string Content, int Line, string FilePath) : base(Content, Line, FilePath)
         {
             var script = this;

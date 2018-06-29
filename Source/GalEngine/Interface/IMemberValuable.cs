@@ -17,7 +17,7 @@ namespace GalEngine
 
         internal virtual void SetPrivateMemberValue(string memberName, object value)
         {
-
+            SetMemberValue(memberName, value);
         }
 
         internal virtual object GetPrivateMemberValue(string memberName)

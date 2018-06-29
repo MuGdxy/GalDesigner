@@ -20,6 +20,15 @@ namespace GalEngine
         public static bool IsEscape(char value)
             => value is '\n' || value is '\t' || value is '\r';
 
+        public static bool IsParenthese(char op)
+            => op is '(' || op is ')' || op is '[' || op is ']';
+
+        public static bool IsOpenParenthese(char op)
+            => op is '(' || op is '[';
+
+        public static bool IsCloseParenthese(char op)
+            => op is ')' || op is ']';
+
         public static bool IsAlphaOrNumber(char value) => IsAlpha(value) || IsNumber(value);
 
         public static string GetFileSuffix(string file)
@@ -58,7 +67,7 @@ namespace GalEngine
             }
         }
 
-        public static void Dipose<T>(ref T value) where T : class
+        public static void Dispose<T>(ref T value) where T : class
         {
             if (value is null) return;
 

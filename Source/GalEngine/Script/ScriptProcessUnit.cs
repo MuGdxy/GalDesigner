@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+  
     public class ScriptProcessUnit
     {
+       
         protected struct Sentence
         {
             public string Code;
             public int Line;
 
-            public Sentence(string code,int line)
+            public Sentence(string code, int line)
             {
                 Code = code;
                 Line = line;
@@ -51,9 +53,6 @@ namespace GalEngine
                         }
 
                         break;
-                    case ' ':
-                        if (isString is false) continue;
-                        break;
 
                     case '"':
                         isString ^= true;
@@ -71,19 +70,29 @@ namespace GalEngine
             return result.ToArray();
         }
 
-        protected virtual void AnalyerSentence(Script script, Sentence[] sentences)
+        private void ProcessSetences(Script script, Sentence[] sentences)
         {
             foreach (var item in sentences)
             {
-                
+                if (AnalyerSetence(script, item) is false)
+                    DebugLayer.ReportError(ErrorType.InvaildScriptFormat, item.Line, script.FilePath);
             }
+        }
+
+        protected virtual bool AnalyerSetence(Script script, Sentence sentence)
+        {
+            foreach (var item in sentence.Code)
+            {
+
+            }
+            return true;
         }
 
         public void ProcessScript(Script script)
         {
             var sentences = AnalyerScript(script);
 
-            AnalyerSentence(script, sentences);
+            ProcessSetences(script, sentences);
         }
 
         public static ScriptProcessUnit Default => defaultProcessUnit;

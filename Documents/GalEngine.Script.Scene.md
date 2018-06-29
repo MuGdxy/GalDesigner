@@ -8,7 +8,7 @@ Also we need set the `Name` before we use it.
 
 An scene is similar to the visaul object, we can add visual object into it(as children).
 
-Grammar: `VisualObject += VisualObjectName`.
+Grammar: `VisualObject = VisualObjectName`.
 
 ## Events 
 
@@ -23,7 +23,7 @@ Scene{
 
     VisualObject += "VisualObject1";
 
-    OnClick += "Script1";
+    OnClick = "Script1";
 }
 
 ```

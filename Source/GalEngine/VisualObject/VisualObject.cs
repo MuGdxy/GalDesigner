@@ -183,7 +183,7 @@ namespace GalEngine
                 else memberResource[i] = memberResourceView[i].Resource as CanvasResource;
             }
 
-            Utilities.Dipose(ref textInstance);
+            Utilities.Dispose(ref textInstance);
 
             textInstance = new CanvasText(text, width, height, memberResource[(int)MemberResource.TextFormat] as CanvasTextFormat);
         }
@@ -350,13 +350,13 @@ namespace GalEngine
                 }
             }
 
-            Utilities.Dipose(ref textInstance);
+            Utilities.Dispose(ref textInstance);
 
             VisualObjectList.Remove(this);
 
             foreach (var item in children)
             {
-                Utilities.Dipose(ref item.children);
+                Utilities.Dispose(ref item.children);
             }
         }
 

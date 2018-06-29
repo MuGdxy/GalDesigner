@@ -19,8 +19,8 @@ namespace GalEngine
 
         internal static void SetResolution(int Width, int Height)
         {
-            Utilities.Dipose(ref renderSurface);
-            Utilities.Dipose(ref templateSurface);
+            Utilities.Dispose(ref renderSurface);
+            Utilities.Dispose(ref templateSurface);
             
             renderSurface = new TextureFace(Width, Height);
             templateSurface = new TextureFace(Width, Height);

@@ -17,7 +17,7 @@ In order to add frame, we define an opreator to do this. It is `+=`.
 
 If you want to add a frame into animation, we can use `+=` to do this.
 
-Grammar: `Frames += Frame(data, time)` or `Frames += [data, time]`.
+Grammar: `Frames = [data, time]`.
 
 ### ProcessUnit
 
@@ -32,8 +32,8 @@ We can write some code to return the pre frame at timepos or next frame. Also we
 Animation{
     Name = "Animation1";
 
-    Frames += Frame(1, 0);
-    Frames += Frame(2, 1);
+    Frames = [1, 0]
+    Frames = [1, 0]
     ...
 }
 
@@ -51,9 +51,9 @@ And there are two kinds value we need set.
 
 ### Add Animation
 
-Like `Add Frame`, we also use the `+=` to add it.
+Like `Add Frame`, we also use the `=` to add it.
 
-Grammar: `Animations += Animation(animation's name, start time)` or `Animations += [animation's name, start time]`.
+Grammar: `Animations = [animation's name, start time]`.
 
 ### Example
 
@@ -62,16 +62,8 @@ Grammar: `Animations += Animation(animation's name, start time)` or `Animations 
 Animator{
     Name = "Animator1";
 
-    Animations += Animation("Animation1", 0);
-    Animations += Animation("Animation2", 0);
+    Animations = ["Animation1", 0];
+    Animations = ["Animation2", 0];
 }
     
 ```
-
-### Function
-
-The animator has some functions that we can use.
-
-- `Run()`: start the animations.
-- `RunAndWait()`: statr the animations and wait it ends(the process unit will stop before the animations end).
- 

@@ -17,3 +17,9 @@ This process unit is used to process the events or common script. Most of script
 ## Story ProcessUnit
 
 This process unit is used to process the story script. It is ran in the game scene.
+
+## How to analyer a file?
+
+- Find all script block in the file.
+- Find all sentence in the script block.
+- Build an expression to analyer it.
