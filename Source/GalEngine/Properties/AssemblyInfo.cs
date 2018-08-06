@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GalEngine")]
-[assembly: AssemblyCopyright("Copyright ©  2018 Link")]
+[assembly: AssemblyCopyright("Copyright © 2018 Link")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

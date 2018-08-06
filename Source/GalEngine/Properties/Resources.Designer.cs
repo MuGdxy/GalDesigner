@@ -59,15 +59,5 @@ namespace GalEngine.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] SpecialThanks {
-            get {
-                object obj = ResourceManager.GetObject("SpecialThanks", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

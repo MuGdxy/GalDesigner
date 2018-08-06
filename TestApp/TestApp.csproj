@@ -50,55 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnimationResource\AnimatorForPlayer1.cs" />
-    <Compile Include="AnimationResource\AnimatorForPlayer2.cs" />
-    <Compile Include="AnimationResource\AnimatorForPlayer3.cs" />
-    <Compile Include="AnimationResource\AnimatorForText.cs" />
-    <Compile Include="AnimationResource\GlobalAnimation.cs" />
-    <Compile Include="AnimationResource\LinearAnimation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest" />
-    <None Include="BuildListT.buildList">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ConfigT.gsConfig">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="ResListT.resList">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Test.gs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Source\Builder\Builder.csproj">
-      <Project>{630d9395-ee2a-4301-bef7-bfaffa2d2d38}</Project>
-      <Name>Builder</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Source\GalEngine\GalEngine.csproj">
       <Project>{26afd910-ad7c-4165-8622-cb8103c2ca7d}</Project>
       <Name>GalEngine</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="Resource\ev09a.bmp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\window.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\window_frame.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Resource\window_menu.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
