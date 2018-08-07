@@ -13,9 +13,8 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            Application.MakeWindow("GalEngine", 1920, 1080);
-            Application.Visable = true;
-            Application.RunLoop();
+            GameScene.Create("GalEngine", new Size(1920, 1080), "");
+            GameScene.RunLoop();
         }
     }
 }

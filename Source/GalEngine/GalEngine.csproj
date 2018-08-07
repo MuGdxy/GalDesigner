@@ -60,7 +60,11 @@
     <Compile Include="Application\Application.cs" />
     <Compile Include="Application\Events.cs" />
     <Compile Include="Application\KeyCode.cs" />
-    <Compile Include="Property\ObjectProperties.cs" />
+    <Compile Include="BaseObject\Rectangle.cs" />
+    <Compile Include="BaseObject\Size.cs" />
+    <Compile Include="BaseObject\ValueManager.cs" />
+    <Compile Include="Core\Bitmap.cs" />
+    <Compile Include="Core\GameScene.cs" />
     <Compile Include="DebugLayer\DebugLayer.cs" />
     <Compile Include="DebugLayer\Error.cs" />
     <Compile Include="DebugLayer\Warning.cs" />
@@ -70,7 +74,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Property\Property.cs" />
+    <Compile Include="System\Graphics.cs" />
+    <Compile Include="System\Windows.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -88,5 +94,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

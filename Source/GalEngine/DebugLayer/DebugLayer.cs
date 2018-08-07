@@ -41,7 +41,7 @@ namespace GalEngine
         
         public static void ReportWarning(Warning warning, params object[] context)
         {
-            Console.WriteLine(WarningHead + SetParamsToString(warnings[warning], context));
+            Console.WriteLine(SetParamsToString(warnings[warning], context));
         }
 
         public static void Assert(bool testValue, Error error, params object[] context)
