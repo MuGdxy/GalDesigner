@@ -44,13 +44,18 @@ namespace GalEngine
             Change += onChange;
         }
 
-        public void Update()
+        public void Update(bool IsTriggerChangeEvent = true)
         {
             if (IsChange is false) return;
 
-            Change?.Invoke(oldValue, newValue);
+            if (IsTriggerChangeEvent is true) Change?.Invoke(oldValue, newValue);
 
             oldValue = newValue;
+        }
+
+        public static implicit operator ValueManager<T>(T Value)
+        {
+            return new ValueManager<T>(Value);
         }
     }
 }

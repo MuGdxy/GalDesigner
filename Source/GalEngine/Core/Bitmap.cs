@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace GalEngine
 
         public Bitmap(int Width, int Height)
         {
-            System.Graphics.CreateBitmap(ref resource, Width, Height);
+            Systems.Graphics.CreateBitmap(Width, Height, out resource);
 
             size = new Size(Width, Height);
         }
@@ -26,9 +27,14 @@ namespace GalEngine
 
         }
 
+        public Bitmap(Stream BitmapStream)
+        {
+            Systems.Graphics.CreateBitmap(BitmapStream, out resource, out size);
+        }
+
         public void Dispose()
         {
-            System.Graphics.DestoryBitmap(ref resource);
+            Systems.Graphics.DestoryBitmap(ref resource);
         }
     }
 }

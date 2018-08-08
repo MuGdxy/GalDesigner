@@ -12,11 +12,12 @@ namespace GalEngine
         private static ValueManager<string> icon = new ValueManager<string>();
         private static ValueManager<Size> size = new ValueManager<Size>(ChangeSizeEvent);
 
-        private static int mousePositionX = 0;
-        private static int mousePositionY = 0;
+        private static Position mousePosition = new Position();
 
         public static string Name { set => name.Value = value; get => name.Value; }
         public static Size Size { set => size.Value = value; get => size.Value; }
+
+        public static RectangleF ViewPort => Utility.ComputeViewPort(Size, GameScene.Resolution);
 
         public static event MouseMoveHandler MouseMove;
         public static event MouseClickHandler MouseClick;
@@ -26,41 +27,46 @@ namespace GalEngine
 
         private static void ChangeNameEvent(string oldName, string newName)
         {
-            System.Windows.SetWindowText(newName);
+            Systems.Windows.SetWindowText(newName);
         }
 
         private static void ChangeSizeEvent(Size oldSize, Size newSize)
         {
-            System.Windows.SetWindowSize(newSize);
+            Systems.Windows.SetWindowSize(newSize);
         }
 
         internal static void OnMouseMove(object sender, MouseMoveEvent eventArg)
         {
-            mousePositionX = eventArg.X;
-            mousePositionY = eventArg.Y;
+            mousePosition = eventArg.MousePosition;
 
             MouseMove?.Invoke(sender, eventArg);
+
+            GameScene.OnMouseMove(sender, eventArg);
         }
 
         internal static void OnMouseClick(object sender, MouseClickEvent eventArg)
         {
-            eventArg.X = mousePositionX;
-            eventArg.Y = mousePositionY;
+            eventArg.MousePosition = mousePosition;
 
             MouseClick?.Invoke(sender, eventArg);
+
+            GameScene.OnMouseClick(sender, eventArg);
         }
 
         internal static void OnMouseWheel(object sender, MouseWheelEvent eventArg)
         {
-            eventArg.X = mousePositionX;
-            eventArg.Y = mousePositionY;
+            eventArg.MousePosition = mousePosition;
 
             MouseWheel?.Invoke(sender, eventArg);
+
+            GameScene.OnMouseWheel(sender, eventArg);
         }
 
         internal static void OnBoardClick(object sender, BoardClickEvent eventArg)
         {
             BoardClick?.Invoke(sender, eventArg);
+
+            GameScene.OnBoardClick(sender, eventArg);
         }
 
         internal static void OnUpdate(object sender)
@@ -73,7 +79,7 @@ namespace GalEngine
 
             GameScene.OnUpdate();
 
-            System.Windows.PresentBitmap();
+            Systems.Windows.PresentBitmap();
         }
 
         internal static void Create(string Name, Size Size, string Icon)
@@ -82,12 +88,12 @@ namespace GalEngine
             size.Value = Size;
             icon.Value = Icon;
 
-            System.Windows.CreateWindow(name.Value, size.Value, icon.Value);
+            Systems.Windows.CreateWindow(name.Value, size.Value, icon.Value);
         }
 
         internal static void RunLoop()
         {
-            while (System.Windows.UpdateWindow() is false)
+            while (Systems.Windows.UpdateWindow() is false)
             {
                 OnUpdate(null);
             }

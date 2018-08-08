@@ -59,11 +59,18 @@
   <ItemGroup>
     <Compile Include="Application\Application.cs" />
     <Compile Include="Application\Events.cs" />
-    <Compile Include="Application\KeyCode.cs" />
+    <Compile Include="Core\GameDefault.cs" />
+    <Compile Include="Enum\FontStyle.cs" />
+    <Compile Include="Enum\FontWeight.cs" />
+    <Compile Include="Enum\KeyCode.cs" />
+    <Compile Include="BaseObject\Color.cs" />
+    <Compile Include="BaseObject\Font.cs" />
+    <Compile Include="BaseObject\Position.cs" />
     <Compile Include="BaseObject\Rectangle.cs" />
     <Compile Include="BaseObject\Size.cs" />
     <Compile Include="BaseObject\ValueManager.cs" />
     <Compile Include="Core\Bitmap.cs" />
+    <Compile Include="Core\GameResource.cs" />
     <Compile Include="Core\GameScene.cs" />
     <Compile Include="DebugLayer\DebugLayer.cs" />
     <Compile Include="DebugLayer\Error.cs" />
@@ -74,8 +81,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="System\Graphics.cs" />
-    <Compile Include="System\Windows.cs" />
+    <Compile Include="Systems\Graphics.cs" />
+    <Compile Include="Systems\Windows.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>

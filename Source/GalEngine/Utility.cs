@@ -49,6 +49,16 @@ namespace GalEngine
             return ComputeViewPort(Size.Width, Size.Height, Resolution.Width, Resolution.Height);
         }
 
+        public static Position ComputePosition(Position Position, RectangleF ViewPort, Size Resolution)
+        {
+            Position result = new Position();
+
+            result.X = (int)((Position.X - ViewPort.Left) / ViewPort.Width * Resolution.Width);
+            result.Y = (int)((Position.Y - ViewPort.Top) / ViewPort.Height * Resolution.Height);
+
+            return result;
+        }
+
         public static void Dispose<T>(ref T Object) where T : class, IDisposable
         {
             if (Object == null) return;

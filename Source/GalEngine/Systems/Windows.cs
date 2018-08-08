@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GalEngine.System
+namespace GalEngine.Systems
 {
+    using Message = APILibrary.Win32.Message;
+
     static class Windows
     {
         private static readonly APILibrary.Win32.Internal.WndProc processFunction = ProcessMessage;
@@ -27,15 +29,17 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_MOUSEMOVE:
                     Application.OnMouseMove(null, new MouseMoveEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam)
+                       MousePosition = new Position(
+                           Message.LowWord(lParam), 
+                           Message.HighWord(lParam))
                     }); break;
 
                 case APILibrary.Win32.WinMsg.WM_LBUTTONDOWN:
                     Application.OnMouseClick(null, new MouseClickEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam),
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
                         Button = MouseButton.Left,
                         IsDown = true
                     }); break;
@@ -43,8 +47,9 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_LBUTTONUP:
                     Application.OnMouseClick(null, new MouseClickEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam),
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
                         Button = MouseButton.Left,
                         IsDown = false
                     }); break;
@@ -52,8 +57,9 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_MBUTTONDOWN:
                     Application.OnMouseClick(null, new MouseClickEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam),
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
                         Button = MouseButton.Middle,
                         IsDown = true
                     }); break;
@@ -61,8 +67,9 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_MBUTTONUP:
                     Application.OnMouseClick(null, new MouseClickEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam),
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
                         Button = MouseButton.Middle,
                         IsDown = false
                     }); break;
@@ -70,8 +77,9 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_RBUTTONDOWN:
                     Application.OnMouseClick(null, new MouseClickEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam),
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
                         Button = MouseButton.Right,
                         IsDown = true
                     }); break;
@@ -79,8 +87,9 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_RBUTTONUP:
                     Application.OnMouseClick(null, new MouseClickEvent()
                     {
-                        X = APILibrary.Win32.Message.LowWord(lParam),
-                        Y = APILibrary.Win32.Message.HighWord(lParam),
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
                         Button = MouseButton.Right,
                         IsDown = false
                     }); break;
@@ -88,9 +97,10 @@ namespace GalEngine.System
                 case APILibrary.Win32.WinMsg.WM_MOUSEWHEEL:
                     Application.OnMouseWheel(null, new MouseWheelEvent()
                     {
-                        Offset = (short)APILibrary.Win32.Message.HighWord(wParam),
-                        X = APILibrary.Win32.Message.GetXFromLparam(lParam),
-                        Y = APILibrary.Win32.Message.GetYFromLparam(lParam)
+                        MousePosition = new Position(
+                           Message.LowWord(lParam),
+                           Message.HighWord(lParam)),
+                        Offset = (short)Message.HighWord(wParam)
                     }); break;
 
                 case APILibrary.Win32.WinMsg.WM_KEYDOWN:
@@ -108,7 +118,7 @@ namespace GalEngine.System
                     }); break;
 
                 case APILibrary.Win32.WinMsg.WM_SIZE:
-                    Application.Size = new Size(APILibrary.Win32.Message.LowWord(lParam), APILibrary.Win32.Message.HighWord(lParam));
+                    Application.Size = new Size(Message.LowWord(lParam), Message.HighWord(lParam));
                     break;
 
                 case APILibrary.Win32.WinMsg.WM_DESTROY:
@@ -216,9 +226,9 @@ namespace GalEngine.System
                 (uint)(APILibrary.Win32.SetWindowPosFlags.SWP_NOZORDER ^ APILibrary.Win32.SetWindowPosFlags.SWP_NOMOVE));
 
             SharpDX.Utilities.Dispose(ref renderTarget);
-
+            
             swapChain.ResizeBuffers(0, size.Width, size.Height, SharpDX.DXGI.Format.Unknown, SharpDX.DXGI.SwapChainFlags.None);
-
+            
             using (var backBuffer = swapChain.GetBackBuffer<SharpDX.DXGI.Surface>(0))
             {
                 renderTarget = new SharpDX.Direct2D1.Bitmap1(Graphics.deviceContext2D, backBuffer);
@@ -227,24 +237,20 @@ namespace GalEngine.System
 
         public static void PresentBitmap(bool isLock = true)
         {
-            Graphics.deviceContext2D.EndDraw();
-
             Graphics.deviceContext2D.Target = renderTarget;
             Graphics.deviceContext2D.BeginDraw();
             Graphics.deviceContext2D.Clear(new SharpDX.Mathematics.Interop.RawColor4(0, 0, 0, 0));
 
-            var viewPort = Utility.ComputeViewPort(Application.Size, Graphics.Target.Size);
-
-            Graphics.deviceContext2D.DrawBitmap(Graphics.Target.resource as SharpDX.Direct2D1.Bitmap1,
+            var viewPort = Utility.ComputeViewPort(Application.Size, GameScene.renderTarget.Size);
+            
+            Graphics.deviceContext2D.DrawBitmap(GameScene.renderTarget.resource as SharpDX.Direct2D1.Bitmap1,
                 new SharpDX.Mathematics.Interop.RawRectangleF(viewPort.Left, viewPort.Top, viewPort.Right, viewPort.Bottom),
                  1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
 
             Graphics.deviceContext2D.EndDraw();
+            Graphics.deviceContext2D.Target = null;
+            
             swapChain.Present(isLock ? 1 : 0, SharpDX.DXGI.PresentFlags.None);
-
-            Graphics.deviceContext2D.Target = Graphics.Target.resource as SharpDX.Direct2D1.Bitmap1;
-            Graphics.deviceContext2D.BeginDraw();
-            Graphics.deviceContext2D.Clear(new SharpDX.Mathematics.Interop.RawColor4(1, 1, 1, 1));
         }
 
         public static bool UpdateWindow()
