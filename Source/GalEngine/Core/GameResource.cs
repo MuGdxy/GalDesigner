@@ -62,5 +62,19 @@ namespace GalEngine
 
             return fonts[FontName];
         }
+
+        public static bool IsColorExist(string ColorName)
+        {
+            if (ColorName == null) return false;
+
+            return colors.ContainsKey(ColorName);
+        }
+
+        public static bool IsFontExist(string FontName)
+        {
+            if (FontName == null) return false;
+
+            return fonts.ContainsKey(FontName);
+        }
     }
 }

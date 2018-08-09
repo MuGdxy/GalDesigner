@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -57,6 +58,22 @@ namespace GalEngine
             result.Y = (int)((Position.Y - ViewPort.Top) / ViewPort.Height * Resolution.Height);
 
             return result;
+        }
+
+        public static bool IsContain(Position Position, Size Size, Matrix3x2 TransformMatrix)
+        {
+            float halfWidth = Size.Width * 0.5f;
+            float halfHeight = Size.Height * 0.5f;
+
+            Matrix3x2.Invert(TransformMatrix, out Matrix3x2 invMatrix);
+
+            var transformPosition = Vector2.Transform(Position.Vector, invMatrix);
+
+            if (transformPosition.X >= -halfWidth && transformPosition.X <= halfWidth &&
+                transformPosition.Y >= -halfHeight && transformPosition.Y <= halfHeight)
+                return true;
+
+            return false;
         }
 
         public static void Dispose<T>(ref T Object) where T : class, IDisposable

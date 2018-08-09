@@ -59,7 +59,9 @@
   <ItemGroup>
     <Compile Include="Application\Application.cs" />
     <Compile Include="Application\Events.cs" />
+    <Compile Include="BaseObject\Transform.cs" />
     <Compile Include="Core\GameDefault.cs" />
+    <Compile Include="Core\GameObject.cs" />
     <Compile Include="Enum\FontStyle.cs" />
     <Compile Include="Enum\FontWeight.cs" />
     <Compile Include="Enum\KeyCode.cs" />

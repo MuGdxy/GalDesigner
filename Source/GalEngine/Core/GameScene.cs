@@ -12,9 +12,12 @@ namespace GalEngine
 
         private static Position mousePosition = new Position();
 
+        private static GameObject root = new GameObject("Root", new Size(0, 0));
+
         internal static Bitmap renderTarget = null;
 
         public static Size Resolution { set => resolution.Value = value; get => resolution.Value; }
+        public static GameObject Root { get => root; }
 
         public static event MouseMoveHandler MouseMove;
         public static event MouseClickHandler MouseClick;
@@ -36,6 +39,8 @@ namespace GalEngine
             eventArg.MousePosition = mousePosition;
 
             MouseMove?.Invoke(sender, eventArg);
+
+            GameObject.ProcessMouseMove(Root, eventArg, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnMouseClick(object sender, MouseClickEvent eventArg)
@@ -43,6 +48,8 @@ namespace GalEngine
             eventArg.MousePosition = mousePosition;
 
             MouseClick?.Invoke(sender, eventArg);
+
+            GameObject.ProcessMouseClick(Root, eventArg, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnMouseWheel(object sender, MouseWheelEvent eventArg)
@@ -50,23 +57,31 @@ namespace GalEngine
             eventArg.MousePosition = mousePosition;
 
             MouseWheel?.Invoke(sender, eventArg);
+
+            GameObject.ProcessMouseWheel(Root, eventArg, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnBoardClick(object sender, BoardClickEvent eventArg)
         {
             BoardClick?.Invoke(sender, eventArg);
+
+            GameObject.ProcessBoardClick(Root, eventArg);
         }
 
         internal static void OnUpdate()
         {
             resolution.Update();
 
+            Update?.Invoke(null);
+
+            GameObject.ProcessUpdate(Root);
+
             Systems.Graphics.BeginDraw(renderTarget);
             Systems.Graphics.Clear(new Color(1, 1, 1, 1));
 
+            GameObject.RenderGameObject(Root, System.Numerics.Matrix3x2.Identity);
+
             Systems.Graphics.EndDraw();
-            
-            Update?.Invoke(null);
         }
 
         public static void Create(string GameName, Size Resolution, string GameIcon)
@@ -74,6 +89,21 @@ namespace GalEngine
             resolution.Value = Resolution;
 
             Application.Create(GameName, Resolution, GameIcon);
+        }
+
+        public static void SetGameObject(GameObject GameObject)
+        {
+            Root.SetChild(GameObject);
+        }
+
+        public static void CancelGameObject(GameObject GameObject)
+        {
+            Root.CancelChild(GameObject);
+        }
+
+        public static void CancelGameObject(string GameObject)
+        {
+            Root.CancelChild(GameObject);
         }
 
         public static void RunLoop()

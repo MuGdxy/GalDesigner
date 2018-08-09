@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +108,12 @@ namespace GalEngine.Systems
         {
             deviceContext2D.Clear(new SharpDX.Mathematics.Interop.RawColor4(ClearColor.Red, ClearColor.Green,
                 ClearColor.Blue, ClearColor.Alpha));
+        }
+
+        public static void SetTransform(Matrix3x2 Transform)
+        {
+            deviceContext2D.Transform = new SharpDX.Mathematics.Interop.RawMatrix3x2(
+                Transform.M11, Transform.M12, Transform.M21, Transform.M22, Transform.M31, Transform.M32);
         }
 
         public static void CreateBitmap(int Width, int Height, out object Resource)

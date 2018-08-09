@@ -241,6 +241,8 @@ namespace GalEngine.Systems
             Graphics.deviceContext2D.BeginDraw();
             Graphics.deviceContext2D.Clear(new SharpDX.Mathematics.Interop.RawColor4(0, 0, 0, 0));
 
+            Graphics.SetTransform(System.Numerics.Matrix3x2.Identity);
+
             var viewPort = Utility.ComputeViewPort(Application.Size, GameScene.renderTarget.Size);
             
             Graphics.deviceContext2D.DrawBitmap(GameScene.renderTarget.resource as SharpDX.Direct2D1.Bitmap1,
