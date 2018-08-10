@@ -15,11 +15,13 @@ namespace GalEngine
 
         public Size Size => size;
 
-        public Bitmap(int Width, int Height)
+        public Bitmap(int Width = 0, int Height = 0)
         {
-            Systems.Graphics.CreateBitmap(Width, Height, out resource);
-
             size = new Size(Width, Height);
+
+            if (Width * Height == 0) return;
+
+            Systems.Graphics.CreateBitmap(Width, Height, out resource);
         }
 
         public Bitmap(Size Size) : this(Size.Width, Size.Height)

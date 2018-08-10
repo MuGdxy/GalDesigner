@@ -87,9 +87,6 @@ namespace GalEngine.Systems
         static Graphics()
         {
             CreateInterface();
-            
-            SetColorBrush(GameDefault.Color, new Color());
-            SetFontFace(GameDefault.Font, new Font());
         }
 
         public static void BeginDraw(Bitmap Target)
@@ -149,40 +146,52 @@ namespace GalEngine.Systems
 
         }
 
-        public static void DrawLine(PositionF Start, PositionF End, string ColorName, float LineWidth = 1.0f)
+        public static void DrawLine(PositionF Start, PositionF End, string ColorName,float Opacity = 1.0f, float LineWidth = 1.0f)
         {
+            var brush = GetColorBrush(ColorName);
+            brush.Opacity = Opacity;
+
             deviceContext2D.DrawLine(
                 new SharpDX.Mathematics.Interop.RawVector2(Start.X, Start.Y),
                 new SharpDX.Mathematics.Interop.RawVector2(End.X, End.Y),
-                GetColorBrush(ColorName), LineWidth);
+                brush, LineWidth);
         }
 
-        public static void DrawRectangle(RectangleF Rectangle, string ColorName, float LineWidth = 1.0f)
+        public static void DrawRectangle(RectangleF Rectangle, string ColorName, float Opacity = 1.0f, float LineWidth = 1.0f)
         {
+            var brush = GetColorBrush(ColorName);
+            brush.Opacity = Opacity;
+
             deviceContext2D.DrawRectangle(
                 new SharpDX.Mathematics.Interop.RawRectangleF(Rectangle.Left, Rectangle.Top, Rectangle.Right, Rectangle.Bottom),
-                GetColorBrush(ColorName), LineWidth);
+                brush, LineWidth);
         }
 
-        public static void FillRectangle(RectangleF Rectangle, string ColorName)
+        public static void FillRectangle(RectangleF Rectangle, string ColorName, float Opacity = 1.0f)
         {
+            var brush = GetColorBrush(ColorName);
+            brush.Opacity = Opacity;
+
             deviceContext2D.FillRectangle(
                 new SharpDX.Mathematics.Interop.RawRectangleF(Rectangle.Left, Rectangle.Top, Rectangle.Right, Rectangle.Bottom),
-                GetColorBrush(ColorName));
+                brush);
         }
 
-        public static void DrawBitmap(Bitmap Bitmap, RectangleF Rectangle)
+        public static void DrawBitmap(Bitmap Bitmap, RectangleF Rectangle, float Opacity = 1.0f)
         {
             deviceContext2D.DrawBitmap(Bitmap.resource as SharpDX.Direct2D1.Bitmap1,
                 new SharpDX.Mathematics.Interop.RawRectangleF(Rectangle.Left, Rectangle.Top, Rectangle.Right, Rectangle.Bottom),
-                1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+                Opacity, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
         }
 
-        public static void DrawText(string Text, RectangleF Rectangle, string FontName, string ColorName)
+        public static void DrawText(string Text, RectangleF Rectangle, string FontName, string ColorName, float Opacity = 1.0f)
         {
+            var brush = GetColorBrush(ColorName);
+            brush.Opacity = Opacity;
+
             deviceContext2D.DrawText(Text, GetFontFace(FontName),
                 new SharpDX.Mathematics.Interop.RawRectangleF(Rectangle.Left, Rectangle.Top, Rectangle.Right, Rectangle.Bottom),
-                GetColorBrush(ColorName), SharpDX.Direct2D1.DrawTextOptions.Clip);
+                brush, SharpDX.Direct2D1.DrawTextOptions.Clip);
         }
 
         public static void DestoryBitmap(ref object resource)

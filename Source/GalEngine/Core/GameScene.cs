@@ -30,6 +30,8 @@ namespace GalEngine
             Utility.Dispose(ref renderTarget);
 
             renderTarget = new Bitmap(newSize);
+
+            DebugLayer.DebugCommand.SetSharp(newSize);
         }
 
         internal static void OnMouseMove(object sender, MouseMoveEvent eventArg)
@@ -41,6 +43,7 @@ namespace GalEngine
             MouseMove?.Invoke(sender, eventArg);
 
             GameObject.ProcessMouseMove(Root, eventArg, System.Numerics.Matrix3x2.Identity);
+            GameObject.ProcessMouseMove(DebugLayer.DebugCommand, eventArg, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnMouseClick(object sender, MouseClickEvent eventArg)
@@ -50,6 +53,7 @@ namespace GalEngine
             MouseClick?.Invoke(sender, eventArg);
 
             GameObject.ProcessMouseClick(Root, eventArg, System.Numerics.Matrix3x2.Identity);
+            GameObject.ProcessMouseClick(DebugLayer.DebugCommand, eventArg, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnMouseWheel(object sender, MouseWheelEvent eventArg)
@@ -59,6 +63,7 @@ namespace GalEngine
             MouseWheel?.Invoke(sender, eventArg);
 
             GameObject.ProcessMouseWheel(Root, eventArg, System.Numerics.Matrix3x2.Identity);
+            GameObject.ProcessMouseWheel(DebugLayer.DebugCommand, eventArg, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnBoardClick(object sender, BoardClickEvent eventArg)
@@ -66,6 +71,7 @@ namespace GalEngine
             BoardClick?.Invoke(sender, eventArg);
 
             GameObject.ProcessBoardClick(Root, eventArg);
+            GameObject.ProcessBoardClick(DebugLayer.DebugCommand, eventArg);
         }
 
         internal static void OnUpdate()
@@ -75,11 +81,13 @@ namespace GalEngine
             Update?.Invoke(null);
 
             GameObject.ProcessUpdate(Root);
+            GameObject.ProcessUpdate(DebugLayer.DebugCommand);
 
             Systems.Graphics.BeginDraw(renderTarget);
             Systems.Graphics.Clear(new Color(1, 1, 1, 1));
 
             GameObject.RenderGameObject(Root, System.Numerics.Matrix3x2.Identity);
+            GameObject.RenderGameObject(DebugLayer.DebugCommand, System.Numerics.Matrix3x2.Identity);
 
             Systems.Graphics.EndDraw();
         }

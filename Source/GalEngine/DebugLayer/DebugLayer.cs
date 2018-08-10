@@ -12,6 +12,10 @@ namespace GalEngine
         private static Dictionary<Error, string> errors = new Dictionary<Error, string>();
         private static Dictionary<Warning, string> warnings = new Dictionary<Warning, string>();
 
+        private static DebugCommand debugCommand = new DebugCommand();
+
+        internal static DebugCommand DebugCommand => debugCommand;
+
         private static string SetParamsToString(string text, params object[] context)
         {
             string result = text;

@@ -7,14 +7,24 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+    class GameObjectDepthComparer : IComparer<GameObject>
+    {
+        public int Compare(GameObject x, GameObject y)
+        {
+            return x.Depth.CompareTo(y.Depth);
+        }
+    }
+
     public class GameObject
     {
         private readonly string name;
-        private Transform transform = new Transform();
-        private SizeF size = new SizeF(0.0f, 0.0f);
-        private float border = 0.0f;
-
-        private string borderColor = GameDefault.Color;
+        private Transform transform = GameDefault.Transform;
+        private SizeF size = GameDefault.SizeF;
+        private Border border = GameDefault.Border;
+        private TextLayout textLayout = GameDefault.TextLayout;
+        private BackGround backGround = GameDefault.BackGround;
+        private float opacity = GameDefault.Opacity;
+        private int depth = GameDefault.Depth;
 
         private bool isHover = false;
 
@@ -27,8 +37,11 @@ namespace GalEngine
         public string Name { get => name; }
         public Transform Transform { get => transform; set => transform = value; }
         public SizeF Size { get => size; set => size = value; }
-        public float Border { get => border; set => border = value; }
-        public string BorderColor { get => borderColor; set => borderColor = value; }
+        public Border Border { get => border; set => border = value; }
+        public TextLayout TextLayout { get => textLayout; set => textLayout = value; }
+        public BackGround BackGround { get => backGround; set => backGround = value; }
+        public float Opacity { get => opacity; set => opacity = value; }
+        public int Depth { get => depth; set => depth = value; }
 
         public bool IsHover => isHover;
 
@@ -68,18 +81,51 @@ namespace GalEngine
 
             float halfWidth = GameObject.Size.Width * 0.5f;
             float halfHeight = GameObject.Size.Height * 0.5f;
+            float opacity = GameObject.Opacity;
 
             var transform = GameObject.Transform.Matrix * BaseTransform;
             var rectangle = new RectangleF(- halfWidth, -halfHeight, halfWidth, halfHeight);
-            var borderColor = GameResource.IsColorExist(GameObject.BorderColor) is true ? GameObject.BorderColor : GameDefault.Color;
 
             Systems.Graphics.SetTransform(transform);
 
-            Systems.Graphics.DrawRectangle(rectangle, borderColor, GameObject.Border);
-
-            foreach (var item in GameObject.children)
+            if (GameObject.Border.Width != GameDefault.BorderWidth)
             {
-                RenderGameObject(item.Value, transform);
+                var borderColor = GameResource.IsColorExist(GameObject.Border.Color) is true ? GameObject.Border.Color : GameDefault.Color;
+
+                Systems.Graphics.DrawRectangle(rectangle, borderColor, opacity, GameObject.Border.Width);
+            }
+
+            if (GameObject.BackGround.Bitmap == GameDefault.Bitmap || GameObject.BackGround.Bitmap == null)
+            {
+                var backgroundColor = GameResource.IsColorExist(GameObject.BackGround.Color) is true ? GameObject.BackGround.Color : null;
+
+                if (backgroundColor == GameDefault.Color) backgroundColor = null;
+
+                if (backgroundColor != null) Systems.Graphics.FillRectangle(rectangle, backgroundColor, opacity);
+            }
+
+            if (GameObject.BackGround.Bitmap != GameDefault.Bitmap && GameObject.BackGround.Bitmap != null)
+            {
+                var bitmap = GameResource.GetBitmap(GameObject.BackGround.Bitmap);
+
+                if (bitmap != null) Systems.Graphics.DrawBitmap(bitmap, rectangle, opacity);
+            }
+
+            if (GameObject.TextLayout.Text != GameDefault.TextLayoutText && GameObject.TextLayout.Text != null)
+            {
+                var textColor = GameResource.IsColorExist(GameObject.TextLayout.Color) is true ? GameObject.TextLayout.Color : GameDefault.Color;
+                var textFont = GameResource.IsFontExist(GameObject.TextLayout.Font) is true ? GameObject.TextLayout.Font : GameDefault.Font;
+
+                Systems.Graphics.DrawText(GameObject.TextLayout.Text, rectangle, textFont, textColor, opacity);
+            }
+
+            List<GameObject> sortedChildren = GameObject.children.Values.ToList();
+
+            sortedChildren.Sort(new GameObjectDepthComparer());
+
+            foreach (var item in sortedChildren)
+            {
+                RenderGameObject(item, transform);
             }
         }
 

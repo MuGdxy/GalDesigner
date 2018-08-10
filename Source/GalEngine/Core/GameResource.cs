@@ -6,10 +6,19 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public static class GameResource
+    public static partial class GameResource
     {
         internal static Dictionary<string, Color> colors = new Dictionary<string, Color>();
         internal static Dictionary<string, Font> fonts = new Dictionary<string, Font>();
+        internal static Dictionary<string, Bitmap> bitmaps = new Dictionary<string, Bitmap>();
+
+        static GameResource()
+        {
+            SetColor(GameDefault.Color, new Color());
+            SetFont(GameDefault.Font, new Font());
+
+            SetSystemColors();
+        }
 
         public static void SetColor(string ColorName, Color Color)
         {
@@ -33,9 +42,20 @@ namespace GalEngine
             Systems.Graphics.SetFontFace(FontName, Font);
         }
 
+        public static void SetBitmap(string BitmapName, System.IO.Stream BitmapStream)
+        {
+            if (bitmaps.ContainsKey(BitmapName) is true)
+            {
+                bitmaps[BitmapName].Dispose();
+                bitmaps.Remove(BitmapName);
+            }
+
+            bitmaps[BitmapName] = new Bitmap(BitmapStream);
+        }
+
         public static void CancelColor(string ColorName)
         {
-            if (colors.ContainsKey(ColorName) is false) return;
+            if (ColorName == null || colors.ContainsKey(ColorName) is false) return;
 
             colors.Remove(ColorName);
             Systems.Graphics.CancelColorBrush(ColorName);
@@ -43,24 +63,39 @@ namespace GalEngine
 
         public static void CancelFont(string FontName)
         {
-            if (fonts.ContainsKey(FontName) is false) return;
+            if (FontName == null || fonts.ContainsKey(FontName) is false) return;
 
             fonts.Remove(FontName);
             Systems.Graphics.CancelFontFace(FontName);
         }
 
+        public static void CancelBitmap(string BitmapName)
+        {
+            if (BitmapName == null || bitmaps.ContainsKey(BitmapName) is false) return;
+
+            bitmaps[BitmapName].Dispose();
+            bitmaps.Remove(BitmapName);
+        }
+
         public static Color GetColor(string ColorName)
         {
-            if (colors.ContainsKey(ColorName) is false) return new Color();
+            if (ColorName == null || colors.ContainsKey(ColorName) is false) return null;
 
             return colors[ColorName];
         }
 
         public static Font GetFont(string FontName)
         {
-            if (fonts.ContainsKey(FontName) is false) return new Font();
+            if (FontName == null || fonts.ContainsKey(FontName) is false) return null;
 
             return fonts[FontName];
+        }
+
+        public static Bitmap GetBitmap(string BitmapName)
+        {
+            if (BitmapName == null || bitmaps.ContainsKey(BitmapName) is false) return null;
+
+            return bitmaps[BitmapName];
         }
 
         public static bool IsColorExist(string ColorName)
@@ -75,6 +110,13 @@ namespace GalEngine
             if (FontName == null) return false;
 
             return fonts.ContainsKey(FontName);
+        }
+
+        public static bool IsBitmapExist(string BitmapName)
+        {
+            if (BitmapName == null) return false;
+
+            return bitmaps.ContainsKey(BitmapName);
         }
     }
 }
