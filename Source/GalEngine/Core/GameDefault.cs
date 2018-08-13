@@ -33,5 +33,6 @@ namespace GalEngine
         public static float BorderWidth => 0.0f;
 
         public static string TextLayoutText => "";
+        public static TextMetrics TextMetrics => new TextMetrics();
     }
 }

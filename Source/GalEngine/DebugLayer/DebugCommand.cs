@@ -8,46 +8,80 @@ namespace GalEngine
 {
     public static class DebugCommandProperty
     {
-        private static float commandInputBoxHeightProportion = 0.07f;
-
         public static string Name => "DebugCommand";
-        public static string CommandInputBoxName => "CommandInputBox";
+        public static string LineNmae => "DebugCommandLine";
 
         public static string BackGround => "DebugCommandBackGround";
-        public static string CommandInputBoxBorderColor => "DebugCommandCommandInputBoxBorderColor";
 
-        public static float CommandInputBoxHeightProportion => commandInputBoxHeightProportion;
+        public static string Font => "DebugCommandFont";
+        
+        internal static void Update(SizeF DebugCommandSize)
+        {
+            GameResource.SetFont(Font, new Font("Consolas", DebugCommandSize.Height * 0.04f));
+        }
 
         static DebugCommandProperty()
         {
             GameResource.SetColor(BackGround, new Color(0.5f, 0.5f, 0.5f));
-            GameResource.SetColor(CommandInputBoxBorderColor, new Color(0, 0, 0));
         }
     }
 
-    class DebugCommandInputBox : GameObject
+    class DebugCommandLine : GameObject
     {
-        public DebugCommandInputBox() : base(DebugCommandProperty.CommandInputBoxName, new Size())
+        public DebugCommandLine(string Name, string Text) : base(Name, new SizeF())
         {
-            Border.Width = 2.0f;
-            Border.Color = DebugCommandProperty.CommandInputBoxBorderColor;
-            
+            TextLayout.Text = Text;
+            TextLayout.Font = DebugCommandProperty.Font;
         }
 
         public void SetSharp(SizeF DebugCommandSize)
         {
-                Size = new SizeF(DebugCommandSize.Width, DebugCommandSize.Height *
-                DebugCommandProperty.CommandInputBoxHeightProportion);
+            var textMetrics = TextLayout.ComputeTextMetrics(TextLayout, new SizeF(DebugCommandSize.Width, 0));
 
-            Transform.Position = new PositionF(0, (DebugCommandSize.Height - Size.Height) * 0.5f);
+            Size = new SizeF(DebugCommandSize.Width, textMetrics.Height);
+        }
 
-            Transform.Update();
+        public void SetPosition(DebugCommandLine LastCommmandLine)
+        {
+            Transform.Position.Y = LastCommmandLine.Transform.Position.Y + (LastCommmandLine.Size.Height + Size.Height) * 0.5f;
         }
     }
 
     class DebugCommand : GameObject
     {
-        private DebugCommandInputBox DebugCommandInputBox = new DebugCommandInputBox();
+        private List<DebugCommandLine> debugCommandLines = new List<DebugCommandLine>();
+
+        private void AddCommandLine(string Text)
+        {
+            DebugCommandLine commandLine = new DebugCommandLine(DebugCommandProperty.LineNmae + debugCommandLines.Count, Text);
+            DebugCommandLine lastCommandLine = debugCommandLines[debugCommandLines.Count - 1];
+
+            commandLine.SetPosition(lastCommandLine);
+            
+            debugCommandLines.Add(commandLine);
+
+            SetChild(commandLine);
+        }
+
+        protected override void OnMouseClick(object sender, MouseClickEvent eventArg)
+        {
+            base.OnMouseClick(sender, eventArg);
+        }
+
+        protected override void OnMouseWheel(object sender, MouseWheelEvent eventArg)
+        {
+            float offset = eventArg.Offset;
+
+            debugCommandLines[0].Transform.Position.Y = Math.Min(
+                debugCommandLines[0].Transform.Position.Y + offset, -Size.Height * 0.5f);
+
+            for (int i = 1; i < debugCommandLines.Count; i++)
+            {
+                debugCommandLines[i].SetPosition(debugCommandLines[i - 1]);
+            }
+
+            base.OnMouseWheel(sender, eventArg);
+        }
 
         protected override void OnBoardClick(object sender, BoardClickEvent eventArg)
         {
@@ -57,7 +91,7 @@ namespace GalEngine
             base.OnBoardClick(sender, eventArg);
         }
 
-        public DebugCommand() : base(DebugCommandProperty.Name, new Size(0, 0))
+        public DebugCommand() : base(DebugCommandProperty.Name, new SizeF(0, 0))
         {
             Opacity = 0.7f;
 
@@ -66,17 +100,29 @@ namespace GalEngine
 
             BackGround.Color = DebugCommandProperty.BackGround;
 
-            SetChild(DebugCommandInputBox);
+            debugCommandLines.Add(new DebugCommandLine("RootCommandLine", ""));
+
+            AddCommandLine("sasdasdsa");
+            AddCommandLine("sasdasdsa"); AddCommandLine("sasdasdsa");
         }
 
         public void SetSharp(Size Resolution)
         {
+            DebugCommandProperty.Update(Resolution);
+
             Size = Resolution;
             Transform.Position = new PositionF(Resolution.Width * 0.5f, Resolution.Height * 0.5f);
 
             Transform.Update();
 
-            DebugCommandInputBox.SetSharp(Size);
+            debugCommandLines[0].Transform.Position.Y = -Resolution.Height * 0.5f;
+            debugCommandLines[0].IsEnableVisual = false;
+
+            for (int i = 1; i < debugCommandLines.Count; i++)
+            {
+                debugCommandLines[i].SetSharp(Resolution);
+                debugCommandLines[i].SetPosition(debugCommandLines[i - 1]);
+            }
         }
     }
 }

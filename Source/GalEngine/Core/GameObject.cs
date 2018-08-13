@@ -218,24 +218,24 @@ namespace GalEngine
 
         internal static void ProcessUpdate(GameObject GameObject)
         {
-            GameObject.Transform.Update();
-
             GameObject.OnUpdate(GameObject);
             GameObject.Update?.Invoke(GameObject);
 
+            GameObject.Transform.Update();
+            
             foreach (var item in GameObject.children)
             {
                 ProcessUpdate(item.Value);
             }
         }
 
-        public GameObject(Size Size)
+        public GameObject(SizeF Size)
         {
             name = GameDefault.GameObjectName + GetHashCode().ToString();
             size = Size;
         }
 
-        public GameObject(string Name, Size Size)
+        public GameObject(string Name, SizeF Size)
         {
             name = Name;
             size = Size;

@@ -38,8 +38,8 @@ namespace GalEngine.Systems
                 (SharpDX.DirectWrite.FontWeight)Font.FontWeight,
                 (SharpDX.DirectWrite.FontStyle)Font.FontStyle, Font.FontSize);
 
-            fontFace[FontName].SetTextAlignment(SharpDX.DirectWrite.TextAlignment.Center);
-            fontFace[FontName].SetParagraphAlignment(SharpDX.DirectWrite.ParagraphAlignment.Center);
+            fontFace[FontName].SetTextAlignment(SharpDX.DirectWrite.TextAlignment.Justified);
+            fontFace[FontName].SetParagraphAlignment(SharpDX.DirectWrite.ParagraphAlignment.Near);
         }
 
         internal static void CancelColorBrush(string ColorName)
@@ -146,6 +146,18 @@ namespace GalEngine.Systems
 
         }
 
+        public static void CreateTextLayout(string Text, string FontName, SizeF MaxSize ,out object Resource)
+        {
+            Resource = new SharpDX.DirectWrite.TextLayout(writeFactory, Text, GetFontFace(FontName), MaxSize.Width, MaxSize.Height);
+        }
+
+        public static void CreateTextMetrics(object Resource, out TextMetrics TextMetrics)
+        {
+            var metrics = (Resource as SharpDX.DirectWrite.TextLayout).Metrics;
+
+            TextMetrics = new TextMetrics(metrics.Width, metrics.Height, metrics.LineCount);
+        }
+
         public static void DrawLine(PositionF Start, PositionF End, string ColorName,float Opacity = 1.0f, float LineWidth = 1.0f)
         {
             var brush = GetColorBrush(ColorName);
@@ -194,12 +206,20 @@ namespace GalEngine.Systems
                 brush, SharpDX.Direct2D1.DrawTextOptions.Clip);
         }
 
-        public static void DestoryBitmap(ref object resource)
+        public static void DestoryBitmap(ref object Resource)
         {
-            if (resource == null) return;
+            if (Resource == null) return;
 
-            (resource as SharpDX.Direct2D1.Bitmap1).Dispose();
-            resource = null;
+            (Resource as SharpDX.Direct2D1.Bitmap1).Dispose();
+            Resource = null;
+        }
+
+        public static void DestoryTextLayout(ref object Resource)
+        {
+            if (Resource == null) return;
+
+            (Resource as SharpDX.DirectWrite.TextLayout).Dispose();
+            Resource = null;
         }
     }
 }
