@@ -12,12 +12,17 @@ namespace GalEngine
 
         private static Position mousePosition = new Position();
 
+        private static Camera defaultCamera = new Camera();
+        private static Camera usedCamera = defaultCamera;
+
         private static GameObject root = new GameObject("Root", new Size(0, 0));
 
         internal static Bitmap renderTarget = null;
 
         public static Size Resolution { set => resolution.Value = value; get => resolution.Value; }
         public static GameObject Root { get => root; }
+
+        public static Camera Camera { get => usedCamera; }
 
         public static event MouseMoveHandler MouseMove;
         public static event MouseClickHandler MouseClick;
@@ -30,6 +35,8 @@ namespace GalEngine
             Utility.Dispose(ref renderTarget);
 
             renderTarget = new Bitmap(newSize);
+
+            defaultCamera.Area = new RectangleF(0, 0, newSize.Width, newSize.Height);
 
             DebugLayer.DebugCommand.SetSharp(newSize);
         }
@@ -86,8 +93,8 @@ namespace GalEngine
             Systems.Graphics.BeginDraw(renderTarget);
             Systems.Graphics.Clear(new Color(1, 1, 1, 1));
 
-            GameObject.RenderGameObject(Root, System.Numerics.Matrix3x2.Identity);
-            GameObject.RenderGameObject(DebugLayer.DebugCommand, System.Numerics.Matrix3x2.Identity);
+            GameObject.RenderGameObject(Root, System.Numerics.Matrix3x2.Identity, Camera);
+            GameObject.RenderGameObject(DebugLayer.DebugCommand, System.Numerics.Matrix3x2.Identity, DebugLayer.DebugCommand.Camera);
 
             Systems.Graphics.EndDraw();
         }
@@ -97,6 +104,16 @@ namespace GalEngine
             resolution.Value = Resolution;
 
             Application.Create(GameName, Resolution, GameIcon);
+        }
+
+        public static void SetCamera(Camera Camera)
+        {
+            usedCamera = Camera;
+        }
+
+        public static void SetCamera()
+        {
+            usedCamera = defaultCamera;
         }
 
         public static void SetGameObject(GameObject GameObject)

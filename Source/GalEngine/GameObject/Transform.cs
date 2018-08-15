@@ -42,18 +42,20 @@ namespace GalEngine
 
         public Matrix3x2 Matrix => matrix;
 
-        internal void Update()
+        internal void Update(SizeF Size)
         {
-            matrix = CreateMatrixFromTransform(this);
+            PositionF center = new PositionF(Position.X + Size.Width * 0.5f, Position.Y + Size.Height * 0.5f);
+
+            matrix = CreateMatrixFromTransform(this, center);
         }
 
-        public static Matrix3x2 CreateMatrixFromTransform(Transform Transform)
+        public static Matrix3x2 CreateMatrixFromTransform(Transform Transform, PositionF Center)
         {
             Matrix3x2 matrix = Matrix3x2.Identity;
 
             matrix = matrix * Matrix3x2.CreateTranslation(Transform.Position.Vector);
-            matrix = matrix * Matrix3x2.CreateScale(Transform.Scale.Vector, Transform.Position.Vector);
-            matrix = matrix * Matrix3x2.CreateRotation(Transform.Angle, Transform.Position.Vector);
+            matrix = matrix * Matrix3x2.CreateScale(Transform.Scale.Vector, Center.Vector);
+            matrix = matrix * Matrix3x2.CreateRotation(Transform.Angle, Center.Vector);
 
             return matrix;
         }

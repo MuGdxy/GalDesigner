@@ -74,7 +74,9 @@ namespace GalEngine
             name.Update();
             icon.Update();
             size.Update();
-            
+
+            Time.Update();
+
             Update?.Invoke(sender);
 
             GameScene.OnUpdate();

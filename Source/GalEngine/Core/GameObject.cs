@@ -75,18 +75,24 @@ namespace GalEngine
         protected virtual void OnMouseLeave(object sender) { }
         protected virtual void OnUpdate(object sender) { }
 
-        internal static void RenderGameObject(GameObject GameObject, Matrix3x2 BaseTransform)
+        internal static void RenderGameObject(GameObject GameObject, Matrix3x2 BaseTransform, Camera Camera)
         {
             if (GameObject.IsEnableVisual is false) return;
+            if (Camera is null) return;
 
-            float halfWidth = GameObject.Size.Width * 0.5f;
-            float halfHeight = GameObject.Size.Height * 0.5f;
             float opacity = GameObject.Opacity;
-
+            
             var transform = GameObject.Transform.Matrix * BaseTransform;
-            var rectangle = new RectangleF(- halfWidth, -halfHeight, halfWidth, halfHeight);
+            var rectangle = new RectangleF(0, 0, GameObject.Size.Width, GameObject.Size.Height);
 
-            Systems.Graphics.SetTransform(transform);
+            if (Utility.IsIntersect(Camera, GameObject.Size, transform) is false) return;
+
+            Vector2 internalScale = new Vector2(GameScene.Resolution.Width / Camera.Size.Width,
+                GameScene.Resolution.Height / Camera.Size.Height);
+            Vector2 scaleCenter = new Vector2(Camera.Area.Left, Camera.Area.Top);
+            
+            Systems.Graphics.SetTransform(transform * Matrix3x2.CreateScale(internalScale, scaleCenter) 
+                * Matrix3x2.CreateTranslation(-scaleCenter));
 
             if (GameObject.Border.Width != GameDefault.BorderWidth)
             {
@@ -125,13 +131,13 @@ namespace GalEngine
 
             foreach (var item in sortedChildren)
             {
-                RenderGameObject(item, transform);
+                RenderGameObject(item, transform, Camera);
             }
         }
 
         internal static void ProcessMouseMove(GameObject GameObject, MouseMoveEvent EventArg, Matrix3x2 BaseTransform)
         {
-            GameObject.Transform.Update();
+            GameObject.Transform.Update(GameObject.Size);
 
             BaseTransform = GameObject.Transform.Matrix * BaseTransform;
 
@@ -152,7 +158,7 @@ namespace GalEngine
 
         internal static void ProcessMouseClick(GameObject GameObject, MouseClickEvent EventArg, Matrix3x2 BaseTransform)
         {
-            GameObject.Transform.Update();
+            GameObject.Transform.Update(GameObject.Size);
 
             BaseTransform = GameObject.Transform.Matrix * BaseTransform;
 
@@ -170,7 +176,7 @@ namespace GalEngine
 
         internal static void ProcessMouseWheel(GameObject GameObject, MouseWheelEvent EventArg, Matrix3x2 BaseTransform)
         {
-            GameObject.Transform.Update();
+            GameObject.Transform.Update(GameObject.Size);
 
             BaseTransform = GameObject.Transform.Matrix * BaseTransform;
 
@@ -221,7 +227,7 @@ namespace GalEngine
             GameObject.OnUpdate(GameObject);
             GameObject.Update?.Invoke(GameObject);
 
-            GameObject.Transform.Update();
+            GameObject.Transform.Update(GameObject.Size);
             
             foreach (var item in GameObject.children)
             {
