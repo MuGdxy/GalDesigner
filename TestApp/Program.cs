@@ -12,7 +12,7 @@ namespace TestApp
     class Program
     {
         static void Main(string[] args)
-        {       
+        {
             GameScene.Create("GalEngine", new Size(1920, 1080), "");
             GameScene.RunLoop();
         }

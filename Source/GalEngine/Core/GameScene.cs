@@ -49,8 +49,15 @@ namespace GalEngine
 
             MouseMove?.Invoke(sender, eventArg);
 
-            GameObject.ProcessMouseMove(Root, eventArg, System.Numerics.Matrix3x2.Identity);
-            GameObject.ProcessMouseMove(DebugLayer.DebugCommand, eventArg, System.Numerics.Matrix3x2.Identity);
+            GameObject.ProcessMouseMove(Root, new MouseMoveEvent()
+            {
+                MousePosition = Utility.ComputePosition(mousePosition, Camera, Resolution)
+            }, System.Numerics.Matrix3x2.Identity);
+
+            GameObject.ProcessMouseMove(DebugLayer.DebugCommand, new MouseMoveEvent()
+            {
+                MousePosition = Utility.ComputePosition(mousePosition, DebugLayer.DebugCommand.Camera, Resolution)
+            }, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnMouseClick(object sender, MouseClickEvent eventArg)
@@ -59,8 +66,19 @@ namespace GalEngine
 
             MouseClick?.Invoke(sender, eventArg);
 
-            GameObject.ProcessMouseClick(Root, eventArg, System.Numerics.Matrix3x2.Identity);
-            GameObject.ProcessMouseClick(DebugLayer.DebugCommand, eventArg, System.Numerics.Matrix3x2.Identity);
+            GameObject.ProcessMouseClick(Root, new MouseClickEvent()
+            {
+                Button = eventArg.Button,
+                IsDown = eventArg.IsDown,
+                MousePosition = Utility.ComputePosition(mousePosition, Camera, Resolution)
+            }, System.Numerics.Matrix3x2.Identity);
+
+            GameObject.ProcessMouseClick(DebugLayer.DebugCommand, new MouseClickEvent()
+            {
+                Button = eventArg.Button,
+                IsDown = eventArg.IsDown,
+                MousePosition = Utility.ComputePosition(mousePosition, DebugLayer.DebugCommand.Camera, Resolution)
+            }, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnMouseWheel(object sender, MouseWheelEvent eventArg)
@@ -69,8 +87,17 @@ namespace GalEngine
 
             MouseWheel?.Invoke(sender, eventArg);
 
-            GameObject.ProcessMouseWheel(Root, eventArg, System.Numerics.Matrix3x2.Identity);
-            GameObject.ProcessMouseWheel(DebugLayer.DebugCommand, eventArg, System.Numerics.Matrix3x2.Identity);
+            GameObject.ProcessMouseWheel(Root, new MouseWheelEvent()
+            {
+                Offset = eventArg.Offset,
+                MousePosition = Utility.ComputePosition(mousePosition, Camera, Resolution)
+            }, System.Numerics.Matrix3x2.Identity);
+
+            GameObject.ProcessMouseWheel(DebugLayer.DebugCommand, new MouseWheelEvent()
+            {
+                Offset = eventArg.Offset,
+                MousePosition = Utility.ComputePosition(mousePosition, DebugLayer.DebugCommand.Camera, Resolution)
+            }, System.Numerics.Matrix3x2.Identity);
         }
 
         internal static void OnBoardClick(object sender, BoardClickEvent eventArg)

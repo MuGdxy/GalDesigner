@@ -77,54 +77,56 @@ namespace GalEngine
 
         internal static void RenderGameObject(GameObject GameObject, Matrix3x2 BaseTransform, Camera Camera)
         {
-            if (GameObject.IsEnableVisual is false) return;
             if (Camera is null) return;
+            if (GameObject.IsEnableVisual is false) return;
 
             float opacity = GameObject.Opacity;
-            
+
             var transform = GameObject.Transform.Matrix * BaseTransform;
             var rectangle = new RectangleF(0, 0, GameObject.Size.Width, GameObject.Size.Height);
 
-            if (Utility.IsIntersect(Camera, GameObject.Size, transform) is false) return;
-
-            Vector2 internalScale = new Vector2(GameScene.Resolution.Width / Camera.Size.Width,
-                GameScene.Resolution.Height / Camera.Size.Height);
-            Vector2 scaleCenter = new Vector2(Camera.Area.Left, Camera.Area.Top);
-            
-            Systems.Graphics.SetTransform(transform * Matrix3x2.CreateScale(internalScale, scaleCenter) 
-                * Matrix3x2.CreateTranslation(-scaleCenter));
-
-            if (GameObject.Border.Width != GameDefault.BorderWidth)
+            if (Utility.IsIntersect(Camera, GameObject.Size, transform) is true)
             {
-                var borderColor = GameResource.IsColorExist(GameObject.Border.Color) is true ? GameObject.Border.Color : GameDefault.Color;
+                Vector2 internalScale = new Vector2(GameScene.Resolution.Width / Camera.Size.Width,
+                    GameScene.Resolution.Height / Camera.Size.Height);
+                Vector2 scaleCenter = new Vector2(Camera.Area.Left, Camera.Area.Top);
 
-                Systems.Graphics.DrawRectangle(rectangle, borderColor, opacity, GameObject.Border.Width);
-            }
+                Systems.Graphics.SetTransform(transform * Matrix3x2.CreateScale(internalScale, scaleCenter)
+                    * Matrix3x2.CreateTranslation(-scaleCenter));
 
-            if (GameObject.BackGround.Bitmap == GameDefault.Bitmap || GameObject.BackGround.Bitmap == null)
-            {
-                var backgroundColor = GameResource.IsColorExist(GameObject.BackGround.Color) is true ? GameObject.BackGround.Color : null;
+                if (GameObject.Border.Width != GameDefault.BorderWidth)
+                {
+                    var borderColor = GameResource.IsColorExist(GameObject.Border.Color) is true ? GameObject.Border.Color : GameDefault.Color;
 
-                if (backgroundColor == GameDefault.Color) backgroundColor = null;
+                    Systems.Graphics.DrawRectangle(rectangle, borderColor, opacity, GameObject.Border.Width);
+                }
 
-                if (backgroundColor != null) Systems.Graphics.FillRectangle(rectangle, backgroundColor, opacity);
-            }
+                if (GameObject.BackGround.Bitmap == GameDefault.Bitmap || GameObject.BackGround.Bitmap == null)
+                {
+                    var backgroundColor = GameResource.IsColorExist(GameObject.BackGround.Color) is true ? GameObject.BackGround.Color : null;
 
-            if (GameObject.BackGround.Bitmap != GameDefault.Bitmap && GameObject.BackGround.Bitmap != null)
-            {
-                var bitmap = GameResource.GetBitmap(GameObject.BackGround.Bitmap);
+                    if (backgroundColor == GameDefault.Color) backgroundColor = null;
 
-                if (bitmap != null) Systems.Graphics.DrawBitmap(bitmap, rectangle, opacity);
-            }
+                    if (backgroundColor != null) Systems.Graphics.FillRectangle(rectangle, backgroundColor, opacity);
+                }
 
-            if (GameObject.TextLayout.Text != GameDefault.TextLayoutText && GameObject.TextLayout.Text != null)
-            {
-                var textColor = GameResource.IsColorExist(GameObject.TextLayout.Color) is true ? GameObject.TextLayout.Color : GameDefault.Color;
-                var textFont = GameResource.IsFontExist(GameObject.TextLayout.Font) is true ? GameObject.TextLayout.Font : GameDefault.Font;
+                if (GameObject.BackGround.Bitmap != GameDefault.Bitmap && GameObject.BackGround.Bitmap != null)
+                {
+                    var bitmap = GameResource.GetBitmap(GameObject.BackGround.Bitmap);
 
-                Systems.Graphics.DrawText(GameObject.TextLayout.Text, rectangle, textFont, textColor, opacity);
-            }
+                    if (bitmap != null) Systems.Graphics.DrawBitmap(bitmap, rectangle, opacity);
+                }
 
+                if (GameObject.TextLayout.Text != GameDefault.TextLayoutText && GameObject.TextLayout.Text != null)
+                {
+                    var textColor = GameResource.IsColorExist(GameObject.TextLayout.Color) is true ? GameObject.TextLayout.Color : GameDefault.Color;
+                    var textFont = GameResource.IsFontExist(GameObject.TextLayout.Font) is true ? GameObject.TextLayout.Font : GameDefault.Font;
+
+                    Systems.Graphics.DrawText(GameObject.TextLayout.Text, rectangle, textFont, textColor, opacity);
+                }
+            } 
+
+            //need change
             List<GameObject> sortedChildren = GameObject.children.Values.ToList();
 
             sortedChildren.Sort(new GameObjectDepthComparer());

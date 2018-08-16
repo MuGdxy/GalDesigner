@@ -50,12 +50,22 @@ namespace GalEngine
             return ComputeViewPort(Size.Width, Size.Height, Resolution.Width, Resolution.Height);
         }
 
-        public static Position ComputePosition(Position Position, RectangleF ViewPort, Size Resolution)
+        public static Position ComputePosition(PositionF Position, RectangleF ViewPort, Size Resolution)
         {
             Position result = new Position();
 
             result.X = (int)((Position.X - ViewPort.Left) / ViewPort.Width * Resolution.Width);
             result.Y = (int)((Position.Y - ViewPort.Top) / ViewPort.Height * Resolution.Height);
+
+            return result;
+        }
+
+        public static Position ComputePosition(PositionF Position, Camera Camera, Size Resolution)
+        {
+            PositionF result = new PositionF();
+
+            result.X = Position.X / Resolution.Width * Camera.Size.Width;
+            result.Y = Position.Y / Resolution.Height * Camera.Size.Height;
 
             return result;
         }
@@ -75,8 +85,8 @@ namespace GalEngine
 
         public static void Project(Vector2[] Position, Vector2 Axis, out float minPosition, out float maxPosition)
         {
-            minPosition = float.MinValue;
-            maxPosition = float.MaxValue;
+            minPosition = float.MaxValue;
+            maxPosition = float.MinValue;
 
             foreach (var item in Position)
             {

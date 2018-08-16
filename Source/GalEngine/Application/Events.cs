@@ -13,7 +13,7 @@ namespace GalEngine
 
     public class MouseMoveEvent : BaseEvent
     {
-        public Position MousePosition;
+        public PositionF MousePosition;
     }
 
     public enum MouseButton

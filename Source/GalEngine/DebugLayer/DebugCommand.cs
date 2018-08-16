@@ -17,7 +17,8 @@ namespace GalEngine
 
         public static string Font => "DebugCommandFont";
 
-        public static float ScrollSpeed = 0.5f;
+        public static float ScrollSpeed => 0.5f;
+        public static float Opacity => 0.7f;
         
         internal static void Update(SizeF DebugCommandSize)
         {
@@ -36,6 +37,8 @@ namespace GalEngine
         {
             TextLayout.Text = Text;
             TextLayout.Font = DebugCommandProperty.Font;
+
+            Opacity = DebugCommandProperty.Opacity;
         }
 
         public void SetSharp(SizeF DebugCommandSize)
@@ -53,19 +56,22 @@ namespace GalEngine
 
     class DebugCommand : GameObject
     {
+        private GameObject debugCommandBackGround = new GameObject(DebugCommandProperty.BackGround, new SizeF());
+
         private List<DebugCommandLine> debugCommandLines = new List<DebugCommandLine>();
 
         private Camera camera = new Camera();
 
         public Camera Camera { get => camera; }
 
-        private void AddCommandLine(string Text)
+        private void AddCommandLine(string Text, string Color = "Default")
         {
             DebugCommandLine commandLine = new DebugCommandLine(DebugCommandProperty.LineNmae + debugCommandLines.Count, Text);
             DebugCommandLine lastCommandLine = debugCommandLines[debugCommandLines.Count - 2];
 
             commandLine.SetSharp(Size);
             commandLine.SetPosition(lastCommandLine);
+            commandLine.TextLayout.Color = Color;
 
             debugCommandLines[debugCommandLines.Count - 1].SetPosition(commandLine);
 
@@ -76,33 +82,20 @@ namespace GalEngine
 
         private void ScrollCommandLine(float Offset)
         {
-            var firstCommandLine = debugCommandLines[0];
-            var lastCommandLine = debugCommandLines[debugCommandLines.Count - 1];
+            Offset = Math.Min(camera.Area.Top, Offset);
 
-            float height = lastCommandLine.Transform.Position.Y - firstCommandLine.Transform.Position.Y + lastCommandLine.Size.Height;
-
-            firstCommandLine.Transform.Position.Y += Offset;
-            firstCommandLine.IsEnableVisual = false;
-
-            firstCommandLine.Transform.Position.Y = Math.Max(Size.Height - height,
-                firstCommandLine.Transform.Position.Y);
-            firstCommandLine.Transform.Position.Y = Math.Min(0,
-                firstCommandLine.Transform.Position.Y);
-
-            for (int i = 1; i < debugCommandLines.Count; i++)
-            {
-                debugCommandLines[i].SetPosition(debugCommandLines[i - 1]);
-            }
+            camera.Move(new PositionF(0, -Offset));
+            debugCommandBackGround.Transform.Position.Y -= Offset;
         }
 
         private void FocusCommand()
         {
             var commandLine = debugCommandLines[debugCommandLines.Count - 1];
 
-            if (commandLine.Transform.Position.Y < 0 ||
-                commandLine.Transform.Position.Y + commandLine.Size.Height > Size.Height)
+            if (commandLine.Transform.Position.Y < camera.Area.Top || 
+                commandLine.Transform.Position.Y + commandLine.Size.Height > camera.Area.Bottom)
             {
-                ScrollCommandLine((Size.Height - commandLine.Size.Height) - commandLine.Transform.Position.Y);
+                ScrollCommandLine((Camera.Area.Bottom - commandLine.Size.Height) - commandLine.Transform.Position.Y);
             }
         }
 
@@ -156,6 +149,8 @@ namespace GalEngine
 
             if (KeyCode >= KeyCode.A && KeyCode <= KeyCode.Z)
                 AddCommandText(((char)((char)KeyCode - 'A' + 'a')).ToString());
+            if (KeyCode >= KeyCode.D0 && KeyCode <= KeyCode.D9)
+                AddCommandText(((int)KeyCode - '0').ToString());
         }
 
         protected override void OnMouseClick(object sender, MouseClickEvent eventArg)
@@ -192,12 +187,12 @@ namespace GalEngine
 
         public DebugCommand() : base(DebugCommandProperty.Name, new SizeF(0, 0))
         {
-            Opacity = 0.7f;
-
             IsEnableVisual = false;
             IsEnableRead = true;
 
-            BackGround.Color = DebugCommandProperty.BackGround;
+            debugCommandBackGround.BackGround.Color = DebugCommandProperty.BackGround;
+            debugCommandBackGround.Opacity = DebugCommandProperty.Opacity;
+            debugCommandBackGround.Depth = -1;
 
             debugCommandLines.Add(new DebugCommandLine("RootCommandLine", ""));
             debugCommandLines.Add(new DebugCommandLine("Command", "Command>"));
@@ -206,6 +201,8 @@ namespace GalEngine
             {
                 SetChild(item);
             }
+
+            SetChild(debugCommandBackGround);
 
             AddCommandLine("Version 0.7beta");
             AddCommandLine("Welcome DebugComand.");
@@ -218,8 +215,9 @@ namespace GalEngine
 
             Size = Resolution;
             Transform.Position = new PositionF(0, 0);
-
             Transform.Update(Size);
+
+            debugCommandBackGround.Size = Resolution;
 
             camera = new Camera(0, 0, Resolution.Width, Resolution.Height);
 
@@ -231,6 +229,11 @@ namespace GalEngine
                 debugCommandLines[i].SetSharp(Resolution);
                 debugCommandLines[i].SetPosition(debugCommandLines[i - 1]);
             }
+        }
+
+        public void WriteCommandText(string CommandText, string Color)
+        {
+            AddCommandLine(CommandText, Color);
         }
     }
 }

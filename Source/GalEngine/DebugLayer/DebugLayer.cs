@@ -38,14 +38,19 @@ namespace GalEngine
             MakeWarnings();
         }
 
+        public static void WriteCommandText(string Text, string Color = "Default")
+        {
+            DebugCommand.WriteCommandText(Text, Color);
+        }
+
         public static void ReportError(Error error, params object[] context)
         {
-            throw new Exception(SetParamsToString(errors[error], context));
+            WriteCommandText(SetParamsToString(errors[error], context), Colors.Green);
         }
         
         public static void ReportWarning(Warning warning, params object[] context)
         {
-            Console.WriteLine(SetParamsToString(warnings[warning], context));
+            WriteCommandText(SetParamsToString(warnings[warning], context), Colors.Red);
         }
 
         public static void Assert(bool testValue, Error error, params object[] context)
