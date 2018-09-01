@@ -7,18 +7,22 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class Transform
+    public class Transform : Commponent
     {
         private PositionF position = new PositionF(0.0f, 0.0f);
         private SizeF scale = new SizeF(1.0f, 1.0f);
         private Vector2 forward = new Vector2(0.0f, 1.0f);
         private float angle = 0.0f;
+        private float depth = GameDefault.Depth;
 
         private Matrix3x2 matrix = Matrix3x2.Identity;
 
+        internal Matrix3x2 Matrix => matrix;
+
         public PositionF Position { get => position; set => position = value; }
         public SizeF Scale { get => scale; set => scale = value; }
-
+        public float Depth { get => depth; set => depth = value; }
+ 
         public Vector2 Forward
         {
             get => forward; set
@@ -40,7 +44,10 @@ namespace GalEngine
             }
         }
 
-        public Matrix3x2 Matrix => matrix;
+        protected internal override void OnRender(GameObject gameObject)
+        {
+
+        }
 
         internal void Update(SizeF Size)
         {

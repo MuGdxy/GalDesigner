@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -87,7 +88,7 @@ namespace GalEngine
         {
             minPosition = float.MaxValue;
             maxPosition = float.MinValue;
-
+            
             foreach (var item in Position)
             {
                 float dotValue = Vector2.Dot(item, Axis);

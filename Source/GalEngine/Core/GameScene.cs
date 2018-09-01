@@ -15,7 +15,7 @@ namespace GalEngine
         private static Camera defaultCamera = new Camera();
         private static Camera usedCamera = defaultCamera;
 
-        private static GameObject root = new GameObject("Root", new Size(0, 0));
+        private static GameObject root = new GameObject("Root");
 
         internal static Bitmap renderTarget = null;
 

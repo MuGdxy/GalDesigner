@@ -60,13 +60,15 @@
     <Compile Include="Application\Application.cs" />
     <Compile Include="Application\Events.cs" />
     <Compile Include="Core\Camera.cs" />
+    <Compile Include="GameObject\Commponent\Commponent.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="DebugLayer\DebugCommand.cs" />
     <Compile Include="Enum\Colors.cs" />
     <Compile Include="GameObject\BackGround.cs" />
     <Compile Include="GameObject\Border.cs" />
-    <Compile Include="GameObject\TextLayout.cs" />
-    <Compile Include="GameObject\Transform.cs" />
+    <Compile Include="GameObject\Commponent\Sharp.cs" />
+    <Compile Include="GameObject\Commponent\TextLayout.cs" />
+    <Compile Include="GameObject\Commponent\Transform.cs" />
     <Compile Include="Core\GameDefault.cs" />
     <Compile Include="Core\GameObject.cs" />
     <Compile Include="Enum\FontStyle.cs" />

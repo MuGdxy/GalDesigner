@@ -11,21 +11,17 @@ namespace GalEngine
     {
         public int Compare(GameObject x, GameObject y)
         {
-            return x.Depth.CompareTo(y.Depth);
+            float xDepth = x.IsCommponentExist<Transform>() is true ? x.GetCommponent<Transform>().Depth : GameDefault.Depth;
+            float yDepth = y.IsCommponentExist<Transform>() is true ? y.GetCommponent<Transform>().Depth : GameDefault.Depth;
+
+            return xDepth.CompareTo(yDepth);
         }
     }
 
     public class GameObject
     {
         private readonly string name;
-        private Transform transform = GameDefault.Transform;
-        private SizeF size = GameDefault.SizeF;
-        private Border border = GameDefault.Border;
-        private TextLayout textLayout = GameDefault.TextLayout;
-        private BackGround backGround = GameDefault.BackGround;
-        private float opacity = GameDefault.Opacity;
-        private int depth = GameDefault.Depth;
-
+      
         private bool isHover = false;
 
         private bool isEnableRead = false;
@@ -33,16 +29,10 @@ namespace GalEngine
 
         private GameObject parent = null;
         private Dictionary<string, GameObject> children = new Dictionary<string, GameObject>();
+        private Dictionary<Type, Commponent> commponents = new Dictionary<Type, Commponent>();
 
         public string Name { get => name; }
-        public Transform Transform { get => transform; set => transform = value; }
-        public SizeF Size { get => size; set => size = value; }
-        public Border Border { get => border; set => border = value; }
-        public TextLayout TextLayout { get => textLayout; set => textLayout = value; }
-        public BackGround BackGround { get => backGround; set => backGround = value; }
-        public float Opacity { get => opacity; set => opacity = value; }
-        public int Depth { get => depth; set => depth = value; }
-
+       
         public bool IsHover => isHover;
 
         public bool IsEnableRead { get => isEnableRead; set => isEnableRead = value; }
@@ -79,13 +69,13 @@ namespace GalEngine
         {
             if (Camera is null) return;
             if (GameObject.IsEnableVisual is false) return;
+            if (GameObject.IsCommponentExist<Sharp>() is false) return;
 
-            float opacity = GameObject.Opacity;
+            var transform = (GameObject.IsCommponentExist<Transform>() is true ?
+                GameObject.GetCommponent<Transform>().Matrix : Matrix3x2.Identity) * BaseTransform;
+            var sharp = GameObject.GetCommponent<Sharp>();
 
-            var transform = GameObject.Transform.Matrix * BaseTransform;
-            var rectangle = new RectangleF(0, 0, GameObject.Size.Width, GameObject.Size.Height);
-
-            if (Utility.IsIntersect(Camera, GameObject.Size, transform) is true)
+            if (Utility.IsIntersect(Camera, sharp.Size, transform) is true)
             {
                 Vector2 internalScale = new Vector2(GameScene.Resolution.Width / Camera.Size.Width,
                     GameScene.Resolution.Height / Camera.Size.Height);
@@ -94,35 +84,9 @@ namespace GalEngine
                 Systems.Graphics.SetTransform(transform * Matrix3x2.CreateScale(internalScale, scaleCenter)
                     * Matrix3x2.CreateTranslation(-scaleCenter));
 
-                if (GameObject.Border.Width != GameDefault.BorderWidth)
+                foreach (var item in GameObject.commponents)
                 {
-                    var borderColor = GameResource.IsColorExist(GameObject.Border.Color) is true ? GameObject.Border.Color : GameDefault.Color;
-
-                    Systems.Graphics.DrawRectangle(rectangle, borderColor, opacity, GameObject.Border.Width);
-                }
-
-                if (GameObject.BackGround.Bitmap == GameDefault.Bitmap || GameObject.BackGround.Bitmap == null)
-                {
-                    var backgroundColor = GameResource.IsColorExist(GameObject.BackGround.Color) is true ? GameObject.BackGround.Color : null;
-
-                    if (backgroundColor == GameDefault.Color) backgroundColor = null;
-
-                    if (backgroundColor != null) Systems.Graphics.FillRectangle(rectangle, backgroundColor, opacity);
-                }
-
-                if (GameObject.BackGround.Bitmap != GameDefault.Bitmap && GameObject.BackGround.Bitmap != null)
-                {
-                    var bitmap = GameResource.GetBitmap(GameObject.BackGround.Bitmap);
-
-                    if (bitmap != null) Systems.Graphics.DrawBitmap(bitmap, rectangle, opacity);
-                }
-
-                if (GameObject.TextLayout.Text != GameDefault.TextLayoutText && GameObject.TextLayout.Text != null)
-                {
-                    var textColor = GameResource.IsColorExist(GameObject.TextLayout.Color) is true ? GameObject.TextLayout.Color : GameDefault.Color;
-                    var textFont = GameResource.IsFontExist(GameObject.TextLayout.Font) is true ? GameObject.TextLayout.Font : GameDefault.Font;
-
-                    Systems.Graphics.DrawText(GameObject.TextLayout.Text, rectangle, textFont, textColor, opacity);
+                    item.Value.OnRender(GameObject);
                 }
             } 
 
@@ -139,11 +103,16 @@ namespace GalEngine
 
         internal static void ProcessMouseMove(GameObject GameObject, MouseMoveEvent EventArg, Matrix3x2 BaseTransform)
         {
-            GameObject.Transform.Update(GameObject.Size);
+            if (GameObject.IsCommponentExist<Sharp>() is false) return;
 
-            BaseTransform = GameObject.Transform.Matrix * BaseTransform;
+            var transform = GameObject.IsCommponentExist<Transform>() is true ? GameObject.GetCommponent<Transform>() : new Transform();
+            var sharp = GameObject.GetCommponent<Sharp>();
 
-            if (Utility.IsContain(EventArg.MousePosition, GameObject.Size, BaseTransform) is true)
+            transform.Update(sharp.Size);
+
+            BaseTransform = transform.Matrix * BaseTransform;
+
+            if (Utility.IsContain(EventArg.MousePosition, sharp.Size, BaseTransform) is true)
             {
                 GameObject.OnMouseMove(GameObject, EventArg);
                 GameObject.MouseMove?.Invoke(GameObject, EventArg);
@@ -160,11 +129,16 @@ namespace GalEngine
 
         internal static void ProcessMouseClick(GameObject GameObject, MouseClickEvent EventArg, Matrix3x2 BaseTransform)
         {
-            GameObject.Transform.Update(GameObject.Size);
+            if (GameObject.IsCommponentExist<Sharp>() is false) return;
 
-            BaseTransform = GameObject.Transform.Matrix * BaseTransform;
+            var transform = GameObject.IsCommponentExist<Transform>() is true ? GameObject.GetCommponent<Transform>() : new Transform();
+            var sharp = GameObject.GetCommponent<Sharp>();
 
-            if (Utility.IsContain(EventArg.MousePosition, GameObject.Size, BaseTransform) is true)
+            transform.Update(sharp.Size);
+
+            BaseTransform = transform.Matrix * BaseTransform;
+
+            if (Utility.IsContain(EventArg.MousePosition, sharp.Size, BaseTransform) is true)
             {
                 GameObject.OnMouseClick(GameObject, EventArg);
                 GameObject.MouseClick?.Invoke(GameObject, EventArg);
@@ -178,11 +152,16 @@ namespace GalEngine
 
         internal static void ProcessMouseWheel(GameObject GameObject, MouseWheelEvent EventArg, Matrix3x2 BaseTransform)
         {
-            GameObject.Transform.Update(GameObject.Size);
+            if (GameObject.IsCommponentExist<Sharp>() is false) return;
 
-            BaseTransform = GameObject.Transform.Matrix * BaseTransform;
+            var transform = GameObject.IsCommponentExist<Transform>() is true ? GameObject.GetCommponent<Transform>() : new Transform();
+            var sharp = GameObject.GetCommponent<Sharp>();
 
-            if (Utility.IsContain(EventArg.MousePosition, GameObject.Size, BaseTransform) is true)
+            transform.Update(sharp.Size);
+
+            BaseTransform = transform.Matrix * BaseTransform;
+
+            if (Utility.IsContain(EventArg.MousePosition, sharp.Size, BaseTransform) is true)
             {
                 GameObject.OnMouseWheel(GameObject, EventArg);
                 GameObject.MouseWheel?.Invoke(GameObject, EventArg);
@@ -229,7 +208,8 @@ namespace GalEngine
             GameObject.OnUpdate(GameObject);
             GameObject.Update?.Invoke(GameObject);
 
-            GameObject.Transform.Update(GameObject.Size);
+            if (GameObject.IsCommponentExist<Transform>() is true && GameObject.IsCommponentExist<Sharp>() is true)
+                GameObject.GetCommponent<Transform>().Update(GameObject.GetCommponent<Sharp>().Size);
             
             foreach (var item in GameObject.children)
             {
@@ -237,16 +217,39 @@ namespace GalEngine
             }
         }
 
-        public GameObject(SizeF Size)
+        public GameObject()
         {
             name = GameDefault.GameObjectName + GetHashCode().ToString();
-            size = Size;
         }
 
-        public GameObject(string Name, SizeF Size)
+        public GameObject(string Name)
         {
             name = Name;
-            size = Size;
+        }
+
+        public void SetCommponent<T>(T commponent) where T : Commponent
+        {
+            commponents[commponent.GetType()] = commponent;
+        }
+
+        public void SetCommponent<T>() where T : Commponent, new()
+        {
+            commponents[typeof(T)] = new T();
+        }
+
+        public void CancelCommponent<T>() where T : Commponent
+        {
+            commponents.Remove(typeof(T));
+        }
+
+        public T GetCommponent<T>() where T : Commponent
+        {
+            return commponents[typeof(T)] as T;
+        }
+
+        public bool IsCommponentExist<T>() where T : Commponent
+        {
+            return commponents.ContainsKey(typeof(T));
         }
 
         public void SetChild(GameObject Child)

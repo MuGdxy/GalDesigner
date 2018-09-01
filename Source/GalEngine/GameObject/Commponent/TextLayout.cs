@@ -24,15 +24,39 @@ namespace GalEngine
         }
     }
 
-    public class TextLayout
+    public class TextLayout : Commponent
     {
         private string text = GameDefault.TextLayoutText;
         private string font = GameDefault.Font;
         private string color = GameDefault.Color;
+        private float opacity = 1.0f;
 
         public string Text { get => text; set => text = value; }
         public string Font { get => font; set => font = value; }
         public string Color { get => color; set => color = value; }
+        public float Opacity { get => opacity; set => opacity = value; }
+
+        protected internal override void OnRender(GameObject gameObject)
+        {
+            if (gameObject.IsCommponentExist<Sharp>() is false) return;
+
+            if (Text != GameDefault.TextLayoutText && Text != null)
+            {
+                var sharp = gameObject.GetCommponent<Sharp>();
+
+                var rectangle = new RectangleF(0, 0, sharp.Size.Width, sharp.Size.Height);
+
+                var textColor = GameResource.IsColorExist(Color) is true ? Color : GameDefault.Color;
+                var textFont = GameResource.IsFontExist(Font) is true ? Font : GameDefault.Font;
+
+                Systems.Graphics.DrawText(Text, rectangle, textFont, textColor, Opacity);
+            }
+        }
+
+        public TextLayout() : this("")
+        {
+
+        }
 
         public TextLayout(string Text = "")
         {
