@@ -12,10 +12,6 @@ namespace GalEngine
         private static Dictionary<Error, string> errors = new Dictionary<Error, string>();
         private static Dictionary<Warning, string> warnings = new Dictionary<Warning, string>();
 
-        private static DebugCommand debugCommand = new DebugCommand();
-
-        internal static DebugCommand DebugCommand => debugCommand;
-
         private static string SetParamsToString(string text, params object[] context)
         {
             string result = text;
@@ -38,19 +34,14 @@ namespace GalEngine
             MakeWarnings();
         }
 
-        public static void WriteCommandText(string Text, string Color = "Default")
-        {
-            DebugCommand.WriteCommandText(Text, Color);
-        }
-
         public static void ReportError(Error error, params object[] context)
         {
-            WriteCommandText(SetParamsToString(errors[error], context), Colors.Green);
+            throw new NotImplementedException();
         }
         
         public static void ReportWarning(Warning warning, params object[] context)
         {
-            WriteCommandText(SetParamsToString(warnings[warning], context), Colors.Red);
+            throw new NotImplementedException();
         }
 
         public static void Assert(bool testValue, Error error, params object[] context)

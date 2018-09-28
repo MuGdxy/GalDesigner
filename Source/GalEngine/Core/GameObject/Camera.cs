@@ -45,12 +45,12 @@ namespace GalEngine
             size = new SizeF(Radius.Width * 2, Radius.Height * 2);
         }
 
-        public void Move(PositionF Position)
+        public void Move(PositionF position)
         {
-            area.Left += Position.X;
-            area.Top += Position.Y;
-            area.Right += Position.X;
-            area.Bottom += Position.Y;
+            area.Left += position.X;
+            area.Top += position.Y;
+            area.Right += position.X;
+            area.Bottom += position.Y;
         }
     }
 }

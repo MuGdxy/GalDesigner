@@ -6,161 +6,96 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public static class GameScene
+    public class GameScene
     {
-        private static ValueManager<Size> resolution = new ValueManager<Size>(ChangeResolutionEvent);
+        private string name;
 
-        private static Position mousePosition = new Position();
+        private Camera defaultCamera;
+        private Camera currentCamera;
+        private GameObject root;
 
-        private static Camera defaultCamera = new Camera();
-        private static Camera usedCamera = defaultCamera;
+        private ValueManager<Size> resolution;
 
-        private static GameObject root = new GameObject("Root");
+        private Bitmap renderTarget;
 
-        internal static Bitmap renderTarget = null;
+        private List<BehaviorSystem> behaviorSystems;
 
-        public static Size Resolution { set => resolution.Value = value; get => resolution.Value; }
-        public static GameObject Root { get => root; }
+        private static GameScene mainScene = null;
 
-        public static Camera Camera { get => usedCamera; }
-
-        public static event MouseMoveHandler MouseMove;
-        public static event MouseClickHandler MouseClick;
-        public static event MouseWheelHandler MouseWheel;
-        public static event BoardClickHandler BoardClick;
-        public static event UpdateHandler Update;
-
-        private static void ChangeResolutionEvent(Size oldSize, Size newSize)
+        protected virtual void OnResolutionChange(object owner, Size oldValue, Size newValue)
         {
-            Utility.Dispose(ref renderTarget);
+            GameScene scene = owner as GameScene;
 
-            renderTarget = new Bitmap(newSize);
+            Utility.Dispose(ref scene.renderTarget);
 
-            defaultCamera.Area = new RectangleF(0, 0, newSize.Width, newSize.Height);
+            renderTarget = new Bitmap(newValue);
 
-            DebugLayer.DebugCommand.SetSharp(newSize);
+            defaultCamera.Area = new RectangleF(0, 0, newValue.Width, newValue.Height);
         }
 
-        internal static void OnMouseMove(object sender, MouseMoveEvent eventArg)
+        public GameScene(string sceneName, Size sceneResolution)
         {
-            mousePosition = Utility.ComputePosition(eventArg.MousePosition, Application.ViewPort, Resolution);
+            name = sceneName;
+            resolution = new ValueManager<Size>(sceneResolution, OnResolutionChange);
 
-            eventArg.MousePosition = mousePosition;
+            defaultCamera = new Camera(0, 0, sceneResolution.Width, sceneResolution.Height);
+            currentCamera = defaultCamera;
 
-            MouseMove?.Invoke(sender, eventArg);
+            root = new GameObject("Root");
 
-            GameObject.ProcessMouseMove(Root, new MouseMoveEvent()
-            {
-                MousePosition = Utility.ComputePosition(mousePosition, Camera, Resolution)
-            }, System.Numerics.Matrix3x2.Identity);
+            renderTarget = new Bitmap(sceneResolution);
 
-            GameObject.ProcessMouseMove(DebugLayer.DebugCommand, new MouseMoveEvent()
-            {
-                MousePosition = Utility.ComputePosition(mousePosition, DebugLayer.DebugCommand.Camera, Resolution)
-            }, System.Numerics.Matrix3x2.Identity);
+            behaviorSystems = new List<BehaviorSystem>();
         }
 
-        internal static void OnMouseClick(object sender, MouseClickEvent eventArg)
+        public virtual void Update(float deltaTime)
         {
-            eventArg.MousePosition = mousePosition;
+            resolution.Update(this, true);
 
-            MouseClick?.Invoke(sender, eventArg);
-
-            GameObject.ProcessMouseClick(Root, new MouseClickEvent()
-            {
-                Button = eventArg.Button,
-                IsDown = eventArg.IsDown,
-                MousePosition = Utility.ComputePosition(mousePosition, Camera, Resolution)
-            }, System.Numerics.Matrix3x2.Identity);
-
-            GameObject.ProcessMouseClick(DebugLayer.DebugCommand, new MouseClickEvent()
-            {
-                Button = eventArg.Button,
-                IsDown = eventArg.IsDown,
-                MousePosition = Utility.ComputePosition(mousePosition, DebugLayer.DebugCommand.Camera, Resolution)
-            }, System.Numerics.Matrix3x2.Identity);
-        }
-
-        internal static void OnMouseWheel(object sender, MouseWheelEvent eventArg)
-        {
-            eventArg.MousePosition = mousePosition;
-
-            MouseWheel?.Invoke(sender, eventArg);
-
-            GameObject.ProcessMouseWheel(Root, new MouseWheelEvent()
-            {
-                Offset = eventArg.Offset,
-                MousePosition = Utility.ComputePosition(mousePosition, Camera, Resolution)
-            }, System.Numerics.Matrix3x2.Identity);
-
-            GameObject.ProcessMouseWheel(DebugLayer.DebugCommand, new MouseWheelEvent()
-            {
-                Offset = eventArg.Offset,
-                MousePosition = Utility.ComputePosition(mousePosition, DebugLayer.DebugCommand.Camera, Resolution)
-            }, System.Numerics.Matrix3x2.Identity);
-        }
-
-        internal static void OnBoardClick(object sender, BoardClickEvent eventArg)
-        {
-            BoardClick?.Invoke(sender, eventArg);
-
-            GameObject.ProcessBoardClick(Root, eventArg);
-            GameObject.ProcessBoardClick(DebugLayer.DebugCommand, eventArg);
-        }
-
-        internal static void OnUpdate()
-        {
-            resolution.Update();
-
-            Update?.Invoke(null);
-
-            GameObject.ProcessUpdate(Root);
-            GameObject.ProcessUpdate(DebugLayer.DebugCommand);
+            root?.Update(deltaTime);
 
             Systems.Graphics.BeginDraw(renderTarget);
             Systems.Graphics.Clear(new Color(1, 1, 1, 1));
 
-            GameObject.RenderGameObject(Root, System.Numerics.Matrix3x2.Identity, Camera);
-            GameObject.RenderGameObject(DebugLayer.DebugCommand, System.Numerics.Matrix3x2.Identity, DebugLayer.DebugCommand.Camera);
+            behaviorSystems.ForEach((BehaviorSystem system) => { system.Excute(); });
 
             Systems.Graphics.EndDraw();
         }
 
-        public static void Create(string GameName, Size Resolution, string GameIcon)
+        public void SetDefaultCamera()
         {
-            resolution.Value = Resolution;
-
-            Application.Create(GameName, Resolution, GameIcon);
+            currentCamera = defaultCamera;
         }
 
-        public static void SetCamera(Camera Camera)
+        public void SetGameObject(GameObject gameObject)
         {
-            usedCamera = Camera;
+            root.SetChild(gameObject);
         }
 
-        public static void SetCamera()
+        public void SetBehaviorSystem(BehaviorSystem behaviorSystem)
         {
-            usedCamera = defaultCamera;
+            behaviorSystems.Add(behaviorSystem);
         }
 
-        public static void SetGameObject(GameObject GameObject)
+        public void CancelGameObject(GameObject gameObject)
         {
-            Root.SetChild(GameObject);
+            root.CancelChild(gameObject);
         }
 
-        public static void CancelGameObject(GameObject GameObject)
+        public void CancelBehaviorSystem(BehaviorSystem behaviorSystem)
         {
-            Root.CancelChild(GameObject);
+            behaviorSystems.Remove(behaviorSystem);
         }
 
-        public static void CancelGameObject(string GameObject)
-        {
-            Root.CancelChild(GameObject);
-        }
+        public string Name { get => name; }
 
-        public static void RunLoop()
-        {
-            Application.RunLoop();
-        }
+        public Camera Camera { get => currentCamera; set => currentCamera = value; }
+        public GameObject Root { get => root; }
+
+        public Size Resolution { get => resolution.Value; set => resolution.Value = value; }
+
+        public Bitmap RenderTarget { get => renderTarget; }
+
+        public static GameScene Main { get => mainScene; set => mainScene = value; }
     }
 }

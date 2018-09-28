@@ -21,9 +21,9 @@ namespace GalEngine
             height = Height;
         }
 
-        public static implicit operator Size(SizeF Size)
+        public static implicit operator Size(SizeF size)
         {
-            return new Size((int)Size.Width, (int)Size.Height);
+            return new Size((int)size.Width, (int)size.Height);
         }
     }
 
@@ -41,9 +41,9 @@ namespace GalEngine
             vector.Y = Height;
         }
 
-        public static implicit operator SizeF(Size Size)
+        public static implicit operator SizeF(Size size)
         {
-            return new SizeF(Size.Width, Size.Height);
+            return new SizeF(size.Width, size.Height);
         }
     }
 

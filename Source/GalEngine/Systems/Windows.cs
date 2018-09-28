@@ -243,11 +243,14 @@ namespace GalEngine.Systems
 
             Graphics.SetTransform(System.Numerics.Matrix3x2.Identity);
 
-            var viewPort = Utility.ComputeViewPort(Application.Size, GameScene.renderTarget.Size);
-            
-            Graphics.deviceContext2D.DrawBitmap(GameScene.renderTarget.resource as SharpDX.Direct2D1.Bitmap1,
-                new SharpDX.Mathematics.Interop.RawRectangleF(viewPort.Left, viewPort.Top, viewPort.Right, viewPort.Bottom),
-                 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+            if (GameScene.Main != null)
+            {
+                var viewPort = Utility.ComputeViewPort(Application.Size, GameScene.Main.RenderTarget.Size);
+
+                Graphics.deviceContext2D.DrawBitmap(GameScene.Main.RenderTarget.resource as SharpDX.Direct2D1.Bitmap1,
+                    new SharpDX.Mathematics.Interop.RawRectangleF(viewPort.Left, viewPort.Top, viewPort.Right, viewPort.Bottom),
+                    1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+            }
 
             Graphics.deviceContext2D.EndDraw();
             Graphics.deviceContext2D.Target = null;

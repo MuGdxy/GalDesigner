@@ -22,14 +22,14 @@ namespace GalEngine
             y = Y;
         }
 
-        public static implicit operator Position(PositionF Position)
+        public static implicit operator Position(PositionF position)
         {
-            return new Position((int)Position.X, (int)Position.Y);
+            return new Position((int)position.X, (int)position.Y);
         }
 
-        public static implicit operator Position(Vector2 Position)
+        public static implicit operator Position(Vector2 position)
         {
-            return new Position((int)Position.X, (int)Position.Y);
+            return new Position((int)position.X, (int)position.Y);
         }
     }
 
@@ -51,14 +51,14 @@ namespace GalEngine
             position = Position;
         }
 
-        public static implicit operator PositionF(Position Position)
+        public static implicit operator PositionF(Position position)
         {
-            return new PositionF(Position.X, Position.Y);
+            return new PositionF(position.X, position.Y);
         }
 
-        public static implicit operator PositionF(Vector2 Position)
+        public static implicit operator PositionF(Vector2 position)
         {
-            return new PositionF(Position);
+            return new PositionF(position);
         }
     }
 }

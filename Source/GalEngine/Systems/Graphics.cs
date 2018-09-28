@@ -151,13 +151,6 @@ namespace GalEngine.Systems
             Resource = new SharpDX.DirectWrite.TextLayout(writeFactory, Text, GetFontFace(FontName), MaxSize.Width, MaxSize.Height);
         }
 
-        public static void CreateTextMetrics(object Resource, out TextMetrics TextMetrics)
-        {
-            var metrics = (Resource as SharpDX.DirectWrite.TextLayout).Metrics;
-
-            TextMetrics = new TextMetrics(metrics.Width, metrics.Height, metrics.LineCount);
-        }
-
         public static void DrawLine(PositionF Start, PositionF End, string ColorName,float Opacity = 1.0f, float LineWidth = 1.0f)
         {
             var brush = GetColorBrush(ColorName);

@@ -17,20 +17,18 @@ namespace GalEngine
         public static string Name { set => name.Value = value; get => name.Value; }
         public static Size Size { set => size.Value = value; get => size.Value; }
 
-        public static RectangleF ViewPort => Utility.ComputeViewPort(Size, GameScene.Resolution);
-
         public static event MouseMoveHandler MouseMove;
         public static event MouseClickHandler MouseClick;
         public static event MouseWheelHandler MouseWheel;
         public static event BoardClickHandler BoardClick;
         public static event UpdateHandler Update;
 
-        private static void ChangeNameEvent(string oldName, string newName)
+        private static void ChangeNameEvent(object owner, string oldName, string newName)
         {
             Systems.Windows.SetWindowText(newName);
         }
 
-        private static void ChangeSizeEvent(Size oldSize, Size newSize)
+        private static void ChangeSizeEvent(object owner, Size oldSize, Size newSize)
         {
             Systems.Windows.SetWindowSize(newSize);
         }
@@ -40,8 +38,6 @@ namespace GalEngine
             mousePosition = eventArg.MousePosition;
 
             MouseMove?.Invoke(sender, eventArg);
-
-            GameScene.OnMouseMove(sender, eventArg);
         }
 
         internal static void OnMouseClick(object sender, MouseClickEvent eventArg)
@@ -49,8 +45,6 @@ namespace GalEngine
             eventArg.MousePosition = mousePosition;
 
             MouseClick?.Invoke(sender, eventArg);
-
-            GameScene.OnMouseClick(sender, eventArg);
         }
 
         internal static void OnMouseWheel(object sender, MouseWheelEvent eventArg)
@@ -58,33 +52,29 @@ namespace GalEngine
             eventArg.MousePosition = mousePosition;
 
             MouseWheel?.Invoke(sender, eventArg);
-
-            GameScene.OnMouseWheel(sender, eventArg);
         }
 
         internal static void OnBoardClick(object sender, BoardClickEvent eventArg)
         {
             BoardClick?.Invoke(sender, eventArg);
-
-            GameScene.OnBoardClick(sender, eventArg);
         }
 
         internal static void OnUpdate(object sender)
         {
-            name.Update();
-            icon.Update();
-            size.Update();
+            name.Update(null);
+            icon.Update(null);
+            size.Update(null);
 
             Time.Update();
 
             Update?.Invoke(sender);
 
-            GameScene.OnUpdate();
+            GameScene.Main?.Update(Time.DeltaSeconds);
 
             Systems.Windows.PresentBitmap();
         }
 
-        internal static void Create(string Name, Size Size, string Icon)
+        public static void Create(string Name, Size Size, string Icon)
         {
             name.Value = Name;
             size.Value = Size;
@@ -93,7 +83,7 @@ namespace GalEngine
             Systems.Windows.CreateWindow(name.Value, size.Value, icon.Value);
         }
 
-        internal static void RunLoop()
+        public static void RunLoop()
         {
             while (Systems.Windows.UpdateWindow() is false)
             {

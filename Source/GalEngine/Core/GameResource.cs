@@ -20,103 +20,103 @@ namespace GalEngine
             SetSystemColors();
         }
 
-        public static void SetColor(string ColorName, Color Color)
+        public static void SetColor(string colorName, Color color)
         {
-            if (colors.ContainsKey(ColorName) is true)
+            if (colors.ContainsKey(colorName) is true)
             {
-                Systems.Graphics.CancelColorBrush(ColorName);
+                Systems.Graphics.CancelColorBrush(colorName);
             }
             
-            colors[ColorName] = Color;
-            Systems.Graphics.SetColorBrush(ColorName, Color);
+            colors[colorName] = color;
+            Systems.Graphics.SetColorBrush(colorName, color);
         }
 
-        public static void SetFont(string FontName, Font Font)
+        public static void SetFont(string fontName, Font font)
         {
-            if (fonts.ContainsKey(FontName) is true)
+            if (fonts.ContainsKey(fontName) is true)
             {
-                Systems.Graphics.CancelFontFace(FontName);
+                Systems.Graphics.CancelFontFace(fontName);
             }
 
-            fonts[FontName] = Font;
-            Systems.Graphics.SetFontFace(FontName, Font);
+            fonts[fontName] = font;
+            Systems.Graphics.SetFontFace(fontName, font);
         }
 
-        public static void SetBitmap(string BitmapName, System.IO.Stream BitmapStream)
+        public static void SetBitmap(string bitmapName, System.IO.Stream bitmapStream)
         {
-            if (bitmaps.ContainsKey(BitmapName) is true)
+            if (bitmaps.ContainsKey(bitmapName) is true)
             {
-                bitmaps[BitmapName].Dispose();
-                bitmaps.Remove(BitmapName);
+                bitmaps[bitmapName].Dispose();
+                bitmaps.Remove(bitmapName);
             }
 
-            bitmaps[BitmapName] = new Bitmap(BitmapStream);
+            bitmaps[bitmapName] = new Bitmap(bitmapStream);
         }
 
-        public static void CancelColor(string ColorName)
+        public static void CancelColor(string colorName)
         {
-            if (ColorName == null || colors.ContainsKey(ColorName) is false) return;
+            if (colorName == null || colors.ContainsKey(colorName) is false) return;
 
-            colors.Remove(ColorName);
-            Systems.Graphics.CancelColorBrush(ColorName);
+            colors.Remove(colorName);
+            Systems.Graphics.CancelColorBrush(colorName);
         }
 
-        public static void CancelFont(string FontName)
+        public static void CancelFont(string fontName)
         {
-            if (FontName == null || fonts.ContainsKey(FontName) is false) return;
+            if (fontName == null || fonts.ContainsKey(fontName) is false) return;
 
-            fonts.Remove(FontName);
-            Systems.Graphics.CancelFontFace(FontName);
+            fonts.Remove(fontName);
+            Systems.Graphics.CancelFontFace(fontName);
         }
 
-        public static void CancelBitmap(string BitmapName)
+        public static void CancelBitmap(string bitmapName)
         {
-            if (BitmapName == null || bitmaps.ContainsKey(BitmapName) is false) return;
+            if (bitmapName == null || bitmaps.ContainsKey(bitmapName) is false) return;
 
-            bitmaps[BitmapName].Dispose();
-            bitmaps.Remove(BitmapName);
+            bitmaps[bitmapName].Dispose();
+            bitmaps.Remove(bitmapName);
         }
 
-        public static Color GetColor(string ColorName)
+        public static Color GetColor(string colorName)
         {
-            if (ColorName == null || colors.ContainsKey(ColorName) is false) return null;
+            if (colorName == null || colors.ContainsKey(colorName) is false) return null;
 
-            return colors[ColorName];
+            return colors[colorName];
         }
 
-        public static Font GetFont(string FontName)
+        public static Font GetFont(string fontName)
         {
-            if (FontName == null || fonts.ContainsKey(FontName) is false) return null;
+            if (fontName == null || fonts.ContainsKey(fontName) is false) return null;
 
-            return fonts[FontName];
+            return fonts[fontName];
         }
 
-        public static Bitmap GetBitmap(string BitmapName)
+        public static Bitmap GetBitmap(string bitmapName)
         {
-            if (BitmapName == null || bitmaps.ContainsKey(BitmapName) is false) return null;
+            if (bitmapName == null || bitmaps.ContainsKey(bitmapName) is false) return null;
 
-            return bitmaps[BitmapName];
+            return bitmaps[bitmapName];
         }
 
-        public static bool IsColorExist(string ColorName)
+        public static bool IsColorExist(string colorName)
         {
-            if (ColorName == null) return false;
+            if (colorName == null) return false;
 
-            return colors.ContainsKey(ColorName);
+            return colors.ContainsKey(colorName);
         }
 
-        public static bool IsFontExist(string FontName)
+        public static bool IsFontExist(string fontName)
         {
-            if (FontName == null) return false;
+            if (fontName == null) return false;
 
-            return fonts.ContainsKey(FontName);
+            return fonts.ContainsKey(fontName);
         }
 
-        public static bool IsBitmapExist(string BitmapName)
+        public static bool IsBitmapExist(string bitmapName)
         {
-            if (BitmapName == null) return false;
+            if (bitmapName == null) return false;
 
-            return bitmaps.ContainsKey(BitmapName);
+            return bitmaps.ContainsKey(bitmapName);
         }
     }
 }

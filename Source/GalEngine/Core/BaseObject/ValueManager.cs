@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public delegate void OnChange<T>(T oldValue, T newValue);
+    public delegate void OnChange<T>(object owner, T oldValue, T newValue);
 
     public class ValueManager<T>
     {
@@ -28,34 +28,34 @@ namespace GalEngine
             }
         }
 
-        public ValueManager(T value = default(T), OnChange<T> onChange = null)
+        public ValueManager(T Value = default(T), OnChange<T> OnChange = null)
         {
-            oldValue = value;
-            newValue = value;
+            oldValue = Value;
+            newValue = Value;
 
-            Change += onChange;
+            Change += OnChange;
         }
 
-        public ValueManager(OnChange<T> onChange)
+        public ValueManager(OnChange<T> OnChange)
         {
             oldValue = default(T);
             newValue = default(T);
 
-            Change += onChange;
+            Change += OnChange;
         }
 
-        public void Update(bool IsTriggerChangeEvent = true)
+        public void Update(object owner, bool isTriggerChangeEvent = true)
         {
             if (IsChange is false) return;
 
-            if (IsTriggerChangeEvent is true) Change?.Invoke(oldValue, newValue);
+            if (isTriggerChangeEvent is true) Change?.Invoke(owner, oldValue, newValue);
 
             oldValue = newValue;
         }
 
-        public static implicit operator ValueManager<T>(T Value)
+        public static implicit operator ValueManager<T>(T value)
         {
-            return new ValueManager<T>(Value);
+            return new ValueManager<T>(value);
         }
     }
 }
