@@ -53,6 +53,17 @@ namespace GalEngine
             bitmaps[bitmapName] = new Bitmap(bitmapStream);
         }
 
+        public static void SetBitmap(string bitmapName, Bitmap bitmap)
+        {
+            if (bitmaps.ContainsKey(bitmapName) is true)
+            {
+                bitmaps[bitmapName].Dispose();
+                bitmaps.Remove(bitmapName);
+            }
+
+            bitmaps[bitmapName] = bitmap;
+        }
+
         public static void CancelColor(string colorName)
         {
             if (colorName == null || colors.ContainsKey(colorName) is false) return;

@@ -38,8 +38,8 @@ namespace GalEngine.Systems
                 (SharpDX.DirectWrite.FontWeight)Font.FontWeight,
                 (SharpDX.DirectWrite.FontStyle)Font.FontStyle, Font.FontSize);
 
-            fontFace[FontName].SetTextAlignment(SharpDX.DirectWrite.TextAlignment.Justified);
-            fontFace[FontName].SetParagraphAlignment(SharpDX.DirectWrite.ParagraphAlignment.Near);
+            fontFace[FontName].TextAlignment = (SharpDX.DirectWrite.TextAlignment.Justified);
+            fontFace[FontName].ParagraphAlignment = (SharpDX.DirectWrite.ParagraphAlignment.Near);
         }
 
         internal static void CancelColorBrush(string ColorName)
@@ -119,7 +119,7 @@ namespace GalEngine.Systems
                 new SharpDX.Direct2D1.BitmapProperties1()
                 {
                     BitmapOptions = SharpDX.Direct2D1.BitmapOptions.Target,
-                    PixelFormat = new SharpDX.Direct2D1.PixelFormat(SharpDX.DXGI.Format.R8G8B8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied)
+                    PixelFormat = new SharpDX.Direct2D1.PixelFormat(SharpDX.DXGI.Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied)
                 });
         }
 
@@ -144,6 +144,13 @@ namespace GalEngine.Systems
                 (int)(Resource as SharpDX.Direct2D1.Bitmap1).Size.Width,
                 (int)(Resource as SharpDX.Direct2D1.Bitmap1).Size.Height);
 
+        }
+
+        public static void CopyBitampFromMemory(byte[] bytes, ref object Resource)
+        {
+            var bitmap = (Resource as SharpDX.Direct2D1.Bitmap1);
+
+            bitmap.CopyFromMemory(bytes, (int)bitmap.Size.Width * 4);
         }
 
         public static void CreateTextLayout(string Text, string FontName, SizeF MaxSize ,out object Resource)

@@ -34,6 +34,11 @@ namespace GalEngine
             Systems.Graphics.CreateBitmap(BitmapStream, out resource, out size);
         }
 
+        public void CopyFromMemroy(byte[] bytes)
+        {
+            Systems.Graphics.CopyBitampFromMemory(bytes, ref resource);
+        }
+
         public void Dispose()
         {
             Systems.Graphics.DestoryBitmap(ref resource);
