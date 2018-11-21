@@ -8,20 +8,20 @@ namespace GalEngine
 {
     public class RequireComponents
     {
-        private List<Type> requireComponentType = new List<Type>();
+        private readonly List<Type> requireComponentType = new List<Type>();
 
-        public void SetRequireComponentType<BaseComponent>() where BaseComponent : Component
+        public void SetRequireComponentType<TBaseComponent>() where TBaseComponent : Component
         {
-            if (requireComponentType.Contains(typeof(BaseComponent)) is true) return;
+            if (requireComponentType.Contains(typeof(TBaseComponent)) is true) return;
 
-            requireComponentType.Add(typeof(BaseComponent));
+            requireComponentType.Add(typeof(TBaseComponent));
         }
 
-        public void CancelRequireComponentType<BaseComponent>() where BaseComponent : Component
+        public void CancelRequireComponentType<TBaseComponent>() where TBaseComponent : Component
         {
-            if (requireComponentType.Contains(typeof(BaseComponent)) is false) return;
+            if (requireComponentType.Contains(typeof(TBaseComponent)) is false) return;
 
-            requireComponentType.Remove(typeof(BaseComponent));
+            requireComponentType.Remove(typeof(TBaseComponent));
         }
 
         public bool IsPass(GameObject gameObject)

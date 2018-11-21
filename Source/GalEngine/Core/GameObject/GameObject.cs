@@ -25,8 +25,8 @@ namespace GalEngine
 
         public string Name { get => name; set => name = value; }
 
-        public List<GameObject> Children { get => children; }
-       
+        public List<GameObject> Children => children;
+
         public GameObject Parent
         {
             get => parent; set
@@ -43,9 +43,9 @@ namespace GalEngine
             name = GameDefault.GameObjectName + GetHashCode().ToString();
         }
 
-        public GameObject(string Name)
+        public GameObject(string name)
         {
-            name = Name;
+            this.name = name;
         }
 
         public virtual void Update(float deltaTime)
@@ -61,24 +61,24 @@ namespace GalEngine
             components[commponent.BaseComponentType] = commponent;
         }
 
-        public void SetComponent<BaseComponent>() where BaseComponent : Component, new()
+        public void SetComponent<TBaseComponent>() where TBaseComponent : Component, new()
         {
-            components[typeof(BaseComponent)] = new BaseComponent();
+            components[typeof(TBaseComponent)] = new TBaseComponent();
         }
 
-        public void CancelComponent<BaseComponent>() where BaseComponent : Component
+        public void CancelComponent<TBaseComponent>() where TBaseComponent : Component
         {
-            components.Remove(typeof(BaseComponent));
+            components.Remove(typeof(TBaseComponent));
         }
 
-        public BaseComponent GetComponent<BaseComponent>() where BaseComponent : Component
+        public TBaseComponent GetComponent<TBaseComponent>() where TBaseComponent : Component
         {
-            return components[typeof(BaseComponent)] as BaseComponent;
+            return components[typeof(TBaseComponent)] as TBaseComponent;
         }
 
-        public bool IsComponentExist<BaseComponent>() where BaseComponent : Component
+        public bool IsComponentExist<TBaseComponent>() where TBaseComponent : Component
         {
-            return components.ContainsKey(typeof(BaseComponent));
+            return components.ContainsKey(typeof(TBaseComponent));
         }
 
         public bool IsComponentExist(Type type)
@@ -86,9 +86,14 @@ namespace GalEngine
             return components.ContainsKey(type);
         }
 
+        public void SetParent(GameObject parent)
+        {
+            parent?.SetChild(this);
+        }
+
         public void SetChild(GameObject child)
         {
-            if (child.Parent != null) child.Parent.CancelChild(child);
+            child.Parent?.CancelChild(child);
 
             children.Add(child);
             child.parent = this;
