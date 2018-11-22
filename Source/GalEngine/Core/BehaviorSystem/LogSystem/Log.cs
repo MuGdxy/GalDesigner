@@ -8,6 +8,9 @@ using LogPrinter;
 
 namespace GalEngine
 {
+    /// <summary>
+    /// log
+    /// </summary>
     public class Log : LogPrinter.Log
     {
         public string Text { get; }

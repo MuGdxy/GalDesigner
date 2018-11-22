@@ -16,7 +16,7 @@ namespace GalEngine
     {
         protected LogPrint logPrint;
 
-        public ConsoleLogSystem()
+        public ConsoleLogSystem() : base("ConsoleLogSystem")
         {
             RequireComponents.AddRequireComponentType<LogComponent>();
 

@@ -69,7 +69,10 @@
     <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
-    <Compile Include="Core\GameScene.cs" />
+    <Compile Include="Core\GameObject\LogProvider.cs" />
+    <Compile Include="Core\GameScene\GameScene.cs" />
+    <Compile Include="Core\GameSystems.cs" />
+    <Compile Include="Core\Interface\ILogProvider.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +89,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Core\BehaviorSystem\LogSystem\Design\design.dgml" />
+    <None Include="Core\BehaviorSystem\LogSystem\Design\design.md" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

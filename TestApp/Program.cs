@@ -13,6 +13,7 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
+            GameSystems.RunLoop();
         }
     }
 }

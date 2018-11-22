@@ -9,10 +9,14 @@ namespace GalEngine
     public abstract class BehaviorSystem
     {
         public RequireComponents RequireComponents { get; set; }
+        public string Name { get; }
+        public bool IsActive { get; set; }
 
-        public BehaviorSystem()
+        public BehaviorSystem(string name)
         {
             RequireComponents = new RequireComponents();
+            Name = name;
+            IsActive = true;
         }
 
         public abstract void Excute(GameObject gameObject);

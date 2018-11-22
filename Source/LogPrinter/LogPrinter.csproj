@@ -38,11 +38,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\KeySetting.cs" />
-    <Compile Include="Core\Log.cs" />
-    <Compile Include="Core\LogFormat.cs" />
-    <Compile Include="Core\LogManager.cs" />
-    <Compile Include="Core\LogPrint.cs" />
+    <Compile Include="KeySetting.cs" />
+    <Compile Include="Log.cs" />
+    <Compile Include="LogFormat.cs" />
+    <Compile Include="LogPrint.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
