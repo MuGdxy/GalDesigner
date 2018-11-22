@@ -60,38 +60,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\BaseLogFormat.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\Component\LogComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogPrint.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ObjectKeySetting.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\TimeKeySetting.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
-    <Compile Include="Extension\BehaviorSystem\ImageRenderSystem.cs" />
-    <Compile Include="Extension\Component\ImageShape.cs" />
-    <Compile Include="Runtime\Application\Application.cs" />
-    <Compile Include="Runtime\Application\Events.cs" />
-    <Compile Include="Core\GameObject\Camera.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
-    <Compile Include="Core\Time.cs" />
-    <Compile Include="Runtime\DebugLayer\DebugCommand.cs" />
-    <Compile Include="Enum\Colors.cs" />
-    <Compile Include="Core\GameObject\Component\Shape.cs" />
-    <Compile Include="Core\GameObject\Component\Transform.cs" />
-    <Compile Include="Core\GameDefault.cs" />
-    <Compile Include="Core\GameObject\GameObject.cs" />
-    <Compile Include="Enum\FontStyle.cs" />
-    <Compile Include="Enum\FontWeight.cs" />
-    <Compile Include="Enum\KeyCode.cs" />
-    <Compile Include="Core\BaseObject\Color.cs" />
-    <Compile Include="Core\BaseObject\Font.cs" />
-    <Compile Include="Core\BaseObject\Position.cs" />
-    <Compile Include="Core\BaseObject\Rectangle.cs" />
-    <Compile Include="Core\BaseObject\Size.cs" />
-    <Compile Include="Core\BaseObject\ValueManager.cs" />
-    <Compile Include="Core\Resource\Bitmap.cs" />
-    <Compile Include="Core\GameResource.cs" />
     <Compile Include="Core\GameScene.cs" />
-    <Compile Include="Runtime\DebugLayer\DebugLayer.cs" />
-    <Compile Include="Runtime\DebugLayer\Error.cs" />
-    <Compile Include="Runtime\DebugLayer\Warning.cs" />
+    <Compile Include="Core\Time.cs" />
+    <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Systems\Graphics.cs" />
-    <Compile Include="Systems\Windows.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,9 +80,16 @@
       <Project>{9f6b254e-6770-4a79-97f3-671d98618ac0}</Project>
       <Name>APILibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LogPrinter\LogPrinter.csproj">
+      <Project>{9d59eb36-0f6c-4274-839b-bd8181e27656}</Project>
+      <Name>LogPrinter</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Runtime\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

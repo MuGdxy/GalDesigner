@@ -6,96 +6,72 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+    /// <summary>
+    /// game scene
+    /// </summary>
     public class GameScene
     {
-        private string name;
+        public string Name { get; set; }
 
-        private Camera defaultCamera;
-        private Camera currentCamera;
-        private GameObject root;
+        public GameObject Root { get; }
 
-        private ValueManager<Size> resolution;
+        public List<BehaviorSystem> BehaviorSystems { get; set; }
 
-        private Bitmap renderTarget;
+        public static GameScene Main { get; }
 
-        private List<BehaviorSystem> behaviorSystems;
-
-        private static GameScene mainScene = null;
-
-        protected virtual void OnResolutionChange(object owner, Size oldValue, Size newValue)
+        static GameScene()
         {
-            GameScene scene = owner as GameScene;
+            Main = new GameScene("MainScene");
 
-            Utility.Dispose(ref scene.renderTarget);
-
-            renderTarget = new Bitmap(newValue);
-
-            defaultCamera.Area = new RectangleF(0, 0, newValue.Width, newValue.Height);
+            //console log system
+            Main.AddBehaviorSystem(new ConsoleLogSystem());
         }
 
-        public GameScene(string sceneName, Size sceneResolution)
+        public GameScene(string name)
         {
-            name = sceneName;
-            resolution = new ValueManager<Size>(sceneResolution, OnResolutionChange);
+            Name = name;
 
-            defaultCamera = new Camera(0, 0, sceneResolution.Width, sceneResolution.Height);
-            currentCamera = defaultCamera;
-
-            root = new GameObject("Root");
-
-            renderTarget = new Bitmap(sceneResolution);
-
-            behaviorSystems = new List<BehaviorSystem>();
+            Root = new GameObject("Root");
+            BehaviorSystems = new List<BehaviorSystem>();
         }
 
         public virtual void Update(float deltaTime)
         {
-            resolution.Update(this, true);
+            Root.Update(deltaTime);
 
-            root?.Update(deltaTime);
+            foreach (var subSystem in BehaviorSystems)
+            {
+                void SearchNode(GameObject node)
+                {
+                    if (subSystem.RequireComponents.IsPass(node) is true)
+                        subSystem.Excute(node);
 
-            Systems.Graphics.BeginDraw(renderTarget);
-            Systems.Graphics.Clear(new Color(1, 1, 1, 1));
+                    foreach (var child in node.Children)
+                        SearchNode(child);
+                }
 
-            behaviorSystems.ForEach((BehaviorSystem system) => { system.Excute(); });
-
-            Systems.Graphics.EndDraw();
+                SearchNode(Root);
+            }
         }
 
-        public void SetDefaultCamera()
+        public void AddGameObject(GameObject gameObject)
         {
-            currentCamera = defaultCamera;
+            Root.AddChild(gameObject);
         }
 
-        public void SetGameObject(GameObject gameObject)
+        public void RemoveGameObject(GameObject gameObject)
         {
-            root.SetChild(gameObject);
+            Root.RemoveChild(gameObject);
         }
 
-        public void SetBehaviorSystem(BehaviorSystem behaviorSystem)
+        public void AddBehaviorSystem(BehaviorSystem behaviorSystem)
         {
-            behaviorSystems.Add(behaviorSystem);
+            BehaviorSystems.Add(behaviorSystem);
         }
 
-        public void CancelGameObject(GameObject gameObject)
+        public void RemoveBehaviorSystem(BehaviorSystem behaviorSystem)
         {
-            root.CancelChild(gameObject);
+            BehaviorSystems.Remove(behaviorSystem);
         }
-
-        public void CancelBehaviorSystem(BehaviorSystem behaviorSystem)
-        {
-            behaviorSystems.Remove(behaviorSystem);
-        }
-
-        public string Name { get => name; }
-
-        public Camera Camera { get => currentCamera; set => currentCamera = value; }
-        public GameObject Root { get => root; }
-
-        public Size Resolution { get => resolution.Value; set => resolution.Value = value; }
-
-        public Bitmap RenderTarget { get => renderTarget; }
-
-        public static GameScene Main { get => mainScene; set => mainScene = value; }
     }
 }

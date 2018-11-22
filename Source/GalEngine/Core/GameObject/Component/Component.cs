@@ -8,8 +8,11 @@ namespace GalEngine
 {
     public abstract class Component
     {
-        protected Type baseComponentType = typeof(Component);
+        public Type BaseComponentType { get; protected set; }
 
-        public Type BaseComponentType { get => baseComponentType; }
+        public Component()
+        {
+            BaseComponentType = typeof(Component);
+        }
     }
 }

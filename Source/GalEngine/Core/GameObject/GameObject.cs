@@ -7,66 +7,58 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    class GameObjectDepthComparer : IComparer<GameObject>
-    {
-        public int Compare(GameObject x, GameObject y)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
     public class GameObject
     {
-        private string name;
-      
         private GameObject parent = null;
-        private List<GameObject> children = new List<GameObject>();
         private Dictionary<Type, Component> components = new Dictionary<Type, Component>();
 
-        public string Name { get => name; set => name = value; }
+        public string Name { get; private set; }
 
-        public List<GameObject> Children => children;
+        public List<GameObject> Children { get; private set; }
 
         public GameObject Parent
         {
             get => parent; set
             {
-                if (parent != null) parent.CancelChild(this);
+                if (parent != null) parent.RemoveChild(this);
 
                 parent = value;
-                parent?.SetChild(this);
+                parent?.AddChild(this);
             }
         }
 
         public GameObject()
         {
-            name = GameDefault.GameObjectName + GetHashCode().ToString();
+            Children = new List<GameObject>();
         }
 
         public GameObject(string name)
         {
-            this.name = name;
+            Name = name;
+
+            Children = new List<GameObject>();
         }
 
         public virtual void Update(float deltaTime)
         {
-            foreach (var child in children)
+            foreach (var child in Children)
             {
                 child.Update(deltaTime);
             }
         }
 
-        public void SetComponent<T>(T commponent) where T : Component
+        public void AddComponent<TBaseComponent>(TBaseComponent commponent) where TBaseComponent : Component
         {
             components[commponent.BaseComponentType] = commponent;
         }
 
-        public void SetComponent<TBaseComponent>() where TBaseComponent : Component, new()
+        public void AddComponent<TBaseComponent>() where TBaseComponent : Component, new()
         {
             components[typeof(TBaseComponent)] = new TBaseComponent();
         }
 
-        public void CancelComponent<TBaseComponent>() where TBaseComponent : Component
+        public void RemoveComponent<TBaseComponent>() where TBaseComponent : Component
         {
             components.Remove(typeof(TBaseComponent));
         }
@@ -88,23 +80,24 @@ namespace GalEngine
 
         public void SetParent(GameObject parent)
         {
-            parent?.SetChild(this);
+            parent?.AddChild(this);
         }
 
-        public void SetChild(GameObject child)
+        public void AddChild(GameObject child)
         {
-            child.Parent?.CancelChild(child);
-
-            children.Add(child);
+            child.Parent?.RemoveChild(child);
             child.parent = this;
+
+            Children.Add(child);
         }
 
-        public void CancelChild(GameObject child)
+        public void RemoveChild(GameObject child)
         {
-            if (children.Contains(child) is false) return;
+            if (Children.Contains(child) is false) return;
+
+            Children.Remove(child);
 
             child.parent = null;
-            children.Remove(child);
         }
     }
 }

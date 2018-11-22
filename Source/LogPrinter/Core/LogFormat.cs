@@ -10,7 +10,7 @@ namespace LogPrinter
     /// </summary>
     public class LogFormat
     {
-        private readonly Dictionary<string, KeySetting> mMapKeySetting = null;
+        private readonly Dictionary<string, KeySetting> mapKeySetting = null;
 
         private static string SetParamsToString(string text, params object[] context)
         {
@@ -30,14 +30,14 @@ namespace LogPrinter
 
         public LogFormat()
         {
-            mMapKeySetting = new Dictionary<string, KeySetting>();
+            mapKeySetting = new Dictionary<string, KeySetting>();
         }
 
-        public Log GenerateLog(string logText, params object[] context)
+        public virtual Log GenerateLog(string logText, params object[] context)
         {
             logText = SetParamsToString(logText, context);
 
-            var log = new Log();
+            var elements = new List<LogElement>();
 
             var key = "";
             
@@ -46,17 +46,17 @@ namespace LogPrinter
                 switch (item)
                 {
                     case '[':
-                        log.Elements.Add(new LogElement(key, null));
+                        elements.Add(new LogElement(key, null));
 
                         key = "";
                         break;
                     
                     case ']':
-                        if (mMapKeySetting.ContainsKey(key) is false)
-                            log.Elements.Add(new LogElement('[' + key + ']', null));
+                        if (mapKeySetting.ContainsKey(key) is false)
+                            elements.Add(new LogElement('[' + key + ']', null));
                         else
-                            log.Elements.Add(new LogElement(
-                                mMapKeySetting[key].GetValue(), mMapKeySetting[key]));
+                            elements.Add(new LogElement(
+                                mapKeySetting[key].GetValue(), mapKeySetting[key]));
 
                         key = "";
                         break;
@@ -67,19 +67,19 @@ namespace LogPrinter
                 }
             }
 
-            log.Elements.Add(new LogElement(key, null));
+            elements.Add(new LogElement(key, null));
 
-            return log;
+            return new Log(elements);
         }
         
         public void AddKeySetting(string key, KeySetting setting)
         {
-            mMapKeySetting.Add(key, setting);
+            mapKeySetting.Add(key, setting);
         }
 
         public void RemoveKeySetting(string key)
         {
-            mMapKeySetting.Remove(key);
+            mapKeySetting.Remove(key);
         }
     }
 }

@@ -8,19 +8,14 @@ namespace GalEngine
 {
     public abstract class BehaviorSystem
     {
-        private readonly GameScene gameScene;
-        private RequireComponents requireComponents;
+        public RequireComponents RequireComponents { get; set; }
 
-        public BehaviorSystem(GameScene gameScene)
+        public BehaviorSystem()
         {
-            this.gameScene = gameScene;
-
-            this.requireComponents = new RequireComponents();
+            RequireComponents = new RequireComponents();
         }
 
-        public abstract void Excute();
-
-        public GameScene GameScene { get => gameScene; }
-        public RequireComponents RequireComponents { get => requireComponents; }
+        public abstract void Excute(GameObject gameObject);
+        
     }
 }

@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LogPrinter;
+
 namespace GalEngine
 {
-    public enum Error
+    class TimeKeySetting : KeySetting
     {
-    }
-
-    public static partial class DebugLayer
-    {
-        private static void MakeErrors()
+        protected override string MapMethod(KeySetting setting)
         {
-
+            return DateTime.Now.ToString();
         }
     }
 }

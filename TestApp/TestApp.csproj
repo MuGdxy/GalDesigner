@@ -62,10 +62,6 @@
       <Project>{26afd910-ad7c-4165-8622-cb8103c2ca7d}</Project>
       <Name>GalEngine</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Source\LogPrinter\LogPrinter.csproj">
-      <Project>{9d59eb36-0f6c-4274-839b-bd8181e27656}</Project>
-      <Name>LogPrinter</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Bitmap.png">

@@ -19,11 +19,11 @@ namespace LogPrinter
     
     public class Log
     {
-        public List<LogElement> Elements { get; private set; }
+        public List<LogElement> Elements { get; }
 
-        public Log()
+        public Log(List<LogElement> elements)
         {
-            Elements = new List<LogElement>();
+            Elements = elements;
         }
     }
 }

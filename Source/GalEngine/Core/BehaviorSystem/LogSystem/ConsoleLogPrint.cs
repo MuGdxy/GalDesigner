@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using LogPrinter;
+
 namespace GalEngine
 {
-    public enum Warning
+    public class ConsoleLogPrint : LogPrint
     {
-    }
-
-    public static partial class DebugLayer
-    {
-        private static void MakeWarnings()
-        { 
+        public override void ApplyLog(LogPrinter.Log log)
+        {
+            base.ApplyLog(log);
         }
     }
 }

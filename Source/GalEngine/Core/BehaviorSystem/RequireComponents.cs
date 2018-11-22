@@ -10,14 +10,14 @@ namespace GalEngine
     {
         private readonly List<Type> requireComponentType = new List<Type>();
 
-        public void SetRequireComponentType<TBaseComponent>() where TBaseComponent : Component
+        public void AddRequireComponentType<TBaseComponent>() where TBaseComponent : Component
         {
             if (requireComponentType.Contains(typeof(TBaseComponent)) is true) return;
 
             requireComponentType.Add(typeof(TBaseComponent));
         }
 
-        public void CancelRequireComponentType<TBaseComponent>() where TBaseComponent : Component
+        public void RemoveRequireComponentType<TBaseComponent>() where TBaseComponent : Component
         {
             if (requireComponentType.Contains(typeof(TBaseComponent)) is false) return;
 
