@@ -6,24 +6,24 @@
     <Node Id="LogFormat" Bounds="-264.814711659056,-117.891910270206,82.3966666666666,25.24" UseManualLocation="True" />
     <Node Id="LogPrint" Bounds="-11.0257067334579,-110.224407054434,114.683333333333,25.24" Label="ConsoleLogPrint" UseManualLocation="True" />
     <Node Id="Logs" Bounds="-119.241859436035,-116.514959126597,50,25.24" UseManualLocation="True" />
-    <Node Id="PrintLogToConsole" Category="Comment" Bounds="162.540354023332,-104.338627422882,132.46,25.24" Label="Print log to console" UseManualLocation="True" />
+    <Node Id="PrintLogToConsole" Category="Comment" Bounds="169.040354023332,-105.838627422882,132.46,25.24" Label="Print log to console" UseManualLocation="True" />
     <Node Id="RecordAndStoreLog." Category="Comment" Bounds="-205.676653788824,-235.446507119351,143.34,25.24" Label="Record and store log." UseManualLocation="True" />
     <Node Id="SolveTheLogsInLogComponent" Category="Comment" Bounds="-14.9377426013041,-237.038037919034,206.67,25.24" Label="Solve the logs in log component" UseManualLocation="True" />
     <Node Id="[object]-&gt;Object'sName" Category="Comment" Bounds="-346.85692788721,11.5791307759168,233.213333333333,25.24" Label="KeySetting: [object] -&gt; object's name" UseManualLocation="True" />
     <Node Id="[time]-&gt;DataTime" Category="Comment" Bounds="-323.137100114498,-56.7567966936992,197.756666666667,25.24" Label="KeySetting: [time] -&gt; data time" UseManualLocation="True" />
   </Nodes>
   <Links>
-    <Link Source="ConsoleLogSystem" Target="LogComponent" Bounds="-68.7643508911133,-164.139602661133,86.44850730896,0.0741729736328125" />
-    <Link Source="LogComponent" Target="ConsoleLogSystem" Bounds="-77.7643508911133,-170.139511108398,86.44850730896,0.07415771484375" />
-    <Link Source="LogFormat" Target="LogComponent" Bounds="-205.033477570402,-149.388854307699,46.3791531941379,31.4969350572109" />
-    <Link Source="LogPrint" Target="ConsoleLogSystem" Bounds="52.8305203700095,-146.522575693642,18.7374495519258,36.2981686392074" />
-    <Link Source="Logs" Target="ConsoleLogSystem" Bounds="-69.2418594360352,-151.483245531633,107.770790011019,38.6276772226458" />
-    <Link Source="Logs" Target="LogComponent" Bounds="-120.284172064561,-146.753732891211,18.3740114499384,30.2387737646141" />
-    <Link Source="PrintLogToConsole" Target="LogPrint" Bounds="112.652947378265,-95.4644468688337,49.8873925875555,1.60931386866515" />
-    <Link Source="RecordAndStoreLog." Target="LogComponent" Bounds="-133.694184346264,-210.206499938965,0.532931969737177,21.5240952749661" />
-    <Link Source="SolveTheLogsInLogComponent" Target="ConsoleLogSystem" Bounds="84.5403132990153,-211.798037919034,2.49389754989065,23.0901777231816" />
-    <Link Source="[object]-&gt;Object'sName" Target="[time]-&gt;DataTime" Bounds="-229.143779711699,-22.5511916530408,2.99245393265244,34.1303221881665" />
-    <Link Source="[time]-&gt;DataTime" Target="LogFormat" Bounds="-224.126163072903,-83.6524160362988,0.282603713217839,26.8956193425996" />
+    <Link Source="ConsoleLogSystem" Target="LogComponent" Bounds="-68.7643508911133,-164.139602661133,86.4485092163086,0.0741729736328125" />
+    <Link Source="LogComponent" Target="ConsoleLogSystem" Bounds="-77.7643508911133,-170.139511108398,86.4485101699829,0.07415771484375" />
+    <Link Source="LogFormat" Target="LogComponent" Bounds="-205.033468988787,-149.388860057163,46.3791570745671,31.4969497869573" />
+    <Link Source="LogPrint" Target="ConsoleLogSystem" Bounds="52.8305208654091,-146.522575614281,18.7374509358485,36.2981685598473" />
+    <Link Source="Logs" Target="ConsoleLogSystem" Bounds="-69.241859436035,-151.48324537313,107.770791977389,38.6276772266969" />
+    <Link Source="Logs" Target="LogComponent" Bounds="-120.284170159445,-146.753739497979,18.3740112878788,30.2387803713819" />
+    <Link Source="PrintLogToConsole" Target="LogPrint" Bounds="112.655203247559,-96.0646214554633,56.3851596064451,1.30874354936894" />
+    <Link Source="RecordAndStoreLog." Target="LogComponent" Bounds="-133.69418512675,-210.206507119351,0.532932448299135,21.5241024584624" />
+    <Link Source="SolveTheLogsInLogComponent" Target="ConsoleLogSystem" Bounds="84.5403132990152,-211.798037919034,2.49389754989073,23.0901777231819" />
+    <Link Source="[object]-&gt;Object'sName" Target="[time]-&gt;DataTime" Bounds="-229.143776496844,-22.5511912351391,2.992446903342,34.1303220110559" />
+    <Link Source="[time]-&gt;DataTime" Target="LogFormat" Bounds="-224.126159808945,-83.652407080471,0.282610575228603,26.8956103867718" />
   </Links>
   <Categories>
     <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />

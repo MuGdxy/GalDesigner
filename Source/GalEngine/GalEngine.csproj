@@ -89,6 +89,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Core\BehaviorSystem\AssetSystem\Design\design.dgml" />
     <None Include="Core\BehaviorSystem\Design\design.dgml" />
     <None Include="Core\BehaviorSystem\LogSystem\Design\design.dgml" />
     <None Include="Core\BehaviorSystem\LogSystem\Design\design.md" />
