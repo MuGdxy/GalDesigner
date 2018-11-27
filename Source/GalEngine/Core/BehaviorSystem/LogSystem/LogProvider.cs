@@ -8,16 +8,14 @@ namespace GalEngine
 {
     public class LogProvider : GameObject
     {
-        private LogComponent logComponent;
+        private LogComponent mLogComponent;
 
         public bool IsActive { get; set; }
 
         public LogProvider(string name) : base(name)
         {
-            AddComponent(new LogComponent(this));
-
-            logComponent = GetComponent<LogComponent>();
-
+            AddComponent(mLogComponent = new LogComponent(name));
+            
             IsActive = true;
         }
 
@@ -25,7 +23,7 @@ namespace GalEngine
         {
             if (IsActive is false) return;
 
-            logComponent.Log(logText, context);
+            mLogComponent.Log(logText, context);
         }
     }
 }

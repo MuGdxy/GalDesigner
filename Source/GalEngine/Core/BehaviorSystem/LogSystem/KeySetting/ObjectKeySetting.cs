@@ -10,16 +10,16 @@ namespace GalEngine
 {
     class ObjectKeySetting : KeySetting
     {
-        private GameObject sendObject;
+        private string mSendObject;
         
         protected override string MapMethod(KeySetting setting)
         {
-            return "Log Sender: " + sendObject.Name;
+            return "Log Sender = " + mSendObject;
         }
 
-        public ObjectKeySetting(GameObject sendObject)
+        public ObjectKeySetting(string sendObject)
         {
-            this.sendObject = sendObject;
+            mSendObject = sendObject;
         }
     }
 }

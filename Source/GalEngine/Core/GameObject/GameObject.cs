@@ -10,8 +10,8 @@ namespace GalEngine
 
     public class GameObject
     {
-        private GameObject parent = null;
-        private Dictionary<Type, Component> components = new Dictionary<Type, Component>();
+        private GameObject mParent = null;
+        private Dictionary<Type, Component> mComponents = new Dictionary<Type, Component>();
 
         public string Name { get; private set; }
 
@@ -19,12 +19,12 @@ namespace GalEngine
 
         public GameObject Parent
         {
-            get => parent; set
+            get => mParent; set
             {
-                if (parent != null) parent.RemoveChild(this);
+                if (mParent != null) mParent.RemoveChild(this);
 
-                parent = value;
-                parent?.AddChild(this);
+                mParent = value;
+                mParent?.AddChild(this);
             }
         }
 
@@ -50,32 +50,32 @@ namespace GalEngine
 
         public void AddComponent<TBaseComponent>(TBaseComponent commponent) where TBaseComponent : Component
         {
-            components[commponent.BaseComponentType] = commponent;
+            mComponents[commponent.BaseComponentType] = commponent;
         }
 
         public void AddComponent<TBaseComponent>() where TBaseComponent : Component, new()
         {
-            components[typeof(TBaseComponent)] = new TBaseComponent();
+            mComponents[typeof(TBaseComponent)] = new TBaseComponent();
         }
 
         public void RemoveComponent<TBaseComponent>() where TBaseComponent : Component
         {
-            components.Remove(typeof(TBaseComponent));
+            mComponents.Remove(typeof(TBaseComponent));
         }
 
         public TBaseComponent GetComponent<TBaseComponent>() where TBaseComponent : Component
         {
-            return components[typeof(TBaseComponent)] as TBaseComponent;
+            return mComponents[typeof(TBaseComponent)] as TBaseComponent;
         }
 
         public bool IsComponentExist<TBaseComponent>() where TBaseComponent : Component
         {
-            return components.ContainsKey(typeof(TBaseComponent));
+            return mComponents.ContainsKey(typeof(TBaseComponent));
         }
 
         public bool IsComponentExist(Type type)
         {
-            return components.ContainsKey(type);
+            return mComponents.ContainsKey(type);
         }
 
         public void SetParent(GameObject parent)
@@ -86,7 +86,7 @@ namespace GalEngine
         public void AddChild(GameObject child)
         {
             child.Parent?.RemoveChild(child);
-            child.parent = this;
+            child.mParent = this;
 
             Children.Add(child);
         }
@@ -97,7 +97,7 @@ namespace GalEngine
 
             Children.Remove(child);
 
-            child.parent = null;
+            child.mParent = null;
         }
     }
 }

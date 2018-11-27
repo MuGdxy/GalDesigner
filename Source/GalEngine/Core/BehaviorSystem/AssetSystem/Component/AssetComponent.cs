@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public interface ILogProvider
+    /// <summary>
+    /// asset component
+    /// 
+    /// </summary>
+    public class AssetComponent
     {
-        LogProvider LogProvider { get; }
     }
 }

@@ -8,25 +8,25 @@ namespace GalEngine
 {
     public class RequireComponents
     {
-        private readonly List<Type> requireComponentType = new List<Type>();
+        private readonly List<Type> mRequireComponentType = new List<Type>();
 
         public void AddRequireComponentType<TBaseComponent>() where TBaseComponent : Component
         {
-            if (requireComponentType.Contains(typeof(TBaseComponent)) is true) return;
+            if (mRequireComponentType.Contains(typeof(TBaseComponent)) is true) return;
 
-            requireComponentType.Add(typeof(TBaseComponent));
+            mRequireComponentType.Add(typeof(TBaseComponent));
         }
 
         public void RemoveRequireComponentType<TBaseComponent>() where TBaseComponent : Component
         {
-            if (requireComponentType.Contains(typeof(TBaseComponent)) is false) return;
+            if (mRequireComponentType.Contains(typeof(TBaseComponent)) is false) return;
 
-            requireComponentType.Remove(typeof(TBaseComponent));
+            mRequireComponentType.Remove(typeof(TBaseComponent));
         }
 
         public bool IsPass(GameObject gameObject)
         {
-            foreach (var type in requireComponentType)
+            foreach (var type in mRequireComponentType)
             {
                 if (gameObject.IsComponentExist(type) is false) return false;
             }

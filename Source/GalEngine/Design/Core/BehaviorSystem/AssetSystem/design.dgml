@@ -6,7 +6,7 @@
     <Node Id="AssetProvider" Bounds="-955.24624471273,-780.6932421875,131.276666666667,25.24" Label="AssetProvider(root)" UseManualLocation="True" />
     <Node Id="AssetProvider1" Bounds="-1208.44838306726,-593.813355858571,105.986666666667,25.24" Label="AssetProvider0" UseManualLocation="True" />
     <Node Id="AssetProvider2" Bounds="-1025.308081284,-593.809247958127,105.986666666667,25.24" Label="AssetProvider1" UseManualLocation="True" />
-    <Node Id="AssetProviderCanReadRangeOfResource." Category="Comment" Bounds="-1247.29189171776,-790.501305998057,207.653333333334,40.48" Label="Asset provider can read range of resource." UseManualLocation="True" />
+    <Node Id="AssetProviderCanReadRangeOfResource." Category="Comment" Bounds="-1247.29189171776,-790.501305998057,207.653333333333,40.48" Label="Asset provider can read range of resource without cache." UseManualLocation="True" />
     <Node Id="AssetProviderN" Bounds="-1218.60457867937,-463.601528989022,108.706666666667,25.24" UseManualLocation="True" />
     <Node Id="AssetSystem" Bounds="-713.824171738138,-627.875328598918,92.1833333333334,25.24" UseManualLocation="True" />
     <Node Id="GameObject" Bounds="-692.6748007015,-985.678040669343,95.3099999999999,25.24" Label="SystemScene" UseManualLocation="True" />
@@ -17,35 +17,35 @@
     <Node Id="PackageProvider1" Bounds="-325.162719726563,-652.788537036133,122.803333333333,25.24" UseManualLocation="True" />
     <Node Id="Root" Category="Comment" Bounds="-451.821823120117,-971.98355929905,50,25.24" UseManualLocation="True" />
     <Node Id="b8839495-fe50-411c-a9f3-1b96a71f5c151" Category="Comment" Bounds="-400.254461856065,-1042.46365929786,224.936666666667,40.4800000000001" Label="For all resource requirement, start a thread for loading. " UseManualLocation="True" />
-    <Node Id="bd2c9288-6027-4645-b2fb-aaee81f252f81" Category="Comment" Bounds="-741.309198585247,-871.88600158924,240.53,55.72" Label="Read package head file to create asset provider tree. Asset can access the package provider to get resource." UseManualLocation="True" />
+    <Node Id="bd2c9288-6027-4645-b2fb-aaee81f252f81" Category="Comment" Bounds="-741.309198585247,-871.88600158924,247.51,70.96" Label="Read package head file to create asset provider tree. Asset can access the package provider to get resource and it will increase the count." UseManualLocation="True" />
     <Node Id="df4234bc-39a0-4d84-859f-7ba64b8a88061" Category="Comment" Bounds="-242.123079444847,-934.343708070912,220.706666666667,40.48" Label="For all resource, if its count is 0, we remove it from memory." UseManualLocation="True" />
     <Node Id="e41f1a6e-b13f-4ee9-ba8e-de66a01552251" Category="Comment" Bounds="-987.124672241211,-456.615452270508,241.36,70.96" Label="For all resource requirement, package provider will start a thread for loading. And asset system can limit the max thread number." UseManualLocation="True" />
   </Nodes>
   <Links>
-    <Link Source="19d3ff55-774a-4b05-a71f-88a95dc7b50a1" Target="AssetProvider1" Bounds="-1235.56325397823,-631.900647561844,52.5663762493984,33.2737118297836" />
-    <Link Source="27a603ff-4a45-454e-97d2-c0971a1f8f181" Target="AssetProvider" Bounds="-964.134256978583,-822.420385406684,49.9486806359845,36.4242743120702" />
-    <Link Source="AssetProvider" Target="AssetSystem" Bounds="-876.97998046875,-755.453247070313,177.568908691406,122.565063476563" />
-    <Link Source="AssetProvider" Target="GameObject" Bounds="-874.549711490845,-954.657077588238,207.573850559434,173.963835400738" />
-    <Link Source="AssetProvider" Target="PackageProvider" Bounds="-823.969604492188,-771.069091796875,463.580322265625,18.4000854492188" />
-    <Link Source="AssetProvider1" Target="AssetProvider" Bounds="-1137.50235980534,-750.27746439649,222.578958381789,156.46410502149" />
-    <Link Source="AssetProvider2" Target="AssetProvider" Bounds="-966.729687301739,-747.223183765975,67.894435099657,153.413944264022" />
-    <Link Source="AssetProviderCanReadRangeOfResource." Target="AssetProvider" Bounds="-1039.63854329427,-769.366423757119,75.3926341132068,0.649843054588587" />
-    <Link Source="AssetProviderN" Target="AssetProvider1" Bounds="-1163.39872372596,-559.593824825086,6.48458855471813,95.9922958360639" />
-    <Link Source="AssetSystem" Target="AssetProvider" Bounds="-859.25439453125,-750.25146484375,178.09033203125,122.376159667969" />
-    <Link Source="AssetSystem" Target="PackageProvider" Bounds="-631.070504183534,-734.088234235746,308.555940307059,106.212924177152" />
-    <Link Source="MapPackageToPackageProvider.NoChild." Target="PackageProvider0" Bounds="-434.669041069322,-618.189911559598,11.7131581699716,45.9063608162659" />
-    <Link Source="NotUsed." Target="AssetSystem" Bounds="-659.355285289729,-594.277085129105,49.4795659435327,123.907004562699" />
-    <Link Source="PackageProvider" Target="AssetProvider" Bounds="-814.969604492188,-765.039367675781,463.580291748047,18.3992919921875" />
-    <Link Source="PackageProvider" Target="AssetSystem" Bounds="-622.560570400869,-737.017573242188,308.555940307059,106.212924177152" />
-    <Link Source="PackageProvider" Target="GameObject" Bounds="-616.560062725411,-955.764369389183,318.449011463783,193.506796146996" />
-    <Link Source="PackageProvider0" Target="PackageProvider" Bounds="-401.445288362135,-731.457960660908,100.959688984927,79.3074430827828" />
-    <Link Source="PackageProvider1" Target="PackageProvider" Bounds="-274.668799207296,-728.086051495277,9.34200724930963,75.2975334288706" />
-    <Link Source="Root" Target="GameObject" Bounds="-588.382479375208,-969.503387253194,136.560656255091,8.5707844460926" />
-    <Link Source="b8839495-fe50-411c-a9f3-1b96a71f5c151" Target="PackageProvider" Bounds="-287.010681834726,-1001.98365929786,8.83996520394498,230.732684136005" />
-    <Link Source="bd2c9288-6027-4645-b2fb-aaee81f252f81" Target="AssetProvider" Bounds="-836.324136707878,-816.16600158924,116.768901823486,33.0235243381613" />
-    <Link Source="bd2c9288-6027-4645-b2fb-aaee81f252f81" Target="PackageProvider" Bounds="-519.596115666784,-816.16600158924,187.620910722956,51.5250601329032" />
-    <Link Source="df4234bc-39a0-4d84-859f-7ba64b8a88061" Target="PackageProvider" Bounds="-260.207300648816,-893.863708070912,110.522646976282,124.866866724296" />
-    <Link Source="e41f1a6e-b13f-4ee9-ba8e-de66a01552251" Target="AssetSystem" Bounds="-830.125314923515,-596.346175488964,143.036360339098,139.730723218456" />
+    <Link Source="19d3ff55-774a-4b05-a71f-88a95dc7b50a1" Target="AssetProvider1" Bounds="-1235.56326752375,-631.900647561844,52.5663639561531,33.2737142885672" />
+    <Link Source="27a603ff-4a45-454e-97d2-c0971a1f8f181" Target="AssetProvider" Bounds="-964.134257393105,-822.420385406684,49.9486800425231,36.4242742745079" />
+    <Link Source="AssetProvider" Target="AssetSystem" Bounds="-866.162841796875,-755.453247070313,177.526977539063,122.564453125" />
+    <Link Source="AssetProvider" Target="GameObject" Bounds="-874.549712041613,-954.657073975617,207.573855517446,173.963831788117" />
+    <Link Source="AssetProvider" Target="PackageProvider" Bounds="-823.969604492188,-768.226196289063,463.692901611328,14.9915771484375" />
+    <Link Source="AssetProvider1" Target="AssetProvider" Bounds="-1137.50239066537,-750.277464740728,222.578985992641,156.464108882157" />
+    <Link Source="AssetProvider2" Target="AssetProvider" Bounds="-966.729677480435,-747.22318363835,67.8944248723967,153.413935680223" />
+    <Link Source="AssetProviderCanReadRangeOfResource." Target="AssetProvider" Bounds="-1039.63855838443,-769.366396300092,75.3926479659589,0.64982931636041" />
+    <Link Source="AssetProviderN" Target="AssetProvider1" Bounds="-1163.39872686677,-559.593821158376,6.48456441688927,95.992292169354" />
+    <Link Source="AssetSystem" Target="AssetProvider" Bounds="-869.292297363281,-750.321716308594,177.359741210938,122.446411132813" />
+    <Link Source="AssetSystem" Target="PackageProvider" Bounds="-632.20849609375,-736.756958007813,272.2724609375,108.881652832031" />
+    <Link Source="MapPackageToPackageProvider.NoChild." Target="PackageProvider0" Bounds="-434.669040372241,-618.189911631547,11.7131597693773,45.9063608882155" />
+    <Link Source="NotUsed." Target="AssetSystem" Bounds="-659.355305894407,-594.277103895415,49.4795831646775,123.907023329009" />
+    <Link Source="PackageProvider" Target="AssetProvider" Bounds="-814.978393554688,-761.821655273438,463.589080810547,14.5083618164063" />
+    <Link Source="PackageProvider" Target="AssetSystem" Bounds="-638.67578125,-745.542724609375,287.286468505859,113.9892578125" />
+    <Link Source="PackageProvider" Target="GameObject" Bounds="-616.560057924985,-955.764365564223,318.449006072875,193.506796312903" />
+    <Link Source="PackageProvider0" Target="PackageProvider" Bounds="-401.445285222089,-731.457956697204,100.959684736743,79.3074391190792" />
+    <Link Source="PackageProvider1" Target="PackageProvider" Bounds="-274.668799043953,-728.086047561646,9.34200835686494,75.2975105255125" />
+    <Link Source="Root" Target="GameObject" Bounds="-588.382474159658,-969.503384380647,136.560651039541,8.57078196739269" />
+    <Link Source="b8839495-fe50-411c-a9f3-1b96a71f5c151" Target="PackageProvider" Bounds="-287.010681917351,-1001.98365929786,8.83996441487994,230.73268812547" />
+    <Link Source="bd2c9288-6027-4645-b2fb-aaee81f252f81" Target="AssetProvider" Bounds="-830.63494703852,-805.321990447069,89.3257484532729,22.4362858890896" />
+    <Link Source="bd2c9288-6027-4645-b2fb-aaee81f252f81" Target="PackageProvider" Bounds="-493.799198585247,-804.843206434045,158.25377652717,40.361452313547" />
+    <Link Source="df4234bc-39a0-4d84-859f-7ba64b8a88061" Target="PackageProvider" Bounds="-260.207301865191,-893.863708070912,110.522648509247,124.866870662847" />
+    <Link Source="e41f1a6e-b13f-4ee9-ba8e-de66a01552251" Target="AssetSystem" Bounds="-830.125322442869,-596.346193363035,143.036349022577,139.730741092527" />
   </Links>
   <Categories>
     <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />

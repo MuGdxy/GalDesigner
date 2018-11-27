@@ -59,6 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\BehaviorSystem\AssetSystem\Component\AssetComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\PackageBytesResource.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\BaseLogFormat.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\Component\LogComponent.cs" />
@@ -69,10 +73,9 @@
     <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
-    <Compile Include="Core\GameObject\LogProvider.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogProvider.cs" />
     <Compile Include="Core\GameScene\GameScene.cs" />
     <Compile Include="Core\GameSystems.cs" />
-    <Compile Include="Core\Interface\ILogProvider.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -89,16 +92,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Core\BehaviorSystem\AssetSystem\Design\design.dgml" />
-    <None Include="Core\BehaviorSystem\Design\design.dgml" />
-    <None Include="Core\BehaviorSystem\LogSystem\Design\design.dgml" />
-    <None Include="Core\BehaviorSystem\LogSystem\Design\design.md" />
-    <None Include="Core\GameObject\Design\design.dgml" />
-    <None Include="Core\GameScene\Design\design.dgml" />
-    <None Include="Core\MainDesign\GameSystems.dgml" />
+    <None Include="Design\Core\BehaviorSystem\AssetSystem\design.dgml" />
+    <None Include="Design\Core\BehaviorSystem\design.dgml" />
+    <None Include="Design\Core\BehaviorSystem\LogSystem\design.dgml" />
+    <None Include="Design\Core\GameObject\design.dgml" />
+    <None Include="Design\Core\GameScene\design.dgml" />
+    <None Include="Design\Core\GameSystems.dgml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\Interface\" />
     <Folder Include="Runtime\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

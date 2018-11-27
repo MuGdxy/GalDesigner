@@ -9,9 +9,9 @@ namespace GalEngine
     /// <summary>
     /// game scene
     /// </summary>
-    public class GameScene : ILogProvider
+    public class GameScene
     {
-        public LogProvider LogProvider { get; }
+        private LogProvider mLogProvider { get; }
 
         public string Name { get; set; }
 
@@ -23,9 +23,9 @@ namespace GalEngine
 
             Root = new GameObject("Root");
 
-            AddGameObject(LogProvider = new LogProvider(name));
+            AddGameObject(mLogProvider = new LogProvider(name));
 
-            LogProvider.Log("[Log] [object] [time] : Finish Initialize GameScene.");
+            mLogProvider.Log("[Log] [object] [time] : [Initialize GameScene Finish].");
         }
 
         public virtual void Update(float deltaTime)

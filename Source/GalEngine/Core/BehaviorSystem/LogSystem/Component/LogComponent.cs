@@ -15,25 +15,22 @@ namespace GalEngine
     /// </summary>
     public class LogComponent : Component
     {
-        protected LogFormat logFormat;
-
-        public GameObject Target { get; }
+        protected LogFormat mLogFormat;
+        
         public List<Log> Logs { get; }
 
-        public LogComponent(GameObject target)
+        public LogComponent(string sendObject)
         {
             BaseComponentType = typeof(LogComponent);
 
-            Target = target;
-
             Logs = new List<Log>();
 
-            logFormat = new BaseLogFormat(this);
+            mLogFormat = new BaseLogFormat(sendObject);
         }
 
         public void Log(string logText, params object[] context)
         {
-            Logs.Add(new Log(logFormat.GenerateLog(logText, context).Elements));
+            Logs.Add(new Log(mLogFormat.GenerateLog(logText, context).Elements));
         }
     }
 }

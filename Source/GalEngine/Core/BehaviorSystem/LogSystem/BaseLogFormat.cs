@@ -15,13 +15,13 @@ namespace GalEngine
     /// </summary>
     public class BaseLogFormat : LogFormat
     {
-        public BaseLogFormat(LogComponent logComponent)
+        public BaseLogFormat(string targetName)
         {
             //[time] -> current time
             AddKeySetting("time", new TimeKeySetting());
 
             //[object] -> who send the log(game object)
-            AddKeySetting("object", new ObjectKeySetting(logComponent.Target));
+            AddKeySetting("object", new ObjectKeySetting(targetName));
         }
     }
 }
