@@ -12,40 +12,44 @@ namespace GalEngine
     /// </summary>
     public class PackageComponent : Component
     {
-        private Dictionary<string, PackageBytesResource> mCachedResource;
-        
-        public string Name { get; private set; }
+        private Dictionary<string, PackageBytesResource> mResources;
 
-        public PackageComponent(string name)
+        public PackageComponent()
         {
-            Name = name;
-            
-            mCachedResource = new Dictionary<string, PackageBytesResource>();
+            mResources = new Dictionary<string, PackageBytesResource>();
         }
 
-        public PackageBytesResource Load(string name)
+        public PackageBytesResource Load(string path, string name)
         {
-            if (mCachedResource.ContainsKey(name) is true) return mCachedResource[name].IncreaseReference();
-
-            mCachedResource[name] =  new PackageBytesResource(name, System.IO.File.ReadAllBytes(name));
-
-            return mCachedResource[name].IncreaseReference();
+            if (mResources[name].Reference == 0)
+                mResources[name].Bytes = System.IO.File.ReadAllBytes(path + name);
+            return mResources[name].IncreaseReference();
         }
 
-        public PackageBytesResource LoadRange(string name, int start, int size)
+        public PackageBytesResource LoadRange(string path, string name, int start, int size)
         {
             var resource = new PackageBytesResource(name, size);
 
-            Array.Copy(System.IO.File.ReadAllBytes(name), 0, resource.Bytes, start, size);
+            Array.Copy(System.IO.File.ReadAllBytes(path + name), 0, resource.Bytes, start, size);
 
             return resource;
         }
 
         public void UnLoad(string name)
         {
-            mCachedResource[name].DecreaseReference();
+            mResources[name].DecreaseReference();
 
-            if (mCachedResource[name].Reference == 0) mCachedResource.Remove(name);
+            if (mResources[name].Reference == 0) mResources[name].Bytes = null;
+        }
+
+        public void AddResource(PackageBytesResource packageBytesResource)
+        {
+            mResources.Add(packageBytesResource.Name, packageBytesResource);
+        }
+
+        public void RemoveResource(PackageBytesResource packageBytesResource)
+        {
+            mResources.Remove(packageBytesResource.Name);
         }
     }
 }

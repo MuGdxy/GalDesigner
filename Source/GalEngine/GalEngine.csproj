@@ -76,6 +76,7 @@
     <Compile Include="Core\BehaviorSystem\LogSystem\LogProvider.cs" />
     <Compile Include="Core\GameScene\GameScene.cs" />
     <Compile Include="Core\GameSystems.cs" />
+    <Compile Include="Core\StringGroup.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

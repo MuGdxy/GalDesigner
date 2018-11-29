@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    /// <summary>
-    /// asset component
-    /// </summary>
-    public class AssetComponent : Component
+    static class StringGroup
     {
-        
+        public static string Log => "[Log] [time] : [object] ";
     }
 }

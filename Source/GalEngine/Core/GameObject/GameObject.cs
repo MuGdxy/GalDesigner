@@ -99,5 +99,30 @@ namespace GalEngine
 
             child.mParent = null;
         }
+
+        public GameObject GetChild(string name)
+        {
+            foreach (var child in Children)
+                if (child.Name == name) return child;
+
+            return null;
+        }
+
+        public bool IsChildExist(string name)
+        {
+            foreach (var child in Children)
+                if (child.Name == name) return true;
+
+            return false;
+        }
+
+        public bool IsChildExist(GameObject gameObject)
+        {
+            foreach (var child in Children)
+                if (child == gameObject) return true;
+
+            return false;
+        }
+
     }
 }

@@ -11,14 +11,15 @@ namespace GalEngine
     /// </summary>
     public class PackageBytesResource
     {
-        public string Name { get; private set; }
-        public byte[] Bytes { get; private set; }
+        public byte[] Bytes { get; internal set; }
         public int Reference { get; private set; }
+        public string Name { get; private set; }
 
         public int Size => Bytes.Length;
 
-        private PackageBytesResource()
+        private PackageBytesResource(string name)
         {
+            Name = name;
             Reference = 0;
         }
 
@@ -32,15 +33,13 @@ namespace GalEngine
             Reference--; return this;
         }
 
-        public PackageBytesResource(string name, byte[] bytes) : this()
+        public PackageBytesResource(string name, byte[] bytes) : this(name)
         {
-            Name = name;
             Bytes = bytes;
         }
 
-        public PackageBytesResource(string name, int size) : this()
+        public PackageBytesResource(string name, int size) : this(name)
         {
-            Name = name;
             Bytes = new byte[size];
         }
     }

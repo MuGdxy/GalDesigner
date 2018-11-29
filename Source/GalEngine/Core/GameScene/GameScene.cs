@@ -25,7 +25,7 @@ namespace GalEngine
 
             AddGameObject(mLogProvider = new LogProvider(name));
 
-            mLogProvider.Log("[Log] [object] [time] : [Initialize GameScene Finish].");
+            mLogProvider.Log(StringGroup.Log + "[Initialize GameScene Finish].");
         }
 
         public virtual void Update(float deltaTime)
