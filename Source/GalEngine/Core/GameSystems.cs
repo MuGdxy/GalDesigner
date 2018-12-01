@@ -54,7 +54,7 @@ namespace GalEngine
             SystemScene = new GameScene("SystemScene");
 
             SystemScene.AddGameObject(mLogProvider = new LogProvider("GameSystems"));
-            SystemScene.AddGameObject(mPackageProvider = new PackageProvider("Package"));
+            SystemScene.AddGameObject(mPackageProvider = new PackageProvider("Package Provider Root", "Package"));
             
             //add log system
             AddBehaviorSystem(new ConsoleLogSystem());

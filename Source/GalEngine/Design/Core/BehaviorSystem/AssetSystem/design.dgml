@@ -1,53 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
-    <Node Id="19d3ff55-774a-4b05-a71f-88a95dc7b50a1" Category="Comment" Bounds="-1397.6252894738,-687.620647561844,236.096666666667,55.72" Label="To load asset provider, we need load sub-tree of asset provider we need to load ." UseManualLocation="True" />
-    <Node Id="27a603ff-4a45-454e-97d2-c0971a1f8f181" Category="Comment" Bounds="-1125.18206435568,-878.140385406684,245.686666666667,55.72" Label="Asset provider can create resource(can not be range) requirement with a fence for sync" UseManualLocation="True" />
-    <Node Id="AddResource" Category="Comment" Bounds="-315.224184459323,-556.686869932133,94.9166666666667,25.24" Label="add resource" UseManualLocation="True" />
-    <Node Id="AssetProvider" Bounds="-955.24624471273,-780.6932421875,131.276666666667,25.24" Label="AssetProvider(root)" UseManualLocation="True" />
-    <Node Id="AssetProvider1" Bounds="-1208.44838306726,-593.813355858571,105.986666666667,25.24" Label="AssetProvider0" UseManualLocation="True" />
-    <Node Id="AssetProvider2" Bounds="-1025.308081284,-593.809247958127,105.986666666667,25.24" Label="AssetProvider1" UseManualLocation="True" />
-    <Node Id="AssetProviderCanReadRangeOfResource." Category="Comment" Bounds="-1247.29189171776,-790.501305998057,207.653333333333,40.48" Label="Asset provider can read range of resource without cache." UseManualLocation="True" />
-    <Node Id="AssetProviderN" Bounds="-1218.60457867937,-463.601528989022,108.706666666667,25.24" UseManualLocation="True" />
-    <Node Id="AssetSystem" Bounds="-713.824171738138,-627.875328598918,92.1833333333334,25.24" UseManualLocation="True" />
+    <Node Id="AddResource" Category="Comment" Bounds="-287.224184459323,-535.686869932133,74.5566666666666,25.24" Label="add asset" UseManualLocation="True" />
+    <Node Id="Asset" Bounds="-116.502524414062,-773.285121508789,50.8299999999999,25.24" UseManualLocation="True" />
+    <Node Id="AssetSystem" Bounds="-687.824171738138,-681.875328598918,92.1833333333334,25.24" UseManualLocation="True" />
+    <Node Id="ForMeesage" Category="Comment" Bounds="-679.91900916943,-599.915838389887,70.76,25.24" Label="Message" UseManualLocation="True" />
     <Node Id="GameObject" Bounds="-692.6748007015,-985.678040669343,95.3099999999999,25.24" Label="SystemScene" UseManualLocation="True" />
-    <Node Id="MapPackageToPackageProvider.NoChild." Category="Comment" Bounds="-564.807517792185,-572.283550743332,219.583333333333,40.48" Label="Map package to package provider. Load resource. Like directory." UseManualLocation="True" />
-    <Node Id="NotUsed." Category="Comment" Bounds="-715.764672241211,-470.370080566406,246.2,86.2" Label="Get asset which need to remove. For all asset need to remove, we access the asset provider sub-tree and discrease the count of asset in the package provider." UseManualLocation="True" />
-    <Node Id="PackageProvider" Bounds="-351.389318993722,-762.25756925132,148.093333333333,25.24" Label="PackageProvider(root)" UseManualLocation="True" />
-    <Node Id="PackageProvider0" Bounds="-478.912421099842,-652.150517578125,122.803333333333,25.24" UseManualLocation="True" />
-    <Node Id="PackageProvider1" Bounds="-325.162719726563,-652.788537036133,122.803333333333,25.24" UseManualLocation="True" />
-    <Node Id="Root" Category="Comment" Bounds="-451.821823120117,-971.98355929905,50,25.24" UseManualLocation="True" />
-    <Node Id="b8839495-fe50-411c-a9f3-1b96a71f5c151" Category="Comment" Bounds="-400.254461856065,-1042.46365929786,224.936666666667,40.48" Label="For all resource requirement, start a thread for loading. " UseManualLocation="True" />
-    <Node Id="bd2c9288-6027-4645-b2fb-aaee81f252f81" Category="Comment" Bounds="-741.309198585247,-871.88600158924,247.51,70.96" Label="Read package head file to create asset provider tree. Asset can access the package provider to get resource and it will increase the count." UseManualLocation="True" />
-    <Node Id="df4234bc-39a0-4d84-859f-7ba64b8a88061" Category="Comment" Bounds="-244.623079444847,-945.843708070912,220.706666666667,40.48" Label="For all resource, if its count is 0, we remove it from memory." UseManualLocation="True" />
-    <Node Id="e41f1a6e-b13f-4ee9-ba8e-de66a01552251" Category="Comment" Bounds="-987.124672241211,-456.615452270508,241.36,70.96" Label="For all resource requirement, package provider will start a thread for loading. And asset system can limit the max thread number." UseManualLocation="True" />
+    <Node Id="MapPackageToPackageProvider.NoChild." Category="Comment" Bounds="-565.307517792185,-537.283550743332,219.583333333333,40.48" Label="Map package to package provider. Load asset. Like directory." UseManualLocation="True" />
+    <Node Id="PackageProvider" Bounds="-347.802865266718,-773.25756925132,148.093333333333,25.24" Label="PackageProvider(root)" UseManualLocation="True" />
+    <Node Id="PackageProvider0" Bounds="-479.412421099842,-647.650517578125,122.803333333333,25.24" UseManualLocation="True" />
+    <Node Id="PackageProvider1" Bounds="-310.662719726563,-648.288537036133,122.803333333333,25.24" UseManualLocation="True" />
+    <Node Id="RealAsset" Category="Comment" Bounds="-26.474158782959,-774.525221508789,77.04,25.24" Label="Real asset" UseManualLocation="True" />
+    <Node Id="Root" Category="Comment" Bounds="-531.821823120117,-986.48355929905,50,25.24" UseManualLocation="True" />
+    <Node Id="df4234bc-39a0-4d84-859f-7ba64b8a88061" Category="Comment" Bounds="-393.709531933385,-943.343698730469,247.273333333333,40.48" Label="For all asset, if its count is 0, we remove it from memory." UseManualLocation="True" />
   </Nodes>
   <Links>
-    <Link Source="19d3ff55-774a-4b05-a71f-88a95dc7b50a1" Target="AssetProvider1" Bounds="-1235.56326752375,-631.900647561844,52.5663639561531,33.2737142885672" />
-    <Link Source="27a603ff-4a45-454e-97d2-c0971a1f8f181" Target="AssetProvider" Bounds="-964.134257393105,-822.420385406684,49.9486800425232,36.424274274508" />
-    <Link Source="AddResource" Target="PackageProvider1" Bounds="-267.239943999536,-618.5563415655,2.57825642170593,61.8694716333669" />
-    <Link Source="AssetProvider" Target="AssetSystem" Bounds="-876.68603515625,-755.453247070313,177.279174804688,122.564453125" />
-    <Link Source="AssetProvider" Target="GameObject" Bounds="-874.549712041613,-954.657073975617,207.573855517446,173.963831788117" />
-    <Link Source="AssetProvider" Target="PackageProvider" Bounds="-823.969604492188,-762.220520019531,463.722259521484,14.9072265625" />
-    <Link Source="AssetProvider1" Target="AssetProvider" Bounds="-1137.50239066537,-750.277464740728,222.578985992641,156.464108882157" />
-    <Link Source="AssetProvider2" Target="AssetProvider" Bounds="-966.729677480435,-747.22318363835,67.8944248723967,153.413935680223" />
-    <Link Source="AssetProviderCanReadRangeOfResource." Target="AssetProvider" Bounds="-1039.63855838443,-769.366396300092,75.3926479659594,0.649829316360297" />
-    <Link Source="AssetProviderN" Target="AssetProvider1" Bounds="-1163.39872686677,-559.593821158376,6.48456441688927,95.992292169354" />
-    <Link Source="AssetSystem" Target="AssetProvider" Bounds="-858.769104003906,-750.321716308594,177.607543945313,122.446411132813" />
-    <Link Source="AssetSystem" Target="PackageProvider" Bounds="-632.20849609375,-736.756958007813,272.2724609375,108.881652832031" />
-    <Link Source="MapPackageToPackageProvider.NoChild." Target="PackageProvider0" Bounds="-446.339094066533,-618.638578049031,19.8721003159184,46.355027305699" />
-    <Link Source="NotUsed." Target="AssetSystem" Bounds="-659.355305894407,-594.277103895415,49.4795831646775,123.907023329009" />
-    <Link Source="PackageProvider" Target="AssetProvider" Bounds="-814.978393554688,-767.827819824219,463.589080810547,14.5932006835938" />
-    <Link Source="PackageProvider" Target="AssetSystem" Bounds="-638.67578125,-745.542724609375,287.286468505859,113.9892578125" />
-    <Link Source="PackageProvider" Target="GameObject" Bounds="-616.560057924985,-955.764365564223,318.449006072875,193.506796312903" />
-    <Link Source="PackageProvider0" Target="PackageProvider" Bounds="-401.445285222089,-731.457956697204,100.959684736743,79.3074391190792" />
-    <Link Source="PackageProvider1" Target="PackageProvider" Bounds="-274.668799043953,-728.086047561646,9.34200835686494,75.2975105255125" />
-    <Link Source="Root" Target="GameObject" Bounds="-588.382474159658,-969.503384380647,136.560651039541,8.57078196739269" />
-    <Link Source="b8839495-fe50-411c-a9f3-1b96a71f5c151" Target="PackageProvider" Bounds="-287.010681917351,-1001.98365929786,8.83996441487994,230.73268812547" />
-    <Link Source="bd2c9288-6027-4645-b2fb-aaee81f252f81" Target="AssetProvider" Bounds="-830.63494703852,-805.321990447069,89.3257484532729,22.4362858890896" />
-    <Link Source="bd2c9288-6027-4645-b2fb-aaee81f252f81" Target="PackageProvider" Bounds="-493.799198585247,-804.843206434045,158.25377652717,40.361452313547" />
-    <Link Source="df4234bc-39a0-4d84-859f-7ba64b8a88061" Target="PackageProvider" Bounds="-261.403965957358,-905.363698730469,110.677669727294,136.123054380118" />
-    <Link Source="e41f1a6e-b13f-4ee9-ba8e-de66a01552251" Target="AssetSystem" Bounds="-830.125322442869,-596.346193363035,143.036349022577,139.730741092527" />
+    <Link Source="AddResource" Target="PackageProvider1" Bounds="-249.869097490612,-614.048684495009,0.476560560107174,78.361789963759" />
+    <Link Source="AssetSystem" Target="PackageProvider" Bounds="-596.166113645286,-745.848423587329,262.857263600563,65.2772812698003" />
+    <Link Source="ForMeesage" Target="AssetSystem" Bounds="-644.106857833214,-647.64058197256,1.63422697600561,47.7247445702163" />
+    <Link Source="MapPackageToPackageProvider.NoChild." Target="PackageProvider0" Bounds="-449.082053184798,-613.833424980863,24.3332747066185,76.5498763968783" />
+    <Link Source="PackageProvider" Target="Asset" Bounds="-199.709528401693,-760.659938772609,74.2070040900445,0.0111948594527576" />
+    <Link Source="PackageProvider" Target="AssetSystem" Bounds="-587.431424768467,-748.017573242188,262.857263600563,65.2772812698004" />
+    <Link Source="PackageProvider" Target="GameObject" Bounds="-615.151113688799,-955.968510857086,319.337972979375,182.710937614899" />
+    <Link Source="PackageProvider0" Target="PackageProvider" Bounds="-403.517203978414,-742.107456686703,108.47992847718,94.456939108578" />
+    <Link Source="PackageProvider1" Target="PackageProvider" Bounds="-269.551408241517,-739.185634802871,17.8167115355366,90.8971167364646" />
+    <Link Source="RealAsset" Target="Asset" Bounds="-56.6731749446203,-761.442045607125,30.1990161616613,0.363114785419043" />
+    <Link Source="Root" Target="GameObject" Bounds="-588.364953579644,-973.717838316115,56.5431609771053,0.329573330664516" />
+    <Link Source="df4234bc-39a0-4d84-859f-7ba64b8a88061" Target="PackageProvider" Bounds="-273.266092855462,-902.863698730469,2.73435634354399,120.608437552945" />
   </Links>
   <Categories>
     <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />

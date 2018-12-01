@@ -6,50 +6,52 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+    using Debug = System.Diagnostics.Debug;
+
     /// <summary>
     /// package component
     /// manager the resource in the package
     /// </summary>
     public class PackageComponent : Component
     {
-        private Dictionary<string, PackageBytesResource> mResources;
+        private Dictionary<string, Asset> mAssets;
 
         public PackageComponent()
         {
-            mResources = new Dictionary<string, PackageBytesResource>();
+            BaseComponentType = typeof(PackageComponent);
+
+            mAssets = new Dictionary<string, Asset>();
         }
 
-        public PackageBytesResource Load(string path, string name)
+        public Asset Load(string path, string name)
         {
-            if (mResources[name].Reference == 0)
-                mResources[name].Bytes = System.IO.File.ReadAllBytes(path + name);
-            return mResources[name].IncreaseReference();
+            if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + name));
+
+            return mAssets[name].IncreaseReference();
         }
 
-        public PackageBytesResource LoadRange(string path, string name, int start, int size)
+        public Asset LoadRange(string path, string name, int start, int size)
         {
-            var resource = new PackageBytesResource(name, size);
-
-            Array.Copy(System.IO.File.ReadAllBytes(path + name), 0, resource.Bytes, start, size);
-
-            return resource;
+            throw new NotImplementedException();
         }
 
         public void UnLoad(string name)
         {
-            mResources[name].DecreaseReference();
+            mAssets[name].DecreaseReference();
 
-            if (mResources[name].Reference == 0) mResources[name].Bytes = null;
+            if (mAssets[name].Reference == 0) mAssets[name].UnLoad();
         }
 
-        public void AddResource(PackageBytesResource packageBytesResource)
+        public void AddAsset(Asset asset)
         {
-            mResources.Add(packageBytesResource.Name, packageBytesResource);
+            mAssets.Add(asset.Name, asset);
         }
 
-        public void RemoveResource(PackageBytesResource packageBytesResource)
+        public void RemoveAsset(Asset asset)
         {
-            mResources.Remove(packageBytesResource.Name);
+            Debug.Assert(asset.Reference == 0);
+
+            mAssets.Remove(asset.Name);
         }
     }
 }

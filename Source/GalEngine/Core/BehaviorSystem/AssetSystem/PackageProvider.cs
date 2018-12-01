@@ -15,61 +15,59 @@ namespace GalEngine
         private PackageComponent mPackageComponent;
         private LogComponent mLogComponent;
 
+        public string Path { get; }
         public string FullPath => GetFullPath();
 
-        public PackageProvider(string name) : base(name)
+        public PackageProvider(string name, string path) : base(name)
         {
             AddComponent(mPackageComponent = new PackageComponent());
             AddComponent(mLogComponent = new LogComponent(name));
 
-            mLogComponent.Log(StringGroup.Log + "[Initialize Package Provider Finish].");
+            Path = path;
+
+            mLogComponent.Log(StringGroup.Log + "[Initialize PackageProvider Finish].");
         }
 
-        public PackageBytesResource Load(string name)
+        public Asset Load(string name)
         {
+            mLogComponent.Log(StringGroup.Log + "[Load Asset] [Name = {0}].", name);
+
             return mPackageComponent.Load(FullPath, name);
         }
 
-        public PackageBytesResource LoadRange(string name, int start, int size)
+        public Asset LoadRange(string name, int start, int size)
         {
+            mLogComponent.Log(StringGroup.Log + "[Load Asset Range] [Name = {0}].", name);
+
             return mPackageComponent.LoadRange(FullPath, name, start, size);
         }
 
         public void UnLoad(string name)
         {
+            mLogComponent.Log(StringGroup.Log + "[UnLoad Asset] [Name = {0}].", name);
+
             mPackageComponent.UnLoad(name);
         }
 
-        public PackageProvider FindPackage(string path)
+        public void AddAsset(Asset asset)
         {
-            var package = this;
-            var pathArray = path.Split('/');
+            mLogComponent.Log(StringGroup.Log + "[Add Asset] [Type = {0}] [Name = {1}].", asset.GetType(), asset.Name);
 
-            foreach (var name in pathArray)
-            {
-                package = package.GetChild(name) as PackageProvider;
-
-                if (package == null) return null;
-            }
-
-            return package;
+            mPackageComponent.AddAsset(asset);
         }
 
-        public void AddResource(PackageBytesResource packageBytesResource)
+        public void RemoveAsset(Asset asset)
         {
-            mPackageComponent.AddResource(packageBytesResource);
-        }
+            mLogComponent.Log(StringGroup.Log + "[Remove Asset] [Type = {0}] [Name = {1}].", asset.GetType(), asset.Name);
 
-        public void RemoveResource(PackageBytesResource packageBytesResource)
-        {
-            mPackageComponent.RemoveResource(packageBytesResource);
+            mPackageComponent.RemoveAsset(asset);
         }
 
         public string GetFullPath()
         {
             if (GetType() != typeof(PackageProvider)) return "";
 
-            return (Parent as PackageProvider)?.GetFullPath() + "/" + Name;
+            return (Parent as PackageProvider)?.GetFullPath() + "/" + Path;
         }
     }
 }

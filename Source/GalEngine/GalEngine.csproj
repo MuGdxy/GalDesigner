@@ -59,9 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\BehaviorSystem\AssetSystem\Component\AssetComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\Asset.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\AssetSystem\PackageBytesResource.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\BaseLogFormat.cs" />
