@@ -15,7 +15,7 @@ namespace GalEngine
     public class PackageComponent : Component
     {
         private Dictionary<string, Asset> mAssets;
-
+        
         public PackageComponent()
         {
             BaseComponentType = typeof(PackageComponent);
@@ -23,22 +23,22 @@ namespace GalEngine
             mAssets = new Dictionary<string, Asset>();
         }
 
-        public Asset Load(string path, string name)
+        public Asset LoadAsset(string path, string name, List<Asset> dependentAssets)
         {
-            if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + name));
+            if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + name), dependentAssets);
 
             return mAssets[name].IncreaseReference();
         }
 
-        public Asset LoadRange(string path, string name, int start, int size)
+        public Asset LoadAssetRange(string path, string name, int start, int size, List<Asset> dependentAssets)
         {
             throw new NotImplementedException();
         }
 
-        public void UnLoad(string name)
+        public void UnLoadAsset(string name)
         {
             mAssets[name].DecreaseReference();
-
+            
             if (mAssets[name].Reference == 0) mAssets[name].UnLoad();
         }
 
@@ -52,6 +52,11 @@ namespace GalEngine
             Debug.Assert(asset.Reference == 0);
 
             mAssets.Remove(asset.Name);
+        }
+
+        public Asset GetAsset(string name)
+        {
+            return mAssets[name];
         }
     }
 }

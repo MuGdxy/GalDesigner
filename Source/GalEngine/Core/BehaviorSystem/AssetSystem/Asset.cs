@@ -16,8 +16,9 @@ namespace GalEngine
         public object Instance { get => instance; private set => instance = value; }
         public int Reference { get; private set; }
         public int Size { get; private set; }
+        public PackageProvider Package { get; internal set; }
 
-        protected virtual object ConvertBytesToInstance(byte[] bytes)
+        protected virtual object ConvertBytesToInstance(byte[] bytes, List<Asset> dependentAssets)
         {
             throw new NotImplementedException("Convert bytes to instance failed.");
         }
@@ -39,7 +40,7 @@ namespace GalEngine
             Reference--; return this;
         }
 
-        internal void Load(byte[] bytes)
+        internal void Load(byte[] bytes, List<Asset> dependentAssets)
         {
             Debug.Assert(bytes != null);
             Debug.Assert(bytes.Length == Size);
@@ -47,7 +48,7 @@ namespace GalEngine
             if (Instance != null) DisposeInstance(ref instance); Instance= null;
 
             Size = bytes.Length;
-            Instance = ConvertBytesToInstance(bytes);
+            Instance = ConvertBytesToInstance(bytes, dependentAssets);
         }
 
         internal void UnLoad()

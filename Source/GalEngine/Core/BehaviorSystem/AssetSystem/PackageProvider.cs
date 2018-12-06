@@ -18,6 +18,53 @@ namespace GalEngine
         public string Path { get; }
         public string FullPath => GetFullPath();
 
+        internal Asset LoadAsset(string name, List<Asset> dependentAssets)
+        {
+            mLogComponent.Log(StringGroup.Log + "[Load Asset] [Name = {0}].", name);
+
+            return mPackageComponent.LoadAsset(FullPath, name, dependentAssets);
+        }
+
+        internal Asset LoadAssetRange(string name, int start, int size, List<Asset> dependentAssets)
+        {
+            mLogComponent.Log(StringGroup.Log + "[Load Asset Range] [Name = {0}].", name);
+
+            return mPackageComponent.LoadAssetRange(FullPath, name, start, size, dependentAssets);
+        }
+
+        internal void UnLoadAsset(string name)
+        {
+            mLogComponent.Log(StringGroup.Log + "[UnLoad Asset] [Name = {0}].", name);
+
+            mPackageComponent.UnLoadAsset(name);
+        }
+
+        internal void AddAsset(Asset asset)
+        {
+            mLogComponent.Log(StringGroup.Log + "[Add Asset] [Type = {0}] [Name = {1}].", asset.GetType(), asset.Name);
+
+            if (asset.Package != null)
+            {
+                mLogComponent.Log(StringGroup.Warning + "[Add Asset and Change the Asset's Package] [Type = {0}] [Name = {1}].",
+                    asset.GetType(), asset.Name);
+
+                asset.Package.RemoveAsset(asset);
+            }
+
+            asset.Package = this;
+
+            mPackageComponent.AddAsset(asset);
+        }
+
+        internal void RemoveAsset(Asset asset)
+        {
+            mLogComponent.Log(StringGroup.Log + "[Remove Asset] [Type = {0}] [Name = {1}].", asset.GetType(), asset.Name);
+
+            asset.Package = null;
+
+            mPackageComponent.RemoveAsset(asset);
+        }
+
         public PackageProvider(string name, string path) : base(name)
         {
             AddComponent(mPackageComponent = new PackageComponent());
@@ -28,39 +75,9 @@ namespace GalEngine
             mLogComponent.Log(StringGroup.Log + "[Initialize PackageProvider Finish].");
         }
 
-        public Asset Load(string name)
+        public Asset GetAsset(string name)
         {
-            mLogComponent.Log(StringGroup.Log + "[Load Asset] [Name = {0}].", name);
-
-            return mPackageComponent.Load(FullPath, name);
-        }
-
-        public Asset LoadRange(string name, int start, int size)
-        {
-            mLogComponent.Log(StringGroup.Log + "[Load Asset Range] [Name = {0}].", name);
-
-            return mPackageComponent.LoadRange(FullPath, name, start, size);
-        }
-
-        public void UnLoad(string name)
-        {
-            mLogComponent.Log(StringGroup.Log + "[UnLoad Asset] [Name = {0}].", name);
-
-            mPackageComponent.UnLoad(name);
-        }
-
-        public void AddAsset(Asset asset)
-        {
-            mLogComponent.Log(StringGroup.Log + "[Add Asset] [Type = {0}] [Name = {1}].", asset.GetType(), asset.Name);
-
-            mPackageComponent.AddAsset(asset);
-        }
-
-        public void RemoveAsset(Asset asset)
-        {
-            mLogComponent.Log(StringGroup.Log + "[Remove Asset] [Type = {0}] [Name = {1}].", asset.GetType(), asset.Name);
-
-            mPackageComponent.RemoveAsset(asset);
+            return mPackageComponent.GetAsset(name);
         }
 
         public string GetFullPath()

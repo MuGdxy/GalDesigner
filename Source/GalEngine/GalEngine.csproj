@@ -60,6 +60,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\BehaviorSystem\AssetSystem\Asset.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\AssetGraph.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\AssetSystem.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
@@ -79,6 +81,8 @@
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\Event\BaseEvent.cs" />
+    <Compile Include="Structure\Graph.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,7 +106,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\Interface\" />
-    <Folder Include="Runtime\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

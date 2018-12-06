@@ -9,5 +9,6 @@ namespace GalEngine
     static class StringGroup
     {
         public static string Log => "[Log] [time] : [object] ";
+        public static string Warning => "[Warning] [time] : [object] ";
     }
 }
