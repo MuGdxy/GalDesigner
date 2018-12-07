@@ -18,25 +18,25 @@ namespace GalEngine
         public string Path { get; }
         public string FullPath => GetFullPath();
 
-        internal Asset LoadAsset(string name, List<Asset> dependentAssets)
+        internal AssetReference LoadAsset(string name, List<AssetReference> dependentAssets)
         {
             mLogComponent.Log(StringGroup.Log + "[Load Asset] [Name = {0}].", name);
 
             return mPackageComponent.LoadAsset(FullPath, name, dependentAssets);
         }
 
-        internal Asset LoadAssetRange(string name, int start, int size, List<Asset> dependentAssets)
+        internal AssetReference LoadAssetIndependent(string name, SegmentRange<int> range, List<AssetReference> dependentAssets)
         {
-            mLogComponent.Log(StringGroup.Log + "[Load Asset Range] [Name = {0}].", name);
+            mLogComponent.Log(StringGroup.Log + "[Load Asset Independent] [Name = {0}].", name);
 
-            return mPackageComponent.LoadAssetRange(FullPath, name, start, size, dependentAssets);
+            return mPackageComponent.LoadAssetIndependent(FullPath, name, range, dependentAssets);
         }
 
-        internal void UnLoadAsset(string name)
+        internal void UnLoadAsset(ref AssetReference assetReference)
         {
-            mLogComponent.Log(StringGroup.Log + "[UnLoad Asset] [Name = {0}].", name);
+            mLogComponent.Log(StringGroup.Log + "[UnLoad Asset] [Name = {0}].", assetReference.Source.Name);
 
-            mPackageComponent.UnLoadAsset(name);
+            mPackageComponent.UnLoadAsset(ref assetReference);
         }
 
         internal void AddAsset(Asset asset)

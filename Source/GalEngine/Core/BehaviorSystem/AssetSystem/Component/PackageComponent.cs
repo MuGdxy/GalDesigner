@@ -23,23 +23,35 @@ namespace GalEngine
             mAssets = new Dictionary<string, Asset>();
         }
 
-        public Asset LoadAsset(string path, string name, List<Asset> dependentAssets)
+        public AssetReference LoadAsset(string path, string name, List<AssetReference> dependentAssets)
         {
+            Debug.Assert(mAssets[name].Reference >= 0);
+
             if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + name), dependentAssets);
 
             return mAssets[name].IncreaseReference();
         }
 
-        public Asset LoadAssetRange(string path, string name, int start, int size, List<Asset> dependentAssets)
+        public AssetReference LoadAssetIndependent(string path, string name, SegmentRange<int> range, List<AssetReference> dependentAssets)
         {
-            throw new NotImplementedException();
+            System.IO.FileStream file = new System.IO.FileStream(path + name, System.IO.FileMode.Open);
+
+            byte[] bytes = new byte[range.End - range.Start + 1];
+
+            file.Read(bytes, range.Start, bytes.Length);
+
+            return mAssets[name].LoadIndependentReference(bytes, dependentAssets);
         }
 
-        public void UnLoadAsset(string name)
+        public void UnLoadAsset(ref AssetReference assetReference)
         {
+            var name = assetReference.Source.Name;
+
             mAssets[name].DecreaseReference();
             
             if (mAssets[name].Reference == 0) mAssets[name].UnLoad();
+
+            assetReference = null;
         }
 
         public void AddAsset(Asset asset)

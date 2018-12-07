@@ -4,57 +4,77 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GalEngine.Structure;
-
 namespace GalEngine
 {
     using Debug = System.Diagnostics.Debug;
     
     class AssetGraph : Graph<Asset>
     {
-        private GraphNode<Asset> LoadAsset(GraphNode<Asset> node)
+        private AssetReference LoadAsset(GraphNode<Asset> node)
         {
+            //exist, so we only add reference
             if (node.Data.Reference != 0)
-            {
-                node.Data.Package.LoadAsset(node.Data.Name, null);
+                return node.Data.Package.LoadAsset(node.Data.Name, null);
 
-                return node;
+            var dependentAssets = new List<AssetReference>();
+
+            //get dependent assets
+            foreach (var need in node.Next)
+            {
+                dependentAssets.Add(LoadAsset(need));
             }
 
-            List<Asset> dependentAssets = new List<Asset>();
+            //load resource
+            var result = node.Data.Package.LoadAsset(node.Data.Name, dependentAssets);
 
-            foreach (var next in node.Next)
+            //dispose the dependent assets
+            foreach (var assetReference in dependentAssets)
             {
-                dependentAssets.Add(LoadAsset(next).Data);
+                var template = assetReference;
+
+                UnLoadAsset(ref template);
             }
 
-            node.Data.Package.LoadAsset(node.Data.Name, dependentAssets);
-
-            return node;
+            return result;
         }
 
-        private void UnLoadAsset(GraphNode<Asset> node)
+        public AssetReference LoadAsset(Asset asset)
         {
-            Debug.Assert(node.Data.Reference != 0);
+            return LoadAsset(mNodes[asset]);
+        }
 
-            node.Data.Package.UnLoadAsset(node.Data.Name);
+        public AssetReference LoadAssetIndependent(Asset asset, SegmentRange<int> range)
+        {
+            var node = mNodes[asset];
+            var dependentAssets = new List<AssetReference>();
 
-            if (node.Data.Reference != 0) return;
-
-            foreach (var next in node.Next)
+            //get dependent assets
+            foreach (var need in node.Next)
             {
-                UnLoadAsset(next);
+                dependentAssets.Add(LoadAsset(need));
             }
+
+            //load resource
+            var result = node.Data.Package.LoadAssetIndependent(node.Data.Name, range, dependentAssets);
+
+            foreach (var assetReference in dependentAssets)
+            {
+                var template = assetReference;
+
+                UnLoadAsset(ref template);
+            }
+
+            return result;
         }
 
-        public void LoadAsset(Asset asset)
+        public void UnLoadAsset(ref AssetReference assetReference)
         {
-            LoadAsset(mNodes[asset]);
+            assetReference.Source.Package.UnLoadAsset(ref assetReference);
         }
 
-        public void UnLoadAsset(Asset asset)
+        public void UnLoadAssetIndependent(ref AssetReference assetReference)
         {
-            UnLoadAsset(mNodes[asset]);
+            assetReference.Source.UnLoadIndependentReference(ref assetReference);
         }
     }
 }

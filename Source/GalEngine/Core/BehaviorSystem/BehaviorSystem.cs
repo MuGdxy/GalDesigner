@@ -19,7 +19,7 @@ namespace GalEngine
             IsActive = true;
         }
 
-        public abstract void Excute(GameObject gameObject);
+        protected internal abstract void Excute(GameObject gameObject);
         
     }
 }

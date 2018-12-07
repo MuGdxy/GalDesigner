@@ -8,17 +8,36 @@ namespace GalEngine
 {
     using Debug = System.Diagnostics.Debug;
 
+    public class AssetReference
+    {
+        internal object instance;
+
+        public Asset Source { get; }
+        public int Size { get; }
+        public bool IsReference { get; }
+
+        public object Instance { get => instance; private set => instance = value; }
+
+        public AssetReference(Asset asset, object instance, int size, bool isReference = true)
+        {
+            Source = asset;
+            Instance = instance;
+            Size = size;
+            IsReference = isReference;
+        }
+    }
+
     public class Asset
     {
-        private object instance = null;
+        private object instance;
 
         public string Name { get; }
-        public object Instance { get => instance; private set => instance = value; }
         public int Reference { get; private set; }
         public int Size { get; private set; }
+
         public PackageProvider Package { get; internal set; }
 
-        protected virtual object ConvertBytesToInstance(byte[] bytes, List<Asset> dependentAssets)
+        protected virtual object ConvertBytesToInstance(byte[] bytes, List<AssetReference> dependentAssets)
         {
             throw new NotImplementedException("Convert bytes to instance failed.");
         }
@@ -28,40 +47,50 @@ namespace GalEngine
             throw new NotImplementedException("Dispose instance failed.");
         }
 
-        internal Asset IncreaseReference()
+        internal AssetReference IncreaseReference()
         {
-            Reference++; return this;
+            Reference++; return new AssetReference(this, instance, Size, true);
         }
 
-        internal Asset DecreaseReference()
+        internal void DecreaseReference()
         {
-            Debug.Assert(Reference > 0);
-
-            Reference--; return this;
+            Debug.Assert(Reference > 0); Reference--;
         }
 
-        internal void Load(byte[] bytes, List<Asset> dependentAssets)
+        internal void Load(byte[] bytes, List<AssetReference> dependentAssets)
         {
-            Debug.Assert(bytes != null);
+            Debug.Assert(instance == null && Reference == 0);
             Debug.Assert(bytes.Length == Size);
 
-            if (Instance != null) DisposeInstance(ref instance); Instance= null;
+            instance = ConvertBytesToInstance(bytes, dependentAssets);
+        }
 
-            Size = bytes.Length;
-            Instance = ConvertBytesToInstance(bytes, dependentAssets);
+        internal AssetReference LoadIndependentReference(byte[] bytes, List<AssetReference> dependentAssets)
+        {
+            return new AssetReference(this, ConvertBytesToInstance(bytes, dependentAssets), bytes.Length, false);
         }
 
         internal void UnLoad()
         {
-            if (Instance == null) return;
+            Debug.Assert(instance != null && Reference == 0);
 
-            DisposeInstance(ref instance); Instance = null;
+            DisposeInstance(ref instance);
+        }
+
+        internal void UnLoadIndependentReference(ref AssetReference independentReference)
+        {
+            Debug.Assert(independentReference.IsReference == false && independentReference.Source == this);
+            Debug.Assert(independentReference.Instance != null);
+
+            DisposeInstance(ref independentReference.instance);
+
+            independentReference = null;
         }
 
         public Asset(string name, int size)
         {
             Name = name; Size = size; Reference = 0;
-            Instance = null;
+            instance = null;
         }
     }
 }

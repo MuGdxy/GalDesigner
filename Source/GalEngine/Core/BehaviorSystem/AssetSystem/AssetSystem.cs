@@ -12,7 +12,7 @@ namespace GalEngine
     {
         private AssetGraph mAssetGraph;
 
-        public AssetSystem(string name) : base(name)
+        public AssetSystem() : base("AssetSystem")
         {
             RequireComponents.AddRequireComponentType<PackageComponent>();
 
@@ -23,7 +23,7 @@ namespace GalEngine
         {
             package.AddAsset(asset);
 
-            mAssetGraph.AddNode(new Structure.GraphNode<Asset>(asset));
+            mAssetGraph.AddNode(new GraphNode<Asset>(asset));
         }
 
         public void RemoveAsset(Asset asset)
@@ -57,6 +57,30 @@ namespace GalEngine
             {
                 mAssetGraph.RemoveEdge(asset, dependentAsset);
             }
+        }
+
+        public AssetReference LoadAsset(Asset asset)
+        {
+            return mAssetGraph.LoadAsset(asset);
+        }
+
+        public AssetReference LoadAssetIndependent(Asset asset, SegmentRange<int> range)
+        {
+            return mAssetGraph.LoadAssetIndependent(asset, range);
+        }
+
+        public void UnLoadAsset(ref AssetReference assetReference)
+        {
+            Debug.Assert(assetReference.IsReference is true);
+
+            mAssetGraph.UnLoadAsset(ref assetReference);
+        }
+
+        public void UnLoadAssetIndependent(ref AssetReference assetReference)
+        {
+            Debug.Assert(assetReference.IsReference is false);
+
+            mAssetGraph.UnLoadAssetIndependent(ref assetReference);
         }
 
         public override void Excute(GameObject gameObject)

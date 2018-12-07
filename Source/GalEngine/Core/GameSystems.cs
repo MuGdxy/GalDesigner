@@ -11,6 +11,9 @@ namespace GalEngine
         private static LogProvider mLogProvider { get; }
         private static PackageProvider mPackageProvider { get; }
         
+        public static ConsoleLogSystem ConsoleLogSystem { get; }
+        public static AssetSystem AssetSystem { get; }
+
         public static List<BehaviorSystem> BehaviorSystems { get; set; }
 
         public static GameScene MainScene { get; set; }
@@ -48,16 +51,17 @@ namespace GalEngine
         static GameSystems()
         {
             BehaviorSystems = new List<BehaviorSystem>();
-           
+
             IsExist = true;
 
             SystemScene = new GameScene("SystemScene");
 
             SystemScene.AddGameObject(mLogProvider = new LogProvider("GameSystems"));
             SystemScene.AddGameObject(mPackageProvider = new PackageProvider("Package Provider Root", "Package"));
-            
+
             //add log system
-            AddBehaviorSystem(new ConsoleLogSystem());
+            AddBehaviorSystem(ConsoleLogSystem = new ConsoleLogSystem());
+            AddBehaviorSystem(AssetSystem = new AssetSystem());
 
             mLogProvider.Log(StringGroup.Log + "[Initialize GameSystems Finish].");
         }
