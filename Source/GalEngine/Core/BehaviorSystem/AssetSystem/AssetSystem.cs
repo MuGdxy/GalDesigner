@@ -83,7 +83,7 @@ namespace GalEngine
             mAssetGraph.UnLoadAssetIndependent(ref assetReference);
         }
 
-        public override void Excute(GameObject gameObject)
+        protected internal override void Excute(GameObject gameObject)
         {
             
         }

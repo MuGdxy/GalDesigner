@@ -19,11 +19,21 @@ namespace GalEngine
             IsActive = true;
         }
 
-        public void Log(string logText, params object[] context)
+        public void Log(string logText, LogLevel logLevel = LogLevel.Information, params object[] context)
         {
             if (IsActive is false) return;
 
-            mLogComponent.Log(logText, context);
+            mLogComponent.Log(logText, logLevel, context);
+        }
+
+        public void EnableLogLevel(LogLevel level)
+        {
+            mLogComponent.EnableLogLevel(level);
+        }
+
+        public void DisableLogLevel(LogLevel level)
+        {
+            mLogComponent.DisableLogLevel(level);
         }
     }
 }

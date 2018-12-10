@@ -1,5 +1,4 @@
-// ReSharper disable once CheckNamespace
-namespace LogPrinter
+namespace GalEngine.Internal
 {
     /// <summary>
     /// key setting. map the output of key

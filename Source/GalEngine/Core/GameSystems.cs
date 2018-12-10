@@ -59,7 +59,7 @@ namespace GalEngine
             SystemScene.AddGameObject(mLogProvider = new LogProvider("GameSystems"));
             SystemScene.AddGameObject(mPackageProvider = new PackageProvider("Package Provider Root", "Package"));
 
-            //add log system
+            //add system
             AddBehaviorSystem(ConsoleLogSystem = new ConsoleLogSystem());
             AddBehaviorSystem(AssetSystem = new AssetSystem());
 
@@ -82,7 +82,7 @@ namespace GalEngine
         {
             BehaviorSystems.Add(behaviorSystem);
 
-            mLogProvider.Log(StringGroup.Log + "[Add Behavior System] [Name = {0}].",
+            mLogProvider.Log(StringGroup.Log + "[Add Behavior System] [Name = {0}].", LogLevel.Information,
                 behaviorSystem.Name);
         }
 
@@ -90,7 +90,7 @@ namespace GalEngine
         {
             BehaviorSystems.Remove(behaviorSystem);
 
-            mLogProvider.Log(StringGroup.Log + "[Remove Behavior System] [Name = {0}].",
+            mLogProvider.Log(StringGroup.Log + "[Remove Behavior System] [Name = {0}].", LogLevel.Information,
                 behaviorSystem.Name);
         }
     }

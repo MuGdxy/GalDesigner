@@ -72,6 +72,11 @@
     <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ObjectKeySetting.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\TimeKeySetting.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogLevel.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\KeySetting.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\Log.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\LogFormat.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\LogPrint.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\LogProvider.cs" />
@@ -90,10 +95,6 @@
     <ProjectReference Include="..\APILibrary\APILibrary.csproj">
       <Project>{9f6b254e-6770-4a79-97f3-671d98618ac0}</Project>
       <Name>APILibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LogPrinter\LogPrinter.csproj">
-      <Project>{9d59eb36-0f6c-4274-839b-bd8181e27656}</Project>
-      <Name>LogPrinter</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

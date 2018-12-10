@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using LogPrinter;
-
 namespace GalEngine
 {
+    using Internal;
+
     /// <summary>
     /// log
     /// </summary>
-    public class Log : LogPrinter.Log
+    public class Log : Internal.Log
     {
         public string Text { get; }
+        public LogLevel Level { get; }
 
-        public Log(List<LogElement> elements) : base(elements)
+        public Log(List<LogElement> elements, LogLevel level) : base(elements)
         {
-            Text = "";
+            Level = level;
+            Text = "[" + LogLevelConverter.ToString(level) + "] ";
 
             foreach (var logElement in elements)
             {

@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using LogPrinter;
-
 namespace GalEngine
 {
+    using Internal;
+
     /// <summary>
     /// console log system
     /// print or solve the logs in log component
@@ -20,10 +20,10 @@ namespace GalEngine
         {
             RequireComponents.AddRequireComponentType<LogComponent>();
 
-            logPrint = new LogPrint();
+            logPrint = new ConsoleLogPrint();
         }
 
-        public override void Excute(GameObject gameObject)
+        protected internal override void Excute(GameObject gameObject)
         {
             var component = gameObject.GetComponent<LogComponent>();
 

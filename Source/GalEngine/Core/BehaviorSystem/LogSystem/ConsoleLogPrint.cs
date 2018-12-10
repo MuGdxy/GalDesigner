@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using LogPrinter;
-
 namespace GalEngine
 {
+    using Internal;
+
     /// <summary>
     /// write log to console
     /// </summary>
     public class ConsoleLogPrint : LogPrint
     {
-        public override void ApplyLog(LogPrinter.Log log)
+        public override void ApplyLog(Internal.Log log)
         {
-            base.ApplyLog(log);
+            Console.WriteLine((log as Log).Text);
         }
     }
 }

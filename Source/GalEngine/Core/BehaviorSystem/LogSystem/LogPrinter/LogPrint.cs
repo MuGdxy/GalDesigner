@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 
 // ReSharper disable once CheckNamespace
-namespace LogPrinter
+namespace GalEngine.Internal
 {
     public class LogPrint
     {

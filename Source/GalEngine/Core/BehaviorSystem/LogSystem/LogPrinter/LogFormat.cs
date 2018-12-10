@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace LogPrinter
+namespace GalEngine.Internal
 {
     /// <summary>
     /// Log format: Log: [Key0] [Key1] [Key2] ... {0} ... {1}...
