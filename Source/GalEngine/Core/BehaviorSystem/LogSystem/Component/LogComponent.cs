@@ -18,13 +18,16 @@ namespace GalEngine
 
         protected LogFormat mLogFormat;
         
-        public List<Log> Logs { get; }
+        public static List<Log> Logs { get; }
+
+        static LogComponent()
+        {
+            Logs = new List<Log>();
+        }
 
         public LogComponent(string sendObject)
         {
             BaseComponentType = typeof(LogComponent);
-
-            Logs = new List<Log>();
 
             mLogFormat = new BaseLogFormat(sendObject);
 

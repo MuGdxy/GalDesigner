@@ -27,14 +27,15 @@ namespace GalEngine
         {
             Debug.Assert(mAssets[name].Reference >= 0);
 
-            if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + name), dependentAssets);
+            if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + "/" + name), dependentAssets);
 
             return mAssets[name].IncreaseReference();
         }
 
         public AssetReference LoadAssetIndependent(string path, string name, SegmentRange<int> range, List<AssetReference> dependentAssets)
         {
-            System.IO.FileStream file = new System.IO.FileStream(path + name, System.IO.FileMode.Open);
+            System.IO.FileStream file = new System.IO.FileStream(path + "/" + name, System.IO.FileMode.Open);
+
 
             byte[] bytes = new byte[range.End - range.Start + 1];
 

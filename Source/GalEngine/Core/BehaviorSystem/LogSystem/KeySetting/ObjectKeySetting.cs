@@ -14,7 +14,7 @@ namespace GalEngine
         
         protected override string MapMethod(KeySetting setting)
         {
-            return "Log Sender = " + mSendObject;
+            return "" + mSendObject;
         }
 
         public ObjectKeySetting(string sendObject)

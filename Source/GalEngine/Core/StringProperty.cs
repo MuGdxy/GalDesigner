@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    static class StringGroup
+    public static class StringProperty
     {
         public static string Log => "[time] : [object] ";
+
+        public static string PackageRoot => "PackageProviderRoot";
     }
 }

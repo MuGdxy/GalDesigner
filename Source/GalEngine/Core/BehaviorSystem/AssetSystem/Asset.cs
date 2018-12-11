@@ -60,7 +60,9 @@ namespace GalEngine
         internal void Load(byte[] bytes, List<AssetReference> dependentAssets)
         {
             Debug.Assert(instance == null && Reference == 0);
-            Debug.Assert(bytes.Length == Size);
+            Debug.Assert(bytes.Length == Size || Size == -1);
+
+            if (Size == -1) Size = bytes.Length;
 
             instance = ConvertBytesToInstance(bytes, dependentAssets);
         }
@@ -87,7 +89,7 @@ namespace GalEngine
             independentReference = null;
         }
 
-        public Asset(string name, int size)
+        public Asset(string name, int size = -1)
         {
             Name = name; Size = size; Reference = 0;
             instance = null;

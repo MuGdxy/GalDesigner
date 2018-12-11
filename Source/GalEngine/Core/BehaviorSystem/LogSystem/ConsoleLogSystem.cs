@@ -27,10 +27,10 @@ namespace GalEngine
         {
             var component = gameObject.GetComponent<LogComponent>();
 
-            foreach (var log in component.Logs)
+            foreach (var log in LogComponent.Logs)
                 logPrint.ApplyLog(log);
 
-            component.Logs.Clear();
+            LogComponent.Logs.Clear();
         }
     }
 }

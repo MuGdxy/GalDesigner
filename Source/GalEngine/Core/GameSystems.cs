@@ -57,13 +57,13 @@ namespace GalEngine
             SystemScene = new GameScene("SystemScene");
 
             SystemScene.AddGameObject(mLogProvider = new LogProvider("GameSystems"));
-            SystemScene.AddGameObject(mPackageProvider = new PackageProvider("Package Provider Root", "Package"));
+            SystemScene.AddGameObject(mPackageProvider = new PackageProvider(StringProperty.PackageRoot, "Package"));
 
             //add system
             AddBehaviorSystem(ConsoleLogSystem = new ConsoleLogSystem());
             AddBehaviorSystem(AssetSystem = new AssetSystem());
 
-            mLogProvider.Log(StringGroup.Log + "[Initialize GameSystems Finish].");
+            mLogProvider.Log(StringProperty.Log + "[Initialize GameSystems Finish].");
         }
 
         public static void RunLoop()
@@ -82,7 +82,7 @@ namespace GalEngine
         {
             BehaviorSystems.Add(behaviorSystem);
 
-            mLogProvider.Log(StringGroup.Log + "[Add Behavior System] [Name = {0}].", LogLevel.Information,
+            mLogProvider.Log(StringProperty.Log + "[Add Behavior System] [Name = {0}].", LogLevel.Information,
                 behaviorSystem.Name);
         }
 
@@ -90,7 +90,7 @@ namespace GalEngine
         {
             BehaviorSystems.Remove(behaviorSystem);
 
-            mLogProvider.Log(StringGroup.Log + "[Remove Behavior System] [Name = {0}].", LogLevel.Information,
+            mLogProvider.Log(StringProperty.Log + "[Remove Behavior System] [Name = {0}].", LogLevel.Information,
                 behaviorSystem.Name);
         }
     }
