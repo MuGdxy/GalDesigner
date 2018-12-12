@@ -2,28 +2,32 @@
 <DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
   <Nodes>
     <Node Id="ConsoleLogSystem" Bounds="17.6841590150197,-179.7599000002,129.053333333333,25.24" UseManualLocation="True" />
-    <Node Id="LogComponent" Bounds="-187.487680766799,-179.685162107505,109.723333333333,25.24" UseManualLocation="True" />
-    <Node Id="LogFormat" Bounds="-264.814711659056,-117.891910270206,82.3966666666666,25.24" UseManualLocation="True" />
+    <Node Id="EnableOrDisableLogLevel." Category="Comment" Bounds="-385.290182291667,-216.962848639275,173.123333333333,25.24" Label="Enable or disable log level." UseManualLocation="True" />
+    <Node Id="LogComponent" Bounds="-177.666845126058,-179.685162658691,109.723333333333,25.24" UseManualLocation="True" />
+    <Node Id="LogFormat" Bounds="-264.814711659056,-106.244886689393,82.3966666666666,25.24" UseManualLocation="True" />
+    <Node Id="LogLevel" Bounds="-358.668051791069,-161.722748639323,70.7333333333333,25.24" UseManualLocation="True" />
     <Node Id="LogPrint" Bounds="-11.0257067334579,-110.224407054434,114.683333333333,25.24" Label="ConsoleLogPrint" UseManualLocation="True" />
     <Node Id="Logs" Bounds="-119.241859436035,-116.514959126597,50,25.24" UseManualLocation="True" />
     <Node Id="PrintLogToConsole" Category="Comment" Bounds="169.040354023332,-105.838627422882,132.46,25.24" Label="Print log to console" UseManualLocation="True" />
-    <Node Id="RecordAndStoreLog." Category="Comment" Bounds="-205.676653788824,-235.446507119351,143.34,25.24" Label="Record and store log." UseManualLocation="True" />
-    <Node Id="SolveTheLogsInLogComponent" Category="Comment" Bounds="-14.9377426013041,-237.038037919034,206.67,25.24" Label="Solve the logs in log component" UseManualLocation="True" />
+    <Node Id="RecordAndStoreLog." Category="Comment" Bounds="-250.029173927307,-272.202948639275,241.41,25.24" Label="Record and store log(shared memory)." UseManualLocation="True" />
+    <Node Id="SolveTheLogsInLogComponent" Category="Comment" Bounds="25.3977908836237,-237.038037414551,206.67,25.24" Label="Solve the logs in log component" UseManualLocation="True" />
     <Node Id="[object]-&gt;Object'sName" Category="Comment" Bounds="-346.85692788721,11.5791307759168,233.213333333333,25.24" Label="KeySetting: [object] -&gt; object's name" UseManualLocation="True" />
-    <Node Id="[time]-&gt;DataTime" Category="Comment" Bounds="-323.137100114498,-56.7567966936992,197.756666666667,25.24" Label="KeySetting: [time] -&gt; data time" UseManualLocation="True" />
+    <Node Id="[time]-&gt;DataTime" Category="Comment" Bounds="-323.137100114498,-51.0047866893926,197.756666666667,25.24" Label="KeySetting: [time] -&gt; data time" UseManualLocation="True" />
   </Nodes>
   <Links>
-    <Link Source="ConsoleLogSystem" Target="LogComponent" Bounds="-68.7643508911133,-164.139602661133,86.4485092163086,0.0741729736328125" />
-    <Link Source="LogComponent" Target="ConsoleLogSystem" Bounds="-77.7643508911133,-170.139511108398,86.4485101699829,0.07415771484375" />
-    <Link Source="LogFormat" Target="LogComponent" Bounds="-205.033468988787,-149.388860057163,46.3791570745671,31.4969497869573" />
+    <Link Source="ConsoleLogSystem" Target="LogComponent" Bounds="-58.9435157775879,-164.139541625977,76.6276741027832,0.0740814208984375" />
+    <Link Source="EnableOrDisableLogLevel." Target="LogComponent" Bounds="-239.171373218105,-191.722848639275,53.3517173055682,11.3050869330883" />
+    <Link Source="EnableOrDisableLogLevel." Target="LogLevel" Bounds="-314.02959407037,-191.722842102051,9.68722706913979,21.7769936215579" />
+    <Link Source="LogComponent" Target="ConsoleLogSystem" Bounds="-67.9435195922852,-170.139495849609,76.6276788711548,0.0740814208984375" />
+    <Link Source="LogFormat" Target="LogComponent" Bounds="-206.292946278244,-149.14581147588,58.8899392501841,42.9009297314955" />
     <Link Source="LogPrint" Target="ConsoleLogSystem" Bounds="52.8305208654091,-146.522575614281,18.7374509358485,36.2981685598473" />
     <Link Source="Logs" Target="ConsoleLogSystem" Bounds="-69.241859436035,-151.48324537313,107.770791977389,38.6276772266969" />
-    <Link Source="Logs" Target="LogComponent" Bounds="-120.284170159445,-146.753739497979,18.3740112878788,30.2387803713819" />
-    <Link Source="PrintLogToConsole" Target="LogPrint" Bounds="112.655203247559,-96.0646214554633,56.3851596064451,1.30874354936894" />
-    <Link Source="RecordAndStoreLog." Target="LogComponent" Bounds="-133.69418512675,-210.206507119351,0.532932448299135,21.5241024584624" />
-    <Link Source="SolveTheLogsInLogComponent" Target="ConsoleLogSystem" Bounds="84.5403132990152,-211.798037919034,2.49389754989073,23.0901777231819" />
-    <Link Source="[object]-&gt;Object'sName" Target="[time]-&gt;DataTime" Bounds="-229.143776496844,-22.5511912351391,2.992446903342,34.1303220110559" />
-    <Link Source="[time]-&gt;DataTime" Target="LogFormat" Bounds="-224.126159808945,-83.652407080471,0.282610575228603,26.8956103867718" />
+    <Link Source="Logs" Target="LogComponent" Bounds="-113.390830002634,-146.244524926342,13.4426544807816,29.7295657997452" />
+    <Link Source="PrintLogToConsole" Target="LogPrint" Bounds="112.655203246773,-96.0646212055882,56.3851507765595,1.30874355681759" />
+    <Link Source="RecordAndStoreLog." Target="LogComponent" Bounds="-128.434943176178,-246.962948639275,4.10793921972414,58.3000451650076" />
+    <Link Source="SolveTheLogsInLogComponent" Target="ConsoleLogSystem" Bounds="98.135053636449,-211.798037414551,20.3476229791649,25.0521249856865" />
+    <Link Source="[object]-&gt;Object'sName" Target="[time]-&gt;DataTime" Bounds="-229.042080862277,-16.8057490047898,2.71743694317018,28.3848797807066" />
+    <Link Source="[time]-&gt;DataTime" Target="LogFormat" Bounds="-224.112008496736,-72.0054951815858,0.244217745650076,21.0007084921932" />
   </Links>
   <Categories>
     <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />

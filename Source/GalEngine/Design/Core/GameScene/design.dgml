@@ -5,17 +5,13 @@
     <Node Id="GameScene" Bounds="-775.328621419271,-461.655056103516,87.5666666666667,25.24" UseManualLocation="True" />
     <Node Id="GameSceneTreeRoot" Bounds="-869.900491027832,-402.914952392578,50,25.24" Label="Root" UseManualLocation="True" />
     <Node Id="GameSceneTreeRoot1" Category="Comment" Bounds="-1053.26382436117,-404.647481079102,143.83,25.24" Label="Game scene tree root" UseManualLocation="True" />
-    <Node Id="ILogProvider" Bounds="-775.59694237461,-578.38,93.1100000000001,25.24" UseManualLocation="True" />
     <Node Id="c9493a57-fab7-4b42-8d5f-3ec8a16ddf5b1" Category="Comment" Bounds="-590.828714752197,-480.953740234375,234.28,70.96" Label="Game scene. It contains the root of game scene tree, we can add game object into the tree. We can think the game scene is a set of game objects." UseManualLocation="True" />
-    <Node Id="ff70d7d5-304e-4c00-aa1e-54002036b7d01" Category="Comment" Bounds="-593.828714752197,-583.453740234375,225.023333333333,55.72" Label="LogProvider Interface. We have to define a LogProvider(add it into the tree) to record log." UseManualLocation="True" />
   </Nodes>
   <Links>
-    <Link Source="GameObject" Target="GameSceneTreeRoot" Bounds="-844.889748385817,-368.674953508088,0.036419157461637,73.1474828049631" />
-    <Link Source="GameScene" Target="ILogProvider" Bounds="-731.274631591017,-544.142078862974,1.76906863157876,82.4870141657079" />
-    <Link Source="GameSceneTreeRoot" Target="GameScene" Bounds="-821.36386798695,-432.27424766486,57.4739672538669,29.7827233170941" />
-    <Link Source="GameSceneTreeRoot1" Target="GameSceneTreeRoot" Bounds="-909.433824361166,-391.114353029476,30.5340587447765,0.387700834440295" />
-    <Link Source="c9493a57-fab7-4b42-8d5f-3ec8a16ddf5b1" Target="GameScene" Bounds="-678.762813009355,-448.306072010262,87.9340923062301,1.21448094536237" />
-    <Link Source="ff70d7d5-304e-4c00-aa1e-54002036b7d01" Target="ILogProvider" Bounds="-673.494500310186,-563.480425910971,79.6657712655899,3.2693646347326" />
+    <Link Source="GameObject" Target="GameSceneTreeRoot" Bounds="-844.889731519867,-368.674953507093,0.0364029071608911,73.147472427991" />
+    <Link Source="GameSceneTreeRoot" Target="GameScene" Bounds="-821.3638468102,-432.274238924723,57.473947245132,29.7827142842891" />
+    <Link Source="GameSceneTreeRoot1" Target="GameSceneTreeRoot" Bounds="-909.43382436117,-391.114353029476,30.5340587447812,0.387700834440409" />
+    <Link Source="c9493a57-fab7-4b42-8d5f-3ec8a16ddf5b1" Target="GameScene" Bounds="-678.76281300488,-448.306065317326,87.9340982526834,1.21447786068484" />
   </Links>
   <Categories>
     <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />

@@ -16,7 +16,7 @@ namespace AssetSystemTestUnit
 
             foreach (var asset in dependentAssets)
             {
-                context += "[DependentAsset = " + asset.Instance + "] ";
+                context += "\n[DependentAsset = " + asset.Instance + "] ";
             }
 
             return context;
