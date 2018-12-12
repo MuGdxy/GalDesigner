@@ -39,9 +39,6 @@
     <Reference Include="SharpDX.D3DCompiler, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.D3DCompiler.4.2.0\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX.Direct2D1, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.Direct2D1.4.2.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
@@ -87,6 +84,11 @@
     <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\Event\BaseEvent.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsAdapter.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsDevice.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsLogProvider.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsResource.cs" />
+    <Compile Include="Runtime\RuntimeLogProvider.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
     <Compile Include="Utility.cs" />
@@ -104,10 +106,11 @@
     <None Include="Design\Core\GameObject\design.dgml" />
     <None Include="Design\Core\GameScene\design.dgml" />
     <None Include="Design\Core\GameSystems.dgml" />
+    <None Include="Design\Runtime\Graphics\GraphicsDevice.dgml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\Interface\" />
+    <Folder Include="Runtime\Windows\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

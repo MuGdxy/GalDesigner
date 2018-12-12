@@ -38,7 +38,7 @@ namespace GalEngine
         {
             if (mDisableLogLevel.Contains(level) is true) return;
 
-            Logs.Add(new Log(mLogFormat.GenerateLog(logText, context).Elements, level));
+            Logs.Add(new Log(mLogFormat.GenerateLog(StringProperty.Log + logText, context).Elements, level));
         }
 
         public void EnableLogLevel(LogLevel level)

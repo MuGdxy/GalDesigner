@@ -8,8 +8,12 @@ namespace GalEngine
 {
     public static class StringProperty
     {
+        internal static string LogRuntimeNode => "Runtime";
+        internal static string LogGraphicsNode => "Graphics";
+
         public static string Log => "[time] : ";
 
-        public static string PackageRoot => "PackageProviderRoot";
+        public static string PackageRoot => "Package";
+        public static string LogRoot => "SystemScene";
     }
 }

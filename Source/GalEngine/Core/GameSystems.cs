@@ -8,16 +8,16 @@ namespace GalEngine
 {
     public static class GameSystems
     {
-        private static LogProvider mLogProvider { get; }
-        private static PackageProvider mPackageProvider { get; }
+        private static LogProvider mLogProvider { get; set; }
+        private static PackageProvider mPackageProvider { get; set; }
         
-        public static ConsoleLogSystem ConsoleLogSystem { get; }
-        public static AssetSystem AssetSystem { get; }
+        public static ConsoleLogSystem ConsoleLogSystem { get; private set; }
+        public static AssetSystem AssetSystem { get; private set; }
 
         public static List<BehaviorSystem> BehaviorSystems { get; set; }
 
         public static GameScene MainScene { get; set; }
-        public static GameScene SystemScene { get; }
+        public static GameScene SystemScene { get; private set; }
 
         public static bool IsExist { get; set; }
         
@@ -48,7 +48,7 @@ namespace GalEngine
             }
         }
 
-        static GameSystems()
+        public static void Initialize()
         {
             BehaviorSystems = new List<BehaviorSystem>();
 
@@ -56,14 +56,18 @@ namespace GalEngine
 
             SystemScene = new GameScene("SystemScene");
 
-            SystemScene.AddGameObject(mLogProvider = new LogProvider("GameSystems"));
+            SystemScene.AddGameObject(mLogProvider = new LogProvider(StringProperty.LogRoot));
             SystemScene.AddGameObject(mPackageProvider = new PackageProvider(StringProperty.PackageRoot, "Package"));
 
             //add system
             AddBehaviorSystem(ConsoleLogSystem = new ConsoleLogSystem());
             AddBehaviorSystem(AssetSystem = new AssetSystem());
 
-            mLogProvider.Log(StringProperty.Log + "[Initialize GameSystems Finish] [object].");
+            //initialize log provider
+            Runtime.RuntimeLogProvider.Initialize();
+            Runtime.Graphics.GraphicsLogProvider.Initialize();
+
+            mLogProvider.Log("[Initialize GameSystems Finish] [object]");
         }
 
         public static void RunLoop()
@@ -82,7 +86,7 @@ namespace GalEngine
         {
             BehaviorSystems.Add(behaviorSystem);
 
-            mLogProvider.Log(StringProperty.Log + "[Add Behavior System] [Name = {0}] [object].", LogLevel.Information,
+            mLogProvider.Log("[Add Behavior System] [Name = {0}] [object]", LogLevel.Information,
                 behaviorSystem.Name);
         }
 
@@ -90,7 +94,7 @@ namespace GalEngine
         {
             BehaviorSystems.Remove(behaviorSystem);
 
-            mLogProvider.Log(StringProperty.Log + "[Remove Behavior System] [Name = {0}] [object].", LogLevel.Information,
+            mLogProvider.Log("[Remove Behavior System] [Name = {0}] [object]", LogLevel.Information,
                 behaviorSystem.Name);
         }
     }
