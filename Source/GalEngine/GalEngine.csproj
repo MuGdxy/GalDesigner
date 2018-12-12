@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,8 +30,24 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.D3DCompiler, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.D3DCompiler.4.2.0\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.Direct2D1.4.2.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
@@ -42,89 +59,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BaseStruct\Conditions.cs" />
-    <Compile Include="BaseStruct\Graph.cs" />
-    <Compile Include="BaseStruct\Rect.cs" />
-    <Compile Include="BaseStruct\Timer.cs" />
-    <Compile Include="DebugLayer\DebugCommand.cs" />
-    <Compile Include="DebugLayer\DebugLayer.cs" />
-    <Compile Include="DebugLayer\ErrorType.cs" />
-    <Compile Include="DebugLayer\WarningMessage.cs" />
-    <Compile Include="DebugLayer\WarningType.cs" />
-    <Compile Include="GalEngine.cs" />
-    <Compile Include="GameWindow.cs" />
-    <Compile Include="Interface\IMemberValuable.cs" />
-    <Compile Include="Interface\IValuable.cs" />
-    <Compile Include="Internal\FpsCounter.cs" />
-    <Compile Include="Internal\ResourceList.cs" />
-    <Compile Include="IO\FileManager.cs" />
-    <Compile Include="IO\ScriptFile.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\Asset.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\AssetGraph.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\AssetSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
+    <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\BaseLogFormat.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\Component\LogComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogPrint.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ObjectKeySetting.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\TimeKeySetting.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogLevel.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\KeySetting.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\Log.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\LogFormat.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\LogPrint.cs" />
+    <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
+    <Compile Include="Core\GameObject\Component\Component.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\LogProvider.cs" />
+    <Compile Include="Core\GameScene\GameScene.cs" />
+    <Compile Include="Core\GameSystems.cs" />
+    <Compile Include="Core\StringProperty.cs" />
+    <Compile Include="Core\Time.cs" />
+    <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resource\GlobalAnalyser.cs" />
-    <Compile Include="Resource\GlobalConfig.cs" />
-    <Compile Include="Resource\GlobalValue.cs" />
-    <Compile Include="Resource\ResourceAnalyser\BuildListAnalyser.cs" />
-    <Compile Include="Resource\ResourceAnalyser\ConfigAnalyser.cs" />
-    <Compile Include="Resource\ResourceAnalyser\ResListAnalyser.cs" />
-    <Compile Include="Resource\ResourceAnalyser\ResourceAnalyser.cs" />
-    <Compile Include="Resource\GlobalResource.cs" />
-    <Compile Include="Resource\ResourcePool.cs" />
-    <Compile Include="Resource\ResourceView\VoiceView.cs" />
-    <Compile Include="Resource\ResourceView\BrushView.cs" />
-    <Compile Include="Resource\ResourceView\ImageView.cs" />
-    <Compile Include="Resource\ResourceView\ResourceView.cs" />
-    <Compile Include="Resource\ResourceView\TextFormatView.cs" />
-    <Compile Include="Script\AnimationScript.cs" />
-    <Compile Include="Script\AnimatorScript.cs" />
-    <Compile Include="Script\BrushScript.cs" />
-    <Compile Include="Script\CommonScript.cs" />
-    <Compile Include="Script\ConfigScript.cs" />
-    <Compile Include="Script\ImageScript.cs" />
-    <Compile Include="Script\SceneScript.cs" />
-    <Compile Include="Script\Script.cs" />
-    <Compile Include="Script\ScriptManager.cs" />
-    <Compile Include="Script\ScriptProcessUnit.cs" />
-    <Compile Include="Script\ScriptType.cs" />
-    <Compile Include="Script\TextFormatScript.cs" />
-    <Compile Include="Script\VisualObjectScript.cs" />
-    <Compile Include="Script\VoiceScript.cs" />
-    <Compile Include="SystemProperty.cs" />
-    <Compile Include="Time.cs" />
-    <Compile Include="Utilities.cs" />
-    <Compile Include="VisualObject\Animation.cs" />
-    <Compile Include="VisualObject\AnimationExtension.cs" />
-    <Compile Include="VisualObject\AnimationList.cs" />
-    <Compile Include="VisualObject\Animator.cs" />
-    <Compile Include="VisualObject\AnimatorList.cs" />
-    <Compile Include="VisualObject\Scene.cs" />
-    <Compile Include="VisualObject\SceneList.cs" />
-    <Compile Include="VisualObject\VisualObject.cs" />
-    <Compile Include="VisualObject\VisualObjectList.cs" />
+    <Compile Include="Runtime\Event\BaseEvent.cs" />
+    <Compile Include="Structure\Graph.cs" />
+    <Compile Include="Structure\SegmentRange.cs" />
+    <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Builder\Builder.csproj">
-      <Project>{630d9395-ee2a-4301-bef7-bfaffa2d2d38}</Project>
-      <Name>Builder</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Presenter\Presenter.csproj">
-      <Project>{856d69c7-4ebf-4ded-8410-9691179cf021}</Project>
-      <Name>Presenter</Name>
+    <ProjectReference Include="..\APILibrary\APILibrary.csproj">
+      <Project>{9f6b254e-6770-4a79-97f3-671d98618ac0}</Project>
+      <Name>APILibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Extra\SpecialThanks" />
+    <None Include="Design\Core\BehaviorSystem\AssetSystem\design.dgml" />
+    <None Include="Design\Core\BehaviorSystem\design.dgml" />
+    <None Include="Design\Core\BehaviorSystem\LogSystem\design.dgml" />
+    <None Include="Design\Core\GameObject\design.dgml" />
+    <None Include="Design\Core\GameScene\design.dgml" />
+    <None Include="Design\Core\GameSystems.dgml" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Folder Include="Core\Interface\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
