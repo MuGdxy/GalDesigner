@@ -23,5 +23,10 @@ namespace GalEngine.Runtime.Graphics
         {
             mLogProvider.Log(logText, logLevel, context);
         }
+
+        public static void Assert(bool condition,string logText, LogLevel logLevel = LogLevel.Information, params object[] context)
+        {
+            if (condition == false) mLogProvider.Log(logText, logLevel, context);
+        }
     }
 }

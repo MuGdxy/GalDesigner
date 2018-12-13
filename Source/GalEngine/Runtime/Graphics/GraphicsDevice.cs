@@ -27,6 +27,9 @@ namespace GalEngine.Runtime.Graphics
 
             Device = new SharpDX.Direct3D11.Device(adapter.Adapter, creationFlags, fetuares);
             ImmediateContext = Device.ImmediateContext;
+
+            GraphicsLogProvider.Log("[Initialize Graphics Device with {0}] [object]", LogLevel.Information, adapter.Description);
+            GraphicsLogProvider.Log("[Graphics Device Feature Level = {0}] [object]", LogLevel.Information, Device.FeatureLevel);
         }
     }
 }

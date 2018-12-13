@@ -93,16 +93,12 @@ namespace AssetSystemTestUnit
         static void Main(string[] args)
         {
             GameSystems.Initialize();
-
-            GalEngine.Runtime.Graphics.GraphicsAdapter.EnumerateGraphicsAdapter();
-
+            
             InitializePackage();
 
             LoadAsset();
-
             foreach (var asset in mAssetReferences)
                 Console.WriteLine(asset.Instance);
-
             UnLoadAsset();
             
             GameSystems.RunLoop();
