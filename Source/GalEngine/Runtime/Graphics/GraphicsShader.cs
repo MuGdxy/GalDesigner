@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
+    public enum ShaderType : uint
+    {
+        None = 0,
+        VertexShader = 1,
+        PixelShader = 2,
+        VertexShaderAndPixelShader = 3
+    }
+
     public abstract class GraphicsShader
     {
 #if DEBUG

@@ -17,10 +17,11 @@ namespace GalEngine.Runtime.Graphics
 
         public static byte[] Compile(byte[] byteCode, string entryPoint = "main")
         {
+            GraphicsLogProvider.Log("[Start Compile Pixel Shader] [object]", LogLevel.Information);
+
             var result = SharpDX.D3DCompiler.ShaderBytecode.Compile(byteCode, entryPoint, "ps_5_0",
                     ShaderFlags, SharpDX.D3DCompiler.EffectFlags.None);
 
-            GraphicsLogProvider.Log("[Compile Pixel Shader] [object]", LogLevel.Information);
             GraphicsLogProvider.Assert(result.HasErrors == false, "[Compile Pixel Shader Failed] [Message = {0}] [object]", LogLevel.Error, result.Message);
 
             return result;

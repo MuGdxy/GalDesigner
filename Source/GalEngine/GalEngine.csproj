@@ -66,6 +66,7 @@
     <Compile Include="Core\BehaviorSystem\LogSystem\Component\LogComponent.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogPrint.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ColorKeySetting.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ObjectKeySetting.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\TimeKeySetting.cs" />
     <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
@@ -86,15 +87,22 @@
     <Compile Include="Runtime\Event\BaseEvent.cs" />
     <Compile Include="Runtime\Graphics\GraphicsAdapter.cs" />
     <Compile Include="Runtime\Graphics\GraphicsBuffer.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsConvert.cs" />
     <Compile Include="Runtime\Graphics\GraphicsDevice.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsInputLayout.cs" />
     <Compile Include="Runtime\Graphics\GraphicsLogProvider.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsPixelFormat.cs" />
     <Compile Include="Runtime\Graphics\GraphicsPixelShader.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsRenderTarget.cs" />
     <Compile Include="Runtime\Graphics\GraphicsResource.cs" />
     <Compile Include="Runtime\Graphics\GraphicsShader.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsSwapChain.cs" />
     <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
     <Compile Include="Runtime\RuntimeLogProvider.cs" />
     <Compile Include="Structure\Graph.cs" />
+    <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
+    <Compile Include="Structure\Size.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>

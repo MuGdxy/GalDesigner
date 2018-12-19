@@ -15,7 +15,17 @@ namespace GalEngine
     {
         public override void ApplyLog(Internal.Log log)
         {
-            Console.WriteLine((log as Log).Text);
+            foreach (var element in log.Elements)
+            {
+                if (element.Setting == null) Console.Write(element.Text);
+                if (element.Setting is ColorKeySetting)
+                {
+                    Console.ForegroundColor = (element.Setting as ColorKeySetting).Color;
+                    Console.Write(element.Text);
+                    Console.ResetColor();
+                }
+            }
+            Console.WriteLine();
         }
     }
 }

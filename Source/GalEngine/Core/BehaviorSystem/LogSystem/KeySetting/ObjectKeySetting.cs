@@ -8,7 +8,7 @@ using GalEngine.Internal;
 
 namespace GalEngine
 {
-    class ObjectKeySetting : KeySetting
+    class ObjectKeySetting : ColorKeySetting
     {
         private string mSendObject;
         
@@ -20,6 +20,7 @@ namespace GalEngine
         public ObjectKeySetting(string sendObject)
         {
             mSendObject = sendObject;
+            Color = ConsoleColor.Blue;
         }
     }
 }

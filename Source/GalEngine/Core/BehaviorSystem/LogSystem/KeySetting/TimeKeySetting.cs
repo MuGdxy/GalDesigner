@@ -8,11 +8,16 @@ using GalEngine.Internal;
 
 namespace GalEngine
 {
-    class TimeKeySetting : KeySetting
+    class TimeKeySetting : ColorKeySetting
     {
         protected override string MapMethod(KeySetting setting)
         {
             return DateTime.Now.ToString();
+        }
+
+        public TimeKeySetting()
+        {
+            Color = ConsoleColor.Green;
         }
     }
 }

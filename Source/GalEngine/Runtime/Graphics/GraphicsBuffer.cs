@@ -19,10 +19,10 @@ namespace GalEngine.Runtime.Graphics
             Resource = new SharpDX.Direct3D11.Buffer(Device.Device,
                 new SharpDX.Direct3D11.BufferDescription()
                 {
-                    BindFlags = (SharpDX.Direct3D11.BindFlags)BindType,
+                    BindFlags = GraphicsConvert.ToBindFlags(BindType),
                     CpuAccessFlags = SharpDX.Direct3D11.CpuAccessFlags.None,
                     OptionFlags = SharpDX.Direct3D11.ResourceOptionFlags.None,
-                    SizeInBytes = size,
+                    SizeInBytes = Size,
                     StructureByteStride = ElementSize,
                     Usage = SharpDX.Direct3D11.ResourceUsage.Default
                 });
