@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="CommonShader" Category="Comment" Bounds="-591.32835530599,-524.425031103516,116.736666666667,25.24" Label="Common Shader" UseManualLocation="True" />
+    <Node Id="GraphicsPixelShader" Bounds="-632.405,-430.184931103516,136.6,25.24" UseManualLocation="True" />
+    <Node Id="GraphicsShader" Bounds="-787.499991048177,-520.970052441406,109.976666666667,25.24" UseManualLocation="True" />
+    <Node Id="GraphicsVertexShader" Bounds="-936.523333333333,-423.26,146.85,25.24" UseManualLocation="True" />
+    <Node Id="SupportCompileShader" Category="Comment" Bounds="-810.510828450521,-331.615010375977,161.21,25.24" Label="Support Compile Shader" UseManualLocation="True" />
+  </Nodes>
+  <Links>
+    <Link Source="CommonShader" Target="GraphicsShader" Bounds="-668.524673048417,-510.794470217486,77.1963177424277,1.3365693349549" />
+    <Link Source="GraphicsPixelShader" Target="GraphicsShader" Bounds="-701.179331585228,-491.459324370494,113.664179576474,61.2743829642443" />
+    <Link Source="GraphicsVertexShader" Target="GraphicsShader" Bounds="-846.232058611455,-490.33816167804,89.6480452358388,67.0781622883912" />
+    <Link Source="SupportCompileShader" Target="GraphicsPixelShader" Bounds="-708.678190527358,-400.345757048176,115.6094305082,68.7307466721994" />
+    <Link Source="SupportCompileShader" Target="GraphicsVertexShader" Bounds="-837.342590816023,-392.918399964452,89.0954552449984,61.3033895884755" />
+  </Links>
+  <Categories>
+    <Category Id="Comment" Label="Comment" Description="Represents a user defined comment on the diagram" CanBeDataDriven="True" IsProviderRoot="False" NavigationActionLabel="Comments" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="IsProviderRoot" Label="IsProviderRoot" Description="IsProviderRoot" DataType="System.Boolean" />
+    <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
+    <Property Id="NavigationActionLabel" Label="NavigationActionLabel" Description="NavigationActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Comment" ValueLabel="Has comment">
+      <Condition Expression="HasCategory('Comment')" />
+      <Setter Property="Background" Value="#FFFFFACD" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="NodeRadius" Value="2" />
+      <Setter Property="MaxWidth" Value="250" />
+    </Style>
+  </Styles>
+</DirectedGraph>

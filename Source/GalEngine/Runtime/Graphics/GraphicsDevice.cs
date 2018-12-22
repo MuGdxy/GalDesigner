@@ -66,6 +66,14 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.ClearState();
         }
 
+        public void ClearRenderTarget(GraphicsRenderTarget renderTarget, Vector4<float> color)
+        {
+            //clear render target using color
+            //x = red, y = green, z = blue, w = alpha
+            ImmediateContext.ClearRenderTargetView(renderTarget.RenderTarget,
+                new SharpDX.Mathematics.Interop.RawColor4(color.X, color.Y, color.Z, color.W));
+        }
+
         public void SetViewPort(Rectangle<float> viewPort)
         {
             //set view port
