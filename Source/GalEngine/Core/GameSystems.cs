@@ -8,10 +8,8 @@ namespace GalEngine
 {
     public static class GameSystems
     {
-        private static LogProvider mLogProvider { get; set; }
         private static PackageProvider mPackageProvider { get; set; }
         
-        public static ConsoleLogSystem ConsoleLogSystem { get; private set; }
         public static AssetSystem AssetSystem { get; private set; }
 
         public static List<BehaviorSystem> BehaviorSystems { get; set; }
@@ -56,19 +54,13 @@ namespace GalEngine
             IsExist = true;
 
             SystemScene = new GameScene("SystemScene");
-
-            SystemScene.AddGameObject(mLogProvider = new LogProvider(StringProperty.LogRoot));
+            
             SystemScene.AddGameObject(mPackageProvider = new PackageProvider(StringProperty.PackageRoot, "Package"));
 
             //add system
-            AddBehaviorSystem(ConsoleLogSystem = new ConsoleLogSystem());
             AddBehaviorSystem(AssetSystem = new AssetSystem());
-
-            //initialize log provider
-            Runtime.RuntimeLogProvider.Initialize();
-            Runtime.Graphics.GraphicsLogProvider.Initialize();
-
-            mLogProvider.Log("[Initialize GameSystems Finish] [object]");
+            
+            LogEmitter.Apply(LogLevel.Information, "[Initialize GameSystems Finish] from [GameSystems]");
         }
 
         public static void RunLoop()
@@ -86,17 +78,15 @@ namespace GalEngine
         public static void AddBehaviorSystem(BehaviorSystem behaviorSystem)
         {
             BehaviorSystems.Add(behaviorSystem);
-
-            mLogProvider.Log("[Add Behavior System] [Name = {0}] [object]", LogLevel.Information,
-                behaviorSystem.Name);
+            
+            LogEmitter.Apply(LogLevel.Information, "[Add Behavior System] [Name = {0}] from [GameSystems]", behaviorSystem.Name);
         }
 
         public static void RemoveBehaviorSystem(BehaviorSystem behaviorSystem)
         {
             BehaviorSystems.Remove(behaviorSystem);
 
-            mLogProvider.Log("[Remove Behavior System] [Name = {0}] [object]", LogLevel.Information,
-                behaviorSystem.Name);
+            LogEmitter.Apply(LogLevel.Information, "[Remove Behavior System] [Name = {0}] from [GameSystems]", behaviorSystem.Name);
         }
     }
 }

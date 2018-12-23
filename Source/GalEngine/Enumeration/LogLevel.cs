@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GalEngine.Internal;
-
 namespace GalEngine
 {
-    abstract class ColorKeySetting : KeySetting
+    public enum LogLevel : int
     {
-        public ConsoleColor Color { get; protected set; }
+        Information = 0,
+        Warning = 1,
+        Error = 2,
+        Count = 3
     }
 }

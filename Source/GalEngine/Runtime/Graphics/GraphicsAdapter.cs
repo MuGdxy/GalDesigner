@@ -22,7 +22,7 @@ namespace GalEngine.Runtime.Graphics
         {
             List<GraphicsAdapter> graphicsAdapters = new List<GraphicsAdapter>();
 
-            GraphicsLogProvider.Log("[Start Enumerate GraphicsAdapter] [object]");
+            LogEmitter.Apply(LogLevel.Information, "[Start Enumerate GraphicsAdapter]");
 
             using (var factory = new SharpDX.DXGI.Factory1())
             {
@@ -30,11 +30,11 @@ namespace GalEngine.Runtime.Graphics
                 {
                     graphicsAdapters.Add(new GraphicsAdapter(adapter.Description.Description, adapter));
 
-                    GraphicsLogProvider.Log("[Enumerate GraphicsAdapter] [{0}] [object]", LogLevel.Information, adapter.Description.Description);
+                    LogEmitter.Apply(LogLevel.Information, "[Enumerate GraphicsAdapter] [{0}]", LogLevel.Information, adapter.Description.Description);
                 }
             }
 
-            GraphicsLogProvider.Log("[End Enumerate GraphicsAdapter] [object]");
+            LogEmitter.Apply(LogLevel.Information, "[End Enumerate GraphicsAdapter]");
 
             return graphicsAdapters;
         }

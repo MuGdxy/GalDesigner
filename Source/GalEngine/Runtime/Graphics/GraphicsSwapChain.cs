@@ -47,8 +47,8 @@ namespace GalEngine.Runtime.Graphics
                 mSwapChain = new SharpDX.DXGI.SwapChain(factory, device.Device, swapChainDesc);
 
                 //report error, if create swapchain failed
-                GraphicsLogProvider.Assert(mSwapChain != null, "[Create SwapChain Failed] [Width = {0}] [Height = {1}] [Format = {2}]",
-                     LogLevel.Error, Size.Width, Size.Height, PixelFormat);
+                LogEmitter.Assert(mSwapChain != null, LogLevel.Error, 
+                    "[Create SwapChain Failed] [Width = {0}] [Height = {1}] [Format = {2}]", Size.Width, Size.Height, PixelFormat);
 
                 RenderTarget = new GraphicsRenderTarget(device, this);
             }

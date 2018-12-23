@@ -17,12 +17,12 @@ namespace GalEngine.Runtime.Graphics
 
         public static byte[] Compile(byte[] byteCode, string entryPoint = "main")
         {
-            GraphicsLogProvider.Log("[Start Compile Vertex Shader] [object]", LogLevel.Information);
+            LogEmitter.Apply(LogLevel.Information, "[Start Compile Vertex Shader]");
 
             var result = SharpDX.D3DCompiler.ShaderBytecode.Compile(byteCode, entryPoint, "vs_5_0",
                  ShaderFlags, SharpDX.D3DCompiler.EffectFlags.None);
 
-            GraphicsLogProvider.Assert(result.HasErrors == false, "[Compile Vertex Shader Failed] [Message = {0}] [object]", LogLevel.Error, result.Message);
+            LogEmitter.Assert(result.HasErrors == false, LogLevel.Error, "[Compile Vertex Shader Failed] [Message = {0}]", result.Message);
 
             return result;
         }

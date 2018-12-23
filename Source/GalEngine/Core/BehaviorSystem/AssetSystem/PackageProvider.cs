@@ -13,40 +13,41 @@ namespace GalEngine
     public class PackageProvider : GameObject
     {
         private PackageComponent mPackageComponent;
-        private LogComponent mLogComponent;
-
+        
         public string Path { get; }
         public string FullPath => GetFullPath();
 
         internal AssetReference LoadAsset(string name, List<AssetReference> dependentAssets)
         {
-            mLogComponent.Log("[Load Asset] [Name = {0}] [object]", LogLevel.Information, name);
+            LogEmitter.Apply(LogLevel.Information, "[Load Asset] [Name = {0}] from [{1}]", name, Name);
 
             return mPackageComponent.LoadAsset(FullPath, name, dependentAssets);
         }
 
         internal AssetReference LoadAssetIndependent(string name, SegmentRange<int> range, List<AssetReference> dependentAssets)
         {
-            mLogComponent.Log("[Load Asset Independent] [Name = {0}] [object]", LogLevel.Information, name);
+            LogEmitter.Apply(LogLevel.Information, "[Load Asset Independent] [Name = {0}] from [{1}]", name, Name);
 
             return mPackageComponent.LoadAssetIndependent(FullPath, name, range, dependentAssets);
         }
 
         internal void UnLoadAsset(ref AssetReference assetReference)
         {
-            mLogComponent.Log("[UnLoad Asset] [Name = {0}] [object]", LogLevel.Information, assetReference.Source.Name);
+            LogEmitter.Apply(LogLevel.Information, "[UnLoad Asset] [Name = {0}] from [{1}]", assetReference.Source.Name, Name);
 
             mPackageComponent.UnLoadAsset(ref assetReference);
         }
 
         internal void AddAsset(Asset asset)
         {
-            mLogComponent.Log("[Add Asset] [Type = {0}] [Name = {1}] [object]", LogLevel.Information, asset.GetType().Name, asset.Name);
+            LogEmitter.Apply(LogLevel.Information, "[Add Asset] [Type = {0}] [Name = {1}] from [{2}]", asset.GetType().Name, asset.Name, Name);
 
+            //if the asset has been in the other package
+            //we change the package asset in
             if (asset.Package != null)
             {
-                mLogComponent.Log("[Add Asset and Change the Asset's Package] [Type = {0}] [Name = {1}] [object]",
-                    LogLevel.Warning, asset.GetType().Name, asset.Name);
+                LogEmitter.Apply(LogLevel.Warning, "[Add Asset and Change the Asset's Package] [Type = {0}] [Name = {1}] from [{2}]",
+                    asset.GetType().Name, asset.Name, Name);
 
                 asset.Package.RemoveAsset(asset);
             }
@@ -58,7 +59,7 @@ namespace GalEngine
 
         internal void RemoveAsset(Asset asset)
         {
-            mLogComponent.Log("[Remove Asset] [Type = {0}] [Name = {1}] [object]", LogLevel.Information, asset.GetType().Name, asset.Name);
+            LogEmitter.Apply(LogLevel.Information, "[Remove Asset] [Type = {0}] [Name = {1}] from [{2}]", asset.GetType().Name, asset.Name, Name);
 
             asset.Package = null;
 
@@ -68,11 +69,10 @@ namespace GalEngine
         public PackageProvider(string name, string path) : base(name)
         {
             AddComponent(mPackageComponent = new PackageComponent());
-            AddComponent(mLogComponent = new LogComponent(name));
-
+            
             Path = path;
-
-            mLogComponent.Log("[Initialize PackageProvider Finish] [object]", LogLevel.Information);
+            
+            LogEmitter.Apply(LogLevel.Information, "[Initialize PackageProvider Finish] from [{0}]", Name);
         }
 
         public Asset GetAsset(string name)

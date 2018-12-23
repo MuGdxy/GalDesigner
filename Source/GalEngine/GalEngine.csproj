@@ -62,34 +62,23 @@
     <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\BaseLogFormat.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\Component\LogComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogPrint.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\ConsoleLogSystem.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ColorKeySetting.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\ObjectKeySetting.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\KeySetting\TimeKeySetting.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\Log.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\LogLevel.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\KeySetting.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\Log.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\LogFormat.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\LogPrinter\LogPrint.cs" />
+    <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
-    <Compile Include="Core\BehaviorSystem\LogSystem\LogProvider.cs" />
     <Compile Include="Core\GameScene\GameScene.cs" />
     <Compile Include="Core\GameSystems.cs" />
     <Compile Include="Core\StringProperty.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\GameObject\GameObject.cs" />
+    <Compile Include="Enumeration\EnumerationConvert.cs" />
+    <Compile Include="Enumeration\LogColor.cs" />
+    <Compile Include="Enumeration\LogLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\Graphics\GraphicsAdapter.cs" />
     <Compile Include="Runtime\Graphics\GraphicsBuffer.cs" />
     <Compile Include="Runtime\Graphics\GraphicsConvert.cs" />
     <Compile Include="Runtime\Graphics\GraphicsDevice.cs" />
     <Compile Include="Runtime\Graphics\GraphicsInputLayout.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsLogProvider.cs" />
     <Compile Include="Runtime\Graphics\GraphicsPixelFormat.cs" />
     <Compile Include="Runtime\Graphics\GraphicsPixelShader.cs" />
     <Compile Include="Runtime\Graphics\GraphicsRenderTarget.cs" />
@@ -97,7 +86,6 @@
     <Compile Include="Runtime\Graphics\GraphicsShader.cs" />
     <Compile Include="Runtime\Graphics\GraphicsSwapChain.cs" />
     <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
-    <Compile Include="Runtime\RuntimeLogProvider.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
@@ -112,15 +100,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Design\Core\BehaviorSystem\AssetSystem\design.dgml" />
-    <None Include="Design\Core\BehaviorSystem\design.dgml" />
-    <None Include="Design\Core\BehaviorSystem\LogSystem\design.dgml" />
-    <None Include="Design\Core\GameObject\design.dgml" />
-    <None Include="Design\Core\GameScene\design.dgml" />
-    <None Include="Design\Core\GameSystems.dgml" />
-    <None Include="Design\Runtime\Graphics\GraphicsDevice.dgml" />
-    <None Include="Design\Runtime\Graphics\GraphicsResource.dgml" />
-    <None Include="Design\Runtime\Graphics\GraphicsShader.dgml" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
