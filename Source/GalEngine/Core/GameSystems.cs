@@ -16,6 +16,7 @@ namespace GalEngine
 
         public static GameScene MainScene { get; set; }
         public static GameScene SystemScene { get; private set; }
+        public static EngineWindow EngineWindow { get; set; }
 
         public static bool IsExist { get; set; }
         
@@ -62,7 +63,7 @@ namespace GalEngine
             
             LogEmitter.Apply(LogLevel.Information, "[Initialize GameSystems Finish] from [GameSystems]");
         }
-
+        
         public static void RunLoop()
         {
             while (IsExist is true)
@@ -72,6 +73,9 @@ namespace GalEngine
 
                 UpdateScene(SystemScene);
                 UpdateScene(MainScene);
+
+                if (EngineWindow != null && EngineWindow.IsExisted != false)
+                    EngineWindow.Update(Time.DeltaSeconds);
             }
         }
 

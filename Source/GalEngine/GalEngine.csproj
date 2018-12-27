@@ -71,9 +71,17 @@
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Enumeration\EnumerationConvert.cs" />
+    <Compile Include="Enumeration\KeyCode.cs" />
     <Compile Include="Enumeration\LogColor.cs" />
     <Compile Include="Enumeration\LogLevel.cs" />
+    <Compile Include="Enumeration\MouseButton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Runtime\Event\BaseEvent.cs" />
+    <Compile Include="Runtime\Event\EventEmitter.cs" />
+    <Compile Include="Runtime\Event\KeyBoardEvent.cs" />
+    <Compile Include="Runtime\Event\MouseEvent.cs" />
+    <Compile Include="Runtime\Event\SizeChangeEvent.cs" />
+    <Compile Include="Runtime\Event\UpdateEvent.cs" />
     <Compile Include="Runtime\Graphics\GraphicsAdapter.cs" />
     <Compile Include="Runtime\Graphics\GraphicsBuffer.cs" />
     <Compile Include="Runtime\Graphics\GraphicsConvert.cs" />
@@ -86,10 +94,13 @@
     <Compile Include="Runtime\Graphics\GraphicsShader.cs" />
     <Compile Include="Runtime\Graphics\GraphicsSwapChain.cs" />
     <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
+    <Compile Include="Runtime\Windows\EngineWindow.cs" />
     <Compile Include="Structure\Graph.cs" />
+    <Compile Include="Structure\Position.cs" />
     <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
     <Compile Include="Structure\Size.cs" />
+    <Compile Include="Structure\Vector2.cs" />
     <Compile Include="Structure\Vector4.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
@@ -102,9 +113,6 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Runtime\Event\" />
-    <Folder Include="Runtime\Windows\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
