@@ -62,6 +62,11 @@
     <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiAsset.cs" />
+    <Compile Include="Core\GameObject\Component\TransformComponent.cs" />
     <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
@@ -92,7 +97,9 @@
     <Compile Include="Runtime\Graphics\GraphicsRenderTarget.cs" />
     <Compile Include="Runtime\Graphics\GraphicsResource.cs" />
     <Compile Include="Runtime\Graphics\GraphicsShader.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsShaderResource.cs" />
     <Compile Include="Runtime\Graphics\GraphicsSwapChain.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsTexture.cs" />
     <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
     <Compile Include="Runtime\Windows\EngineWindow.cs" />
     <Compile Include="Structure\Graph.cs" />

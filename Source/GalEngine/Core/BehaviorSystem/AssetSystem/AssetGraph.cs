@@ -28,6 +28,7 @@ namespace GalEngine
             var result = node.Data.Package.LoadAsset(node.Data.Name, dependentAssets);
 
             //dispose the dependent assets
+            //we only keep the asset we need
             foreach (var assetReference in dependentAssets)
             {
                 var template = assetReference;

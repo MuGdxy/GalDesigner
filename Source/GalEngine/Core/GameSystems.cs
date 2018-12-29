@@ -36,8 +36,11 @@ namespace GalEngine
                 {
                     if (node is null) return;
 
+                    //if node can not pass the requirement
+                    //we will not to search the children of node
                     if (subSystem.RequireComponents.IsPass(node) is false) return;
 
+                    //excute system code
                     subSystem.Excute(node);
 
                     foreach (var child in node.Children)

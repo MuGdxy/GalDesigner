@@ -170,9 +170,9 @@ namespace GalEngine
             SenderEvent(new RenderEvent(DateTime.Now, deltaTime));
 
             //process the event
-            while (mEventQueue.Count != 0)
+            while (EventCount != 0)
             {
-                switch (mEventQueue.Dequeue())
+                switch (GetEvent(true))
                 {
                     case UpdateEvent update: OnUpdateEvent?.Invoke(this, update); break;
                     case RenderEvent render: OnRenderEvent?.Invoke(this, render); break;

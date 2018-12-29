@@ -22,5 +22,10 @@ namespace GalEngine.Runtime.Graphics
         {
             return (SharpDX.DXGI.Format)pixelFormat;
         }
+
+        public static int SizeOfInBytes(PixelFormat pixelFormat)
+        {
+            return SharpDX.DXGI.FormatHelper.SizeOfInBytes(ToPixelFormat(pixelFormat));
+        }
     }
 }

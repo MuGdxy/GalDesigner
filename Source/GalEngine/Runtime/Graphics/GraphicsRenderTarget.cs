@@ -25,6 +25,22 @@ namespace GalEngine.Runtime.Graphics
             };
 
             RenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, backTexture, renderTargetDesc);
-        } 
+        }
+
+        public GraphicsRenderTarget(GraphicsDevice device, GraphicsTexture texture)
+        {
+            //set render target desc
+            var renderTargetDesc = new SharpDX.Direct3D11.RenderTargetViewDescription()
+            {
+                Format = GraphicsConvert.ToPixelFormat(texture.PixelFormat),
+                Texture2D = new SharpDX.Direct3D11.RenderTargetViewDescription.Texture2DResource()
+                {
+                    MipSlice = 0,
+                },
+                Dimension = SharpDX.Direct3D11.RenderTargetViewDimension.Texture2D
+            };
+
+            RenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, texture.Resource, renderTargetDesc);
+        }
     }
 }

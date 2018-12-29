@@ -10,6 +10,8 @@ namespace GalEngine
     {
         protected Queue<BaseEvent> mEventQueue;
 
+        public int EventCount { get => mEventQueue.Count; }
+        
         public EventEmitter()
         {
             mEventQueue = new Queue<BaseEvent>();
