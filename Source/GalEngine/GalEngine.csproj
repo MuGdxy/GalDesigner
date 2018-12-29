@@ -101,6 +101,7 @@
     <Compile Include="Runtime\Graphics\GraphicsSwapChain.cs" />
     <Compile Include="Runtime\Graphics\GraphicsTexture.cs" />
     <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
+    <Compile Include="Runtime\RuntimeException.cs" />
     <Compile Include="Runtime\Windows\EngineWindow.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\Position.cs" />

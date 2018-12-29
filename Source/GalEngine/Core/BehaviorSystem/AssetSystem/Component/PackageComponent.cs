@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    using Debug = System.Diagnostics.Debug;
-
     /// <summary>
     /// package component
     /// manager the resource in the package
@@ -25,8 +23,6 @@ namespace GalEngine
 
         public AssetReference LoadAsset(string path, string name, List<AssetReference> dependentAssets)
         {
-            Debug.Assert(mAssets[name].Reference >= 0);
-
             if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + "/" + name), dependentAssets);
 
             return mAssets[name].IncreaseReference();
@@ -62,7 +58,7 @@ namespace GalEngine
 
         public void RemoveAsset(Asset asset)
         {
-            Debug.Assert(asset.Reference == 0);
+            RuntimeException.Assert(asset.Reference == 0);
 
             mAssets.Remove(asset.Name);
         }

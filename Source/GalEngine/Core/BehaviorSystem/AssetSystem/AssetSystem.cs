@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    using Debug = System.Diagnostics.Debug;
-
     public class AssetSystem : BehaviorSystem
     {
         private AssetGraph mAssetGraph;
@@ -71,14 +69,14 @@ namespace GalEngine
 
         public void UnLoadAsset(ref AssetReference assetReference)
         {
-            Debug.Assert(assetReference.IsReference is true);
+            RuntimeException.Assert(assetReference.IsReference is true);
 
             mAssetGraph.UnLoadAsset(ref assetReference);
         }
 
         public void UnLoadAssetIndependent(ref AssetReference assetReference)
         {
-            Debug.Assert(assetReference.IsReference is false);
+            RuntimeException.Assert(assetReference.IsReference is false);
 
             mAssetGraph.UnLoadAssetIndependent(ref assetReference);
         }

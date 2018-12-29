@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    using Debug = System.Diagnostics.Debug;
-
     public class AssetReference
     {
         internal object instance;
@@ -54,13 +52,15 @@ namespace GalEngine
 
         internal void DecreaseReference()
         {
-            Debug.Assert(Reference > 0); Reference--;
+            RuntimeException.Assert(Reference > 0);
+
+            Reference--;
         }
 
         internal void Load(byte[] bytes, List<AssetReference> dependentAssets)
         {
-            Debug.Assert(instance == null && Reference == 0);
-            Debug.Assert(bytes.Length == Size || Size == -1);
+            RuntimeException.Assert(instance == null && Reference == 0);
+            RuntimeException.Assert(bytes.Length == Size || Size == -1);
 
             if (Size == -1) Size = bytes.Length;
 
@@ -74,15 +74,15 @@ namespace GalEngine
 
         internal void UnLoad()
         {
-            Debug.Assert(instance != null && Reference == 0);
+            RuntimeException.Assert(instance != null && Reference == 0);
 
             DisposeInstance(ref instance);
         }
 
         internal void UnLoadIndependentReference(ref AssetReference independentReference)
         {
-            Debug.Assert(independentReference.IsReference == false && independentReference.Source == this);
-            Debug.Assert(independentReference.Instance != null);
+            RuntimeException.Assert(independentReference.IsReference == false && independentReference.Source == this);
+            RuntimeException.Assert(independentReference.Instance != null);
 
             DisposeInstance(ref independentReference.instance);
 

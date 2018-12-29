@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    using Debug = System.Diagnostics.Debug;
-    
     class AssetGraph : Graph<Asset>
     {
         private AssetReference LoadAsset(GraphNode<Asset> node)
