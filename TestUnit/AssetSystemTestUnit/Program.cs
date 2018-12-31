@@ -8,33 +8,32 @@ using GalEngine;
 
 namespace AssetSystemTestUnit
 {
-    class StringAsset : Asset
+    class StringAssetDescription : AssetDescription
     {
-        protected override object ConvertBytesToInstance(byte[] bytes, List<AssetReference> dependentAssets)
+        private static void CreateFunction(out object instance, byte[] bytes, List<Asset> dependentAssets)
         {
             var context = Encoding.UTF8.GetString(bytes);
 
-            foreach (var asset in dependentAssets)
-            {
-                context += "\n[DependentAsset = " + asset.Instance + "] ";
-            }
+            foreach (var asset in dependentAssets) context += "\n[DependentAsset = " + asset.Instance + "] ";
 
-            return context;
+            instance = context;
         }
 
-        protected override void DisposeInstance(ref object instance)
+        private static void DestoryFunction(ref object instance)
         {
             instance = null;
         }
 
-        public StringAsset(string name, int size = -1) : base(name, size)
+        public StringAssetDescription(string name, int size = 0, 
+            bool isKeepDependentAssets = true) : base(name, "string", size, CreateFunction, DestoryFunction, isKeepDependentAssets)
         {
+
         }
     }
 
     class Program
     {
-        static List<AssetReference> mAssetReferences; 
+        static List<Asset> mAssets; 
 
         static void InitializePackage()
         {
@@ -48,46 +47,44 @@ namespace AssetSystemTestUnit
             packageRoot.GetChild("Package2").AddChild(new PackageProvider("Package3", "Package3"));
             packageRoot.GetChild("Package2").AddChild(new PackageProvider("Package4", "Package4"));
 
-            assetSystem.AddAsset(packageRoot, new StringAsset("Asset1"));
-            assetSystem.AddAsset(packageRoot, new StringAsset("Asset2"));
-            assetSystem.AddAsset(packageRoot.GetChild("Package2") as PackageProvider, new StringAsset("Asset1"));
-            assetSystem.AddAsset(packageRoot.GetChild("Package2") as PackageProvider, new StringAsset("Asset2"));
+            assetSystem.AddAssetDescription(packageRoot, new StringAssetDescription("Asset1"));
+            assetSystem.AddAssetDescription(packageRoot, new StringAssetDescription("Asset2"));
+            assetSystem.AddAssetDescription(packageRoot.GetChild("Package2") as PackageProvider, new StringAssetDescription("Asset1"));
+            assetSystem.AddAssetDescription(packageRoot.GetChild("Package2") as PackageProvider, new StringAssetDescription("Asset2"));
 
-            var assets = new List<Asset>();
+            var assets = new List<AssetDescription>();
 
-            assets.Add(packageRoot.GetAsset("Asset2"));
-            assets.Add((packageRoot.GetChild("Package2") as PackageProvider).GetAsset("Asset1"));
+            assets.Add(packageRoot.GetAssetDescription("Asset2"));
+            assets.Add((packageRoot.GetChild("Package2") as PackageProvider).GetAssetDescription("Asset1"));
 
-            assetSystem.AddAssetDependencies(packageRoot.GetAsset("Asset1"), assets);
+            assetSystem.AddAssetDependencies(packageRoot.GetAssetDescription("Asset1"), assets);
         }
 
         static void LoadAsset()
         {
-            mAssetReferences = new List<AssetReference>();
+            mAssets = new List<Asset>();
 
             var systemScene = GameSystems.SystemScene;
             var assetSystem = GameSystems.AssetSystem;
 
             var packageRoot = systemScene.Root.GetChild(StringProperty.PackageRoot) as PackageProvider;
 
-            mAssetReferences.Add(assetSystem.LoadAsset(packageRoot.GetAsset("Asset1")));
-            mAssetReferences.Add(assetSystem.LoadAsset(packageRoot.GetAsset("Asset2")));
-            mAssetReferences.Add(assetSystem.LoadAsset((packageRoot.GetChild("Package2") as PackageProvider).GetAsset("Asset1")));
-            mAssetReferences.Add(assetSystem.LoadAsset((packageRoot.GetChild("Package2") as PackageProvider).GetAsset("Asset2")));
+            mAssets.Add(assetSystem.CreateAsset(packageRoot.GetAssetDescription("Asset1")));
+            mAssets.Add(assetSystem.CreateAsset(packageRoot.GetAssetDescription("Asset2")));
+            mAssets.Add(assetSystem.CreateAsset((packageRoot.GetChild("Package2") as PackageProvider).GetAssetDescription("Asset1")));
+            mAssets.Add(assetSystem.CreateAsset((packageRoot.GetChild("Package2") as PackageProvider).GetAssetDescription("Asset2")));
         }
 
         static void UnLoadAsset()
         {
             var assetSystem = GameSystems.AssetSystem;
 
-            foreach (var asset in mAssetReferences)
+            foreach (var asset in mAssets)
             {
-                var reference = asset;
-
-                assetSystem.UnLoadAsset(ref reference);
+                assetSystem.DestoryAsset(asset);
             }
 
-            mAssetReferences.Clear();
+            mAssets.Clear();
         }
 
         static void Main(string[] args)
@@ -97,7 +94,7 @@ namespace AssetSystemTestUnit
             InitializePackage();
 
             LoadAsset();
-            foreach (var asset in mAssetReferences)
+            foreach (var asset in mAssets)
                 Console.WriteLine(asset.Instance);
             UnLoadAsset();
             

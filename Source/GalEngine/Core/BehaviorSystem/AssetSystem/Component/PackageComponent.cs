@@ -12,60 +12,61 @@ namespace GalEngine
     /// </summary>
     public class PackageComponent : Component
     {
-        private Dictionary<string, Asset> mAssets;
+        private Dictionary<string, AssetDescription> mAssetDescriptions;
         
         public PackageComponent()
         {
             BaseComponentType = typeof(PackageComponent);
 
-            mAssets = new Dictionary<string, Asset>();
+            mAssetDescriptions = new Dictionary<string, AssetDescription>();
         }
 
-        public AssetReference LoadAsset(string path, string name, List<AssetReference> dependentAssets)
+        public Asset CreateAsset(string path, string name, List<Asset> dependentAssets)
         {
-            if (mAssets[name].Reference == 0) mAssets[name].Load(System.IO.File.ReadAllBytes(path + "/" + name), dependentAssets);
+            //create asset with reference count
+            byte[] bytes = mAssetDescriptions[name].Reference == 0 ? System.IO.File.ReadAllBytes(path + "/" + name) : null;
 
-            return mAssets[name].IncreaseReference();
+            return mAssetDescriptions[name].IncreaseAssetReference(bytes, dependentAssets);
         }
 
-        public AssetReference LoadAssetIndependent(string path, string name, SegmentRange<int> range, List<AssetReference> dependentAssets)
+        public Asset CreateIndependentAsset(string path, string name, SegmentRange<int> range, List<Asset> dependentAssets)
         {
+            //create independent asset(without reference count)
+            //we do not have any reference count for independent asset
             System.IO.FileStream file = new System.IO.FileStream(path + "/" + name, System.IO.FileMode.Open);
-
 
             byte[] bytes = new byte[range.End - range.Start + 1];
 
             file.Read(bytes, range.Start, bytes.Length);
 
-            return mAssets[name].LoadIndependentReference(bytes, dependentAssets);
+            return mAssetDescriptions[name].CreateIndependentAsset(bytes, dependentAssets);
         }
 
-        public void UnLoadAsset(ref AssetReference assetReference)
+        public Asset DestoryAsset(Asset asset)
         {
-            var name = assetReference.Source.Name;
-
-            mAssets[name].DecreaseReference();
-            
-            if (mAssets[name].Reference == 0) mAssets[name].UnLoad();
-
-            assetReference = null;
+            return mAssetDescriptions[asset.AssetDescription.Name].DecreaseAssetReference(asset);
         }
 
-        public void AddAsset(Asset asset)
+        public Asset DestoryIndependentAsset(Asset asset)
         {
-            mAssets.Add(asset.Name, asset);
+            return mAssetDescriptions[asset.AssetDescription.Name].DestoryIndependentAsset(asset);
         }
 
-        public void RemoveAsset(Asset asset)
+        public void AddAssetDescription(AssetDescription description)
         {
-            RuntimeException.Assert(asset.Reference == 0);
-
-            mAssets.Remove(asset.Name);
+            mAssetDescriptions.Add(description.Name, description);
         }
 
-        public Asset GetAsset(string name)
+        public void RemoveAssetDescription(AssetDescription description)
         {
-            return mAssets[name];
+            RuntimeException.Assert(description.Reference == 0);
+
+            mAssetDescriptions.Remove(description.Name);
+        }
+        
+        public AssetDescription GetAssetDescription(string name)
+        {
+            return mAssetDescriptions[name];
         }
     }
 }

@@ -11,14 +11,14 @@ namespace GalEngine
         public static void Assert(bool condition, string message = null)
         {
 #if DEBUG
-            if (condition == true) throw new Exception(message);
+            if (condition == false) throw new Exception(message);
 #endif
         }
 
         public static void Assert(bool condition, Exception exception)
         {
 #if DEBUG
-            if (condition == true) throw exception;
+            if (condition == false) throw exception;
 #endif
         }
     }

@@ -17,68 +17,64 @@ namespace GalEngine
             mAssetGraph = new AssetGraph();
         }
 
-        public void AddAsset(PackageProvider package, Asset asset)
+        public void AddAssetDescription(PackageProvider package, AssetDescription description)
         {
-            package.AddAsset(asset);
+            package.AddAssetDescription(description);
 
-            mAssetGraph.AddNode(new GraphNode<Asset>(asset));
+            mAssetGraph.AddNode(new GraphNode<AssetDescription>(description));
         }
 
-        public void RemoveAsset(Asset asset)
+        public void RemoveAssetDescription(AssetDescription description)
         {
-            asset.Package.RemoveAsset(asset);
+            description.Package.RemoveAssetDescription(description);
             
-            mAssetGraph.RemoveNode(asset);
+            mAssetGraph.RemoveNode(description);
         }
 
-        public void AddAssetDependency(Asset asset, Asset dependentAsset)
+        public void AddAssetDependency(AssetDescription description, AssetDescription dependentDescription)
         {
-            mAssetGraph.AddEdge(asset, dependentAsset);
+            mAssetGraph.AddEdge(description, dependentDescription);
         }
 
-        public void AddAssetDependencies(Asset asset, List<Asset> dependentAssets)
+        public void AddAssetDependencies(AssetDescription description, List<AssetDescription> dependentDescriptions)
         {
-            foreach (var dependentAsset in dependentAssets)
+            foreach (var dependentDescription in dependentDescriptions)
             {
-                mAssetGraph.AddEdge(asset, dependentAsset);
+                mAssetGraph.AddEdge(description, dependentDescription);
             }
         }
 
-        public void RemoveAssetDependency(Asset asset, Asset dependentAsset)
+        public void RemoveAssetDependency(AssetDescription description, AssetDescription dependentDescription)
         {
-            mAssetGraph.RemoveEdge(asset, dependentAsset);
+            mAssetGraph.RemoveEdge(description, dependentDescription);
         }
 
-        public void RemoveAssetDependencies(Asset asset, List<Asset> dependentAssets)
+        public void RemoveAssetDependencies(AssetDescription description, List<AssetDescription> dependentDescriptions)
         {
-            foreach (var dependentAsset in dependentAssets)
+            foreach (var dependentDescription in dependentDescriptions)
             {
-                mAssetGraph.RemoveEdge(asset, dependentAsset);
+                mAssetGraph.RemoveEdge(description, dependentDescription);
             }
         }
 
-        public AssetReference LoadAsset(Asset asset)
+        public Asset CreateAsset(AssetDescription description)
         {
-            return mAssetGraph.LoadAsset(asset);
+            return mAssetGraph.CreateAsset(description);
         }
 
-        public AssetReference LoadAssetIndependent(Asset asset, SegmentRange<int> range)
+        public Asset CreateIndependentAsset(AssetDescription description, SegmentRange<int> range)
         {
-            return mAssetGraph.LoadAssetIndependent(asset, range);
+            return mAssetGraph.CreateIndependentAsset(description, range);
         }
 
-        public void UnLoadAsset(ref AssetReference assetReference)
+        public Asset DestoryAsset(Asset asset)
         {
-            RuntimeException.Assert(assetReference.IsReference is true);
-
-            mAssetGraph.UnLoadAsset(ref assetReference);
+            return mAssetGraph.DestoryAsset(asset);
         }
 
-        public void UnLoadAssetIndependent(ref AssetReference assetReference)
+        public Asset UnLoadAssetIndependent(Asset asset)
         {
-            RuntimeException.Assert(assetReference.IsReference is false);
-
-            mAssetGraph.UnLoadAssetIndependent(ref assetReference);
+            return mAssetGraph.DestoryIndependentAsset(asset);
         }
 
         protected internal override void Excute(GameObject gameObject)

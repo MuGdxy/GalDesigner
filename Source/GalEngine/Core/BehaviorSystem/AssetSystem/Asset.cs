@@ -6,93 +6,145 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class AssetReference
+    public class Asset
     {
-        internal object instance;
-
-        public Asset Source { get; }
         public int Size { get; }
+
+        public object Instance { get; internal set; }
+
+        public bool IsExisted { get; internal set; }
         public bool IsReference { get; }
+        public AssetDescription AssetDescription { get; }
 
-        public object Instance { get => instance; private set => instance = value; }
-
-        public AssetReference(Asset asset, object instance, int size, bool isReference = true)
+        internal Asset(object instance, int size, bool isReference, 
+            AssetDescription assetDescription)
         {
-            Source = asset;
-            Instance = instance;
-            Size = size;
-            IsReference = isReference;
+            Size = size; Instance = instance; IsReference = isReference;
+            AssetDescription = assetDescription; IsExisted = true;
         }
     }
 
-    public class Asset
+    public delegate void AssetCreateFunction(out object instance, byte[] bytes, List<Asset> dependentAssets);
+    public delegate void AssetDestoryFunction(ref object instance);
+
+    public class AssetDescription
     {
-        private object instance;
+        private object mInstance;
+
+        private readonly AssetCreateFunction mCreateFunction;
+        private readonly AssetDestoryFunction mDestoryFunction;
+
+        internal object Instance { get => mInstance; }
+        internal AssetCreateFunction CreateFunction { get => mCreateFunction; }
+        internal AssetDestoryFunction DestoryFunction { get => mDestoryFunction; }
+        internal List<Asset> DependentAssets { get; private set; }
 
         public string Name { get; }
-        public int Reference { get; private set; }
+        public string Type { get; }
+
         public int Size { get; private set; }
+        public int Reference { get; private set; }
+        public bool IsKeepDependentAssets { get; }
 
         public PackageProvider Package { get; internal set; }
 
-        protected virtual object ConvertBytesToInstance(byte[] bytes, List<AssetReference> dependentAssets)
+        internal Asset IncreaseAssetReference(byte[] bytes, List<Asset> dependentAssets)
         {
-            throw new NotImplementedException("Convert bytes to instance failed.");
+            //increase the reference of asset
+            //if the reference is 0, we will create it by using the input data(bytes and dependentAssets)
+            //if the reference is not 0, the bytes and dependentAssets is null
+            //each increase asset reference call need to match the decrease asset reference call
+            if (Reference++ == 0)
+            {
+                RuntimeException.Assert(mInstance == null);
+                RuntimeException.Assert(Size == bytes.Length || Size <= 0);
+
+                //create instance and keep the dependent assets
+                mCreateFunction(out mInstance, bytes, DependentAssets = dependentAssets);
+
+                LogEmitter.Apply(LogLevel.Information, "[Load and Create Asset] [Name = {0}] [Type = {1}] from [{2}]", Name, Type, Package.Name);
+
+                //create reference asset
+                return new Asset(mInstance, Size = bytes.Length, true, this);
+            }
+
+            RuntimeException.Assert(mInstance != null);
+
+            return new Asset(mInstance, Size, true, this);
         }
 
-        protected virtual void DisposeInstance(ref object instance)
+        internal Asset CreateIndependentAsset(byte[] bytes, List<Asset> dependentAssets)
         {
-            throw new NotImplementedException("Dispose instance failed.");
+            //create independent asset(without reference count)
+            //we do not have any reference count for independent asset
+            //bytes and dependentAssets can not to be null
+            //the create independent asset call need to match the destory independent asset call
+            //note: the dependent assets will be destoryed after this
+            mCreateFunction(out object instance, bytes, dependentAssets);
+
+            LogEmitter.Apply(LogLevel.Information, "[Load and Create Independent Asset] [Name = {0}] [Type = {1}] from [{2}]", Name, Type, Package.Name);
+
+            return new Asset(instance, bytes.Length, false, this);
         }
 
-        internal AssetReference IncreaseReference()
+        internal Asset DecreaseAssetReference(Asset asset)
         {
-            Reference++; return new AssetReference(this, instance, Size, true);
-        }
+            //decrease the reference of asset
+            //if the reference is 0, error
+            //if the reference is not 0, we dispose the asset
+            //set the asset's Instance to "null" and IsExisted to false
+            //each increase asset reference call need to match the decrease asset reference call
+            RuntimeException.Assert(asset.IsReference == true && asset.IsExisted == true);
+            RuntimeException.Assert(asset.AssetDescription == this);
 
-        internal void DecreaseReference()
-        {
             RuntimeException.Assert(Reference > 0);
 
-            Reference--;
+            //destory instance if reference is 0
+            if (--Reference == 0)
+            {
+                //destory 
+                mDestoryFunction(ref mInstance);
+
+                LogEmitter.Apply(LogLevel.Information, "[Destory Asset] [Name = {0}] [Type = {1}] from [{2}]", Name, Type, Package.Name);
+            }
+
+            asset.Instance = null;
+            asset.IsExisted = false;
+
+            return asset;
         }
 
-        internal void Load(byte[] bytes, List<AssetReference> dependentAssets)
+        internal Asset DestoryIndependentAsset(Asset asset)
         {
-            RuntimeException.Assert(instance == null && Reference == 0);
-            RuntimeException.Assert(bytes.Length == Size || Size == -1);
+            //destory independent asset(without reference count)
+            //the create independent asset call need to match the destory independent asset call
+            RuntimeException.Assert(asset.IsReference == false && asset.IsExisted == true);
+            RuntimeException.Assert(asset.AssetDescription == this);
 
-            if (Size == -1) Size = bytes.Length;
+            //destory instance
+            var instance = asset.Instance;
+            mDestoryFunction(ref instance);
 
-            instance = ConvertBytesToInstance(bytes, dependentAssets);
+            LogEmitter.Apply(LogLevel.Information, "[Destory Independent Asset] [Name = {0}] [Type = {1}] from [{2}]", Name, Type, Package.Name);
+
+            asset.Instance = null;
+            asset.IsExisted = false;
+
+            return asset;
         }
 
-        internal AssetReference LoadIndependentReference(byte[] bytes, List<AssetReference> dependentAssets)
+        public AssetDescription(string name, string type, int size, 
+            AssetCreateFunction createFunction, 
+            AssetDestoryFunction destoryFunction, 
+            bool isKeepDependentAssets = false)
         {
-            return new AssetReference(this, ConvertBytesToInstance(bytes, dependentAssets), bytes.Length, false);
-        }
+            Name = name; Type = type; Size = size;
 
-        internal void UnLoad()
-        {
-            RuntimeException.Assert(instance != null && Reference == 0);
+            mInstance = null;
+            mCreateFunction = createFunction;
+            mDestoryFunction = destoryFunction;
 
-            DisposeInstance(ref instance);
-        }
-
-        internal void UnLoadIndependentReference(ref AssetReference independentReference)
-        {
-            RuntimeException.Assert(independentReference.IsReference == false && independentReference.Source == this);
-            RuntimeException.Assert(independentReference.Instance != null);
-
-            DisposeInstance(ref independentReference.instance);
-
-            independentReference = null;
-        }
-
-        public Asset(string name, int size = -1)
-        {
-            Name = name; Size = size; Reference = 0;
-            instance = null;
+            IsKeepDependentAssets = isKeepDependentAssets;
         }
     }
 }
