@@ -63,9 +63,13 @@
     <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent.cs" />
-    <Compile Include="Core\GameObject\Component\TransformComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\LabelVisualGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiStyle.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiSystem.cs" />
     <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="Runtime\Graphics\GraphicsInputLayout.cs" />
     <Compile Include="Runtime\Graphics\GraphicsPixelFormat.cs" />
     <Compile Include="Runtime\Graphics\GraphicsPixelShader.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsRasterizerState.cs" />
     <Compile Include="Runtime\Graphics\GraphicsRenderTarget.cs" />
     <Compile Include="Runtime\Graphics\GraphicsResource.cs" />
     <Compile Include="Runtime\Graphics\GraphicsShader.cs" />
@@ -102,6 +107,7 @@
     <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
     <Compile Include="Runtime\RuntimeException.cs" />
     <Compile Include="Runtime\Windows\EngineWindow.cs" />
+    <Compile Include="Structure\Color.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\Position.cs" />
     <Compile Include="Structure\Rectangle.cs" />

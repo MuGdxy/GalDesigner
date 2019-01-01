@@ -23,6 +23,16 @@ namespace GalEngine.Runtime.Graphics
             return (SharpDX.DXGI.Format)pixelFormat;
         }
 
+        public static SharpDX.Direct3D11.FillMode ToFillMode(FillMode fillMode)
+        {
+            return (SharpDX.Direct3D11.FillMode)fillMode;
+        }
+
+        public static SharpDX.Direct3D11.CullMode ToCullMode(CullMode cullMode)
+        {
+            return (SharpDX.Direct3D11.CullMode)cullMode;
+        }
+
         public static int SizeOfInBytes(PixelFormat pixelFormat)
         {
             return SharpDX.DXGI.FormatHelper.SizeOfInBytes(ToPixelFormat(pixelFormat));

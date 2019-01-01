@@ -200,6 +200,13 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.InputAssembler.PrimitiveTopology = GraphicsConvert.ToPrimitiveTopology(primitiveType);
         }
 
+        public void SetRasterizerState(GraphicsRasterizerState rasterizerState)
+        {
+            //set rasterizerState
+            //note: if you change the rasterizer state, you need to reset the state
+            ImmediateContext.Rasterizer.State = rasterizerState.RasterizerState;
+        }
+
         public void DrawIndexed(int indexCount, int startVertexLocation = 0, int baseVertexLocation = 0)
         {
             //draw indexed

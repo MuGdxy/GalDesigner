@@ -13,7 +13,7 @@ namespace GalEngine
         {
             //logic gui component is used for logic
             //if you do not have any logic requirement, you can set this logic gui component to object
-            //because gui behavior system requires at least two component to run(visual and logic gui component)
+            //because gui behavior system requires at least three component to run(visual, logic and transform gui component)
             BaseComponentType = typeof(LogicGuiComponent);
         }
     }
