@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsVertexShader : GraphicsShader
+    public class GraphicsVertexShader : GraphicsShader, IDisposable
     {
-        internal SharpDX.Direct3D11.VertexShader VertexShader { get; }
+        private SharpDX.Direct3D11.VertexShader mVertexShader;
+
+        internal SharpDX.Direct3D11.VertexShader VertexShader { get => mVertexShader; }
 
         public GraphicsVertexShader(GraphicsDevice device, byte[] byteCode) : base(device, byteCode)
         {
-            VertexShader = new SharpDX.Direct3D11.VertexShader(Device.Device, ByteCode);
+            mVertexShader = new SharpDX.Direct3D11.VertexShader(Device.Device, ByteCode);
         }
+
+        ~GraphicsVertexShader() => Dispose();
 
         public static byte[] Compile(byte[] byteCode, string entryPoint = "main")
         {
@@ -25,6 +29,11 @@ namespace GalEngine.Runtime.Graphics
             LogEmitter.Assert(result.HasErrors == false, LogLevel.Error, "[Compile Vertex Shader Failed] [Message = {0}]", result.Message);
 
             return result;
+        }
+
+        public void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref mVertexShader);
         }
     }
 }

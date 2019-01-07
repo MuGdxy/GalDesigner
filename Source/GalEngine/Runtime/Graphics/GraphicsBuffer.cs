@@ -16,7 +16,7 @@ namespace GalEngine.Runtime.Graphics
         {
             ElementSize = elementSize;
 
-            Resource = new SharpDX.Direct3D11.Buffer(Device.Device,
+            mResource = new SharpDX.Direct3D11.Buffer(Device.Device,
                 new SharpDX.Direct3D11.BufferDescription()
                 {
                     BindFlags = GraphicsConvert.ToBindFlags(BindType),

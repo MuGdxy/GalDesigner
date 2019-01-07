@@ -23,7 +23,7 @@ namespace GalEngine.Runtime.Graphics
 
             mRowPitch = width * GraphicsConvert.SizeOfInBytes(PixelFormat);
 
-            Resource = new SharpDX.Direct3D11.Texture2D(device.Device, new SharpDX.Direct3D11.Texture2DDescription()
+            mResource = new SharpDX.Direct3D11.Texture2D(device.Device, new SharpDX.Direct3D11.Texture2DDescription()
             {
                 ArraySize = 1,
                 BindFlags = GraphicsConvert.ToBindFlags(bindType),

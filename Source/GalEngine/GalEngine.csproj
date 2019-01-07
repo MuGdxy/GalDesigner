@@ -91,6 +91,7 @@
     <Compile Include="Runtime\Event\SizeChangeEvent.cs" />
     <Compile Include="Runtime\Event\UpdateEvent.cs" />
     <Compile Include="Runtime\Graphics\GraphicsAdapter.cs" />
+    <Compile Include="Runtime\Graphics\GraphicsBlendState.cs" />
     <Compile Include="Runtime\Graphics\GraphicsBuffer.cs" />
     <Compile Include="Runtime\Graphics\GraphicsConvert.cs" />
     <Compile Include="Runtime\Graphics\GraphicsDevice.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsSwapChain
+    public class GraphicsSwapChain : IDisposable
     {
         internal SharpDX.DXGI.SwapChain mSwapChain;
 
@@ -53,10 +53,17 @@ namespace GalEngine.Runtime.Graphics
                 RenderTarget = new GraphicsRenderTarget(device, this);
             }
         }
+
+        ~GraphicsSwapChain() => Dispose();
         
         public void Present(bool sync)
         {
             mSwapChain.Present(sync ? 1 : 0, SharpDX.DXGI.PresentFlags.None);
+        }
+
+        public void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref mSwapChain);
         }
     }
 }

@@ -21,13 +21,13 @@ namespace GalEngine.Runtime.Graphics
         VideoEncoder = 1024
     }
 
-    public abstract class GraphicsResource
+    public abstract class GraphicsResource : IDisposable
     {
-        private SharpDX.Direct3D11.Resource mResource;
+        protected SharpDX.Direct3D11.Resource mResource;
 
         protected GraphicsDevice Device { get; }
 
-        internal protected SharpDX.Direct3D11.Resource Resource { get => mResource; protected set => mResource = value; }
+        internal protected SharpDX.Direct3D11.Resource Resource { get => mResource; }
 
         public int Size { get; }
         public GraphicsResourceBindType BindType { get; }
@@ -38,14 +38,17 @@ namespace GalEngine.Runtime.Graphics
             BindType = bindType;
             Device = device;
 
-            Resource = null;
+            mResource = null;
         }
+
+        ~GraphicsResource() => Dispose();
 
         public abstract void Update<T>(T[] data) where T : struct;
         public abstract void Update(byte[] data);
 
-        ~GraphicsResource()
+        public void Dispose()
         {
+            //we can dispose it any times, because we only dispose resource really at the first time
             SharpDX.Utilities.Dispose(ref mResource);
         }
     }

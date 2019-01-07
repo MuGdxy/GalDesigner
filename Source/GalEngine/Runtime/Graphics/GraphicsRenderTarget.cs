@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsRenderTarget
+    public class GraphicsRenderTarget : IDisposable
     {
-        internal SharpDX.Direct3D11.RenderTargetView RenderTarget { get; }
+        private SharpDX.Direct3D11.RenderTargetView mRenderTarget;
+
+        internal SharpDX.Direct3D11.RenderTargetView RenderTarget { get => mRenderTarget; }
 
         public GraphicsRenderTarget(GraphicsDevice device, GraphicsSwapChain swapChain)
         {
@@ -24,7 +26,7 @@ namespace GalEngine.Runtime.Graphics
                  Dimension = SharpDX.Direct3D11.RenderTargetViewDimension.Texture2D
             };
 
-            RenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, backTexture, renderTargetDesc);
+            mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, backTexture, renderTargetDesc);
         }
 
         public GraphicsRenderTarget(GraphicsDevice device, GraphicsTexture texture)
@@ -40,7 +42,15 @@ namespace GalEngine.Runtime.Graphics
                 Dimension = SharpDX.Direct3D11.RenderTargetViewDimension.Texture2D
             };
 
-            RenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, texture.Resource, renderTargetDesc);
+            mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, texture.Resource, renderTargetDesc);
+        }
+
+        ~GraphicsRenderTarget() => Dispose();
+
+        public void Dispose()
+        {
+            //we can dispose it any times, because we only dispose resource really at the first time
+            SharpDX.Utilities.Dispose(ref mRenderTarget);
         }
     }
 }

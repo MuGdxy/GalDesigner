@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsShaderResource
+    public class GraphicsShaderResource : IDisposable
     {
-        internal SharpDX.Direct3D11.ShaderResourceView ShaderResource { get; }
+        private SharpDX.Direct3D11.ShaderResourceView mShaderResource;
 
-        public GraphicsShaderResource(GraphicsDevice device,GraphicsTexture texture)
+        internal SharpDX.Direct3D11.ShaderResourceView ShaderResource { get => mShaderResource; }
+
+        public GraphicsShaderResource(GraphicsDevice device, GraphicsTexture texture)
         {
             var shaderResourceDesc = new SharpDX.Direct3D11.ShaderResourceViewDescription()
             {
@@ -23,7 +25,14 @@ namespace GalEngine.Runtime.Graphics
                 Dimension = SharpDX.Direct3D.ShaderResourceViewDimension.Texture2D
             };
 
-            ShaderResource = new SharpDX.Direct3D11.ShaderResourceView(device.Device, texture.Resource, shaderResourceDesc);
+            mShaderResource = new SharpDX.Direct3D11.ShaderResourceView(device.Device, texture.Resource, shaderResourceDesc);
+        }
+
+        ~GraphicsShaderResource() => Dispose();
+
+        public void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref mShaderResource);
         }
     }
 }

@@ -6,16 +6,27 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsAdapter
+    public class GraphicsAdapter : IDisposable
     {
-        internal SharpDX.DXGI.Adapter Adapter { get; }
+        private SharpDX.DXGI.Adapter mAdapter;
+
+        internal SharpDX.DXGI.Adapter Adapter { get => mAdapter; }
 
         public string Description { get; }
 
         private GraphicsAdapter(string description, SharpDX.DXGI.Adapter adapter)
         {
             Description = description;
-            Adapter = adapter;
+
+            mAdapter = adapter;
+        }
+
+        ~GraphicsAdapter() => Dispose();
+
+        public void Dispose()
+        {
+            //we can dispose it any times, because we only dispose resource really at the first time
+            SharpDX.Utilities.Dispose(ref mAdapter);
         }
 
         public static List<GraphicsAdapter> EnumerateGraphicsAdapter()

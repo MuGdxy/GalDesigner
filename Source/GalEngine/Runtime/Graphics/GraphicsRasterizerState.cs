@@ -19,7 +19,7 @@ namespace GalEngine.Runtime.Graphics
         Back = 3
     }
 
-    public class GraphicsRasterizerState
+    public class GraphicsRasterizerState : IDisposable
     {
         private GraphicsDevice mDevice;
 
@@ -39,6 +39,8 @@ namespace GalEngine.Runtime.Graphics
                 mDescription = SharpDX.Direct3D11.RasterizerStateDescription.Default());
         }
 
+        ~GraphicsRasterizerState() => Dispose();
+
         public void SetFillMode(FillMode fillMode)
         {
             //note: each change we need to create rasterizer state again
@@ -57,6 +59,12 @@ namespace GalEngine.Runtime.Graphics
             SharpDX.Utilities.Dispose(ref mRasterizerState);
 
             mRasterizerState = new SharpDX.Direct3D11.RasterizerState(mDevice.Device, mDescription);
+        }
+
+        public void Dispose()
+        {
+            //we can dispose it any times, because we only dispose resource really at the first time
+            SharpDX.Utilities.Dispose(ref mRasterizerState);
         }
     }
 }

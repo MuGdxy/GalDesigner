@@ -8,16 +8,18 @@ namespace GalEngine.Runtime.Graphics
 {
     using Debug = System.Diagnostics.Debug;
 
-    public class GraphicsDevice
+    public class GraphicsDevice : IDisposable
     {
         private GraphicsVertexShader mVertexShader;
         private GraphicsPixelShader mPixelShader;
         private GraphicsInputLayout mInputLayout;
 
+        private SharpDX.Direct3D11.Device mDevice;
+        private SharpDX.Direct3D11.DeviceContext mImmediateContext;
         private SharpDX.Direct3D11.InputLayout mInputLayoutDirect3DVersion;
 
-        internal SharpDX.Direct3D11.Device Device { get; }
-        internal SharpDX.Direct3D11.DeviceContext ImmediateContext { get; }
+        internal SharpDX.Direct3D11.Device Device { get => mDevice; }
+        internal SharpDX.Direct3D11.DeviceContext ImmediateContext { get => mImmediateContext; }
         
         public GraphicsAdapter Adapter { get; }
 
@@ -46,12 +48,14 @@ namespace GalEngine.Runtime.Graphics
             };
 
             //create device with current adapter
-            Device = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
-            ImmediateContext = Device.ImmediateContext;
+            mDevice = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
+            mImmediateContext = Device.ImmediateContext;
 
             LogEmitter.Apply(LogLevel.Information, "[Initialize Graphics Device with {0}]", adapter.Description);
             LogEmitter.Apply(LogLevel.Information, "[Graphics Device Feature Level = {0}]", LogLevel.Information, Device.FeatureLevel);
         }
+
+        ~GraphicsDevice() => Dispose();
 
         public void Reset()
         {
@@ -200,6 +204,13 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.InputAssembler.PrimitiveTopology = GraphicsConvert.ToPrimitiveTopology(primitiveType);
         }
 
+        public void SetBlendState(GraphicsBlendState blendState)
+        {
+            //set blend state
+            //note: if you change the blend state, you need to reset the state
+            ImmediateContext.OutputMerger.BlendState = blendState.BlendState;
+        }
+
         public void SetRasterizerState(GraphicsRasterizerState rasterizerState)
         {
             //set rasterizerState
@@ -211,6 +222,14 @@ namespace GalEngine.Runtime.Graphics
         {
             //draw indexed
             ImmediateContext.DrawIndexed(indexCount, startVertexLocation, baseVertexLocation);
+        }
+
+        public void Dispose()
+        {
+            //we can dispose it any times, because we only dispose resource really at the first time
+            SharpDX.Utilities.Dispose(ref mInputLayoutDirect3DVersion);
+            SharpDX.Utilities.Dispose(ref mImmediateContext);
+            SharpDX.Utilities.Dispose(ref mDevice);
         }
     }
 }

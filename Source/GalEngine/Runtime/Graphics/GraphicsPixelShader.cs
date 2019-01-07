@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsPixelShader : GraphicsShader
+    public class GraphicsPixelShader : GraphicsShader, IDisposable
     {
-        internal SharpDX.Direct3D11.PixelShader PixelShader { get; }
+        private SharpDX.Direct3D11.PixelShader mPixelShader;
+
+        internal SharpDX.Direct3D11.PixelShader PixelShader { get => mPixelShader; }
 
         public GraphicsPixelShader(GraphicsDevice device, byte[] byteCode) : base(device, byteCode)
         {
-            PixelShader = new SharpDX.Direct3D11.PixelShader(Device.Device, ByteCode);
+            mPixelShader = new SharpDX.Direct3D11.PixelShader(Device.Device, ByteCode);
         }
+
+        ~GraphicsPixelShader() => Dispose();
 
         public static byte[] Compile(byte[] byteCode, string entryPoint = "main")
         {
@@ -25,6 +29,12 @@ namespace GalEngine.Runtime.Graphics
             LogEmitter.Assert(result.HasErrors == false,LogLevel.Error, "[Compile Pixel Shader Failed] [Message = {0}]", result.Message);
 
             return result;
+        }
+
+        public void Dispose()
+        {
+            //we can dispose it any times, because we only dispose resource really at the first time
+            SharpDX.Utilities.Dispose(ref mPixelShader);
         }
     }
 }

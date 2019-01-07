@@ -33,6 +33,16 @@ namespace GalEngine.Runtime.Graphics
             return (SharpDX.Direct3D11.CullMode)cullMode;
         }
 
+        public static SharpDX.Direct3D11.BlendOperation ToBlendOperation(BlendOperation blendOperation)
+        {
+            return (SharpDX.Direct3D11.BlendOperation)blendOperation;
+        }
+
+        public static SharpDX.Direct3D11.BlendOption ToBlendOption(BlendOption blendOption)
+        {
+            return (SharpDX.Direct3D11.BlendOption)blendOption;
+        }
+
         public static int SizeOfInBytes(PixelFormat pixelFormat)
         {
             return SharpDX.DXGI.FormatHelper.SizeOfInBytes(ToPixelFormat(pixelFormat));
