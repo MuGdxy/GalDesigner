@@ -30,7 +30,7 @@ namespace GalEngine.Runtime.Graphics
             Debug.Assert(size % elementSize == 0);
         }
 
-        public override void Update<T>(T[] data)
+        public override void Update<T>(params T[] data)
         {
             Debug.Assert(System.Runtime.InteropServices.Marshal.SizeOf<T>() == ElementSize);
             Debug.Assert(data.Length == Size / ElementSize);
@@ -38,7 +38,7 @@ namespace GalEngine.Runtime.Graphics
             Device.ImmediateContext.UpdateSubresource(data, Resource);
         }
 
-        public override void Update(byte[] data)
+        public override void Update(params byte[] data)
         {
             Debug.Assert(data.Length == Size);
 

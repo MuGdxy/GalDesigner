@@ -8,8 +8,8 @@ namespace GalEngine
 {
     public enum MouseButton
     {
-        Left,
-        Middle,
-        Right
+        Left = 0,
+        Middle = 1,
+        Right = 2
     }
 }

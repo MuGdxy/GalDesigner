@@ -12,6 +12,8 @@ namespace GalEngine.Runtime.Graphics
 
         internal SharpDX.Direct3D11.RenderTargetView RenderTarget { get => mRenderTarget; }
 
+        public Size<int> Size { get; private set; }
+        
         public GraphicsRenderTarget(GraphicsDevice device, GraphicsSwapChain swapChain)
         {
             //get back buffer and set render target desc
@@ -27,6 +29,9 @@ namespace GalEngine.Runtime.Graphics
             };
 
             mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, backTexture, renderTargetDesc);
+
+            //set size
+            Size = swapChain.Size;
         }
 
         public GraphicsRenderTarget(GraphicsDevice device, GraphicsTexture texture)
@@ -43,6 +48,9 @@ namespace GalEngine.Runtime.Graphics
             };
 
             mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, texture.Resource, renderTargetDesc);
+
+            //set size
+            Size = new Size<int>(texture.Width, texture.Height);
         }
 
         ~GraphicsRenderTarget() => Dispose();

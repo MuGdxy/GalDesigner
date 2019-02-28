@@ -38,12 +38,12 @@ namespace GalEngine.Runtime.Graphics
             });
         }
 
-        public override void Update<T>(T[] data)
+        public override void Update<T>(params T[] data)
         {
             Device.ImmediateContext.UpdateSubresource(data, Resource, 0, mRowPitch);
         }
 
-        public override void Update(byte[] data)
+        public override void Update(params byte[] data)
         {
             Device.ImmediateContext.UpdateSubresource(data, Resource, 0, mRowPitch);
         }

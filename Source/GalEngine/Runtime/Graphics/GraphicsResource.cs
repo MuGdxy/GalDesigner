@@ -43,8 +43,8 @@ namespace GalEngine.Runtime.Graphics
 
         ~GraphicsResource() => Dispose();
 
-        public abstract void Update<T>(T[] data) where T : struct;
-        public abstract void Update(byte[] data);
+        public abstract void Update<T>(params T[] data) where T : struct;
+        public abstract void Update(params byte[] data);
 
         public void Dispose()
         {
