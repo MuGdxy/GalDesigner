@@ -18,8 +18,8 @@ namespace GalEngine
             Name = name;
             IsActive = true;
         }
-
-        protected internal abstract void Excute(GameObject gameObject);
         
+        protected internal virtual void Update() { }
+        protected internal virtual void Excute(List<GameObject> passedGameObjectList) { }
     }
 }

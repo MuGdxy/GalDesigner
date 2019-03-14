@@ -41,7 +41,7 @@ namespace GalEngine.Runtime.Graphics
                 {
                     graphicsAdapters.Add(new GraphicsAdapter(adapter.Description.Description, adapter));
 
-                    LogEmitter.Apply(LogLevel.Information, "[Enumerate GraphicsAdapter] [{0}]", LogLevel.Information, adapter.Description.Description);
+                    LogEmitter.Apply(LogLevel.Information, "[Enumerate GraphicsAdapter] [{0}]", adapter.Description.Description);
                 }
             }
 

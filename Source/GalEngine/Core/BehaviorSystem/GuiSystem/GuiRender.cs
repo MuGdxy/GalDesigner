@@ -21,11 +21,15 @@ namespace GalEngine
         {
             public Matrix4x4 World;
             public Matrix4x4 Project;
+
+            public static int SizeInBytes => 128;
         }
 
         private struct RenderConfig
         {
             public Color<float> Color;
+
+            public static int SizeInBytes => 16;
         }
 
         private readonly GraphicsBlendState mBlendState;
@@ -39,6 +43,9 @@ namespace GalEngine
         private readonly GraphicsBuffer mSquareVertexBuffer;
         private readonly GraphicsBuffer mSquareIndexBuffer;
 
+        private readonly GraphicsBuffer mRectangleVertexBuffer;
+        private readonly GraphicsBuffer mRectangleIndexBuffer;
+
         //shader buffer and slot
         private readonly int mTransformBufferSlot;
         private readonly int mRenderConfigBufferSlot;
@@ -48,17 +55,17 @@ namespace GalEngine
 
         private Matrix4x4 mProject;
 
-        protected GraphicsDevice mDevice;
+        public GraphicsDevice Device { get; }
 
         public GuiRender(GraphicsDevice device)
         {
             //gui render is a simple render to render gui object
             //gui render can provide some simple object draw function
             //we can replace it to our render and we can use it in the gui system render function
-            mDevice = device;
+            Device = device;
 
             //init blend state
-            mBlendState = new GraphicsBlendState(mDevice, new RenderTargetBlendDescription()
+            mBlendState = new GraphicsBlendState(Device, new RenderTargetBlendDescription()
             {
                 AlphaBlendOperation = BlendOperation.Add,
                 BlendOperation = BlendOperation.Add,
@@ -69,23 +76,24 @@ namespace GalEngine
                 IsBlendEnable = true
             });
 
+            //init vertex shader, for all draw command we use same vertex shader
+            mVertexShader = new GraphicsVertexShader(Device, GraphicsVertexShader.Compile(Properties.Resources.GuiRenderCommonVertexShader));
+
+            //init pixel shader, we will choose the best pixel shader for different draw command
+            mColorPixelShader = new GraphicsPixelShader(Device, GraphicsPixelShader.Compile(Properties.Resources.GuiRenderColorPixelShader));
+
             //init input layout
             //Position : float3
             //Texcoord : float2
-            mInputLayout = new GraphicsInputLayout(new InputElement[]
+            mInputLayout = new GraphicsInputLayout(Device, new InputElement[]
             {
                 new InputElement("POSITION", 0, 12),
                 new InputElement("TEXCOORD", 0, 8)
-            });
+            }, mVertexShader);
 
-            //init vertex shader, for all draw command we use same vertex shader
-            mVertexShader = new GraphicsVertexShader(mDevice, Properties.Resources.GuiRenderCommonVertexShader);
-
-            //init pixel shader, we will choose the best pixel shader for different draw command
-            mColorPixelShader = new GraphicsPixelShader(mDevice, Properties.Resources.GuiRenderColorPixelShader);
 
             //init render object vertex buffer and index buffer
-            //init vertex data
+            //init square vertex data
             Vertex[] squareVertices = new Vertex[]
             {
                 new Vertex() { Position = new Vector3(0, 0, 0), TexCoord = new Vector2(0, 0) },
@@ -94,35 +102,52 @@ namespace GalEngine
                 new Vertex() { Position = new Vector3(1, 0, 0), TexCoord = new Vector2(1, 0) }
             };
 
-            //init index data
+            //init square index data
             uint[] squareIndices = new uint[] {0, 1, 2, 0, 2 ,3 };
 
-            //init buffer and update
-            mSquareVertexBuffer = new GraphicsBuffer(mDevice, squareVertices.Length *
-                System.Runtime.InteropServices.Marshal.SizeOf<Vertex>(),
-                System.Runtime.InteropServices.Marshal.SizeOf<Vertex>(),
+            //init square buffer and update
+            mSquareVertexBuffer = new GraphicsBuffer(Device,
+                squareVertices.Length * Utility.SizeOf<Vertex>(), Utility.SizeOf<Vertex>(),
                 GraphicsResourceBindType.VertexBufferr);
 
-            mSquareIndexBuffer = new GraphicsBuffer(mDevice, squareIndices.Length *
-                System.Runtime.InteropServices.Marshal.SizeOf<uint>(),
-                System.Runtime.InteropServices.Marshal.SizeOf<uint>(),
+            mSquareIndexBuffer = new GraphicsBuffer(Device,
+                squareIndices.Length * Utility.SizeOf<uint>(), Utility.SizeOf<uint>(),
                 GraphicsResourceBindType.IndexBuffer);
 
             mSquareVertexBuffer.Update(squareVertices);
             mSquareIndexBuffer.Update(squareIndices);
 
+            //init rectangle index data
+            uint[] rectangleIndices = new uint[] 
+            {
+                0, 4, 1, 1, 4, 5,
+                0, 3, 4, 3, 7, 4,
+                3, 6, 7, 2, 6, 3,
+                2, 1, 6, 1, 5, 6
+            };
+
+            //init rectangle vertex and index buffer
+            mRectangleVertexBuffer = new GraphicsBuffer(Device,
+                8 * Utility.SizeOf<Vertex>(), Utility.SizeOf<Vertex>(),
+                GraphicsResourceBindType.VertexBufferr);
+
+            mRectangleIndexBuffer = new GraphicsBuffer(Device,
+                24 * Utility.SizeOf<uint>(), Utility.SizeOf<uint>(),
+                GraphicsResourceBindType.IndexBuffer);
+
+            mRectangleIndexBuffer.Update(rectangleIndices);
+
+
             //init shader buffer
             mTransformBufferSlot = 0;
             mRenderConfigBufferSlot = 0;
 
-            mTransformBuffer = new GraphicsBuffer(mDevice, 
-                System.Runtime.InteropServices.Marshal.SizeOf<Transform>(),
-                System.Runtime.InteropServices.Marshal.SizeOf<Transform>(),
+            mTransformBuffer = new GraphicsBuffer(Device, 
+                Transform.SizeInBytes, Transform.SizeInBytes,
                 GraphicsResourceBindType.ConstantBuffer);
-
-            mRenderConfigBuffer = new GraphicsBuffer(mDevice,
-                System.Runtime.InteropServices.Marshal.SizeOf<RenderConfig>(),
-                System.Runtime.InteropServices.Marshal.SizeOf<RenderConfig>(),
+            
+            mRenderConfigBuffer = new GraphicsBuffer(Device,
+                RenderConfig.SizeInBytes, RenderConfig.SizeInBytes,
                 GraphicsResourceBindType.ConstantBuffer);
         }
 
@@ -131,29 +156,29 @@ namespace GalEngine
             //begin draw and we need set the render target before we draw anything
 
             //reset device and set render target
-            mDevice.Reset();
-            mDevice.SetRenderTarget(renderTarget);
+            Device.Reset();
+            Device.SetRenderTarget(renderTarget);
 
             //set blend state
-            mDevice.SetBlendState(mBlendState);
+            Device.SetBlendState(mBlendState);
 
             //set input layout ,vertex shader and primitive type
-            mDevice.SetInputLayout(mInputLayout);
-            mDevice.SetVertexShader(mVertexShader);
-            mDevice.SetPrimitiveType(PrimitiveType.TriangleList);
+            Device.SetInputLayout(mInputLayout);
+            Device.SetVertexShader(mVertexShader);
+            Device.SetPrimitiveType(PrimitiveType.TriangleList);
 
             //set view port
-            mDevice.SetViewPort(new Rectangle<float>(0, 0, renderTarget.Size.Width, renderTarget.Size.Height));
-
-            //set default vertex buffer and index buffer
-            //default object is square
-            mDevice.SetVertexBuffer(mSquareVertexBuffer);
-            mDevice.SetIndexBuffer(mSquareIndexBuffer);
+            Device.SetViewPort(new Rectangle<float>(0, 0, renderTarget.Size.Width, renderTarget.Size.Height));
 
             //set the project matrix, need set null when we end draw
             mProject = Matrix4x4.CreateOrthographic(
                 renderTarget.Size.Width,
                 renderTarget.Size.Height, 0, 1);
+        }
+
+        public virtual void EndDraw()
+        {
+            mProject = Matrix4x4.Identity;
         }
 
         public virtual void DrawLine(Position<float> start, Position<float> end, Color<float> color, 
@@ -185,18 +210,69 @@ namespace GalEngine
             mRenderConfigBuffer.Update(renderConfig);
 
             //set buffer and shader
-            mDevice.SetPixelShader(mColorPixelShader);
-            mDevice.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
-            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
+            Device.SetPixelShader(mColorPixelShader);
+            Device.SetVertexBuffer(mSquareVertexBuffer);
+            Device.SetIndexBuffer(mSquareIndexBuffer);
+
+            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
+            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
 
             //draw
-            mDevice.DrawIndexed(6, 0, 0);
+            Device.DrawIndexed(6, 0, 0);
         }
 
         public virtual void DrawRectangle(Rectangle<float> rectangle, Color<float> color, 
             float padding = 2.0f)
         {
+            //draw rectangle with color
+            //padding means the width of edge
+            //color.Alpha means the opacity of line
 
+            //read rectangle data
+            Rectangle<float> outSide = rectangle;
+
+            //inside rectangle will smaller than outside
+            Rectangle<float> inSide = new Rectangle<float>(
+                outSide.Left + padding, 
+                outSide.Top + padding,
+                outSide.Right - padding,
+                outSide.Bottom - padding);
+
+            //first, we need compute the vertex buffer for our rectangle
+            //we do not need tex coord of vertex
+            //we can compute the index buffer at init the render
+            Vertex[] vertics = new Vertex[]
+            {
+                new Vertex() { Position = new Vector3(outSide.Left,  outSide.Top, 0 ) },
+                new Vertex() { Position = new Vector3(outSide.Right, outSide.Top, 0) },
+                new Vertex() { Position = new Vector3(outSide.Right, outSide.Bottom, 0) },
+                new Vertex() { Position = new Vector3(outSide.Left,  outSide.Bottom, 0) },
+                new Vertex() { Position = new Vector3(inSide.Left,   inSide.Top, 0) },
+                new Vertex() { Position = new Vector3(inSide.Right,  inSide.Top, 0) },
+                new Vertex() { Position = new Vector3(inSide.Right,  inSide.Bottom, 0) },
+                new Vertex() { Position = new Vector3(inSide.Left,   inSide.Bottom, 0) }
+            };
+
+            //update vertex buffer
+            mRectangleVertexBuffer.Update(vertics);
+
+            //second, update constant buffer
+            Transform transform = new Transform() { World = Matrix4x4.Identity, Project = mProject };
+            RenderConfig renderConfig = new RenderConfig() { Color = color };
+
+            mTransformBuffer.Update(transform);
+            mRenderConfigBuffer.Update(renderConfig);
+
+            //set buffer and shader
+            Device.SetPixelShader(mColorPixelShader);
+            Device.SetVertexBuffer(mRectangleVertexBuffer);
+            Device.SetIndexBuffer(mRectangleIndexBuffer);
+
+            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
+            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
+
+            //draw
+            Device.DrawIndexed(24, 0, 0);
         }
     }
 }

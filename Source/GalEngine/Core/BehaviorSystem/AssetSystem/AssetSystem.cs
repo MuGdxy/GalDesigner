@@ -76,10 +76,5 @@ namespace GalEngine
         {
             return mAssetGraph.DestoryIndependentAsset(asset);
         }
-
-        protected internal override void Excute(GameObject gameObject)
-        {
-            
-        }
     }
 }

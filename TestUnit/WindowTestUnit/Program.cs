@@ -11,11 +11,8 @@ namespace WindowTestUnit
     class Program
     {
 
-        static void InitializeWindow()
+        static void InitializeWindowEvent()
         {
-            GameSystems.EngineWindow = new EngineWindow("WindowTestUnit", "", new Size<int>(1920, 1080));
-            GameSystems.EngineWindow.Show();
-
             GameSystems.EngineWindow.OnKeyBoardEvent += (object sender, KeyBoardEvent eventArg) =>
             {
                 LogEmitter.Apply(LogLevel.Information, "[KeyBoardEvent] [KeyCode = {0}] [State = {1}]",
@@ -45,10 +42,16 @@ namespace WindowTestUnit
         }
 
         static void Main(string[] args)
-        { 
-            GameSystems.Initialize();
+        {
+            GameSystems.Initialize(new GameStartInfo()
+            {
+                WindowName = "WindowTestUnit",
+                GameName = "WindowTestUnit",
+                IconName = "",
+                WindowSize = new Size<int>(1920, 1080)
+            });
 
-            InitializeWindow();
+            InitializeWindowEvent();
 
             GameSystems.RunLoop();
         }

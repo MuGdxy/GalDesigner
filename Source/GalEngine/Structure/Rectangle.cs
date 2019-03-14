@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class Rectangle<T>
+    public class Rectangle<T> 
     {
         public T Left { get; }
         public T Top { get; }
@@ -18,7 +18,7 @@ namespace GalEngine
             Left = left;
             Top = top;
             Right = right;
-            bottom = Bottom;
+            Bottom = bottom;
         }
     }
 }

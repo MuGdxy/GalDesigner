@@ -89,7 +89,13 @@ namespace AssetSystemTestUnit
 
         static void Main(string[] args)
         {
-            GameSystems.Initialize();
+            GameSystems.Initialize(new GameStartInfo()
+            {
+                WindowName = "AssetSystemTestUnit",
+                GameName = "AssetSystemTestUnit",
+                IconName = "",
+                WindowSize = new Size<int>(1920, 1080)
+            });
             
             InitializePackage();
 

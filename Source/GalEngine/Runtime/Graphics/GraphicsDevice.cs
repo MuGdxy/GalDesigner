@@ -16,8 +16,7 @@ namespace GalEngine.Runtime.Graphics
 
         private SharpDX.Direct3D11.Device mDevice;
         private SharpDX.Direct3D11.DeviceContext mImmediateContext;
-        private SharpDX.Direct3D11.InputLayout mInputLayoutDirect3DVersion;
-
+        
         internal SharpDX.Direct3D11.Device Device { get => mDevice; }
         internal SharpDX.Direct3D11.DeviceContext ImmediateContext { get => mImmediateContext; }
         
@@ -39,10 +38,9 @@ namespace GalEngine.Runtime.Graphics
 #else
             var creationFlags = SharpDX.Direct3D11.DeviceCreationFlags.None;
 #endif
-            //fetuares level: 10_1, 11_0, 12_0
-            var fetuares = new SharpDX.Direct3D.FeatureLevel[3]
+            //fetuares level: 11_0, 12_0
+            var fetuares = new SharpDX.Direct3D.FeatureLevel[2]
             {
-                 SharpDX.Direct3D.FeatureLevel.Level_10_1,
                  SharpDX.Direct3D.FeatureLevel.Level_11_0,
                  SharpDX.Direct3D.FeatureLevel.Level_12_0
             };
@@ -52,7 +50,7 @@ namespace GalEngine.Runtime.Graphics
             mImmediateContext = Device.ImmediateContext;
 
             LogEmitter.Apply(LogLevel.Information, "[Initialize Graphics Device with {0}]", adapter.Description);
-            LogEmitter.Apply(LogLevel.Information, "[Graphics Device Feature Level = {0}]", LogLevel.Information, Device.FeatureLevel);
+            LogEmitter.Apply(LogLevel.Information, "[Graphics Device Feature Level = {0}]", Device.FeatureLevel);
         }
 
         ~GraphicsDevice() => Dispose();
@@ -64,8 +62,6 @@ namespace GalEngine.Runtime.Graphics
             mVertexShader = null;
             mPixelShader = null;
             mInputLayout = null;
-
-            SharpDX.Utilities.Dispose(ref mInputLayoutDirect3DVersion);
 
             ImmediateContext.ClearState();
         }
@@ -106,19 +102,8 @@ namespace GalEngine.Runtime.Graphics
             //set input layout
             mInputLayout = inputLayout;
 
-            //dispose current input layout Direct3D instance
-            //because current input layout is out
-            SharpDX.Utilities.Dispose(ref mInputLayoutDirect3DVersion);
-
-            //if vertex shader is not null, we create a new input layout Direct3D instance
-            if (mVertexShader == null) return;
-
-            //create instance
-            mInputLayoutDirect3DVersion = new SharpDX.Direct3D11.InputLayout(Device,
-                mVertexShader.ByteCode, mInputLayout.InputElements);
-
             //set input layout Direct3D instance to pipeline
-            ImmediateContext.InputAssembler.InputLayout = mInputLayoutDirect3DVersion;
+            ImmediateContext.InputAssembler.InputLayout = mInputLayout.InputLayout;
         }
 
         public void SetVertexShader(GraphicsVertexShader vertexShader)
@@ -128,20 +113,6 @@ namespace GalEngine.Runtime.Graphics
 
             //set vertex shader Direct3D instance to pipeline
             ImmediateContext.VertexShader.SetShader(mVertexShader.VertexShader, null, 0);
-
-            //dispose current input layout Direct3D instance
-            //because current input layout is out
-            SharpDX.Utilities.Dispose(ref mInputLayoutDirect3DVersion);
-
-            //if input layout is not null, we create a new input layout Direct3D instance
-            if (mInputLayout == null) return;
-
-            //create instance
-            mInputLayoutDirect3DVersion = new SharpDX.Direct3D11.InputLayout(Device,
-                mVertexShader.ByteCode, mInputLayout.InputElements);
-
-            //set input layout Direct3D instance to pipeline
-            ImmediateContext.InputAssembler.InputLayout = mInputLayoutDirect3DVersion;
         }
 
         public void SetPixelShader(GraphicsPixelShader pixelShader)
@@ -227,7 +198,6 @@ namespace GalEngine.Runtime.Graphics
         public void Dispose()
         {
             //we can dispose it any times, because we only dispose resource really at the first time
-            SharpDX.Utilities.Dispose(ref mInputLayoutDirect3DVersion);
             SharpDX.Utilities.Dispose(ref mImmediateContext);
             SharpDX.Utilities.Dispose(ref mDevice);
         }

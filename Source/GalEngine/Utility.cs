@@ -17,5 +17,10 @@ namespace GalEngine
             Object.Dispose();
             Object = null;
         }
+
+        public static int SizeOf<T>()
+        {
+            return Marshal.SizeOf<T>();
+        }
     }
 }

@@ -29,8 +29,9 @@ namespace GalEngine.Runtime.Graphics
     public class GraphicsInputLayout
     {
         internal SharpDX.Direct3D11.InputElement[] InputElements { get; }
+        internal SharpDX.Direct3D11.InputLayout InputLayout { get; }
 
-        public GraphicsInputLayout(InputElement[] inputElements)
+        public GraphicsInputLayout(GraphicsDevice device, InputElement[] inputElements, GraphicsVertexShader vertexShader)
         {
             InputElements = new SharpDX.Direct3D11.InputElement[inputElements.Length];
 
@@ -64,6 +65,8 @@ namespace GalEngine.Runtime.Graphics
 
                 InputElements[i] = inputElement;
             }
+
+            InputLayout = new SharpDX.Direct3D11.InputLayout(device.Device, vertexShader.ByteCode, InputElements);
         }
     }
 }

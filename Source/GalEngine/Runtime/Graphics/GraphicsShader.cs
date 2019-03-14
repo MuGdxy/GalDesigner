@@ -17,7 +17,9 @@ namespace GalEngine.Runtime.Graphics
     public abstract class GraphicsShader
     {
 #if DEBUG
-        protected static SharpDX.D3DCompiler.ShaderFlags ShaderFlags => SharpDX.D3DCompiler.ShaderFlags.Debug;
+        protected static SharpDX.D3DCompiler.ShaderFlags ShaderFlags => 
+            SharpDX.D3DCompiler.ShaderFlags.Debug |
+            SharpDX.D3DCompiler.ShaderFlags.SkipOptimization;
 #else
          protected static SharpDX.D3DCompiler.ShaderFlags ShaderFlags => SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel2;
 #endif
