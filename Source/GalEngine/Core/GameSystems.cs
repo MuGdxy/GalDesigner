@@ -20,6 +20,7 @@ namespace GalEngine
     public static class GameSystems
     {
         private static PackageProvider PackageProvider { get; set; }
+        private static GuiControlProvider GuiControlProvider { get; set; }
         
         public static AssetSystem AssetSystem { get; private set; }
         public static GuiSystem GuiSystem { get; private set; }
@@ -35,30 +36,33 @@ namespace GalEngine
         public static string GameName { get; private set; }
         public static bool IsExist { get; set; }
         
-        private static void UpdateScene(GameScene scene)
+        private static void UpdateBehaviorSystem(BehaviorSystem system)
         {
-            //update main scene
-            scene?.Update(Time.DeltaSeconds);
+            if (system.IsActive == false) return;
 
-            //process sub system
-            foreach (var subSystem in BehaviorSystems)
+            //update system
+            system.Update();
+
+            //build scenes
+            GameScene[] scenes = new GameScene[2]
             {
+                SystemScene, MainScene
+            };
+
+            foreach (var scene in scenes)
+            {
+                if (scene == null) continue;
+
+                //create passed gameobject list
                 List<GameObject> passedGameObjects = new List<GameObject>();
 
-                //is active
-                if (subSystem.IsActive is false) continue;
-
-                //update sub system status
-                subSystem.Update();
-
-                //search node
                 void SearchNode(GameObject node, ref List<GameObject> passedList)
                 {
                     if (node is null) return;
 
                     //if node can not pass the requirement
                     //we will not to search the children of node
-                    if (subSystem.RequireComponents.IsPass(node) is false) return;
+                    if (system.RequireComponents.IsPass(node) is false) return;
 
                     passedList.Add(node);
 
@@ -66,9 +70,10 @@ namespace GalEngine
                         SearchNode(child, ref passedList);
                 }
 
-                SearchNode(scene?.Root, ref passedGameObjects);
+                foreach (var child in scene.Root.Children)
+                    SearchNode(child, ref passedGameObjects);
 
-                subSystem.Excute(passedGameObjects);
+                system.Excute(passedGameObjects);
             }
         }
 
@@ -98,6 +103,7 @@ namespace GalEngine
             SystemScene = new GameScene("SystemScene");
             
             SystemScene.AddGameObject(PackageProvider = new PackageProvider(StringProperty.PackageRoot, "Package"));
+            SystemScene.AddGameObject(GuiControlProvider = new GuiControlProvider(StringProperty.GuiControlRoot));
 
             InitializeRuntime(gameStartInfo);
 
@@ -115,8 +121,10 @@ namespace GalEngine
                 //update time
                 Time.Update();
 
-                UpdateScene(SystemScene);
-                UpdateScene(MainScene);
+                SystemScene?.Update(Time.DeltaSeconds);
+                MainScene?.Update(Time.DeltaSeconds);
+
+                foreach (var subSystem in BehaviorSystems) UpdateBehaviorSystem(subSystem);
 
                 if (EngineWindow != null && EngineWindow.IsExisted != false)
                     EngineWindow.Update(Time.DeltaSeconds);

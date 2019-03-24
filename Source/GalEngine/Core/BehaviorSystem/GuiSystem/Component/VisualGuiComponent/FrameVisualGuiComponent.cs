@@ -14,9 +14,7 @@ namespace GalEngine
 
         public FrameVisualGuiComponent(Size<float> size, Color<float> color, float padding = 2.0f)
         {
-            //frame visual gui component, it presents the rectangle frame
-            BaseComponentType = typeof(FrameVisualGuiComponent);
-
+            //frame visual gui component, it presents the rectangle 
             Size = size;
             Color = color;
             Padding = padding;

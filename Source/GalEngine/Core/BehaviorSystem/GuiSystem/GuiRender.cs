@@ -24,10 +24,19 @@ namespace GalEngine
 
             public static int SizeInBytes => 128;
         }
-
+        
         private struct RenderConfig
         {
-            public Color<float> Color;
+            private float mColorRed;
+            private float mColorGreen;
+            private float mColorBlue;
+            private float mColorAlpha;
+
+            public Color<float> Color
+            {
+                get { return new Color<float>(mColorRed, mColorGreen, mColorBlue, mColorAlpha); }
+                set { mColorRed = value.Red; mColorGreen = value.Green; mColorBlue = value.Blue; mColorAlpha = value.Alpha; }
+            }
 
             public static int SizeInBytes => 16;
         }
