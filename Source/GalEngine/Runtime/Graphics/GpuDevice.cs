@@ -8,21 +8,21 @@ namespace GalEngine.Runtime.Graphics
 {
     using Debug = System.Diagnostics.Debug;
 
-    public class GraphicsDevice : IDisposable
+    public class GpuDevice : IDisposable
     {
-        private GraphicsVertexShader mVertexShader;
-        private GraphicsPixelShader mPixelShader;
-        private GraphicsInputLayout mInputLayout;
+        private GpuVertexShader mVertexShader;
+        private GpuPixelShader mPixelShader;
+        private GpuInputLayout mInputLayout;
 
         private SharpDX.Direct3D11.Device mDevice;
         private SharpDX.Direct3D11.DeviceContext mImmediateContext;
-        
-        internal SharpDX.Direct3D11.Device Device { get => mDevice; }
-        internal SharpDX.Direct3D11.DeviceContext ImmediateContext { get => mImmediateContext; }
-        
-        public GraphicsAdapter Adapter { get; }
 
-        public GraphicsDevice(GraphicsAdapter adapter)
+        internal SharpDX.Direct3D11.Device Device => mDevice;
+        internal SharpDX.Direct3D11.DeviceContext ImmediateContext => mImmediateContext;
+        
+        public GpuAdapter Adapter { get; }
+
+        public GpuDevice(GpuAdapter adapter)
         {
             //set member to null
             mVertexShader = null;
@@ -44,16 +44,16 @@ namespace GalEngine.Runtime.Graphics
                  SharpDX.Direct3D.FeatureLevel.Level_11_0,
                  SharpDX.Direct3D.FeatureLevel.Level_12_0
             };
-
+            
             //create device with current adapter
             mDevice = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
             mImmediateContext = Device.ImmediateContext;
-
+            
             LogEmitter.Apply(LogLevel.Information, "[Initialize Graphics Device with {0}]", adapter.Description);
             LogEmitter.Apply(LogLevel.Information, "[Graphics Device Feature Level = {0}]", Device.FeatureLevel);
         }
 
-        ~GraphicsDevice() => Dispose();
+        ~GpuDevice() => Dispose();
 
         public void Reset()
         {
@@ -66,7 +66,7 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.ClearState();
         }
 
-        public void ClearRenderTarget(GraphicsRenderTarget renderTarget, Vector4<float> color)
+        public void ClearRenderTarget(GpuRenderTarget renderTarget, Vector4<float> color)
         {
             //clear render target using color
             //x = red, y = green, z = blue, w = alpha
@@ -91,13 +91,13 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.Rasterizer.SetViewport(viewPortF);
         }
 
-        public void SetRenderTarget(GraphicsRenderTarget renderTarget)
+        public void SetRenderTarget(GpuRenderTarget renderTarget)
         {
             //set render target
             ImmediateContext.OutputMerger.SetRenderTargets(renderTarget.RenderTarget);
         }
 
-        public void SetInputLayout(GraphicsInputLayout inputLayout)
+        public void SetInputLayout(GpuInputLayout inputLayout)
         {
             //set input layout
             mInputLayout = inputLayout;
@@ -106,7 +106,7 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.InputAssembler.InputLayout = mInputLayout.InputLayout;
         }
 
-        public void SetVertexShader(GraphicsVertexShader vertexShader)
+        public void SetVertexShader(GpuVertexShader vertexShader)
         {
             //set vertex shader
             mVertexShader = vertexShader;
@@ -115,7 +115,7 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.VertexShader.SetShader(mVertexShader.VertexShader, null, 0);
         }
 
-        public void SetPixelShader(GraphicsPixelShader pixelShader)
+        public void SetPixelShader(GpuPixelShader pixelShader)
         {
             //set pixel shader
             mPixelShader = pixelShader;
@@ -124,29 +124,43 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.PixelShader.SetShader(mPixelShader.PixelShader, null, 0);
         }
 
-        public void SetBuffer(GraphicsBuffer buffer, int register, ShaderType targetShader = ShaderType.VertexShaderAndPixelShader)
+        public void SetBuffer(GpuBuffer buffer, int register, ShaderType target = ShaderType.VertexShaderAndPixelShader)
         {
             //set buffer Direct3D instance to pipeline's shader
             //we use target shader to flag which shader the buffer will set to
 
             //test if the buffer can be set
-            Debug.Assert((buffer.BindType & GraphicsResourceBindType.ConstantBuffer) != GraphicsResourceBindType.None);
+            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, BindUsage.ConstantBuffer) == true);
 
             //we can use "&" to make sure if we need set buffer to vertex shader
-            if ((targetShader & ShaderType.VertexShader) != ShaderType.None)
+            if ((target & ShaderType.VertexShader) != ShaderType.None)
                 ImmediateContext.VertexShader.SetConstantBuffer(register, buffer.Resource as SharpDX.Direct3D11.Buffer);
 
             //we can use "&" to make sure if we need set buffer to pixel shader
-            if ((targetShader & ShaderType.PixelShader) != ShaderType.None)
+            if ((target & ShaderType.PixelShader) != ShaderType.None)
                 ImmediateContext.PixelShader.SetConstantBuffer(register, buffer.Resource as SharpDX.Direct3D11.Buffer);
         }
 
-        public void SetVertexBuffer(GraphicsBuffer buffer)
+        public void SetResourceUsage(GpuResourceUsage resourceUsage, int register, ShaderType target = ShaderType.VertexShaderAndPixelShader)
+        {
+            //set resource Direct3D instance to pipeline's shader
+            //we use target shader to flag which shader the resource will set to
+            
+            //we can use "&" to make sure if we need set buffer to vertex shader
+            if ((target & ShaderType.VertexShader) != ShaderType.None)
+                ImmediateContext.VertexShader.SetShaderResource(register, resourceUsage.ShaderResource);
+
+            //we can use "&" to make sure if we need set buffer to pixel shader
+            if ((target & ShaderType.PixelShader) != ShaderType.None)
+                ImmediateContext.PixelShader.SetShaderResource(register, resourceUsage.ShaderResource);
+        }
+
+        public void SetVertexBuffer(GpuBuffer buffer)
         {
             //set vertex buffer to input stage
 
             //test if the buffer can be set
-            Debug.Assert((buffer.BindType & GraphicsResourceBindType.VertexBufferr) != GraphicsResourceBindType.None);
+            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, BindUsage.VertexBufferr) == true);
 
             //create buffer binding
             var bufferBinding = new SharpDX.Direct3D11.VertexBufferBinding(
@@ -157,12 +171,12 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.InputAssembler.SetVertexBuffers(0, bufferBinding);
         }
 
-        public void SetIndexBuffer(GraphicsBuffer buffer)
+        public void SetIndexBuffer(GpuBuffer buffer)
         {
             //set index buffer to input stage
 
             //test if the buffer can be set
-            Debug.Assert((buffer.BindType & GraphicsResourceBindType.IndexBuffer) != GraphicsResourceBindType.None);
+            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, BindUsage.IndexBuffer) == true);
 
             //set index buffer
             ImmediateContext.InputAssembler.SetIndexBuffer(buffer.Resource as SharpDX.Direct3D11.Buffer,
@@ -172,17 +186,17 @@ namespace GalEngine.Runtime.Graphics
         public void SetPrimitiveType(PrimitiveType primitiveType)
         {
             //set primitive type
-            ImmediateContext.InputAssembler.PrimitiveTopology = GraphicsConvert.ToPrimitiveTopology(primitiveType);
+            ImmediateContext.InputAssembler.PrimitiveTopology = GpuConvert.ToPrimitiveType(primitiveType);
         }
 
-        public void SetBlendState(GraphicsBlendState blendState)
+        public void SetBlendState(GpuBlendState blendState)
         {
             //set blend state
             //note: if you change the blend state, you need to reset the state
             ImmediateContext.OutputMerger.BlendState = blendState.BlendState;
         }
 
-        public void SetRasterizerState(GraphicsRasterizerState rasterizerState)
+        public void SetRasterizerState(GpuRasterizerState rasterizerState)
         {
             //set rasterizerState
             //note: if you change the rasterizer state, you need to reset the state

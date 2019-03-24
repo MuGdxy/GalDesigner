@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum PrimitiveType
+    public enum PrimitiveType : uint
     {
         TriangleList = 4
     }
@@ -26,13 +26,18 @@ namespace GalEngine.Runtime.Graphics
         
     }
 
-    public class GraphicsInputLayout
+    public class GpuInputLayout : IDisposable
     {
-        internal SharpDX.Direct3D11.InputElement[] InputElements { get; }
-        internal SharpDX.Direct3D11.InputLayout InputLayout { get; }
+        private SharpDX.Direct3D11.InputLayout mInputLayout;
 
-        public GraphicsInputLayout(GraphicsDevice device, InputElement[] inputElements, GraphicsVertexShader vertexShader)
+        protected GpuDevice GpuDevice { get; }
+
+        internal SharpDX.Direct3D11.InputElement[] InputElements { get; }
+        internal SharpDX.Direct3D11.InputLayout InputLayout => mInputLayout;
+
+        public GpuInputLayout(GpuDevice device, InputElement[] inputElements, GpuVertexShader vertexShader)
         {
+            GpuDevice = device;
             InputElements = new SharpDX.Direct3D11.InputElement[inputElements.Length];
 
             for (int i = 0; i < InputElements.Length; i++)
@@ -66,7 +71,14 @@ namespace GalEngine.Runtime.Graphics
                 InputElements[i] = inputElement;
             }
 
-            InputLayout = new SharpDX.Direct3D11.InputLayout(device.Device, vertexShader.ByteCode, InputElements);
+            mInputLayout = new SharpDX.Direct3D11.InputLayout(GpuDevice.Device, vertexShader.ByteCode, InputElements);
+        }
+
+        ~GpuInputLayout() => Dispose();
+
+        public void Dispose()
+        {
+            SharpDX.Utilities.Dispose(ref mInputLayout);
         }
     }
 }

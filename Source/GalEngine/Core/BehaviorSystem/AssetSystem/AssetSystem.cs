@@ -17,7 +17,7 @@ namespace GalEngine
             mAssetGraph = new AssetGraph();
         }
 
-        public void AddAssetDescription(PackageProvider package, AssetDescription description)
+        public void AddAssetDescription(Package package, AssetDescription description)
         {
             package.AddAssetDescription(description);
 

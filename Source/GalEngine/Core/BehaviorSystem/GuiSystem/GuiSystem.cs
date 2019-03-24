@@ -9,14 +9,14 @@ namespace GalEngine
 {
     public class GuiSystem : BehaviorSystem
     {
-        private GraphicsRenderTarget mRenderTarget;
-        private GraphicsTexture mRenderCanvas;
+        private GpuRenderTarget mRenderTarget;
+        private GpuTexture2D mRenderCanvas;
 
         private GuiRender mRender;
 
         public Rectangle<int> Area { get; set; }
 
-        public GuiSystem(GraphicsDevice device, Rectangle<int> area) : base("GuiSystem")
+        public GuiSystem(GpuDevice device, Rectangle<int> area) : base("GuiSystem")
         {
             RequireComponents.AddRequireComponentType<TransformGuiComponent>();
             RequireComponents.AddRequireComponentType<VisualGuiComponent>();
@@ -26,27 +26,31 @@ namespace GalEngine
 
             Area = area;
 
-            mRenderCanvas = new GraphicsTexture(mRender.Device,
-                Area.Right - Area.Left, Area.Bottom - Area.Top,
-                PixelFormat.R8G8B8A8Unknown, GraphicsResourceBindType.RenderTarget);
+            mRenderCanvas = new GpuTexture2D(
+                new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
+                PixelFormat.R8G8B8A8Unknown,
+                mRender.Device,
+                new GpuResourceInfo(BindUsage.ShaderResource | BindUsage.RenderTarget));
 
-            mRenderTarget = new GraphicsRenderTarget(mRender.Device, mRenderCanvas);
+            mRenderTarget = new GpuRenderTarget(mRender.Device, mRenderCanvas);
         }
 
         protected internal override void Update()
         {
             //update the render area, we need to update the canvas and render target
             //if the area's size is not equal the canvas's size
-            if (mRenderCanvas.Width != Area.Right - Area.Left || 
-                mRenderCanvas.Height != Area.Bottom - Area.Top)
+            if (mRenderCanvas.Size.Width != Area.Right - Area.Left ||
+                mRenderCanvas.Size.Height != Area.Bottom - Area.Top)
             {
                 //update canvas
-                mRenderCanvas = new GraphicsTexture(mRender.Device,
-                    Area.Right - Area.Left, Area.Bottom - Area.Top,
-                    PixelFormat.R8G8B8A8Unknown, GraphicsResourceBindType.RenderTarget);
+                mRenderCanvas = new GpuTexture2D(
+                    new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
+                    PixelFormat.R8G8B8A8Unknown,
+                    mRender.Device,
+                    new GpuResourceInfo(BindUsage.ShaderResource | BindUsage.RenderTarget));
 
                 //update render target
-                mRenderTarget = new GraphicsRenderTarget(mRender.Device, mRenderCanvas);
+                mRenderTarget = new GpuRenderTarget(mRender.Device, mRenderCanvas);
             }
         }
 

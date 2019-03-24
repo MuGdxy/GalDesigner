@@ -41,32 +41,32 @@ namespace GalEngine
             public static int SizeInBytes => 16;
         }
 
-        private readonly GraphicsBlendState mBlendState;
-        private readonly GraphicsInputLayout mInputLayout;
-        private readonly GraphicsVertexShader mVertexShader;
+        private readonly GpuBlendState mBlendState;
+        private readonly GpuInputLayout mInputLayout;
+        private readonly GpuVertexShader mVertexShader;
 
         //pixel shader
-        private readonly GraphicsPixelShader mColorPixelShader;
+        private readonly GpuPixelShader mColorPixelShader;
 
         //render object vertex buffer and index buffer
-        private readonly GraphicsBuffer mSquareVertexBuffer;
-        private readonly GraphicsBuffer mSquareIndexBuffer;
+        private readonly GpuBuffer mSquareVertexBuffer;
+        private readonly GpuBuffer mSquareIndexBuffer;
 
-        private readonly GraphicsBuffer mRectangleVertexBuffer;
-        private readonly GraphicsBuffer mRectangleIndexBuffer;
+        private readonly GpuBuffer mRectangleVertexBuffer;
+        private readonly GpuBuffer mRectangleIndexBuffer;
 
         //shader buffer and slot
         private readonly int mTransformBufferSlot;
         private readonly int mRenderConfigBufferSlot;
 
-        private readonly GraphicsBuffer mTransformBuffer;
-        private readonly GraphicsBuffer mRenderConfigBuffer;
+        private readonly GpuBuffer mTransformBuffer;
+        private readonly GpuBuffer mRenderConfigBuffer;
 
         private Matrix4x4 mProject;
 
-        public GraphicsDevice Device { get; }
+        public GpuDevice Device { get; }
 
-        public GuiRender(GraphicsDevice device)
+        public GuiRender(GpuDevice device)
         {
             //gui render is a simple render to render gui object
             //gui render can provide some simple object draw function
@@ -74,7 +74,7 @@ namespace GalEngine
             Device = device;
 
             //init blend state
-            mBlendState = new GraphicsBlendState(Device, new RenderTargetBlendDescription()
+            mBlendState = new GpuBlendState(Device, new RenderTargetBlendDescription()
             {
                 AlphaBlendOperation = BlendOperation.Add,
                 BlendOperation = BlendOperation.Add,
@@ -86,15 +86,15 @@ namespace GalEngine
             });
 
             //init vertex shader, for all draw command we use same vertex shader
-            mVertexShader = new GraphicsVertexShader(Device, GraphicsVertexShader.Compile(Properties.Resources.GuiRenderCommonVertexShader));
+            mVertexShader = new GpuVertexShader(Device, GpuVertexShader.Compile(Properties.Resources.GuiRenderCommonVertexShader));
 
             //init pixel shader, we will choose the best pixel shader for different draw command
-            mColorPixelShader = new GraphicsPixelShader(Device, GraphicsPixelShader.Compile(Properties.Resources.GuiRenderColorPixelShader));
+            mColorPixelShader = new GpuPixelShader(Device, GpuPixelShader.Compile(Properties.Resources.GuiRenderColorPixelShader));
 
             //init input layout
             //Position : float3
             //Texcoord : float2
-            mInputLayout = new GraphicsInputLayout(Device, new InputElement[]
+            mInputLayout = new GpuInputLayout(Device, new InputElement[]
             {
                 new InputElement("POSITION", 0, 12),
                 new InputElement("TEXCOORD", 0, 8)
@@ -115,13 +115,17 @@ namespace GalEngine
             uint[] squareIndices = new uint[] {0, 1, 2, 0, 2 ,3 };
 
             //init square buffer and update
-            mSquareVertexBuffer = new GraphicsBuffer(Device,
-                squareVertices.Length * Utility.SizeOf<Vertex>(), Utility.SizeOf<Vertex>(),
-                GraphicsResourceBindType.VertexBufferr);
+            mSquareVertexBuffer = new GpuBuffer(
+                Utility.SizeOf<Vertex>() * squareVertices.Length,
+                Utility.SizeOf<Vertex>() * 1,
+                Device,
+                GpuResourceInfo.VertexBuffer());
 
-            mSquareIndexBuffer = new GraphicsBuffer(Device,
-                squareIndices.Length * Utility.SizeOf<uint>(), Utility.SizeOf<uint>(),
-                GraphicsResourceBindType.IndexBuffer);
+            mSquareIndexBuffer = new GpuBuffer(
+                Utility.SizeOf<uint>() * squareIndices.Length,
+                Utility.SizeOf<uint>() * 1,
+                Device, 
+                GpuResourceInfo.IndexBuffer());
 
             mSquareVertexBuffer.Update(squareVertices);
             mSquareIndexBuffer.Update(squareIndices);
@@ -136,13 +140,17 @@ namespace GalEngine
             };
 
             //init rectangle vertex and index buffer
-            mRectangleVertexBuffer = new GraphicsBuffer(Device,
-                8 * Utility.SizeOf<Vertex>(), Utility.SizeOf<Vertex>(),
-                GraphicsResourceBindType.VertexBufferr);
+            mRectangleVertexBuffer = new GpuBuffer(
+                Utility.SizeOf<Vertex>() * 8,
+                Utility.SizeOf<Vertex>() * 1,
+                Device,
+                GpuResourceInfo.VertexBuffer());
 
-            mRectangleIndexBuffer = new GraphicsBuffer(Device,
-                24 * Utility.SizeOf<uint>(), Utility.SizeOf<uint>(),
-                GraphicsResourceBindType.IndexBuffer);
+            mRectangleIndexBuffer = new GpuBuffer(
+                Utility.SizeOf<uint>() * 24, 
+                Utility.SizeOf<uint>() * 1,
+                Device,
+                GpuResourceInfo.IndexBuffer());
 
             mRectangleIndexBuffer.Update(rectangleIndices);
 
@@ -151,16 +159,20 @@ namespace GalEngine
             mTransformBufferSlot = 0;
             mRenderConfigBufferSlot = 0;
 
-            mTransformBuffer = new GraphicsBuffer(Device, 
-                Transform.SizeInBytes, Transform.SizeInBytes,
-                GraphicsResourceBindType.ConstantBuffer);
+            mTransformBuffer = new GpuBuffer(
+                Transform.SizeInBytes, 
+                Transform.SizeInBytes,
+                Device,
+                GpuResourceInfo.ConstantBuffer());
             
-            mRenderConfigBuffer = new GraphicsBuffer(Device,
-                RenderConfig.SizeInBytes, RenderConfig.SizeInBytes,
-                GraphicsResourceBindType.ConstantBuffer);
+            mRenderConfigBuffer = new GpuBuffer(
+                RenderConfig.SizeInBytes, 
+                RenderConfig.SizeInBytes,
+                Device,
+                GpuResourceInfo.ConstantBuffer());
         }
 
-        public virtual void BeginDraw(GraphicsRenderTarget renderTarget)
+        public virtual void BeginDraw(GpuRenderTarget renderTarget)
         {
             //begin draw and we need set the render target before we draw anything
 

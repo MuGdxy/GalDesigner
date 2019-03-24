@@ -46,7 +46,7 @@ namespace GalEngine
         public int Reference { get; private set; }
         public bool IsKeepDependentAssets { get; }
 
-        public PackageProvider Package { get; internal set; }
+        public Package Package { get; internal set; }
 
         internal Asset IncreaseAssetReference(byte[] bytes, List<Asset> dependentAssets)
         {

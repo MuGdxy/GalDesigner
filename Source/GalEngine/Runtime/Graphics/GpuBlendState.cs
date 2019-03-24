@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum BlendOperation
+    public enum BlendOperation : uint
     {
         Add = 1,
         Subtract = 2,
@@ -15,7 +15,7 @@ namespace GalEngine.Runtime.Graphics
         Maximum = 5
     }
 
-    public enum BlendOption
+    public enum BlendOption : uint
     {
         Zero = 1,
         One = 2,
@@ -59,45 +59,45 @@ namespace GalEngine.Runtime.Graphics
     }
 
 
-    public class GraphicsBlendState : IDisposable
+    public class GpuBlendState : IDisposable
     {
-        private GraphicsDevice mDevice;
-
         private SharpDX.Direct3D11.BlendState mBlendState;
         private SharpDX.Direct3D11.BlendStateDescription mDescription;
 
+        protected GpuDevice GpuDevice { get; }
+
         internal SharpDX.Direct3D11.BlendState BlendState { get => mBlendState; }
 
-        public GraphicsBlendState(GraphicsDevice device)
+        public GpuBlendState(GpuDevice device)
         {
-            mDevice = device;
+            GpuDevice = device;
 
-            mBlendState = new SharpDX.Direct3D11.BlendState(mDevice.Device,
+            mBlendState = new SharpDX.Direct3D11.BlendState(GpuDevice.Device,
                 mDescription = SharpDX.Direct3D11.BlendStateDescription.Default());
         }
 
-        public GraphicsBlendState(GraphicsDevice device, RenderTargetBlendDescription description)
+        public GpuBlendState(GpuDevice device, RenderTargetBlendDescription description)
         {
-            mDevice = device;
+            GpuDevice = device;
 
             mDescription = SharpDX.Direct3D11.BlendStateDescription.Default();
 
             mDescription.RenderTarget[0] = new SharpDX.Direct3D11.RenderTargetBlendDescription()
             {
                 IsBlendEnabled = description.IsBlendEnable,
-                SourceBlend = GraphicsConvert.ToBlendOption(description.SourceBlend),
-                DestinationBlend = GraphicsConvert.ToBlendOption(description.DestinationBlend),
-                BlendOperation = GraphicsConvert.ToBlendOperation(description.BlendOperation),
-                SourceAlphaBlend = GraphicsConvert.ToBlendOption(description.SourceAlphaBlend),
-                DestinationAlphaBlend = GraphicsConvert.ToBlendOption(description.DestinationAlphaBlend),
-                AlphaBlendOperation = GraphicsConvert.ToBlendOperation(description.AlphaBlendOperation),
+                SourceBlend = GpuConvert.ToBlendOption(description.SourceBlend),
+                DestinationBlend = GpuConvert.ToBlendOption(description.DestinationBlend),
+                BlendOperation = GpuConvert.ToBlendOperation(description.BlendOperation),
+                SourceAlphaBlend = GpuConvert.ToBlendOption(description.SourceAlphaBlend),
+                DestinationAlphaBlend = GpuConvert.ToBlendOption(description.DestinationAlphaBlend),
+                AlphaBlendOperation = GpuConvert.ToBlendOperation(description.AlphaBlendOperation),
                 RenderTargetWriteMask = SharpDX.Direct3D11.ColorWriteMaskFlags.All
             };
 
-            mBlendState = new SharpDX.Direct3D11.BlendState(mDevice.Device, mDescription);
+            mBlendState = new SharpDX.Direct3D11.BlendState(GpuDevice.Device, mDescription);
         }
 
-        ~GraphicsBlendState() => Dispose();
+        ~GpuBlendState() => Dispose();
 
         public void Dispose()
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class PackageProvider : GameObject
+    public class Package : GameObject
     {
         private PackageComponent mPackageComponent;
         
@@ -61,7 +61,7 @@ namespace GalEngine
             mPackageComponent.RemoveAssetDescription(description);
         }
 
-        public PackageProvider(string name, string path) : base(name)
+        public Package(string name, string path) : base(name)
         {
             AddComponent(mPackageComponent = new PackageComponent());
             
@@ -77,9 +77,9 @@ namespace GalEngine
 
         public string GetFullPath()
         {
-            if (Parent.GetType() != typeof(PackageProvider)) return Path;
+            if (Parent.GetType() != typeof(Package)) return Path;
 
-            return (Parent as PackageProvider)?.GetFullPath() + "/" + Path;
+            return (Parent as Package)?.GetFullPath() + "/" + Path;
         }
     }
 }

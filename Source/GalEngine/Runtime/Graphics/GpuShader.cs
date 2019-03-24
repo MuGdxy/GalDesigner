@@ -14,7 +14,7 @@ namespace GalEngine.Runtime.Graphics
         VertexShaderAndPixelShader = 3
     }
 
-    public abstract class GraphicsShader
+    public abstract class GpuShader
     {
 #if DEBUG
         protected static SharpDX.D3DCompiler.ShaderFlags ShaderFlags => 
@@ -23,14 +23,14 @@ namespace GalEngine.Runtime.Graphics
 #else
          protected static SharpDX.D3DCompiler.ShaderFlags ShaderFlags => SharpDX.D3DCompiler.ShaderFlags.OptimizationLevel2;
 #endif
-        protected GraphicsDevice Device { get; }
+        protected GpuDevice GpuDevice { get; }
         
-        public byte[] ByteCode { get; private set; }
+        public byte[] ByteCode { get; }
 
-        public GraphicsShader(GraphicsDevice device, byte[] byteCode)
+        public GpuShader(GpuDevice device, byte[] byteCode)
         {
             ByteCode = byteCode;
-            Device = device;
+            GpuDevice = device;
         }
     }
 }

@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsVertexShader : GraphicsShader, IDisposable
+    public class GpuVertexShader : GpuShader, IDisposable
     {
         private SharpDX.Direct3D11.VertexShader mVertexShader;
 
-        internal SharpDX.Direct3D11.VertexShader VertexShader { get => mVertexShader; }
+        internal SharpDX.Direct3D11.VertexShader VertexShader => mVertexShader;
 
-        public GraphicsVertexShader(GraphicsDevice device, byte[] byteCode) : base(device, byteCode)
+        public GpuVertexShader(GpuDevice device, byte[] byteCode) : base(device, byteCode)
         {
-            mVertexShader = new SharpDX.Direct3D11.VertexShader(Device.Device, ByteCode);
+            mVertexShader = new SharpDX.Direct3D11.VertexShader(GpuDevice.Device, ByteCode);
         }
 
-        ~GraphicsVertexShader() => Dispose();
+        ~GpuVertexShader() => Dispose();
 
         public static byte[] Compile(byte[] byteCode, string entryPoint = "main")
         {
