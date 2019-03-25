@@ -10,12 +10,12 @@ namespace GalEngine.Runtime.Graphics
     {
         private int mRowPitch;
 
-        public PixelFormat PixelFormat { get; }
+        public GpuPixelFormat PixelFormat { get; }
         public Size<int> Size { get; }
 
         public GpuTexture2D(
             Size<int> size,
-            PixelFormat pixelFormat, 
+            GpuPixelFormat pixelFormat, 
             GpuDevice device,
             GpuResourceInfo resourceInfo) :
             base(device, size.Width * size.Height * GpuConvert.SizeOfInBytes(pixelFormat), resourceInfo)

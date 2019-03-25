@@ -33,7 +33,6 @@ namespace GuiSystemTestUnit
                 IconName = "",
                 WindowSize = new Size<int>(1920, 1080)
             });
-
             GameSystems.SystemScene.Root.GetChild(StringProperty.GuiControlRoot).AddChild(
                 new SimpleGuiObject(
                     new Position<float>(),

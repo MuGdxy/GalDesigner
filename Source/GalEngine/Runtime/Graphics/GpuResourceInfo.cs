@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum CpuAccessFlag
+    public enum GpuCpuAccessFlag
     {
         None = 0,
         Read = 1,
         Write = 2
     }
 
-    public enum BindUsage
+    public enum GpuBindUsage
     {
         None = 0,
         VertexBufferr = 1,
@@ -28,7 +28,7 @@ namespace GalEngine.Runtime.Graphics
         VideoEncoder = 1024
     }
 
-   public enum HeapType
+   public enum GpuHeapType
     {
         Default = 0,
         Immutable = 1,
@@ -38,14 +38,14 @@ namespace GalEngine.Runtime.Graphics
 
     public class GpuResourceInfo
     {
-        public CpuAccessFlag CpuAccessFlag { get; }
-        public BindUsage BindUsage { get; }
-        public HeapType HeapType { get; }
+        public GpuCpuAccessFlag CpuAccessFlag { get; }
+        public GpuBindUsage BindUsage { get; }
+        public GpuHeapType HeapType { get; }
 
         public GpuResourceInfo(
-            BindUsage bindUsage,
-            CpuAccessFlag cpuAccessFlag = CpuAccessFlag.None,
-            HeapType heapType = HeapType.Default)
+            GpuBindUsage bindUsage,
+            GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
+            GpuHeapType heapType = GpuHeapType.Default)
         {
             BindUsage = bindUsage;
             CpuAccessFlag = cpuAccessFlag;
@@ -53,23 +53,23 @@ namespace GalEngine.Runtime.Graphics
         }
 
         public static GpuResourceInfo ConstantBuffer(
-            CpuAccessFlag cpuAccessFlag = CpuAccessFlag.None,
-            HeapType heapType = HeapType.Default) 
-            => new GpuResourceInfo(BindUsage.ConstantBuffer, cpuAccessFlag, heapType);
+            GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
+            GpuHeapType heapType = GpuHeapType.Default) 
+            => new GpuResourceInfo(GpuBindUsage.ConstantBuffer, cpuAccessFlag, heapType);
 
         public static GpuResourceInfo VertexBuffer(
-            CpuAccessFlag cpuAccessFlag = CpuAccessFlag.None,
-            HeapType heapType = HeapType.Default)
-            => new GpuResourceInfo(BindUsage.VertexBufferr, cpuAccessFlag, heapType);
+            GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
+            GpuHeapType heapType = GpuHeapType.Default)
+            => new GpuResourceInfo(GpuBindUsage.VertexBufferr, cpuAccessFlag, heapType);
 
         public static GpuResourceInfo IndexBuffer(
-            CpuAccessFlag cpuAccessFlag = CpuAccessFlag.None,
-            HeapType heapType = HeapType.Default)
-            => new GpuResourceInfo(BindUsage.IndexBuffer, cpuAccessFlag, heapType);
+            GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
+            GpuHeapType heapType = GpuHeapType.Default)
+            => new GpuResourceInfo(GpuBindUsage.IndexBuffer, cpuAccessFlag, heapType);
 
         public static GpuResourceInfo ShaderResource(
-            CpuAccessFlag cpuAccessFlag = CpuAccessFlag.None,
-            HeapType heapType = HeapType.Default)
-            => new GpuResourceInfo(BindUsage.ShaderResource, cpuAccessFlag, heapType);
+            GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
+            GpuHeapType heapType = GpuHeapType.Default)
+            => new GpuResourceInfo(GpuBindUsage.ShaderResource, cpuAccessFlag, heapType);
     }
 }

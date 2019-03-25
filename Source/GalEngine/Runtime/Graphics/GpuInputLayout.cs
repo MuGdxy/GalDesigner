@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum PrimitiveType : uint
+    public enum GpuPrimitiveType : uint
     {
         TriangleList = 4
     }

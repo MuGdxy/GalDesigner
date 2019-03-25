@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum FillMode : uint
+    public enum GpuFillMode : uint
     {
         Wireframe = 2,
         Solid = 3
     }
 
-    public enum CullMode : uint
+    public enum GpuCullMode : uint
     {
         None = 1,
         Front = 2,
@@ -28,8 +28,8 @@ namespace GalEngine.Runtime.Graphics
 
         internal SharpDX.Direct3D11.RasterizerState RasterizerState { get => mRasterizerState; }
 
-        public FillMode FillMode { get; }
-        public CullMode CullMode { get; }
+        public GpuFillMode FillMode { get; }
+        public GpuCullMode CullMode { get; }
 
         public GpuRasterizerState(GpuDevice device)
         {

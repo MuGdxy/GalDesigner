@@ -20,6 +20,7 @@ namespace GalEngine
         }
         
         protected internal virtual void Update() { }
+        protected internal virtual void Present(PresentRender render) { }
         protected internal virtual void Excute(List<GameObject> passedGameObjectList) { }
     }
 }

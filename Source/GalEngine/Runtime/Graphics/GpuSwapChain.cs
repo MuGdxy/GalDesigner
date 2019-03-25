@@ -15,13 +15,13 @@ namespace GalEngine.Runtime.Graphics
         internal SharpDX.DXGI.SwapChain SwapChain => mSwapChain;
 
         public Size<int> Size { get; }
-        public PixelFormat PixelFormat { get; }
+        public GpuPixelFormat PixelFormat { get; }
         public GpuRenderTarget RenderTarget { get; }
 
         public GpuSwapChain(
             IntPtr handle, 
             Size<int> size, 
-            PixelFormat pixelFormat,
+            GpuPixelFormat pixelFormat,
             GpuDevice device)
         {
             //size property

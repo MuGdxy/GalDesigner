@@ -79,5 +79,35 @@ namespace GalEngine.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PresentDrawPixelShader {
+            get {
+                object obj = ResourceManager.GetObject("PresentDrawPixelShader", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PresentMaskPixelShader {
+            get {
+                object obj = ResourceManager.GetObject("PresentMaskPixelShader", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PresentVertexShader {
+            get {
+                object obj = ResourceManager.GetObject("PresentVertexShader", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

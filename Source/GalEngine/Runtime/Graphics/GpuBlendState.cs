@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum BlendOperation : uint
+    public enum GpuBlendOperation : uint
     {
         Add = 1,
         Subtract = 2,
@@ -15,7 +15,7 @@ namespace GalEngine.Runtime.Graphics
         Maximum = 5
     }
 
-    public enum BlendOption : uint
+    public enum GpuBlendOption : uint
     {
         Zero = 1,
         One = 2,
@@ -39,22 +39,22 @@ namespace GalEngine.Runtime.Graphics
     public class RenderTargetBlendDescription
     {
         public bool IsBlendEnable { get; set; }
-        public BlendOption SourceBlend { get; set; }
-        public BlendOption DestinationBlend { get; set; }
-        public BlendOperation BlendOperation { get; set; }
-        public BlendOption SourceAlphaBlend { get; set; }
-        public BlendOption DestinationAlphaBlend { get; set; }
-        public BlendOperation AlphaBlendOperation { get; set; }
+        public GpuBlendOption SourceBlend { get; set; }
+        public GpuBlendOption DestinationBlend { get; set; }
+        public GpuBlendOperation BlendOperation { get; set; }
+        public GpuBlendOption SourceAlphaBlend { get; set; }
+        public GpuBlendOption DestinationAlphaBlend { get; set; }
+        public GpuBlendOperation AlphaBlendOperation { get; set; }
 
         public RenderTargetBlendDescription()
         {
             IsBlendEnable = false;
-            SourceBlend = BlendOption.One;
-            DestinationBlend = BlendOption.Zero;
-            BlendOperation = BlendOperation.Add;
-            SourceAlphaBlend = BlendOption.One;
-            DestinationAlphaBlend = BlendOption.Zero;
-            AlphaBlendOperation = BlendOperation.Add;
+            SourceBlend = GpuBlendOption.One;
+            DestinationBlend = GpuBlendOption.Zero;
+            BlendOperation = GpuBlendOperation.Add;
+            SourceAlphaBlend = GpuBlendOption.One;
+            DestinationAlphaBlend = GpuBlendOption.Zero;
+            AlphaBlendOperation = GpuBlendOperation.Add;
         }
     }
 

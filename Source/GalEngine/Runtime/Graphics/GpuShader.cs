@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum ShaderType : uint
+    public enum GpuShaderType : uint
     {
         None = 0,
         VertexShader = 1,

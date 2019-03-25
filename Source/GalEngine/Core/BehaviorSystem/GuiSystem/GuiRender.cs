@@ -21,8 +21,6 @@ namespace GalEngine
         {
             public Matrix4x4 World;
             public Matrix4x4 Project;
-
-            public static int SizeInBytes => 128;
         }
         
         private struct RenderConfig
@@ -37,8 +35,6 @@ namespace GalEngine
                 get { return new Color<float>(mColorRed, mColorGreen, mColorBlue, mColorAlpha); }
                 set { mColorRed = value.Red; mColorGreen = value.Green; mColorBlue = value.Blue; mColorAlpha = value.Alpha; }
             }
-
-            public static int SizeInBytes => 16;
         }
 
         private readonly GpuBlendState mBlendState;
@@ -76,12 +72,12 @@ namespace GalEngine
             //init blend state
             mBlendState = new GpuBlendState(Device, new RenderTargetBlendDescription()
             {
-                AlphaBlendOperation = BlendOperation.Add,
-                BlendOperation = BlendOperation.Add,
-                DestinationAlphaBlend = BlendOption.InverseSourceAlpha,
-                DestinationBlend = BlendOption.InverseSourceAlpha,
-                SourceAlphaBlend = BlendOption.SourceAlpha,
-                SourceBlend = BlendOption.SourceAlpha,
+                AlphaBlendOperation = GpuBlendOperation.Add,
+                BlendOperation = GpuBlendOperation.Add,
+                DestinationAlphaBlend = GpuBlendOption.InverseSourceAlpha,
+                DestinationBlend = GpuBlendOption.InverseSourceAlpha,
+                SourceAlphaBlend = GpuBlendOption.SourceAlpha,
+                SourceBlend = GpuBlendOption.SourceAlpha,
                 IsBlendEnable = true
             });
 
@@ -160,25 +156,25 @@ namespace GalEngine
             mRenderConfigBufferSlot = 0;
 
             mTransformBuffer = new GpuBuffer(
-                Transform.SizeInBytes, 
-                Transform.SizeInBytes,
+                Utility.SizeOf<Transform>(),
+                Utility.SizeOf<Transform>(),
                 Device,
                 GpuResourceInfo.ConstantBuffer());
             
             mRenderConfigBuffer = new GpuBuffer(
-                RenderConfig.SizeInBytes, 
-                RenderConfig.SizeInBytes,
+                Utility.SizeOf<RenderConfig>(),
+                Utility.SizeOf<RenderConfig>(),
                 Device,
                 GpuResourceInfo.ConstantBuffer());
         }
 
-        public virtual void BeginDraw(GpuRenderTarget renderTarget)
+        public virtual void BeginDraw(Texture2D texture)
         {
             //begin draw and we need set the render target before we draw anything
 
             //reset device and set render target
             Device.Reset();
-            Device.SetRenderTarget(renderTarget);
+            Device.SetRenderTarget(texture.GpuRenderTarget);
 
             //set blend state
             Device.SetBlendState(mBlendState);
@@ -186,15 +182,15 @@ namespace GalEngine
             //set input layout ,vertex shader and primitive type
             Device.SetInputLayout(mInputLayout);
             Device.SetVertexShader(mVertexShader);
-            Device.SetPrimitiveType(PrimitiveType.TriangleList);
+            Device.SetPrimitiveType(GpuPrimitiveType.TriangleList);
 
             //set view port
-            Device.SetViewPort(new Rectangle<float>(0, 0, renderTarget.Size.Width, renderTarget.Size.Height));
+            Device.SetViewPort(new Rectangle<float>(0, 0, texture.Size.Width, texture.Size.Height));
 
             //set the project matrix, need set null when we end draw
-            mProject = Matrix4x4.CreateOrthographic(
-                renderTarget.Size.Width,
-                renderTarget.Size.Height, 0, 1);
+            mProject = Matrix4x4.CreateOrthographicOffCenter(
+                0, texture.Size.Width, 
+                0, texture.Size.Height, 0, 1);
         }
 
         public virtual void EndDraw()
@@ -235,8 +231,8 @@ namespace GalEngine
             Device.SetVertexBuffer(mSquareVertexBuffer);
             Device.SetIndexBuffer(mSquareIndexBuffer);
 
-            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
-            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
+            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, GpuShaderType.VertexShader);
+            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
 
             //draw
             Device.DrawIndexed(6, 0, 0);
@@ -289,8 +285,8 @@ namespace GalEngine
             Device.SetVertexBuffer(mRectangleVertexBuffer);
             Device.SetIndexBuffer(mRectangleIndexBuffer);
 
-            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
-            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
+            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, GpuShaderType.VertexShader);
+            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
 
             //draw
             Device.DrawIndexed(24, 0, 0);

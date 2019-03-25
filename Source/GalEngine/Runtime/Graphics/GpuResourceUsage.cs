@@ -18,7 +18,7 @@ namespace GalEngine.Runtime.Graphics
 
         public GpuResourceUsage(GpuDevice device, GpuTexture2D texture)
         {
-            Debug.Assert(GpuConvert.HasBindUsage(texture.ResourceInfo.BindUsage, BindUsage.ShaderResource) == true);
+            Debug.Assert(GpuConvert.HasBindUsage(texture.ResourceInfo.BindUsage, GpuBindUsage.ShaderResource) == true);
 
             GpuDevice = device;
 

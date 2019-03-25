@@ -9,8 +9,7 @@ namespace GalEngine
 {
     public class GuiSystem : BehaviorSystem
     {
-        private GpuRenderTarget mRenderTarget;
-        private GpuTexture2D mRenderCanvas;
+        private Texture2D mTexture;
 
         private GuiRender mRender;
 
@@ -26,37 +25,36 @@ namespace GalEngine
 
             Area = area;
 
-            mRenderCanvas = new GpuTexture2D(
+            mTexture = new Texture2D(
                 new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
-                PixelFormat.R8G8B8A8Unknown,
-                mRender.Device,
-                new GpuResourceInfo(BindUsage.ShaderResource | BindUsage.RenderTarget));
-
-            mRenderTarget = new GpuRenderTarget(mRender.Device, mRenderCanvas);
+                PixelFormat.RedBlueGreenAlpha8bit,
+                mRender.Device);
         }
 
         protected internal override void Update()
         {
             //update the render area, we need to update the canvas and render target
             //if the area's size is not equal the canvas's size
-            if (mRenderCanvas.Size.Width != Area.Right - Area.Left ||
-                mRenderCanvas.Size.Height != Area.Bottom - Area.Top)
+            if (mTexture.Size.Width != Area.Right - Area.Left ||
+                mTexture.Size.Height != Area.Bottom - Area.Top)
             {
-                //update canvas
-                mRenderCanvas = new GpuTexture2D(
-                    new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
-                    PixelFormat.R8G8B8A8Unknown,
-                    mRender.Device,
-                    new GpuResourceInfo(BindUsage.ShaderResource | BindUsage.RenderTarget));
+                Utility.Dispose(ref mTexture);
 
-                //update render target
-                mRenderTarget = new GpuRenderTarget(mRender.Device, mRenderCanvas);
+                mTexture = new Texture2D(
+                    new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
+                    PixelFormat.RedBlueGreenAlpha8bit,
+                    mRender.Device);
             }
+        }
+
+        protected internal override void Present(PresentRender render)
+        {
+            render.Mask(mTexture, Area, 1.0f);
         }
 
         protected internal override void Excute(List<GameObject> passedGameObjectList)
         {
-            mRender.BeginDraw(mRenderTarget);
+            mRender.BeginDraw(mTexture);
 
             foreach (var gameObject in passedGameObjectList)
             {

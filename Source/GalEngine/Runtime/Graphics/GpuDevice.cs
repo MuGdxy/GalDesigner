@@ -124,35 +124,49 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.PixelShader.SetShader(mPixelShader.PixelShader, null, 0);
         }
 
-        public void SetBuffer(GpuBuffer buffer, int register, ShaderType target = ShaderType.VertexShaderAndPixelShader)
+        public void SetBuffer(GpuBuffer buffer, int register, GpuShaderType target = GpuShaderType.VertexShaderAndPixelShader)
         {
             //set buffer Direct3D instance to pipeline's shader
             //we use target shader to flag which shader the buffer will set to
 
             //test if the buffer can be set
-            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, BindUsage.ConstantBuffer) == true);
+            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, GpuBindUsage.ConstantBuffer) == true);
 
             //we can use "&" to make sure if we need set buffer to vertex shader
-            if ((target & ShaderType.VertexShader) != ShaderType.None)
+            if ((target & GpuShaderType.VertexShader) != GpuShaderType.None)
                 ImmediateContext.VertexShader.SetConstantBuffer(register, buffer.Resource as SharpDX.Direct3D11.Buffer);
 
             //we can use "&" to make sure if we need set buffer to pixel shader
-            if ((target & ShaderType.PixelShader) != ShaderType.None)
+            if ((target & GpuShaderType.PixelShader) != GpuShaderType.None)
                 ImmediateContext.PixelShader.SetConstantBuffer(register, buffer.Resource as SharpDX.Direct3D11.Buffer);
         }
 
-        public void SetResourceUsage(GpuResourceUsage resourceUsage, int register, ShaderType target = ShaderType.VertexShaderAndPixelShader)
+        public void SetResourceUsage(GpuResourceUsage resourceUsage, int register, GpuShaderType target = GpuShaderType.VertexShaderAndPixelShader)
         {
             //set resource Direct3D instance to pipeline's shader
             //we use target shader to flag which shader the resource will set to
             
             //we can use "&" to make sure if we need set buffer to vertex shader
-            if ((target & ShaderType.VertexShader) != ShaderType.None)
+            if ((target & GpuShaderType.VertexShader) != GpuShaderType.None)
                 ImmediateContext.VertexShader.SetShaderResource(register, resourceUsage.ShaderResource);
 
             //we can use "&" to make sure if we need set buffer to pixel shader
-            if ((target & ShaderType.PixelShader) != ShaderType.None)
+            if ((target & GpuShaderType.PixelShader) != GpuShaderType.None)
                 ImmediateContext.PixelShader.SetShaderResource(register, resourceUsage.ShaderResource);
+        }
+
+        public void SetSamplerState(GpuSamplerState samplerState, int register, GpuShaderType target = GpuShaderType.VertexShaderAndPixelShader)
+        {
+            //set sampler state Direct3D instance to pipeline's shader
+            //we use target shader to flag which shader the resource will set to
+
+            //we can use "&" to make sure if we need set sampler state to vertex shader
+            if ((target & GpuShaderType.VertexShader) != GpuShaderType.None)
+                ImmediateContext.VertexShader.SetSampler(register, samplerState.SamplerState);
+
+            //we can use "&" to make sure if we need set sampler state to pixel shader
+            if ((target & GpuShaderType.PixelShader) != GpuShaderType.None)
+                ImmediateContext.PixelShader.SetSampler(register, samplerState.SamplerState);
         }
 
         public void SetVertexBuffer(GpuBuffer buffer)
@@ -160,7 +174,7 @@ namespace GalEngine.Runtime.Graphics
             //set vertex buffer to input stage
 
             //test if the buffer can be set
-            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, BindUsage.VertexBufferr) == true);
+            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, GpuBindUsage.VertexBufferr) == true);
 
             //create buffer binding
             var bufferBinding = new SharpDX.Direct3D11.VertexBufferBinding(
@@ -176,14 +190,14 @@ namespace GalEngine.Runtime.Graphics
             //set index buffer to input stage
 
             //test if the buffer can be set
-            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, BindUsage.IndexBuffer) == true);
+            Debug.Assert(GpuConvert.HasBindUsage(buffer.ResourceInfo.BindUsage, GpuBindUsage.IndexBuffer) == true);
 
             //set index buffer
             ImmediateContext.InputAssembler.SetIndexBuffer(buffer.Resource as SharpDX.Direct3D11.Buffer,
                  SharpDX.DXGI.Format.R32_UInt, 0);
         }
 
-        public void SetPrimitiveType(PrimitiveType primitiveType)
+        public void SetPrimitiveType(GpuPrimitiveType primitiveType)
         {
             //set primitive type
             ImmediateContext.InputAssembler.PrimitiveTopology = GpuConvert.ToPrimitiveType(primitiveType);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum TextureAddressMode : uint
+    public enum GpuTextureAddressMode : uint
     {
         Wrap = 1,
         Mirror = 2,
@@ -15,7 +15,7 @@ namespace GalEngine.Runtime.Graphics
         MirrorOnce = 5
     }
 
-    public enum TextureFilter : uint
+    public enum GpuTextureFilter : uint
     {
         MinMagMipPoint = 0,
         MinMagPointMipLinear = 1,
@@ -63,17 +63,17 @@ namespace GalEngine.Runtime.Graphics
 
         internal SharpDX.Direct3D11.SamplerState SamplerState => mSamplerState;
 
-        public TextureAddressMode AddressU { get; }
-        public TextureAddressMode AddressV { get; }
-        public TextureAddressMode AddressW { get; }
+        public GpuTextureAddressMode AddressU { get; }
+        public GpuTextureAddressMode AddressV { get; }
+        public GpuTextureAddressMode AddressW { get; }
 
-        public TextureFilter Filter { get; }
+        public GpuTextureFilter Filter { get; }
 
         public GpuSamplerState(GpuDevice device, 
-            TextureAddressMode addressU,
-            TextureAddressMode addressV, 
-            TextureAddressMode addressW, 
-            TextureFilter filter = TextureFilter.MinMagMipLinear)
+            GpuTextureAddressMode addressU,
+            GpuTextureAddressMode addressV, 
+            GpuTextureAddressMode addressW, 
+            GpuTextureFilter filter = GpuTextureFilter.MinMagMipLinear)
         {
             GpuDevice = device;
 
@@ -100,8 +100,8 @@ namespace GalEngine.Runtime.Graphics
         }
 
         public GpuSamplerState(GpuDevice device,
-            TextureAddressMode addressUVW,
-            TextureFilter filter) : this(device, addressUVW, addressUVW, addressUVW, filter)
+            GpuTextureAddressMode addressUVW = GpuTextureAddressMode.Clamp,
+            GpuTextureFilter filter = GpuTextureFilter.MinMagMipLinear) : this(device, addressUVW, addressUVW, addressUVW, filter)
         {
 
         }

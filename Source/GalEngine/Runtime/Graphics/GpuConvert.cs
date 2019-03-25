@@ -10,13 +10,13 @@ namespace GalEngine.Runtime.Graphics
 
     static class GpuConvert
     {
-        private static BindUsage[] mBindUsagePool = new BindUsage[]
+        private static GpuBindUsage[] mBindUsagePool = new GpuBindUsage[]
         {
-            BindUsage.VertexBufferr, BindUsage.IndexBuffer,
-            BindUsage.ConstantBuffer, BindUsage.ShaderResource,
-            BindUsage.StreamOutput, BindUsage.RenderTarget,
-            BindUsage.DepthStencil, BindUsage.UnorderedAccess,
-            BindUsage.Decoder, BindUsage.VideoEncoder
+            GpuBindUsage.VertexBufferr, GpuBindUsage.IndexBuffer,
+            GpuBindUsage.ConstantBuffer, GpuBindUsage.ShaderResource,
+            GpuBindUsage.StreamOutput, GpuBindUsage.RenderTarget,
+            GpuBindUsage.DepthStencil, GpuBindUsage.UnorderedAccess,
+            GpuBindUsage.Decoder, GpuBindUsage.VideoEncoder
         };
 
         private static BindFlag[] mBindFlagPool = new BindFlag[]
@@ -28,24 +28,24 @@ namespace GalEngine.Runtime.Graphics
              BindFlag.Decoder, BindFlag.VideoEncoder
         };
 
-        public static bool HasBindUsage(BindUsage usage, BindUsage requirement)
+        public static bool HasBindUsage(GpuBindUsage usage, GpuBindUsage requirement)
         {
             if (((uint)usage & (uint)requirement) != 0) return true;
             return false;
         }
 
-        public static bool HasCpuAccessFlag(CpuAccessFlag flag, CpuAccessFlag requirement)
+        public static bool HasCpuAccessFlag(GpuCpuAccessFlag flag, GpuCpuAccessFlag requirement)
         {
             if (((uint)flag & (uint)requirement) != 0) return true;
             return false;
         }
 
-        public static SharpDX.Direct3D.PrimitiveTopology ToPrimitiveType(PrimitiveType primitiveType)
+        public static SharpDX.Direct3D.PrimitiveTopology ToPrimitiveType(GpuPrimitiveType primitiveType)
         {
             return (SharpDX.Direct3D.PrimitiveTopology)primitiveType;
         }
 
-        public static BindFlag ToBindUsage(BindUsage bindUsage)
+        public static BindFlag ToBindUsage(GpuBindUsage bindUsage)
         {
             uint result = 0;
 
@@ -58,69 +58,69 @@ namespace GalEngine.Runtime.Graphics
             return (BindFlag)result;
         }
 
-        public static SharpDX.Direct3D11.ResourceUsage ToHeapType(HeapType heapType)
+        public static SharpDX.Direct3D11.ResourceUsage ToHeapType(GpuHeapType heapType)
         {
             switch (heapType)
             {
-                case HeapType.Default:
+                case GpuHeapType.Default:
                     return SharpDX.Direct3D11.ResourceUsage.Default;
-                case HeapType.Immutable:
+                case GpuHeapType.Immutable:
                     return SharpDX.Direct3D11.ResourceUsage.Immutable;
-                case HeapType.Dynamic:
+                case GpuHeapType.Dynamic:
                     return SharpDX.Direct3D11.ResourceUsage.Dynamic;
-                case HeapType.Staging:
+                case GpuHeapType.Staging:
                     return SharpDX.Direct3D11.ResourceUsage.Staging;
                 default:
                     throw new Exception("The heap type is not support");
             }
         }
 
-        public static SharpDX.Direct3D11.CpuAccessFlags ToCpuAccessFlag(CpuAccessFlag cpuAccessFlag)
+        public static SharpDX.Direct3D11.CpuAccessFlags ToCpuAccessFlag(GpuCpuAccessFlag cpuAccessFlag)
         {
             uint result = 0;
 
-            if (HasCpuAccessFlag(cpuAccessFlag, CpuAccessFlag.Read)) result = result | (uint)SharpDX.Direct3D11.CpuAccessFlags.Read;
-            if (HasCpuAccessFlag(cpuAccessFlag, CpuAccessFlag.Write)) result = result | (uint)SharpDX.Direct3D11.CpuAccessFlags.Write;
+            if (HasCpuAccessFlag(cpuAccessFlag, GpuCpuAccessFlag.Read)) result = result | (uint)SharpDX.Direct3D11.CpuAccessFlags.Read;
+            if (HasCpuAccessFlag(cpuAccessFlag, GpuCpuAccessFlag.Write)) result = result | (uint)SharpDX.Direct3D11.CpuAccessFlags.Write;
 
             return (SharpDX.Direct3D11.CpuAccessFlags)result;
         }
 
-        public static SharpDX.DXGI.Format ToPixelFormat(PixelFormat pixelFormat)
+        public static SharpDX.DXGI.Format ToPixelFormat(GpuPixelFormat pixelFormat)
         {
             return (SharpDX.DXGI.Format)pixelFormat;
         }
 
-        public static SharpDX.Direct3D11.FillMode ToFillMode(FillMode fillMode)
+        public static SharpDX.Direct3D11.FillMode ToFillMode(GpuFillMode fillMode)
         {
             return (SharpDX.Direct3D11.FillMode)fillMode;
         }
 
-        public static SharpDX.Direct3D11.CullMode ToCullMode(CullMode cullMode)
+        public static SharpDX.Direct3D11.CullMode ToCullMode(GpuCullMode cullMode)
         {
             return (SharpDX.Direct3D11.CullMode)cullMode;
         }
 
-        public static SharpDX.Direct3D11.BlendOperation ToBlendOperation(BlendOperation blendOperation)
+        public static SharpDX.Direct3D11.BlendOperation ToBlendOperation(GpuBlendOperation blendOperation)
         {
             return (SharpDX.Direct3D11.BlendOperation)blendOperation;
         }
 
-        public static SharpDX.Direct3D11.BlendOption ToBlendOption(BlendOption blendOption)
+        public static SharpDX.Direct3D11.BlendOption ToBlendOption(GpuBlendOption blendOption)
         {
             return (SharpDX.Direct3D11.BlendOption)blendOption;
         }
 
-        public static SharpDX.Direct3D11.TextureAddressMode ToTextureAddressMode(TextureAddressMode addressMode)
+        public static SharpDX.Direct3D11.TextureAddressMode ToTextureAddressMode(GpuTextureAddressMode addressMode)
         {
             return (SharpDX.Direct3D11.TextureAddressMode)addressMode;
         }
 
-        public static SharpDX.Direct3D11.Filter ToTextureFilter(TextureFilter textureFilter)
+        public static SharpDX.Direct3D11.Filter ToTextureFilter(GpuTextureFilter textureFilter)
         {
             return (SharpDX.Direct3D11.Filter)textureFilter;
         }
 
-        public static int SizeOfInBytes(PixelFormat pixelFormat)
+        public static int SizeOfInBytes(GpuPixelFormat pixelFormat)
         {
             return SharpDX.DXGI.FormatHelper.SizeOfInBytes(ToPixelFormat(pixelFormat));
         }

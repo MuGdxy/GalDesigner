@@ -19,8 +19,9 @@ namespace GalEngine
 
         public bool IsExisted { get; set; }
 
+        public IntPtr Handle => mHandle;
+
         public event UpdateEventHandler OnUpdateEvent;
-        public event RenderEventHandler OnRenderEvent;
         public event KeyBoardEventHandler OnKeyBoardEvent;
         public event MouseMoveEventHandler OnMouseMoveEvent;
         public event MouseClickEventHandler OnMouseClickEvent;
@@ -175,7 +176,6 @@ namespace GalEngine
                 switch (GetEvent(true))
                 {
                     case UpdateEvent update: OnUpdateEvent?.Invoke(this, update); break;
-                    case RenderEvent render: OnRenderEvent?.Invoke(this, render); break;
                     case KeyBoardEvent keyBoard: OnKeyBoardEvent?.Invoke(this, keyBoard); break;
                     case MouseClickEvent mouseClick: OnMouseClickEvent?.Invoke(this, mouseClick); break;
                     case MouseWheelEvent mouseWheel: OnMouseWhellEvent?.Invoke(this, mouseWheel); break;
