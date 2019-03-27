@@ -9,7 +9,7 @@ namespace GalEngine
 {
     public class GuiSystem : BehaviorSystem
     {
-        private Texture2D mTexture;
+        private Texture2D mCanvas;
 
         private GuiRender mRender;
 
@@ -25,7 +25,7 @@ namespace GalEngine
 
             Area = area;
 
-            mTexture = new Texture2D(
+            mCanvas = new Texture2D(
                 new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
                 PixelFormat.RedBlueGreenAlpha8bit,
                 mRender.Device);
@@ -35,12 +35,12 @@ namespace GalEngine
         {
             //update the render area, we need to update the canvas and render target
             //if the area's size is not equal the canvas's size
-            if (mTexture.Size.Width != Area.Right - Area.Left ||
-                mTexture.Size.Height != Area.Bottom - Area.Top)
+            if (mCanvas.Size.Width != Area.Right - Area.Left ||
+                mCanvas.Size.Height != Area.Bottom - Area.Top)
             {
-                Utility.Dispose(ref mTexture);
+                Utility.Dispose(ref mCanvas);
 
-                mTexture = new Texture2D(
+                mCanvas = new Texture2D(
                     new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
                     PixelFormat.RedBlueGreenAlpha8bit,
                     mRender.Device);
@@ -49,32 +49,18 @@ namespace GalEngine
 
         protected internal override void Present(PresentRender render)
         {
-            render.Mask(mTexture, Area, 1.0f);
+            render.Mask(mCanvas, Area, 1.0f);
         }
 
         protected internal override void Excute(List<GameObject> passedGameObjectList)
         {
-            mRender.BeginDraw(mTexture);
+            mRender.BeginDraw(mCanvas);
 
             foreach (var gameObject in passedGameObjectList)
             {
                 var transformComponent = gameObject.GetComponent<TransformGuiComponent>();
 
-                //run rendering code
-                switch (gameObject.GetComponent<VisualGuiComponent>())
-                {
-                    case FrameVisualGuiComponent frameComponent:
-                        //draw rectangle
-                        mRender.DrawRectangle(
-                            new Rectangle<float>(
-                                transformComponent.Position.X,
-                                transformComponent.Position.Y,
-                                transformComponent.Position.X + frameComponent.Size.Width,
-                                transformComponent.Position.Y + frameComponent.Size.Height),
-                            frameComponent.Color,
-                            frameComponent.Padding);
-                        break;
-                }
+               
             }
 
             mRender.EndDraw();

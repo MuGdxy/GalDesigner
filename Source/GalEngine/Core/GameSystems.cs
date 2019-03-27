@@ -135,7 +135,7 @@ namespace GalEngine
                 SystemScene?.Update(Time.DeltaSeconds);
                 MainScene?.Update(Time.DeltaSeconds);
 
-                foreach (var subSystem in BehaviorSystems) UpdateBehaviorSystem(subSystem);
+                BehaviorSystems.ForEach((system) => UpdateBehaviorSystem(system));
 
                 if (EngineWindow != null && EngineWindow.IsExisted != false)
                     EngineWindow.Update(Time.DeltaSeconds);

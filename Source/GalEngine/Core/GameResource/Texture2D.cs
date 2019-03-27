@@ -28,6 +28,11 @@ namespace GalEngine
         {
 
         }
+
+        public Texture2D(Size<int> size, PixelFormat pixelFormat, byte[] data) : this(size, pixelFormat)
+        {
+            mTexture.Update(data);
+        }
         
         public Texture2D(Size<int> size, PixelFormat pixelFormat, GpuDevice device)
         {

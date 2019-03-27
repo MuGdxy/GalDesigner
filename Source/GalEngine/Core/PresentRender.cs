@@ -164,7 +164,7 @@ namespace GalEngine
             RenderConfig renderConfig = new RenderConfig();
 
             transform.World = Matrix4x4.CreateTranslation(new Vector3(area.Left, area.Top, 0));
-            transform.World *= Matrix4x4.CreateScale(new Vector3(area.Right - area.Left, area.Bottom - area.Top, 1));
+            transform.World = Matrix4x4.CreateScale(new Vector3(area.Right - area.Left, area.Bottom - area.Top, 1)) * transform.World;
             transform.Projection = Matrix4x4.CreateOrthographicOffCenter(0, mSwapChain.Size.Width, 0, mSwapChain.Size.Height, 0, 1);
 
             renderConfig.Opacity = new Vector4(opacity);
@@ -190,7 +190,7 @@ namespace GalEngine
             RenderConfig renderConfig = new RenderConfig();
 
             transform.World = Matrix4x4.CreateTranslation(new Vector3(area.Left, area.Top, 0));
-            transform.World *= Matrix4x4.CreateScale(new Vector3(area.Right - area.Left, area.Bottom - area.Top, 1));
+            transform.World = Matrix4x4.CreateScale(new Vector3(area.Right - area.Left, area.Bottom - area.Top, 1)) * transform.World;
             transform.Projection = Matrix4x4.CreateOrthographicOffCenter(0, mSwapChain.Size.Width, 0, mSwapChain.Size.Height, 0, 1);
 
             renderConfig.Opacity = new Vector4(opacity);
