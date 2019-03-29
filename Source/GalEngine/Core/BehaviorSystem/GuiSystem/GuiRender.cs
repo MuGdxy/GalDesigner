@@ -5,6 +5,7 @@ using System.Text;
 using System.Numerics;
 using System.Threading.Tasks;
 
+using GalEngine.GameResource;
 using GalEngine.Runtime.Graphics;
 
 namespace GalEngine
@@ -313,13 +314,13 @@ namespace GalEngine
             mDevice.DrawIndexed(24, 0, 0);
         }
 
-        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, float opacity)
+        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, Color<float> color)
         {
             //fill rectangle with texture
             //the result color's alpha is equal texture.alpha * opacity
 
             MatrixData matrixData = new MatrixData();
-            RenderConfig renderConfig = new RenderConfig() { Color = new Color<float>(1.0f, 1.0f, 1.0f, opacity) };
+            RenderConfig renderConfig = new RenderConfig() { Color = color };
 
             //1.scale the rectangle
             matrixData.World = Matrix4x4.CreateScale(rectangle.Right - rectangle.Left, rectangle.Bottom - rectangle.Top, 1.0f);
@@ -345,6 +346,11 @@ namespace GalEngine
             mDevice.SetResourceUsage(texture.GpuResourceUsage, mTextureSlot, GpuShaderType.PixelShader);
             
             mDevice.DrawIndexed(6, 0, 0);
+        }
+
+        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, float opacity = 1.0f)
+        {
+            DrawImage(rectangle, texture, new Color<float>(1.0f, 1.0f, 1.0f, opacity));
         }
 
         public virtual void FillRectangle(Rectangle<float> rectangle, Color<float> color)

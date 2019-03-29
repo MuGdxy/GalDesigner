@@ -5,6 +5,7 @@ using System.Text;
 using System.Numerics;
 using System.Threading.Tasks;
 
+using GalEngine.GameResource;
 using GalEngine.Runtime.Graphics;
 
 namespace GalEngine

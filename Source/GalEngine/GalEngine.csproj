@@ -78,6 +78,7 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiSystem.cs" />
     <Compile Include="Core\GameResource\Font.cs" />
+    <Compile Include="Core\GameResource\Text.cs" />
     <Compile Include="Core\GameResource\Texture2D.cs" />
     <Compile Include="Core\PresentRender.cs" />
     <Compile Include="Core\StringLogging.cs" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using GalEngine.Runtime.Graphics;
 
-namespace GalEngine
+namespace GalEngine.GameResource
 {
     public class Texture2D : IDisposable
     {
@@ -43,6 +43,11 @@ namespace GalEngine
         }
 
         ~Texture2D() => Dispose();
+
+        public void CopyFromTexture2D(Position<int> destination, Texture2D texture, Rectangle<int> region)
+        {
+            mTexture.CopyFromGpuTexture2D(destination, texture.mTexture, region);
+        }
 
         public void Dispose()
         {

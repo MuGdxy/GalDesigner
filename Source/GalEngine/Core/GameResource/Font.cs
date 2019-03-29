@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SharpFont;
 using GalEngine.Runtime.Graphics;
 
-namespace GalEngine
+namespace GalEngine.GameResource
 {
     public class CharacterCodeMetrics : IDisposable
     {
@@ -32,26 +32,34 @@ namespace GalEngine
         private static readonly Library mLibrary = new Library();
 
         private Face mFace;
-        private GpuDevice mDevice;
+        private readonly GpuDevice mDevice;
 
-        private Dictionary<char, CharacterCodeMetrics> mCharacterIndex;
+        private readonly Dictionary<char, CharacterCodeMetrics> mCharacterIndex;
+
+        internal Face FontFace => mFace;
+        internal GpuDevice GpuDevice => mDevice;
 
         public int Size { get; }
 
         public Font(int size, byte[] fontData, GpuDevice device)
         {
+            //create font
             mFace = new Face(mLibrary, fontData, 0);
             mDevice = device;
             Size = size;
 
+            //set font size and encoding
             mFace.SetPixelSizes(0, (uint)size);
             mFace.SelectCharmap(SharpFont.Encoding.Unicode);
+
+            mCharacterIndex = new Dictionary<char, CharacterCodeMetrics>();
         }
 
         ~Font() => Dispose();
 
         public void FreeCache()
         {
+            //dispose the CharacterCodeMetrics that cache in the font
             foreach (var characterCode in mCharacterIndex) characterCode.Value.Dispose();
 
             mCharacterIndex.Clear();
@@ -59,14 +67,20 @@ namespace GalEngine
 
         public CharacterCodeMetrics GetCharacterCodeMetrics(char character)
         {
+            //search it in cache, if it is found return it
+            //if we do not find, we create it and cache it
             if (mCharacterIndex.ContainsKey(character) == true) return mCharacterIndex[character];
 
+            //find index(see more in freetype)
             var index = mFace.GetCharIndex(character);
 
+            //load glyph
             mFace.LoadGlyph(index, LoadFlags.Default, LoadTarget.Normal);
 
+            //test the format of glyph, if it is not bitmap, we convert its format to bitmap
             if (mFace.Glyph.Format != GlyphFormat.Bitmap) mFace.Glyph.RenderGlyph(RenderMode.Normal);
 
+            //create metrices
             var codeMetrics = new CharacterCodeMetrics();
 
             codeMetrics.Advance = (mFace.Glyph.Advance.X.Value >> 6);
@@ -83,7 +97,11 @@ namespace GalEngine
 
         public void Dispose()
         {
+            //dispose the CharacterCodeMetrics that cache in the font
             FreeCache();
+
+            //dispose the font class
+            Utility.Dispose(ref mFace);
         }
     }
 }

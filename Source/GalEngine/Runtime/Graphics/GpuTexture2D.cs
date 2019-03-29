@@ -40,6 +40,18 @@ namespace GalEngine.Runtime.Graphics
             });
         }
 
+        public void CopyFromGpuTexture2D(Position<int> destination, GpuTexture2D source, Rectangle<int> region)
+        {
+            if (region.Right - region.Left == 0 || region.Bottom - region.Top == 0) return;
+
+            var resourceRegion = new SharpDX.Direct3D11.ResourceRegion(
+                region.Left, region.Top, 0,
+                region.Right, region.Bottom, 1);
+
+            GpuDevice.ImmediateContext.CopySubresourceRegion(source.mResource, 0, resourceRegion,
+                mResource, 0, destination.X, destination.Y);
+        }
+
         public override void Update<T>(params T[] data)
         {
             GpuDevice.ImmediateContext.UpdateSubresource(data, Resource, 0, mRowPitch);
