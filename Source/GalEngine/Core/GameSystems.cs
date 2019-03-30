@@ -121,7 +121,9 @@ namespace GalEngine
             //add system
             AddBehaviorSystem(AssetSystem = new AssetSystem());
             AddBehaviorSystem(GuiSystem = new GuiSystem(GpuDevice, new Rectangle<int>(0, 0, EngineWindow.Size.Width, EngineWindow.Size.Height)));
-            
+
+            EngineWindow.AddEventListener(GuiSystem);
+
             LogEmitter.Apply(LogLevel.Information, "[Initialize GameSystems Finish] from [GameSystems]");
         }
         

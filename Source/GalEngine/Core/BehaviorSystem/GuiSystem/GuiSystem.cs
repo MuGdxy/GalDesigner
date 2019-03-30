@@ -12,9 +12,8 @@ namespace GalEngine
     public class GuiSystem : BehaviorSystem
     {
         private Texture2D mCanvas;
-
         private GuiRender mRender;
-
+        
         public Rectangle<int> Area { get; set; }
 
         public GuiSystem(GpuDevice device, Rectangle<int> area) : base("GuiSystem")
@@ -22,10 +21,10 @@ namespace GalEngine
             RequireComponents.AddRequireComponentType<TransformGuiComponent>();
             RequireComponents.AddRequireComponentType<VisualGuiComponent>();
             RequireComponents.AddRequireComponentType<LogicGuiComponent>();
+            
+            Area = area;
 
             mRender = new GuiRender(device);
-
-            Area = area;
 
             mCanvas = new Texture2D(
                 new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
@@ -56,6 +55,19 @@ namespace GalEngine
 
         protected internal override void Excute(List<GameObject> passedGameObjectList)
         {
+            //logic component solver
+            while (EventCount != 0)
+            {
+                switch (GetEvent(true))
+                {
+                    case KeyBoardEvent keyBoard: break;
+                    case MouseClickEvent mouseClick: break;
+                    case MouseWheelEvent mouseWheel: break;
+                    case MouseMoveEvent mouseMove: break;
+                }
+            }
+
+            //visual component solver
             mRender.BeginDraw(mCanvas);
 
             foreach (var gameObject in passedGameObjectList)

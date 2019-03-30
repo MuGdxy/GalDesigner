@@ -41,7 +41,7 @@ namespace GuiSystemTestUnit
                     new Position<float>(10, 10),
                     new Size<float>(100, 100), 
                     new Color<float>(1, 0, 0, 1)));
-
+            
             GameSystems.RunLoop();
         }
     }

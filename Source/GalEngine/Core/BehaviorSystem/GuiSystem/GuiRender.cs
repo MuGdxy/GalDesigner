@@ -353,6 +353,20 @@ namespace GalEngine
             DrawImage(rectangle, texture, new Color<float>(1.0f, 1.0f, 1.0f, opacity));
         }
 
+        public virtual void DrawText(Position<float> position, Text text, Color<float> color)
+        {
+            DrawImage(new Rectangle<float>(
+                position.X,
+                position.Y,
+                position.X + text.Size.Width,
+                position.Y + text.Size.Height), text.Texture, color);
+        }
+
+        public virtual void DrawText(Rectangle<float> rectangle, Text text, Color<float> color)
+        {
+            DrawImage(rectangle, text.Texture, color);
+        }
+
         public virtual void FillRectangle(Rectangle<float> rectangle, Color<float> color)
         {
             //fill rectangle

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public static class StringProperty
+    public static partial class StringProperty
     {
         public static string Log => "[time] : ";
 

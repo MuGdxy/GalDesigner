@@ -69,9 +69,9 @@
     <Compile Include="Core\BehaviorSystem\AssetSystem\Package.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponentEvent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\FrameVisualGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl.cs" />
@@ -103,6 +103,7 @@
     </Compile>
     <Compile Include="Runtime\Event\BaseEvent.cs" />
     <Compile Include="Runtime\Event\EventEmitter.cs" />
+    <Compile Include="Runtime\Event\EventListener.cs" />
     <Compile Include="Runtime\Event\KeyBoardEvent.cs" />
     <Compile Include="Runtime\Event\MouseEvent.cs" />
     <Compile Include="Runtime\Event\SizeChangeEvent.cs" />

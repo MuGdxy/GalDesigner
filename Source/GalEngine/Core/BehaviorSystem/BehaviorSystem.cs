@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public abstract class BehaviorSystem
+    public abstract class BehaviorSystem : EventListener
     {
         public RequireComponents RequireComponents { get; set; }
         public string Name { get; }
