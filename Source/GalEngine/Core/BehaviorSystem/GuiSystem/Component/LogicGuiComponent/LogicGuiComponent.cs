@@ -38,7 +38,7 @@ namespace GalEngine
         }
 
         public void SetEventStatus(string eventName, bool status) =>
-            mGuiComponentStatus.SetProperty(eventName, status);
+            mGuiComponentEventStatus.SetProperty(eventName, status);
         
         public void SetEventSolver(string eventName, GuiComponentEventSolver solver) =>
             mGuiComponentEventSolver[eventName] = solver;
@@ -47,7 +47,7 @@ namespace GalEngine
             mGuiComponentStatus.GetProperty(statusName);
 
         public bool GetEventStatus(string eventName) =>
-            mGuiComponentStatus.GetProperty(eventName);
+            mGuiComponentEventStatus.GetProperty(eventName);
 
         public GuiComponentEventSolver GetEventSolver(string eventName)
         {

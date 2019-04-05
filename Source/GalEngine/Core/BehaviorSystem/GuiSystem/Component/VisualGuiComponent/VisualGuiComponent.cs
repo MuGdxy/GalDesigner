@@ -4,18 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using GalEngine.GameResource;
+
 namespace GalEngine
 {
     public class VisualGuiComponent : GuiComponent
     {
-        public GuiComponentShape Shape { get; }
+        public Shape Shape { get; }
 
-        public VisualGuiComponent() : this(new GuiComponentShape())
+        public VisualGuiComponent() : this(new Shape())
         {
 
         }
 
-        public VisualGuiComponent(GuiComponentShape shape)
+        public VisualGuiComponent(Shape shape)
         {
             //visual gui component is used for rendering or any visual requirement
             //if you do not have any visual requirement, you can set this visual gui component to object

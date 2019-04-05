@@ -271,3 +271,5 @@ __pycache__/
 /TestApp/Resource/window_frame.png
 /TestApp/Resource/window.png
 /TestApp/Resource/ev09a.bmp
+/TestUnit/GuiSystemTestUnit/consola.ttf
+/TestUnit/GuiSystemTestUnit/Package/consola.ttf

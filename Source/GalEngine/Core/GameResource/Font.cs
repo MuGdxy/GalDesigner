@@ -41,6 +41,11 @@ namespace GalEngine.GameResource
 
         public int Size { get; }
 
+        public Font(int size, byte[] fontData) : this(size, fontData, GameSystems.GpuDevice)
+        {
+
+        }
+
         public Font(int size, byte[] fontData, GpuDevice device)
         {
             //create font
@@ -86,9 +91,10 @@ namespace GalEngine.GameResource
             codeMetrics.Advance = (mFace.Glyph.Advance.X.Value >> 6);
             codeMetrics.HoriBearingX = (mFace.Glyph.Metrics.HorizontalBearingX.Value >> 6);
             codeMetrics.HoriBearingY = (mFace.Glyph.Metrics.HorizontalBearingY.Value >> 6);
-            codeMetrics.Texture = new Texture2D(
+            codeMetrics.Texture = mFace.Glyph.Bitmap.Buffer != IntPtr.Zero ? new Texture2D(
                 new Size<int>(mFace.Glyph.Bitmap.Width, mFace.Glyph.Bitmap.Rows),
-                PixelFormat.Alpha8bit, mFace.Glyph.Bitmap.BufferData);
+                PixelFormat.Alpha8bit, mFace.Glyph.Bitmap.BufferData) : 
+                new Texture2D(new Size<int>(0,0), PixelFormat.Alpha8bit);
 
             mCharacterIndex.Add(character, codeMetrics);
 

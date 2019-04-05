@@ -9,16 +9,15 @@ namespace GalEngine.GameResource
     public class Text : IDisposable
     {
         private readonly Font mFont;
+        private readonly Size<int> mMaxSize;
         private readonly string mTextContent;
 
         private Texture2D mTextTexture;
 
         public Font Font => mFont;
-
-        public Texture2D Texture => Texture;
-
+        public Size<int> MaxSize => mMaxSize;
         public string TextContent => mTextContent;
-
+        public Texture2D Texture => mTextTexture;
         public Size<int> Size => mTextTexture.Size;
 
         private static Size<int> RequirementSize(string textContent, Font font, Size<int> maxSize)
@@ -76,7 +75,8 @@ namespace GalEngine.GameResource
             }
 
             //limit the requirement size
-            internalfunctionUpdateSize(maxSize.Width, maxSize.Height);
+            requirementWidth = Math.Min(requirementWidth, maxSize.Width);
+            requirementHeight = Math.Min(requirementHeight, maxSize.Height);
 
             return new Size<int>(requirementWidth, requirementHeight);
         }
@@ -143,6 +143,7 @@ namespace GalEngine.GameResource
         public Text(string textContent, Font font, Size<int> maxSize)
         {
             mFont = font;
+            mMaxSize = maxSize;
             mTextContent = textContent;
 
             maxSize = new Size<int>(

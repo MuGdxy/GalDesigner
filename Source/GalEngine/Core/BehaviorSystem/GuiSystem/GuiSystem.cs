@@ -10,13 +10,21 @@ using GalEngine.Runtime.Graphics;
 
 namespace GalEngine
 {
+    public class GuiDebugProperty
+    {
+        public ShapeDebugProperty ShapeProperty { get; set; }
+    }
+
     public class GuiSystem : BehaviorSystem
     {
         private Texture2D mCanvas;
         private GuiRender mRender;
+
+        private GuiComponentEventProperty mComponentEventProperty;
         
         public Rectangle<int> Area { get; set; }
-
+        public GuiDebugProperty GuiDebugProperty { get; set; }
+        
         public GuiSystem(GpuDevice device, Rectangle<int> area) : base("GuiSystem")
         {
             RequireComponents.AddRequireComponentType<TransformGuiComponent>();
@@ -148,6 +156,17 @@ namespace GalEngine
                                 logicComponent.GetEventSolver(GuiComponentStatusProperty.Focus)?
                                     .Invoke(gameObject as GuiControl, new GuiComponentFocusEvent(eventArg.Time, true));
                             }
+                        }
+
+                        //when we click the empty place, the focus will be lost
+                        if (gameObject == eventProperty.FocusControl && isContained == false)
+                        {
+                            eventProperty.FocusControl = null;
+
+                            //update the component focus status and invoke the event of get focus
+                            logicComponent.SetStatus(GuiComponentStatusProperty.Focus, false);
+                            logicComponent.GetEventSolver(GuiComponentStatusProperty.Focus)?
+                                .Invoke(gameObject as GuiControl, new GuiComponentFocusEvent(eventArg.Time, false));
                         }
                     }
 
@@ -286,29 +305,74 @@ namespace GalEngine
                 eventProperty.MousePosition = eventArg.Position;
             }
 
-            var componentEventProperty = new GuiComponentEventProperty();
-
             //logic component solver
             while (EventCount != 0)
             {
                 switch (GetEvent(true))
                 {
-                    case KeyBoardEvent keyBoard: keyBoardSolver(passedGameObjectList, keyBoard, ref componentEventProperty); break;
-                    case MouseClickEvent mouseClick: mouseClickSolver(passedGameObjectList, mouseClick, ref componentEventProperty); break;
-                    case MouseWheelEvent mouseWheel: mouseWheelSolver(passedGameObjectList, mouseWheel, ref componentEventProperty); break;
-                    case MouseMoveEvent mouseMove: mouseMoveSolver(passedGameObjectList, mouseMove, ref componentEventProperty); break;
+                    case KeyBoardEvent keyBoard: keyBoardSolver(passedGameObjectList, keyBoard, ref mComponentEventProperty); break;
+                    case MouseClickEvent mouseClick: mouseClickSolver(passedGameObjectList, mouseClick, ref mComponentEventProperty); break;
+                    case MouseWheelEvent mouseWheel: mouseWheelSolver(passedGameObjectList, mouseWheel, ref mComponentEventProperty); break;
+                    case MouseMoveEvent mouseMove: mouseMoveSolver(passedGameObjectList, mouseMove, ref mComponentEventProperty); break;
                     default: break;
                 }
             }
 
+            void textGuiComponentSolver(GuiRender render, TransformGuiComponent transformComponent, TextGuiComponent textComponent)
+            {
+                //update the property and create asset(Text)
+                textComponent.SetPropertyToAsset();
+
+                var size = (textComponent.Shape as RectangleShape).Size;
+
+                //compute the position(center)
+                var position = new Position<float>(
+                    x : (size.Width - textComponent.mTextAsset.Size.Width) * 0.5f,
+                    y : (size.Height - textComponent.mTextAsset.Size.Height) * 0.5f);
+
+                render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
+
+                //enable debug mode, we will render the shape
+                if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
+                {
+                    //draw debug shape
+                    render.DrawRectangle(
+                        rectangle: new Rectangle<float>(left: 0, top: 0, right: size.Width, bottom: size.Height),
+                        color: GuiDebugProperty.ShapeProperty.Color,
+                        padding: GuiDebugProperty.ShapeProperty.Padding);
+                }
+            }
+
+            //stack to maintain the path of game object's tree from node to root
+            //matrix is the transform from root to node
+            Stack<Tuple<GameObject, Matrix4x4>> transformStack = new Stack<Tuple<GameObject, Matrix4x4>>();
+
+            //add virtual root to stack
+            transformStack.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
+
             //visual component solver
             mRender.BeginDraw(mCanvas);
+            mRender.Clear(mCanvas, new Color<float>(1, 1, 1, 1));
 
             foreach (var gameObject in passedGameObjectList)
             {
-                var transformComponent = gameObject.GetComponent<TransformGuiComponent>();
+                //maintain the elments in the stack are ancestors from root to node(with deep order, first element is root)
+                //because the list of game objects is the dfs order of tree
+                while (transformStack.Count != 1 && transformStack.Peek().Item1 != gameObject.Parent) transformStack.Pop();
 
-                
+                //get current transform matrix, it is the result of root to node's transform matrix
+                var transformComponent = gameObject.GetComponent<TransformGuiComponent>();
+                var transformMatrix = transformComponent.Transform * transformStack.Peek().Item2;
+
+                //set transform 
+                mRender.SetTransform(transformMatrix);
+
+                switch (gameObject.GetComponent<VisualGuiComponent>())
+                {
+                    case TextGuiComponent textComponent:
+                        textGuiComponentSolver(mRender, transformComponent, textComponent); break;
+                    default: break;
+                }
             }
 
             mRender.EndDraw();

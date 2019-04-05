@@ -208,6 +208,13 @@ namespace GalEngine
                 0, texture.Size.Height, 0, 1);
         }
 
+        public virtual void Clear(Texture2D texture, Color<float> clear)
+        {
+            mDevice.ClearRenderTarget(
+                renderTarget: texture.GpuRenderTarget,
+                color: new Vector4<float>(x: clear.Red, y: clear.Green, z: clear.Blue, w: clear.Alpha));
+        }
+
         public virtual void EndDraw()
         {
             mProject = Matrix4x4.Identity;

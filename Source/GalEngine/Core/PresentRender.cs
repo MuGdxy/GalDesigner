@@ -69,10 +69,10 @@ namespace GalEngine
             });
 
             //compile shader
+            mVertexShader = new GpuVertexShader(mDevice, GpuVertexShader.Compile(Properties.Resources.PresentVertexShader));
             mDrawPixelShader = new GpuPixelShader(mDevice, GpuPixelShader.Compile(Properties.Resources.PresentDrawPixelShader));
             mMaskPixelShader = new GpuPixelShader(mDevice, GpuPixelShader.Compile(Properties.Resources.PresentMaskPixelShader));
-            mVertexShader = new GpuVertexShader(mDevice, GpuVertexShader.Compile(Properties.Resources.PresentVertexShader));
-
+            
             //create input layout, we only need to render texture
             mInputLayout = new GpuInputLayout(mDevice, new InputElement[]
             {

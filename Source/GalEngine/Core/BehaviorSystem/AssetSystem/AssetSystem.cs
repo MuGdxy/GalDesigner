@@ -72,7 +72,7 @@ namespace GalEngine
             return mAssetGraph.DestoryAsset(asset);
         }
 
-        public Asset UnLoadAssetIndependent(Asset asset)
+        public Asset DestoryAssetIndependent(Asset asset)
         {
             return mAssetGraph.DestoryIndependentAsset(asset);
         }
