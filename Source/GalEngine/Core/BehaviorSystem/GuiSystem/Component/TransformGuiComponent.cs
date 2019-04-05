@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Numerics;
 using System.Threading.Tasks;
 
 namespace GalEngine
@@ -9,6 +10,8 @@ namespace GalEngine
     public class TransformGuiComponent : GuiComponent
     {
         public Position<float> Position { get; set; }
+
+        public Matrix4x4 Transform => Matrix4x4.CreateTranslation(Position.X, Position.Y, 0.0f);
 
         public TransformGuiComponent()
         {

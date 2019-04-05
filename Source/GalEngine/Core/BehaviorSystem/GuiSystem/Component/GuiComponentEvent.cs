@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+    struct GuiComponentEventProperty
+    {
+        public Position<int> MousePosition;
+        public GuiControl DragControl;
+        public GuiControl FocusControl;
+    }
+
     public class GuiComponentEvent : BaseEvent
     {
         public string Name { get; }
@@ -24,15 +31,29 @@ namespace GalEngine
         {
             Position = position;
         }
+
+        public GuiComponentMoveEvent(DateTime time, Position<int> position) : 
+            this(time, GuiComponentStatusProperty.Move, position)
+        {
+
+        }
     }
 
     public class GuiComponentClickEvent : GuiComponentMoveEvent
     {
         public MouseButton Button { get; }
+        public bool IsDown { get; }
 
-        public GuiComponentClickEvent(DateTime time, string name, Position<int> position, MouseButton button) : base(time, name, position)
+        public GuiComponentClickEvent(DateTime time, string name, Position<int> position, MouseButton button, bool isDown) : base(time, name, position)
         {
             Button = button;
+            IsDown = isDown;
+        }
+
+        public GuiComponentClickEvent(DateTime time, Position<int> position, MouseButton button, bool isDown) :
+            this(time, GuiComponentStatusProperty.Click, position, button, isDown)
+        {
+
         }
     }
 
@@ -44,44 +65,96 @@ namespace GalEngine
         {
             Offset = offset;
         }
+
+        public GuiComponentWheelEvent(DateTime time, Position<int> position, int offset) 
+            : this(time, GuiComponentStatusProperty.Wheel, position, offset)
+        {
+
+        }
     }
 
     public class GuiComponentInputEvent : GuiComponentEvent
     {
-        public char Input { get; }
+        public KeyCode Input { get; }
 
-        public GuiComponentInputEvent(DateTime time, string name, char input) : base(time, name)
+        public GuiComponentInputEvent(DateTime time, string name, KeyCode input) : base(time, name)
         {
             Input = input;
         }
+
+        public GuiComponentInputEvent(DateTime time, KeyCode input) : 
+            this(time, GuiComponentStatusProperty.Input, input)
+        {
+
+        }
     }
 
-    public class GuiComponentEventName
+    public class GuiComponentFocusEvent : GuiComponentEvent
     {
-        public string Drag => "Drag";
-        public string Show => "Show";
-        public string Hide => "Hide";
-        public string Move => "Move";
-        public string Click => "Click";
-        public string Wheel => "Wheel";
-        public string Hover => "Hover";
-        public string Enter => "Enter";
-        public string Leave => "Leave";
-        public string Input => "Input";
-        public string SetFocus => "SetFocus";
-        public string LostFocus => "LostFocus";
+        public bool Focus { get; }
 
-        public string[] Array => new string[]
+        public GuiComponentFocusEvent(DateTime time, string name, bool focus) : base(time, name)
         {
-            Drag, Show, Hide, Move, Click, Wheel, Hover, Enter , Leave, Input, SetFocus, LostFocus
+            Focus = focus;
+        }
+
+        public GuiComponentFocusEvent(DateTime time, bool focus)
+            : this(time, GuiComponentStatusProperty.Focus, focus)
+        {
+
+        }
+    }
+
+    public class GuiComponentHoverEvent : GuiComponentEvent
+    {
+        public bool Hover { get; }
+        public bool Enter => Hover;
+        public bool Leave => !Enter;
+
+        public GuiComponentHoverEvent(DateTime time, string name, bool hover) : base(time, name)
+        {
+            Hover = hover;
+        }
+
+        public GuiComponentHoverEvent(DateTime time, bool hover)
+            : this(time, GuiComponentStatusProperty.Hover, hover)
+        {
+
+        }
+    }
+
+    public static class GuiComponentStatusProperty
+    {
+        public static string Drag => "Drag";
+        public static string Show => "Show";
+        public static string Hide => "Hide";
+        public static string Move => "Move";
+        public static string Click => "Click";
+        public static string Wheel => "Wheel";
+        public static string Hover => "Hover";
+        public static string Input => "Input";
+        public static string Focus => "Focus";
+
+        public static string[] Event => new string[]
+        {
+            Drag, Show, Hide, Move, Click, Wheel, Hover, Input, Focus
         };
 
-        internal GuiComponentEventName() { }
+        public static string[] Component => new string[]
+        {
+            Drag, Show, Hide, Hover, Focus
+        };
     }
-
-    public static partial class StringProperty
+    
+    public class GuiComponentStatus : PropertyContainer<bool>
     {
-        public static GuiComponentEventName GuiComponentEvent { get; }
+        public GuiComponentStatus(string[] statusNames)
+        {
+            foreach (var statusName in statusNames)
+            {
+                SetProperty(statusName, false);
+            }
+        }
     }
 
     public delegate void GuiComponentEventSolver(GuiControl control, GuiComponentEvent eventArg);
