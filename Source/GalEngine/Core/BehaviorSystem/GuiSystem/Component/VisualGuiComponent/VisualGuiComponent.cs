@@ -8,6 +8,12 @@ using GalEngine.GameResource;
 
 namespace GalEngine
 {
+    public enum GuiRenderMode
+    {
+        WireFrame,
+        Solid
+    }
+
     public class VisualGuiComponent : GuiComponent
     {
         public Shape Shape { get; }

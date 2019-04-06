@@ -318,6 +318,7 @@ namespace GalEngine
                 }
             }
 
+            //solve to render text component
             void textGuiComponentSolver(GuiRender render, TransformGuiComponent transformComponent, TextGuiComponent textComponent)
             {
                 //update the property and create asset(Text)
@@ -330,7 +331,9 @@ namespace GalEngine
                     x : (size.Width - textComponent.mTextAsset.Size.Width) * 0.5f,
                     y : (size.Height - textComponent.mTextAsset.Size.Height) * 0.5f);
 
-                render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
+                //not invisable text, we will render it
+                if (textComponent.mTextAsset.Texture.GpuTexture != null)
+                    render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
 
                 //enable debug mode, we will render the shape
                 if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
@@ -343,6 +346,43 @@ namespace GalEngine
                             left: -padding, 
                             top: -padding, 
                             right: size.Width + padding, 
+                            bottom: size.Height + padding),
+                        color: GuiDebugProperty.ShapeProperty.Color,
+                        padding: GuiDebugProperty.ShapeProperty.Padding);
+                }
+            }
+
+            void rectangleComponentSolver(GuiRender render, TransformGuiComponent transformComponent, RectangleGuiComponent rectangleComponent)
+            {
+                //get size of rectangle
+                var size = (rectangleComponent.Shape as RectangleShape).Size;
+
+                //swtich render mode
+                switch (rectangleComponent.RenderMode)
+                {
+                    case GuiRenderMode.WireFrame: render.DrawRectangle(
+                            rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
+                            color: rectangleComponent.Color,
+                            padding: rectangleComponent.Padding);
+                        break;
+                    case GuiRenderMode.Solid: render.FillRectangle(
+                        rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
+                        color: rectangleComponent.Color);
+                        break;
+                    default: break;
+                }
+
+                //draw debug shape
+                if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
+                {
+                    var padding = GuiDebugProperty.ShapeProperty.Padding;
+
+                    //draw debug shape
+                    render.DrawRectangle(
+                        rectangle: new Rectangle<float>(
+                            left: -padding,
+                            top: -padding,
+                            right: size.Width + padding,
                             bottom: size.Height + padding),
                         color: GuiDebugProperty.ShapeProperty.Color,
                         padding: GuiDebugProperty.ShapeProperty.Padding);
@@ -377,6 +417,8 @@ namespace GalEngine
                 {
                     case TextGuiComponent textComponent:
                         textGuiComponentSolver(mRender, transformComponent, textComponent); break;
+                    case RectangleGuiComponent rectangleComponent:
+                        rectangleComponentSolver(mRender, transformComponent, rectangleComponent); break;
                     default: break;
                 }
             }

@@ -31,9 +31,9 @@ namespace GalEngine
             (Shape as RectangleShape).Size = new Size<float>(mTextAsset.Size.Width, mTextAsset.Size.Height);
         }
 
-        public TextGuiComponent()
+        public TextGuiComponent() : base(new RectangleShape())
         {
-
+            //to do: default ctor
         }
 
         public TextGuiComponent(string text, Font font, Color<float> color) : base(new RectangleShape())

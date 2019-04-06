@@ -29,16 +29,22 @@ namespace GuiSystemTestUnit
         {
             private LogicGuiComponent mLogicGuiComponent;
             private TransformGuiComponent mTransformComponent;
-            private TextGuiComponent mTextComponent;
+            private VisualGuiComponent mVisualGuiComponent;
 
-            public SimpleGuiObject(string text, Position<float> position, Font font)
+            public SimpleGuiObject(Position<float> position, Size<float> size)
             {
                 AddComponent(mLogicGuiComponent = new LogicGuiComponent());
                 AddComponent(mTransformComponent = new TransformGuiComponent(position));
-                AddComponent(mTextComponent = new TextGuiComponent(text, font, new Color<float>(0, 0, 0, 1)));
+                AddComponent(mVisualGuiComponent = new RectangleGuiComponent(
+                    new RectangleShape(size), new Color<float>(0, 0, 0, 1), GuiRenderMode.WireFrame));
 
                 mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Drag, true);
-                mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Click, true);
+                mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Hover, true);
+                mLogicGuiComponent.SetEventSolver(GuiComponentStatusProperty.Hover, (x, y) =>
+                {
+                    (mVisualGuiComponent as RectangleGuiComponent).RenderMode = (y as GuiComponentHoverEvent).Hover ?
+                        GuiRenderMode.Solid : GuiRenderMode.WireFrame;
+                });
             }
         }
 
@@ -60,7 +66,7 @@ namespace GuiSystemTestUnit
                 .GetAssetDescription("consola.ttf"));
 
             GameSystems.SystemScene.Root.GetChild(StringProperty.GuiControlRoot).AddChild(
-                new SimpleGuiObject("Hello, World!", new Position<float>(30, 30), asset.Instance as Font));
+                new SimpleGuiObject(new Position<float>(30, 30), new Size<float>(100, 100)));
 
             GameSystems.GuiSystem.GuiDebugProperty = new GuiDebugProperty()
             {
