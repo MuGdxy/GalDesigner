@@ -18,18 +18,17 @@ namespace GalEngine
 
         internal void SetPropertyToAsset()
         {
-            //get the size we want to render
-            var size = new Size<int>((int)(Shape as RectangleShape).Size.Width, (int)(Shape as RectangleShape).Size.Height);
-
             //do not need to change the text asset, because we do not change any propertry
-            if (mTextAsset != null && mTextAsset.TextContent == Text && mTextAsset.Font == Font && 
-                mTextAsset.MaxSize == size) return;
+            if (mTextAsset != null && mTextAsset.TextContent == Text && mTextAsset.Font == Font) return;
 
             //dispose old asset
             Utility.Dispose(ref mTextAsset);
 
             //create new asset
-            mTextAsset = new Text(Text, Font, size);
+            mTextAsset = new Text(Text, Font, new Size<int>(0, 0));
+
+            //change the shape
+            (Shape as RectangleShape).Size = new Size<float>(mTextAsset.Size.Width, mTextAsset.Size.Height);
         }
 
         public TextGuiComponent()
@@ -37,7 +36,7 @@ namespace GalEngine
 
         }
 
-        public TextGuiComponent(RectangleShape shape, string text, Font font, Color<float> color) : base(shape)
+        public TextGuiComponent(string text, Font font, Color<float> color) : base(new RectangleShape())
         {
             Font = font;
             Text = text;

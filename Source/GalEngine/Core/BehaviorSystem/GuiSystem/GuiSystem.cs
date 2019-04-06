@@ -335,9 +335,15 @@ namespace GalEngine
                 //enable debug mode, we will render the shape
                 if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
                 {
+                    var padding = GuiDebugProperty.ShapeProperty.Padding;
+
                     //draw debug shape
                     render.DrawRectangle(
-                        rectangle: new Rectangle<float>(left: 0, top: 0, right: size.Width, bottom: size.Height),
+                        rectangle: new Rectangle<float>(
+                            left: -padding, 
+                            top: -padding, 
+                            right: size.Width + padding, 
+                            bottom: size.Height + padding),
                         color: GuiDebugProperty.ShapeProperty.Color,
                         padding: GuiDebugProperty.ShapeProperty.Padding);
                 }

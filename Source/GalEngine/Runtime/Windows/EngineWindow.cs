@@ -10,6 +10,7 @@ namespace GalEngine
     {
         private IntPtr mHandle;
         private APILibrary.Win32.Internal.WndProc mWndProc;
+        private APILibrary.Win32.Rect mLastClipRect;
 
         public string Name { get; private set; }
         public string Icon { get; }
@@ -89,19 +90,53 @@ namespace GalEngine
                 return APILibrary.Win32.Message.HighWord(message.wParam);
             }
 
+            void lockCursor()
+            {
+                APILibrary.Win32.Internal.SetCapture(mHandle);
+
+                var position = new APILibrary.Win32.Point();
+                var clientRect = new APILibrary.Win32.Rect();
+
+                APILibrary.Win32.Internal.GetClipCursor(ref mLastClipRect);
+                APILibrary.Win32.Internal.ClientToScreen(mHandle, ref position);
+                APILibrary.Win32.Internal.GetClientRect(mHandle, ref clientRect);
+
+                var lockRect = new APILibrary.Win32.Rect()
+                {
+                    left = position.x,
+                    top = position.y,
+                    right = position.x + clientRect.right - clientRect.left,
+                    bottom = position.y + clientRect.bottom - clientRect.top
+                };
+
+                APILibrary.Win32.Internal.ClipCursor(ref lockRect);
+            }
+            void unLockCursor()
+            {
+                APILibrary.Win32.Internal.ReleaseCapture();
+
+                APILibrary.Win32.Internal.ClipCursor(ref mLastClipRect);
+            }
+
             switch ((APILibrary.Win32.WinMsg)message.type)
             {
                 //sender event
                 case APILibrary.Win32.WinMsg.WM_KEYUP: SenderEvent(new KeyBoardEvent(DateTime.Now, (KeyCode)message.wParam, false)); break;
                 case APILibrary.Win32.WinMsg.WM_KEYDOWN: SenderEvent(new KeyBoardEvent(DateTime.Now, (KeyCode)message.wParam, true)); break;
                 case APILibrary.Win32.WinMsg.WM_MOUSEMOVE: SenderEvent(new MouseMoveEvent(DateTime.Now, mousePosition())); break;
-                case APILibrary.Win32.WinMsg.WM_LBUTTONUP: SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, false)); break;
-                case APILibrary.Win32.WinMsg.WM_MBUTTONUP: SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, false)); break;
-                case APILibrary.Win32.WinMsg.WM_RBUTTONUP: SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, false)); break;
+                case APILibrary.Win32.WinMsg.WM_LBUTTONUP: unLockCursor();
+                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, false)); break;
+                case APILibrary.Win32.WinMsg.WM_MBUTTONUP: unLockCursor();
+                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, false)); break;
+                case APILibrary.Win32.WinMsg.WM_RBUTTONUP: unLockCursor();
+                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, false)); break;
                 case APILibrary.Win32.WinMsg.WM_MOUSEWHEEL: SenderEvent(new MouseWheelEvent(DateTime.Now, mousePosition(), mouseWheelScrollOffset())); break;
-                case APILibrary.Win32.WinMsg.WM_LBUTTONDOWN: SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, true)); break;
-                case APILibrary.Win32.WinMsg.WM_MBUTTONDOWN: SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, true)); break;
-                case APILibrary.Win32.WinMsg.WM_RBUTTONDOWN: SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, true)); break;
+                case APILibrary.Win32.WinMsg.WM_LBUTTONDOWN: lockCursor();
+                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, true)); break;
+                case APILibrary.Win32.WinMsg.WM_MBUTTONDOWN: lockCursor();
+                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, true)); break;
+                case APILibrary.Win32.WinMsg.WM_RBUTTONDOWN: lockCursor();
+                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, true)); break;
                 default: break;
             }
         }

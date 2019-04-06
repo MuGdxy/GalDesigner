@@ -17,7 +17,7 @@ namespace GuiSystemTestUnit
                 base(name: name,
                      type: "Font",
                      size: 0,
-                     createFunction: (out object x, byte[] y, List<Asset> z) => x = new Font(20, y),
+                     createFunction: (out object x, byte[] y, List<Asset> z) => x = new Font(25, y),
                      destoryFunction: (ref object x) => { (x as Font).Dispose(); x = null; },
                      isKeepDependentAssets: false)
             {
@@ -31,13 +31,14 @@ namespace GuiSystemTestUnit
             private TransformGuiComponent mTransformComponent;
             private TextGuiComponent mTextComponent;
 
-            public SimpleGuiObject(string text, Position<float> position, Size<float> size, Font font)
+            public SimpleGuiObject(string text, Position<float> position, Font font)
             {
                 AddComponent(mLogicGuiComponent = new LogicGuiComponent());
                 AddComponent(mTransformComponent = new TransformGuiComponent(position));
-                AddComponent(mTextComponent = new TextGuiComponent(new RectangleShape(size), text, font, new Color<float>(0, 0, 0, 1)));
+                AddComponent(mTextComponent = new TextGuiComponent(text, font, new Color<float>(0, 0, 0, 1)));
 
                 mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Drag, true);
+                mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Click, true);
             }
         }
 
@@ -59,11 +60,11 @@ namespace GuiSystemTestUnit
                 .GetAssetDescription("consola.ttf"));
 
             GameSystems.SystemScene.Root.GetChild(StringProperty.GuiControlRoot).AddChild(
-                new SimpleGuiObject("Hello, World!", new Position<float>(30, 30), new Size<float>(200, 100), asset.Instance as Font));
+                new SimpleGuiObject("Hello, World!", new Position<float>(30, 30), asset.Instance as Font));
 
             GameSystems.GuiSystem.GuiDebugProperty = new GuiDebugProperty()
             {
-                ShapeProperty = new ShapeDebugProperty(2.0f, new Color<float>(1, 0, 0, 1))
+                //ShapeProperty = new ShapeDebugProperty(2.0f, new Color<float>(1, 0, 0, 1))
             };
 
             GameSystems.RunLoop();
