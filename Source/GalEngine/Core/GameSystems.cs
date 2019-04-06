@@ -19,9 +19,11 @@ namespace GalEngine
 
     public static class GameSystems
     {
-        private static PackageProvider PackageProvider { get; set; }
-        private static GuiControlProvider GuiControlProvider { get; set; }
-        
+        private static Package Package { get; set; }
+        private static GuiControl GuiControl { get; set; }
+       
+        private static PresentRender PresentRender { get; set; }
+
         public static AssetSystem AssetSystem { get; private set; }
         public static GuiSystem GuiSystem { get; private set; }
 
@@ -30,8 +32,8 @@ namespace GalEngine
         public static GameScene MainScene { get; set; }
         public static GameScene SystemScene { get; private set; }
         public static EngineWindow EngineWindow { get; private set; }
-        public static GraphicsDevice GraphicsDevice { get; private set; }
-
+        public static GpuDevice GpuDevice { get; private set; }
+        
 
         public static string GameName { get; private set; }
         public static bool IsExist { get; set; }
@@ -79,38 +81,49 @@ namespace GalEngine
 
         private static void InitializeRuntime(GameStartInfo gameStartInfo)
         {
-            var adapters = GraphicsAdapter.EnumerateGraphicsAdapter();
+            var adapters = GpuAdapter.EnumerateGraphicsAdapter();
 
             LogEmitter.Assert(adapters.Count > 0, LogLevel.Error, "[Initialize Graphics Device Failed without Support Adapter] from [GameSystems]");
 
-            GraphicsDevice = new GraphicsDevice(adapters[0]);
+            GpuDevice = new GpuDevice(adapters[0]);
 
             EngineWindow = new EngineWindow(
-                gameStartInfo.WindowName, 
-                gameStartInfo.IconName, 
+                gameStartInfo.WindowName,
+                gameStartInfo.IconName,
                 gameStartInfo.WindowSize);
             EngineWindow.Show();
+
+            PresentRender = new PresentRender(GpuDevice, EngineWindow.Handle, EngineWindow.Size);
+
+            //init resize event
+            EngineWindow.OnSizeChangeEvent += (sender, eventArg) =>
+            {
+                PresentRender.ReSize(eventArg.After);
+                GuiSystem.Area = new Rectangle<int>(0, 0, eventArg.After.Width, eventArg.After.Height);
+            };
         }
 
         public static void Initialize(GameStartInfo gameStartInfo)
         {
             GameName = gameStartInfo.GameName;
-
+            
             BehaviorSystems = new List<BehaviorSystem>();
 
             IsExist = true;
 
             SystemScene = new GameScene("SystemScene");
             
-            SystemScene.AddGameObject(PackageProvider = new PackageProvider(StringProperty.PackageRoot, "Package"));
-            SystemScene.AddGameObject(GuiControlProvider = new GuiControlProvider(StringProperty.GuiControlRoot));
+            SystemScene.AddGameObject(Package = new Package(StringProperty.PackageRoot, "Package"));
+            SystemScene.AddGameObject(GuiControl = new GuiControl(StringProperty.GuiControlRoot));
 
             InitializeRuntime(gameStartInfo);
 
             //add system
             AddBehaviorSystem(AssetSystem = new AssetSystem());
-            AddBehaviorSystem(GuiSystem = new GuiSystem(GraphicsDevice, new Rectangle<int>(0, 0, EngineWindow.Size.Width, EngineWindow.Size.Height)));
-            
+            AddBehaviorSystem(GuiSystem = new GuiSystem(GpuDevice, new Rectangle<int>(0, 0, EngineWindow.Size.Width, EngineWindow.Size.Height)));
+
+            EngineWindow.AddEventListener(GuiSystem);
+
             LogEmitter.Apply(LogLevel.Information, "[Initialize GameSystems Finish] from [GameSystems]");
         }
         
@@ -124,13 +137,17 @@ namespace GalEngine
                 SystemScene?.Update(Time.DeltaSeconds);
                 MainScene?.Update(Time.DeltaSeconds);
 
-                foreach (var subSystem in BehaviorSystems) UpdateBehaviorSystem(subSystem);
+                BehaviorSystems.ForEach((system) => UpdateBehaviorSystem(system));
 
                 if (EngineWindow != null && EngineWindow.IsExisted != false)
                     EngineWindow.Update(Time.DeltaSeconds);
 
                 if (EngineWindow != null && EngineWindow.IsExisted == false)
                     IsExist = false;
+
+                PresentRender.BeginDraw();
+                BehaviorSystems.ForEach((system) => system.Present(PresentRender));
+                PresentRender.EndDraw(true);
             }
         }
 

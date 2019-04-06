@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props" Condition="Exists('..\..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" />
+  <Import Project="..\..\packages\SharpFont.4.0.1\build\SharpFont.props" Condition="Exists('..\..\packages\SharpFont.4.0.1\build\SharpFont.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +14,8 @@
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +25,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,16 +38,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.D3DCompiler, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.D3DCompiler.4.2.0\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.D3DCompiler.4.2.0\lib\net45\SharpDX.D3DCompiler.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.Direct3D11.4.2.0\lib\net45\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <HintPath>..\..\..\SoftwaveGraphics\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\..\packages\SharpDX.DXGI.4.2.0\lib\net45\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpFont, Version=4.0.1.200, Culture=neutral, PublicKeyToken=48add4c483071cdf, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SharpFont.4.0.1\lib\net45\SharpFont.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -60,16 +67,24 @@
     <Compile Include="Core\BehaviorSystem\AssetSystem\AssetGraph.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\AssetSystem.cs" />
     <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\AssetSystem\PackageProvider.cs" />
+    <Compile Include="Core\BehaviorSystem\AssetSystem\Package.cs" />
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponentEvent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\FrameVisualGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\RectangleGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\TextGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControlProvider.cs" />
+    <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiSystem.cs" />
+    <Compile Include="Core\GameResource\Font.cs" />
+    <Compile Include="Core\GameResource\Shape.cs" />
+    <Compile Include="Core\GameResource\Text.cs" />
+    <Compile Include="Core\GameResource\Texture2D.cs" />
+    <Compile Include="Core\PresentRender.cs" />
     <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
     <Compile Include="Core\GameObject\Component\Component.cs" />
@@ -83,6 +98,7 @@
     <Compile Include="Enumeration\LogColor.cs" />
     <Compile Include="Enumeration\LogLevel.cs" />
     <Compile Include="Enumeration\MouseButton.cs" />
+    <Compile Include="Enumeration\PixelFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -91,31 +107,35 @@
     </Compile>
     <Compile Include="Runtime\Event\BaseEvent.cs" />
     <Compile Include="Runtime\Event\EventEmitter.cs" />
+    <Compile Include="Runtime\Event\EventListener.cs" />
     <Compile Include="Runtime\Event\KeyBoardEvent.cs" />
     <Compile Include="Runtime\Event\MouseEvent.cs" />
     <Compile Include="Runtime\Event\SizeChangeEvent.cs" />
     <Compile Include="Runtime\Event\UpdateEvent.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsAdapter.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsBlendState.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsBuffer.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsConvert.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsDevice.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsInputLayout.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsPixelFormat.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsPixelShader.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsRasterizerState.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsRenderTarget.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsResource.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsShader.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsShaderResource.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsSwapChain.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsTexture.cs" />
-    <Compile Include="Runtime\Graphics\GraphicsVertexShader.cs" />
+    <Compile Include="Runtime\Graphics\GpuAdapter.cs" />
+    <Compile Include="Runtime\Graphics\GpuBlendState.cs" />
+    <Compile Include="Runtime\Graphics\GpuBuffer.cs" />
+    <Compile Include="Runtime\Graphics\GpuConvert.cs" />
+    <Compile Include="Runtime\Graphics\GpuDevice.cs" />
+    <Compile Include="Runtime\Graphics\GpuInputLayout.cs" />
+    <Compile Include="Runtime\Graphics\GpuPixelFormat.cs" />
+    <Compile Include="Runtime\Graphics\GpuPixelShader.cs" />
+    <Compile Include="Runtime\Graphics\GpuRasterizerState.cs" />
+    <Compile Include="Runtime\Graphics\GpuRenderTarget.cs" />
+    <Compile Include="Runtime\Graphics\GpuResource.cs" />
+    <Compile Include="Runtime\Graphics\GpuSamplerState.cs" />
+    <Compile Include="Runtime\Graphics\GpuShader.cs" />
+    <Compile Include="Runtime\Graphics\GpuResourceUsage.cs" />
+    <Compile Include="Runtime\Graphics\GpuSwapChain.cs" />
+    <Compile Include="Runtime\Graphics\GpuTexture2D.cs" />
+    <Compile Include="Runtime\Graphics\GpuVertexShader.cs" />
+    <Compile Include="Runtime\Graphics\GpuResourceInfo.cs" />
     <Compile Include="Runtime\RuntimeException.cs" />
     <Compile Include="Runtime\Windows\EngineWindow.cs" />
     <Compile Include="Structure\Color.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\Position.cs" />
+    <Compile Include="Structure\PropertyContainer.cs" />
     <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
     <Compile Include="Structure\Size.cs" />
@@ -139,8 +159,18 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Asset\PresentDrawPixelShader.hlsl" />
+    <Content Include="Asset\PresentMaskPixelShader.hlsl" />
+    <Content Include="Asset\PresentVertexShader.hlsl" />
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderCommonVertexShader.hlsl" />
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderColorPixelShader.hlsl" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\SharpFont.4.0.1\build\SharpFont.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SharpFont.4.0.1\build\SharpFont.props'))" />
+    <Error Condition="!Exists('..\..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SharpFont.Dependencies.2.6\build\SharpFont.Dependencies.props'))" />
+  </Target>
 </Project>

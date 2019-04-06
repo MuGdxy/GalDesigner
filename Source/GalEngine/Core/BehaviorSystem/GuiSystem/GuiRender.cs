@@ -5,6 +5,7 @@ using System.Text;
 using System.Numerics;
 using System.Threading.Tasks;
 
+using GalEngine.GameResource;
 using GalEngine.Runtime.Graphics;
 
 namespace GalEngine
@@ -17,12 +18,10 @@ namespace GalEngine
             public Vector2 TexCoord;
         }
 
-        private struct Transform
+        private struct MatrixData
         {
             public Matrix4x4 World;
             public Matrix4x4 Project;
-
-            public static int SizeInBytes => 128;
         }
         
         private struct RenderConfig
@@ -37,64 +36,79 @@ namespace GalEngine
                 get { return new Color<float>(mColorRed, mColorGreen, mColorBlue, mColorAlpha); }
                 set { mColorRed = value.Red; mColorGreen = value.Green; mColorBlue = value.Blue; mColorAlpha = value.Alpha; }
             }
-
-            public static int SizeInBytes => 16;
         }
 
-        private readonly GraphicsBlendState mBlendState;
-        private readonly GraphicsInputLayout mInputLayout;
-        private readonly GraphicsVertexShader mVertexShader;
+        private readonly GpuDevice mDevice;
+
+        private readonly GpuBlendState mBlendState;
+        private readonly GpuInputLayout mInputLayout;
+        private readonly GpuVertexShader mVertexShader;
 
         //pixel shader
-        private readonly GraphicsPixelShader mColorPixelShader;
+        private readonly GpuPixelShader mColorPixelShader;
+        private readonly GpuPixelShader mTexturePixelShader;
+
+        //sampler state
+        private readonly GpuSamplerState mSamplerState;
 
         //render object vertex buffer and index buffer
-        private readonly GraphicsBuffer mSquareVertexBuffer;
-        private readonly GraphicsBuffer mSquareIndexBuffer;
+        private readonly GpuBuffer mSquareVertexBuffer;
+        private readonly GpuBuffer mSquareIndexBuffer;
 
-        private readonly GraphicsBuffer mRectangleVertexBuffer;
-        private readonly GraphicsBuffer mRectangleIndexBuffer;
+        private readonly GpuBuffer mRectangleVertexBuffer;
+        private readonly GpuBuffer mRectangleIndexBuffer;
 
         //shader buffer and slot
-        private readonly int mTransformBufferSlot;
-        private readonly int mRenderConfigBufferSlot;
-
-        private readonly GraphicsBuffer mTransformBuffer;
-        private readonly GraphicsBuffer mRenderConfigBuffer;
+        private readonly int mTextureSlot = 0;
+        private readonly int mSamplerStateSlot = 0;
+        private readonly int mMatrixDataBufferSlot = 0;
+        private readonly int mRenderConfigBufferSlot = 0;
+        
+        private readonly GpuBuffer mMatrixDataBuffer;
+        private readonly GpuBuffer mRenderConfigBuffer;
 
         private Matrix4x4 mProject;
 
-        public GraphicsDevice Device { get; }
+        public GpuDevice Device => mDevice;
 
-        public GuiRender(GraphicsDevice device)
+        public Matrix4x4 Transform { get; set; }
+
+        public GuiRender(GpuDevice device)
         {
             //gui render is a simple render to render gui object
             //gui render can provide some simple object draw function
             //we can replace it to our render and we can use it in the gui system render function
-            Device = device;
+            mDevice = device;
+
+            //default transform is I
+            Transform = Matrix4x4.Identity;
 
             //init blend state
-            mBlendState = new GraphicsBlendState(Device, new RenderTargetBlendDescription()
+            mBlendState = new GpuBlendState(mDevice, new RenderTargetBlendDescription()
             {
-                AlphaBlendOperation = BlendOperation.Add,
-                BlendOperation = BlendOperation.Add,
-                DestinationAlphaBlend = BlendOption.InverseSourceAlpha,
-                DestinationBlend = BlendOption.InverseSourceAlpha,
-                SourceAlphaBlend = BlendOption.SourceAlpha,
-                SourceBlend = BlendOption.SourceAlpha,
+                AlphaBlendOperation = GpuBlendOperation.Add,
+                BlendOperation = GpuBlendOperation.Add,
+                DestinationAlphaBlend = GpuBlendOption.InverseSourceAlpha,
+                DestinationBlend = GpuBlendOption.InverseSourceAlpha,
+                SourceAlphaBlend = GpuBlendOption.SourceAlpha,
+                SourceBlend = GpuBlendOption.SourceAlpha,
                 IsBlendEnable = true
             });
 
             //init vertex shader, for all draw command we use same vertex shader
-            mVertexShader = new GraphicsVertexShader(Device, GraphicsVertexShader.Compile(Properties.Resources.GuiRenderCommonVertexShader));
+            mVertexShader = new GpuVertexShader(mDevice, GpuVertexShader.Compile(Properties.Resources.GuiRenderCommonVertexShader));
 
             //init pixel shader, we will choose the best pixel shader for different draw command
-            mColorPixelShader = new GraphicsPixelShader(Device, GraphicsPixelShader.Compile(Properties.Resources.GuiRenderColorPixelShader));
+            mColorPixelShader = new GpuPixelShader(mDevice, GpuPixelShader.Compile(Properties.Resources.GuiRenderColorPixelShader));
+            mTexturePixelShader = new GpuPixelShader(mDevice, GpuPixelShader.Compile(Properties.Resources.GuiRenderTexturePixelShader));
+
+            //init sampler state
+            mSamplerState = new GpuSamplerState(mDevice);
 
             //init input layout
             //Position : float3
             //Texcoord : float2
-            mInputLayout = new GraphicsInputLayout(Device, new InputElement[]
+            mInputLayout = new GpuInputLayout(mDevice, new InputElement[]
             {
                 new InputElement("POSITION", 0, 12),
                 new InputElement("TEXCOORD", 0, 8)
@@ -115,13 +129,17 @@ namespace GalEngine
             uint[] squareIndices = new uint[] {0, 1, 2, 0, 2 ,3 };
 
             //init square buffer and update
-            mSquareVertexBuffer = new GraphicsBuffer(Device,
-                squareVertices.Length * Utility.SizeOf<Vertex>(), Utility.SizeOf<Vertex>(),
-                GraphicsResourceBindType.VertexBufferr);
+            mSquareVertexBuffer = new GpuBuffer(
+                Utility.SizeOf<Vertex>() * squareVertices.Length,
+                Utility.SizeOf<Vertex>() * 1,
+                mDevice,
+                GpuResourceInfo.VertexBuffer());
 
-            mSquareIndexBuffer = new GraphicsBuffer(Device,
-                squareIndices.Length * Utility.SizeOf<uint>(), Utility.SizeOf<uint>(),
-                GraphicsResourceBindType.IndexBuffer);
+            mSquareIndexBuffer = new GpuBuffer(
+                Utility.SizeOf<uint>() * squareIndices.Length,
+                Utility.SizeOf<uint>() * 1,
+                mDevice, 
+                GpuResourceInfo.IndexBuffer());
 
             mSquareVertexBuffer.Update(squareVertices);
             mSquareIndexBuffer.Update(squareIndices);
@@ -136,58 +154,75 @@ namespace GalEngine
             };
 
             //init rectangle vertex and index buffer
-            mRectangleVertexBuffer = new GraphicsBuffer(Device,
-                8 * Utility.SizeOf<Vertex>(), Utility.SizeOf<Vertex>(),
-                GraphicsResourceBindType.VertexBufferr);
+            mRectangleVertexBuffer = new GpuBuffer(
+                Utility.SizeOf<Vertex>() * 8,
+                Utility.SizeOf<Vertex>() * 1,
+                mDevice,
+                GpuResourceInfo.VertexBuffer());
 
-            mRectangleIndexBuffer = new GraphicsBuffer(Device,
-                24 * Utility.SizeOf<uint>(), Utility.SizeOf<uint>(),
-                GraphicsResourceBindType.IndexBuffer);
+            mRectangleIndexBuffer = new GpuBuffer(
+                Utility.SizeOf<uint>() * 24, 
+                Utility.SizeOf<uint>() * 1,
+                mDevice,
+                GpuResourceInfo.IndexBuffer());
 
             mRectangleIndexBuffer.Update(rectangleIndices);
 
 
             //init shader buffer
-            mTransformBufferSlot = 0;
-            mRenderConfigBufferSlot = 0;
-
-            mTransformBuffer = new GraphicsBuffer(Device, 
-                Transform.SizeInBytes, Transform.SizeInBytes,
-                GraphicsResourceBindType.ConstantBuffer);
+            mMatrixDataBuffer = new GpuBuffer(
+                Utility.SizeOf<MatrixData>(),
+                Utility.SizeOf<MatrixData>(),
+                mDevice,
+                GpuResourceInfo.ConstantBuffer());
             
-            mRenderConfigBuffer = new GraphicsBuffer(Device,
-                RenderConfig.SizeInBytes, RenderConfig.SizeInBytes,
-                GraphicsResourceBindType.ConstantBuffer);
+            mRenderConfigBuffer = new GpuBuffer(
+                Utility.SizeOf<RenderConfig>(),
+                Utility.SizeOf<RenderConfig>(),
+                mDevice,
+                GpuResourceInfo.ConstantBuffer());
         }
 
-        public virtual void BeginDraw(GraphicsRenderTarget renderTarget)
+        public virtual void BeginDraw(Texture2D texture)
         {
             //begin draw and we need set the render target before we draw anything
 
             //reset device and set render target
-            Device.Reset();
-            Device.SetRenderTarget(renderTarget);
+            mDevice.Reset();
+            mDevice.SetRenderTarget(texture.GpuRenderTarget);
 
             //set blend state
-            Device.SetBlendState(mBlendState);
+            mDevice.SetBlendState(mBlendState);
 
             //set input layout ,vertex shader and primitive type
-            Device.SetInputLayout(mInputLayout);
-            Device.SetVertexShader(mVertexShader);
-            Device.SetPrimitiveType(PrimitiveType.TriangleList);
+            mDevice.SetInputLayout(mInputLayout);
+            mDevice.SetVertexShader(mVertexShader);
+            mDevice.SetPrimitiveType(GpuPrimitiveType.TriangleList);
 
             //set view port
-            Device.SetViewPort(new Rectangle<float>(0, 0, renderTarget.Size.Width, renderTarget.Size.Height));
+            mDevice.SetViewPort(new Rectangle<float>(0, 0, texture.Size.Width, texture.Size.Height));
 
             //set the project matrix, need set null when we end draw
-            mProject = Matrix4x4.CreateOrthographic(
-                renderTarget.Size.Width,
-                renderTarget.Size.Height, 0, 1);
+            mProject = Matrix4x4.CreateOrthographicOffCenter(
+                0, texture.Size.Width, 
+                0, texture.Size.Height, 0, 1);
+        }
+
+        public virtual void Clear(Texture2D texture, Color<float> clear)
+        {
+            mDevice.ClearRenderTarget(
+                renderTarget: texture.GpuRenderTarget,
+                color: new Vector4<float>(x: clear.Red, y: clear.Green, z: clear.Blue, w: clear.Alpha));
         }
 
         public virtual void EndDraw()
         {
             mProject = Matrix4x4.Identity;
+        }
+
+        public virtual void SetTransform(Matrix4x4 transform)
+        {
+            Transform = transform;
         }
 
         public virtual void DrawLine(Position<float> start, Position<float> end, Color<float> color, 
@@ -198,36 +233,38 @@ namespace GalEngine
             //color.Alpha means the opacity of line
 
             //first, we compute the matrix of world transform
-            Transform transform = new Transform();
+            MatrixData matrixData = new MatrixData();
             Vector2 vector = new Vector2(end.X - start.X, end.Y - start.Y);
 
             //1.compute the scale component, x-component is euqal the length of line, y-component is equal the padding
-            transform.World = Matrix4x4.CreateScale(vector.Length(), padding, 1.0f);
+            matrixData.World = Matrix4x4.CreateScale(vector.Length(), padding, 1.0f);
             //2.compute the angle of rotate, we only rotate it at the z-axis
-            transform.World = Matrix4x4.CreateRotationZ((float)Math.Atan2(vector.Y, vector.X), new Vector3(0, padding * 0.5f, 0)) * transform.World;
+            matrixData.World *= Matrix4x4.CreateRotationZ((float)Math.Atan2(vector.Y, vector.X), new Vector3(0, padding * 0.5f, 0));
             //3.compute the translation, the position of start, but the y is start.y - padding * 0.5f
-            transform.World = Matrix4x4.CreateTranslation(new Vector3(start.X, start.Y - padding * 0.5f, 0)) * transform.World;
+            matrixData.World *= Matrix4x4.CreateTranslation(new Vector3(start.X, start.Y - padding * 0.5f, 0));
+            //4.keep transform matrix data
+            matrixData.World *= Transform;
 
             //set project matrix
-            transform.Project = mProject;
+            matrixData.Project = mProject;
 
             //second, we set the render config
             RenderConfig renderConfig = new RenderConfig() { Color = color };
 
             //update buffer
-            mTransformBuffer.Update(transform);
+            mMatrixDataBuffer.Update(matrixData);
             mRenderConfigBuffer.Update(renderConfig);
 
             //set buffer and shader
-            Device.SetPixelShader(mColorPixelShader);
-            Device.SetVertexBuffer(mSquareVertexBuffer);
-            Device.SetIndexBuffer(mSquareIndexBuffer);
+            mDevice.SetPixelShader(mColorPixelShader);
+            mDevice.SetVertexBuffer(mSquareVertexBuffer);
+            mDevice.SetIndexBuffer(mSquareIndexBuffer);
 
-            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
-            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
+            mDevice.SetBuffer(mMatrixDataBuffer, mMatrixDataBufferSlot, GpuShaderType.VertexShader);
+            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
 
             //draw
-            Device.DrawIndexed(6, 0, 0);
+            mDevice.DrawIndexed(6, 0, 0);
         }
 
         public virtual void DrawRectangle(Rectangle<float> rectangle, Color<float> color, 
@@ -235,7 +272,7 @@ namespace GalEngine
         {
             //draw rectangle with color
             //padding means the width of edge
-            //color.Alpha means the opacity of line
+            //color.Alpha means the opacity of edge
 
             //read rectangle data
             Rectangle<float> outSide = rectangle;
@@ -266,22 +303,106 @@ namespace GalEngine
             mRectangleVertexBuffer.Update(vertics);
 
             //second, update constant buffer
-            Transform transform = new Transform() { World = Matrix4x4.Identity, Project = mProject };
+            MatrixData matrixData = new MatrixData() { World = Transform, Project = mProject };
             RenderConfig renderConfig = new RenderConfig() { Color = color };
 
-            mTransformBuffer.Update(transform);
+            mMatrixDataBuffer.Update(matrixData);
             mRenderConfigBuffer.Update(renderConfig);
 
             //set buffer and shader
-            Device.SetPixelShader(mColorPixelShader);
-            Device.SetVertexBuffer(mRectangleVertexBuffer);
-            Device.SetIndexBuffer(mRectangleIndexBuffer);
+            mDevice.SetPixelShader(mColorPixelShader);
+            mDevice.SetVertexBuffer(mRectangleVertexBuffer);
+            mDevice.SetIndexBuffer(mRectangleIndexBuffer);
 
-            Device.SetBuffer(mTransformBuffer, mTransformBufferSlot, ShaderType.VertexShader);
-            Device.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, ShaderType.PixelShader);
+            mDevice.SetBuffer(mMatrixDataBuffer, mMatrixDataBufferSlot, GpuShaderType.VertexShader);
+            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
 
             //draw
-            Device.DrawIndexed(24, 0, 0);
+            mDevice.DrawIndexed(24, 0, 0);
+        }
+
+        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, Color<float> color)
+        {
+            //fill rectangle with texture
+            //the result color's alpha is equal texture.alpha * opacity
+
+            MatrixData matrixData = new MatrixData();
+            RenderConfig renderConfig = new RenderConfig() { Color = color };
+
+            //1.scale the rectangle
+            matrixData.World = Matrix4x4.CreateScale(rectangle.Right - rectangle.Left, rectangle.Bottom - rectangle.Top, 1.0f);
+            //2.translate it
+            matrixData.World *= Matrix4x4.CreateTranslation(rectangle.Left, rectangle.Top, 0.0f);
+            //3.keep transform matrix data
+            matrixData.World *= Transform;
+
+            //set projection matrix
+            matrixData.Project = mProject;
+
+            mMatrixDataBuffer.Update(matrixData);
+            mRenderConfigBuffer.Update(renderConfig);
+
+            mDevice.SetPixelShader(mTexturePixelShader);
+            mDevice.SetVertexBuffer(mSquareVertexBuffer);
+            mDevice.SetIndexBuffer(mSquareIndexBuffer);
+
+            mDevice.SetSamplerState(mSamplerState, mSamplerStateSlot, GpuShaderType.PixelShader);
+
+            mDevice.SetBuffer(mMatrixDataBuffer, mMatrixDataBufferSlot, GpuShaderType.VertexShader);
+            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
+            mDevice.SetResourceUsage(texture.GpuResourceUsage, mTextureSlot, GpuShaderType.PixelShader);
+            
+            mDevice.DrawIndexed(6, 0, 0);
+        }
+
+        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, float opacity = 1.0f)
+        {
+            DrawImage(rectangle, texture, new Color<float>(1.0f, 1.0f, 1.0f, opacity));
+        }
+
+        public virtual void DrawText(Position<float> position, Text text, Color<float> color)
+        {
+            DrawImage(new Rectangle<float>(
+                position.X,
+                position.Y,
+                position.X + text.Size.Width,
+                position.Y + text.Size.Height), text.Texture, color);
+        }
+
+        public virtual void DrawText(Rectangle<float> rectangle, Text text, Color<float> color)
+        {
+            DrawImage(rectangle, text.Texture, color);
+        }
+
+        public virtual void FillRectangle(Rectangle<float> rectangle, Color<float> color)
+        {
+            //fill rectangle
+            //color.alpha means the opacity of rectangle
+
+            MatrixData matrixData = new MatrixData();
+            RenderConfig renderConfig = new RenderConfig() { Color = color };
+
+            //1.scale the rectangle
+            matrixData.World = Matrix4x4.CreateScale(rectangle.Right - rectangle.Left, rectangle.Bottom - rectangle.Top, 1.0f);
+            //2.translate it
+            matrixData.World *= Matrix4x4.CreateTranslation(rectangle.Left, rectangle.Top, 0.0f);
+            //3.keep transform matrix data
+            matrixData.World *= Transform;
+            
+            //set projection matrix
+            matrixData.Project = mProject;
+
+            mMatrixDataBuffer.Update(matrixData);
+            mRenderConfigBuffer.Update(renderConfig);
+
+            mDevice.SetPixelShader(mColorPixelShader);
+            mDevice.SetVertexBuffer(mSquareVertexBuffer);
+            mDevice.SetIndexBuffer(mSquareIndexBuffer);
+
+            mDevice.SetBuffer(mMatrixDataBuffer, mMatrixDataBufferSlot, GpuShaderType.VertexShader);
+            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
+
+            mDevice.DrawIndexed(6, 0, 0);
         }
     }
 }

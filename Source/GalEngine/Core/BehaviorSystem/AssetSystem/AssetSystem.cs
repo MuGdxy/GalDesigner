@@ -17,7 +17,7 @@ namespace GalEngine
             mAssetGraph = new AssetGraph();
         }
 
-        public void AddAssetDescription(PackageProvider package, AssetDescription description)
+        public void AddAssetDescription(Package package, AssetDescription description)
         {
             package.AddAssetDescription(description);
 
@@ -72,7 +72,7 @@ namespace GalEngine
             return mAssetGraph.DestoryAsset(asset);
         }
 
-        public Asset UnLoadAssetIndependent(Asset asset)
+        public Asset DestoryAssetIndependent(Asset asset)
         {
             return mAssetGraph.DestoryIndependentAsset(asset);
         }

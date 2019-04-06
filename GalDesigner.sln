@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssetSystemTestUnit", "Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowTestUnit", "TestUnit\WindowTestUnit\WindowTestUnit.csproj", "{D3F9A9F7-B273-47AC-A088-AF8C5904E44C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuiSystemTestUnit", "GuiSystemTestUnit\GuiSystemTestUnit.csproj", "{02E98D0F-D2B6-406E-98E0-E7AC95D03374}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GuiSystemTestUnit", "TestUnit\GuiSystemTestUnit\GuiSystemTestUnit.csproj", "{02E98D0F-D2B6-406E-98E0-E7AC95D03374}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

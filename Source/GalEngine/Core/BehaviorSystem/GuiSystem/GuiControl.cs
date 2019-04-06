@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class GuiControlProvider : GameObject
+    public class GuiControl : GameObject
     {
-        public GuiControlProvider(string name) : base(name)
+        public GuiControl()
+        {
+            //add requirement component
+            AddComponent<VisualGuiComponent>();
+            AddComponent<LogicGuiComponent>();
+            AddComponent<TransformGuiComponent>();
+        }
+
+        public GuiControl(string name) : base(name)
         {
             //add requirement component
             AddComponent<VisualGuiComponent>();

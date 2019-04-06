@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsAdapter : IDisposable
+    public class GpuAdapter : IDisposable
     {
         private SharpDX.DXGI.Adapter mAdapter;
 
-        internal SharpDX.DXGI.Adapter Adapter { get => mAdapter; }
+        internal SharpDX.DXGI.Adapter Adapter => mAdapter;
 
         public string Description { get; }
 
-        private GraphicsAdapter(string description, SharpDX.DXGI.Adapter adapter)
+        private GpuAdapter(string description, SharpDX.DXGI.Adapter adapter)
         {
             Description = description;
 
             mAdapter = adapter;
         }
 
-        ~GraphicsAdapter() => Dispose();
+        ~GpuAdapter() => Dispose();
 
         public void Dispose()
         {
@@ -29,9 +29,9 @@ namespace GalEngine.Runtime.Graphics
             SharpDX.Utilities.Dispose(ref mAdapter);
         }
 
-        public static List<GraphicsAdapter> EnumerateGraphicsAdapter()
+        public static List<GpuAdapter> EnumerateGraphicsAdapter()
         {
-            List<GraphicsAdapter> graphicsAdapters = new List<GraphicsAdapter>();
+            List<GpuAdapter> graphicsAdapters = new List<GpuAdapter>();
 
             LogEmitter.Apply(LogLevel.Information, "[Start Enumerate GraphicsAdapter]");
 
@@ -39,7 +39,7 @@ namespace GalEngine.Runtime.Graphics
             {
                 foreach (var adapter in factory.Adapters)
                 {
-                    graphicsAdapters.Add(new GraphicsAdapter(adapter.Description.Description, adapter));
+                    graphicsAdapters.Add(new GpuAdapter(adapter.Description.Description, adapter));
 
                     LogEmitter.Apply(LogLevel.Information, "[Enumerate GraphicsAdapter] [{0}]", adapter.Description.Description);
                 }

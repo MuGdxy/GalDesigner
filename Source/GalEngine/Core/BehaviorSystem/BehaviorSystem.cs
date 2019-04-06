@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public abstract class BehaviorSystem
+    public abstract class BehaviorSystem : EventListener
     {
         public RequireComponents RequireComponents { get; set; }
         public string Name { get; }
@@ -20,6 +20,7 @@ namespace GalEngine
         }
         
         protected internal virtual void Update() { }
+        protected internal virtual void Present(PresentRender render) { }
         protected internal virtual void Excute(List<GameObject> passedGameObjectList) { }
     }
 }

@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsShaderResource : IDisposable
+    using Debug = System.Diagnostics.Debug;
+
+    public class GpuResourceUsage : IDisposable
     {
         private SharpDX.Direct3D11.ShaderResourceView mShaderResource;
 
+        protected GpuDevice GpuDevice { get; }
+
         internal SharpDX.Direct3D11.ShaderResourceView ShaderResource { get => mShaderResource; }
 
-        public GraphicsShaderResource(GraphicsDevice device, GraphicsTexture texture)
+        public GpuResourceUsage(GpuDevice device, GpuTexture2D texture)
         {
+            Debug.Assert(GpuConvert.HasBindUsage(texture.ResourceInfo.BindUsage, GpuBindUsage.ShaderResource) == true);
+
+            GpuDevice = device;
+
             var shaderResourceDesc = new SharpDX.Direct3D11.ShaderResourceViewDescription()
             {
-                Format = GraphicsConvert.ToPixelFormat(texture.PixelFormat),
+                Format = GpuConvert.ToPixelFormat(texture.PixelFormat),
                 Texture2D = new SharpDX.Direct3D11.ShaderResourceViewDescription.Texture2DResource()
                 {
                     MipLevels = 1,
@@ -25,10 +33,10 @@ namespace GalEngine.Runtime.Graphics
                 Dimension = SharpDX.Direct3D.ShaderResourceViewDimension.Texture2D
             };
 
-            mShaderResource = new SharpDX.Direct3D11.ShaderResourceView(device.Device, texture.Resource, shaderResourceDesc);
+            mShaderResource = new SharpDX.Direct3D11.ShaderResourceView(GpuDevice.Device, texture.Resource, shaderResourceDesc);
         }
 
-        ~GraphicsShaderResource() => Dispose();
+        ~GpuResourceUsage() => Dispose();
 
         public void Dispose()
         {

@@ -6,22 +6,31 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsSwapChain : IDisposable
+    public class GpuSwapChain : IDisposable
     {
-        internal SharpDX.DXGI.SwapChain mSwapChain;
+        private SharpDX.DXGI.SwapChain mSwapChain;
+
+        protected GpuDevice GpuDevice { get; }
+
+        internal SharpDX.DXGI.SwapChain SwapChain => mSwapChain;
 
         public Size<int> Size { get; }
-        public PixelFormat PixelFormat { get; }
-        public GraphicsRenderTarget RenderTarget { get; }
+        public GpuPixelFormat PixelFormat { get; }
+        public GpuRenderTarget RenderTarget { get; }
 
-        public GraphicsSwapChain(GraphicsDevice device, IntPtr handle, Size<int> size, PixelFormat pixelFormat)
+        public GpuSwapChain(
+            IntPtr handle, 
+            Size<int> size, 
+            GpuPixelFormat pixelFormat,
+            GpuDevice device)
         {
             //size property
             Size = size;
             PixelFormat = pixelFormat;
+            GpuDevice = device;
 
             //get factory
-            using (var factory = device.Adapter.Adapter.GetParent<SharpDX.DXGI.Factory>())
+            using (var factory = GpuDevice.Adapter.Adapter.GetParent<SharpDX.DXGI.Factory>())
             {
                 //set swapchain desc
                 var swapChainDesc = new SharpDX.DXGI.SwapChainDescription()
@@ -31,7 +40,7 @@ namespace GalEngine.Runtime.Graphics
                     IsWindowed = true,
                     ModeDescription = new SharpDX.DXGI.ModeDescription()
                     {
-                        Format = GraphicsConvert.ToPixelFormat(PixelFormat),
+                        Format = GpuConvert.ToPixelFormat(PixelFormat),
                         Height = Size.Height,
                         Width = Size.Width,
                         RefreshRate = new SharpDX.DXGI.Rational(60, 1),
@@ -44,17 +53,17 @@ namespace GalEngine.Runtime.Graphics
                     Usage = SharpDX.DXGI.Usage.RenderTargetOutput
                 };
 
-                mSwapChain = new SharpDX.DXGI.SwapChain(factory, device.Device, swapChainDesc);
+                mSwapChain = new SharpDX.DXGI.SwapChain(factory, GpuDevice.Device, swapChainDesc);
 
                 //report error, if create swapchain failed
                 LogEmitter.Assert(mSwapChain != null, LogLevel.Error, 
                     "[Create SwapChain Failed] [Width = {0}] [Height = {1}] [Format = {2}]", Size.Width, Size.Height, PixelFormat);
 
-                RenderTarget = new GraphicsRenderTarget(device, this);
+                RenderTarget = new GpuRenderTarget(GpuDevice, this);
             }
         }
 
-        ~GraphicsSwapChain() => Dispose();
+        ~GpuSwapChain() => Dispose();
         
         public void Present(bool sync)
         {

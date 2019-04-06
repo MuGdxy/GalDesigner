@@ -40,22 +40,22 @@ namespace AssetSystemTestUnit
             var systemScene = GameSystems.SystemScene;
             var assetSystem = GameSystems.AssetSystem;
 
-            var packageRoot = systemScene.Root.GetChild(StringProperty.PackageRoot) as PackageProvider;
+            var packageRoot = systemScene.Root.GetChild(StringProperty.PackageRoot) as Package;
 
-            packageRoot.AddChild(new PackageProvider("Package1", "Package1"));
-            packageRoot.AddChild(new PackageProvider("Package2", "Package2"));
-            packageRoot.GetChild("Package2").AddChild(new PackageProvider("Package3", "Package3"));
-            packageRoot.GetChild("Package2").AddChild(new PackageProvider("Package4", "Package4"));
+            packageRoot.AddChild(new Package("Package1", "Package1"));
+            packageRoot.AddChild(new Package("Package2", "Package2"));
+            packageRoot.GetChild("Package2").AddChild(new Package("Package3", "Package3"));
+            packageRoot.GetChild("Package2").AddChild(new Package("Package4", "Package4"));
 
             assetSystem.AddAssetDescription(packageRoot, new StringAssetDescription("Asset1"));
             assetSystem.AddAssetDescription(packageRoot, new StringAssetDescription("Asset2"));
-            assetSystem.AddAssetDescription(packageRoot.GetChild("Package2") as PackageProvider, new StringAssetDescription("Asset1"));
-            assetSystem.AddAssetDescription(packageRoot.GetChild("Package2") as PackageProvider, new StringAssetDescription("Asset2"));
+            assetSystem.AddAssetDescription(packageRoot.GetChild("Package2") as Package, new StringAssetDescription("Asset1"));
+            assetSystem.AddAssetDescription(packageRoot.GetChild("Package2") as Package, new StringAssetDescription("Asset2"));
 
             var assets = new List<AssetDescription>();
 
             assets.Add(packageRoot.GetAssetDescription("Asset2"));
-            assets.Add((packageRoot.GetChild("Package2") as PackageProvider).GetAssetDescription("Asset1"));
+            assets.Add((packageRoot.GetChild("Package2") as Package).GetAssetDescription("Asset1"));
 
             assetSystem.AddAssetDependencies(packageRoot.GetAssetDescription("Asset1"), assets);
         }
@@ -67,12 +67,12 @@ namespace AssetSystemTestUnit
             var systemScene = GameSystems.SystemScene;
             var assetSystem = GameSystems.AssetSystem;
 
-            var packageRoot = systemScene.Root.GetChild(StringProperty.PackageRoot) as PackageProvider;
+            var packageRoot = systemScene.Root.GetChild(StringProperty.PackageRoot) as Package;
 
             mAssets.Add(assetSystem.CreateAsset(packageRoot.GetAssetDescription("Asset1")));
             mAssets.Add(assetSystem.CreateAsset(packageRoot.GetAssetDescription("Asset2")));
-            mAssets.Add(assetSystem.CreateAsset((packageRoot.GetChild("Package2") as PackageProvider).GetAssetDescription("Asset1")));
-            mAssets.Add(assetSystem.CreateAsset((packageRoot.GetChild("Package2") as PackageProvider).GetAssetDescription("Asset2")));
+            mAssets.Add(assetSystem.CreateAsset((packageRoot.GetChild("Package2") as Package).GetAssetDescription("Asset1")));
+            mAssets.Add(assetSystem.CreateAsset((packageRoot.GetChild("Package2") as Package).GetAssetDescription("Asset2")));
         }
 
         static void UnLoadAsset()

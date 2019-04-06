@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public enum PixelFormat
+    public enum GpuPixelFormat : uint
     {
-        R8G8B8A8Unknown = 28
+        R8G8B8A8Unknown = 28,
+        A8Unknown = 65
     }
 }

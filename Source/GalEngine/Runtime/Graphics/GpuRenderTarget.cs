@@ -6,21 +6,25 @@ using System.Threading.Tasks;
 
 namespace GalEngine.Runtime.Graphics
 {
-    public class GraphicsRenderTarget : IDisposable
+    public class GpuRenderTarget : IDisposable
     {
         private SharpDX.Direct3D11.RenderTargetView mRenderTarget;
 
+        protected GpuDevice GpuDevice { get; }
+
         internal SharpDX.Direct3D11.RenderTargetView RenderTarget { get => mRenderTarget; }
 
-        public Size<int> Size { get; private set; }
+        public Size<int> Size { get; }
         
-        public GraphicsRenderTarget(GraphicsDevice device, GraphicsSwapChain swapChain)
+        public GpuRenderTarget(GpuDevice device, GpuSwapChain swapChain)
         {
+            GpuDevice = device;
+
             //get back buffer and set render target desc
-            var backTexture = swapChain.mSwapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0);
+            var backTexture = swapChain.SwapChain.GetBackBuffer<SharpDX.Direct3D11.Texture2D>(0);
             var renderTargetDesc = new SharpDX.Direct3D11.RenderTargetViewDescription()
             {
-                 Format = GraphicsConvert.ToPixelFormat(swapChain.PixelFormat),
+                 Format = GpuConvert.ToPixelFormat(swapChain.PixelFormat),
                  Texture2D = new SharpDX.Direct3D11.RenderTargetViewDescription.Texture2DResource()
                  {
                      MipSlice = 0
@@ -28,18 +32,20 @@ namespace GalEngine.Runtime.Graphics
                  Dimension = SharpDX.Direct3D11.RenderTargetViewDimension.Texture2D
             };
 
-            mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, backTexture, renderTargetDesc);
+            mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(GpuDevice.Device, backTexture, renderTargetDesc);
 
             //set size
-            Size = swapChain.Size;
+            Size = new Size<int>(swapChain.Size.Width, swapChain.Size.Height);
         }
 
-        public GraphicsRenderTarget(GraphicsDevice device, GraphicsTexture texture)
+        public GpuRenderTarget(GpuDevice device, GpuTexture2D texture)
         {
+            GpuDevice = device;
+            
             //set render target desc
             var renderTargetDesc = new SharpDX.Direct3D11.RenderTargetViewDescription()
             {
-                Format = GraphicsConvert.ToPixelFormat(texture.PixelFormat),
+                Format = GpuConvert.ToPixelFormat(texture.PixelFormat),
                 Texture2D = new SharpDX.Direct3D11.RenderTargetViewDescription.Texture2DResource()
                 {
                     MipSlice = 0,
@@ -47,13 +53,13 @@ namespace GalEngine.Runtime.Graphics
                 Dimension = SharpDX.Direct3D11.RenderTargetViewDimension.Texture2D
             };
 
-            mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(device.Device, texture.Resource, renderTargetDesc);
+            mRenderTarget = new SharpDX.Direct3D11.RenderTargetView(GpuDevice.Device, texture.Resource, renderTargetDesc);
 
             //set size
-            Size = new Size<int>(texture.Width, texture.Height);
+            Size = new Size<int>(texture.Size.Width, texture.Size.Height);
         }
 
-        ~GraphicsRenderTarget() => Dispose();
+        ~GpuRenderTarget() => Dispose();
 
         public void Dispose()
         {

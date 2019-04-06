@@ -124,4 +124,16 @@
   <data name="GuiRenderCommonVertexShader" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderCommonVertexShader.hlsl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="GuiRenderTexturePixelShader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PresentDrawPixelShader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Asset\PresentDrawPixelShader.hlsl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PresentMaskPixelShader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Asset\PresentMaskPixelShader.hlsl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="PresentVertexShader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Asset\PresentVertexShader.hlsl;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

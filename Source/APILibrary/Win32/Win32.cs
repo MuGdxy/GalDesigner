@@ -139,7 +139,16 @@ namespace APILibrary.Win32
         public static extern bool GetCursorPos(ref Point lpPoint);
 
         [DllImport(User32)]
+        public static extern bool GetClipCursor(ref Rect lpRect);
+
+        [DllImport(User32)]
         public static extern bool GetClientRect(IntPtr hWnd, ref Rect lpRect);
+
+        [DllImport(User32)]
+        public static extern bool ClipCursor(ref Rect lpRect);
+
+        [DllImport(User32)]
+        public static extern bool ClientToScreen(IntPtr hWnd, ref Point lpPoint);
 
         [DllImport(User32)]
         public static extern bool AdjustWindowRect(ref Rect lpRect, uint dwStyle, bool bMENU);
