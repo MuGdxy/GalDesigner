@@ -158,7 +158,7 @@ namespace GalEngine
             Present(sync);
         }
 
-        public void Draw(Texture2D texture, Rectangle<int> area, float opacity = 1.0f)
+        public void Draw(Image texture, Rectangle<int> area, float opacity = 1.0f)
         {
             //init the data we need uo upload
             Transform transform = new Transform();
@@ -184,7 +184,7 @@ namespace GalEngine
             mDevice.DrawIndexed(6, 0, 0);
         }
 
-        public void Mask(Texture2D texture, Rectangle<int> area, float opacity = 1.0f)
+        public void Mask(Image texture, Rectangle<int> area, float opacity = 1.0f)
         {
             //init the data we need uo upload
             Transform transform = new Transform();

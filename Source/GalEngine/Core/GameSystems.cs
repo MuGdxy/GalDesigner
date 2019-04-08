@@ -19,8 +19,6 @@ namespace GalEngine
 
     public static class GameSystems
     {
-        private static Package Package { get; set; }
-        private static GuiControl GuiControl { get; set; }
        
         private static PresentRender PresentRender { get; set; }
 
@@ -113,9 +111,6 @@ namespace GalEngine
 
             SystemScene = new GameScene("SystemScene");
             
-            SystemScene.AddGameObject(Package = new Package(StringProperty.PackageRoot, "Package"));
-            SystemScene.AddGameObject(GuiControl = new GuiControl(StringProperty.GuiControlRoot));
-
             InitializeRuntime(gameStartInfo);
 
             //add system

@@ -11,9 +11,9 @@ namespace GalEngine.GameResource
 {
     public class CharacterCodeMetrics : IDisposable
     {
-        private Texture2D mTexture;
+        private Image mTexture;
 
-        public Texture2D Texture { get => mTexture; internal set { mTexture = value; } }
+        public Image Texture { get => mTexture; internal set { mTexture = value; } }
 
         public int Advance { get; internal set; }
         public int HoriBearingX { get; internal set; }
@@ -30,6 +30,7 @@ namespace GalEngine.GameResource
     public class Font : IDisposable
     {
         private static readonly Library mLibrary = new Library();
+        private static readonly Font mInternalFont = new Font("Internal.UbuntuMono-R.Font", 17, Properties.Resources.UbuntuMono_R);
 
         private Face mFace;
         private readonly GpuDevice mDevice;
@@ -41,17 +42,22 @@ namespace GalEngine.GameResource
 
         public int Size { get; }
 
-        public Font(int size, byte[] fontData) : this(size, fontData, GameSystems.GpuDevice)
+        public string Name { get; }
+
+        public static Font Default => mInternalFont;
+
+        public Font(string name, int size, byte[] fontData) : this(name, size, fontData, GameSystems.GpuDevice)
         {
 
         }
 
-        public Font(int size, byte[] fontData, GpuDevice device)
+        public Font(string name, int size, byte[] fontData, GpuDevice device)
         {
             //create font
             mFace = new Face(mLibrary, fontData, 0);
             mDevice = device;
             Size = size;
+            Name = name;
 
             //set font size and encoding
             mFace.SetPixelSizes(0, (uint)size);
@@ -79,6 +85,14 @@ namespace GalEngine.GameResource
             //find index(see more in freetype)
             var index = mFace.GetCharIndex(character);
 
+            //nonsupport character, we return space
+            if (index == 0)
+            {
+                index = mFace.GetCharIndex(' ');
+
+                LogEmitter.Apply(LogLevel.Warning, "There are some nonsupport character used in [{0}] font.", Name);
+            }
+
             //load glyph
             mFace.LoadGlyph(index, LoadFlags.Default, LoadTarget.Normal);
 
@@ -91,10 +105,10 @@ namespace GalEngine.GameResource
             codeMetrics.Advance = (mFace.Glyph.Advance.X.Value >> 6);
             codeMetrics.HoriBearingX = (mFace.Glyph.Metrics.HorizontalBearingX.Value >> 6);
             codeMetrics.HoriBearingY = (mFace.Glyph.Metrics.HorizontalBearingY.Value >> 6);
-            codeMetrics.Texture = mFace.Glyph.Bitmap.Buffer != IntPtr.Zero ? new Texture2D(
+            codeMetrics.Texture = mFace.Glyph.Bitmap.Buffer != IntPtr.Zero ? new Image(
                 new Size<int>(mFace.Glyph.Bitmap.Width, mFace.Glyph.Bitmap.Rows),
                 PixelFormat.Alpha8bit, mFace.Glyph.Bitmap.BufferData) : 
-                new Texture2D(new Size<int>(0,0), PixelFormat.Alpha8bit);
+                new Image(new Size<int>(0,0), PixelFormat.Alpha8bit);
 
             mCharacterIndex.Add(character, codeMetrics);
 

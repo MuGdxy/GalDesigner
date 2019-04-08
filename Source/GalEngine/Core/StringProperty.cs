@@ -9,8 +9,5 @@ namespace GalEngine
     public static partial class StringProperty
     {
         public static string Log => "[time] : ";
-
-        public static string PackageRoot => "Package";
-        public static string GuiControlRoot => "GuiControl";
     }
 }

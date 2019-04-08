@@ -89,6 +89,23 @@ namespace GalEngine
         }
     }
 
+    public class GuiComponentDragEvent : GuiComponentEvent
+    {
+        public bool Begin { get; }
+        public bool End => !Begin;
+
+        public GuiComponentDragEvent(DateTime time, string name, bool begin) : base(time, name)
+        {
+            Begin = begin;
+        }
+
+        public GuiComponentDragEvent(DateTime time, bool begin)
+            : this(time, GuiComponentStatusProperty.Drag, begin)
+        {
+
+        }
+    }
+
     public class GuiComponentFocusEvent : GuiComponentEvent
     {
         public bool Focus { get; }
@@ -123,12 +140,39 @@ namespace GalEngine
         }
     }
 
+    public class GuiComponentShowEvent : GuiComponentEvent
+    {
+        public bool Show { get; }
+        public bool Hide => !Show;
+
+        public GuiComponentShowEvent(DateTime time, string name, bool show) : base(time, name)
+        {
+            Show = show;
+        }
+
+        public GuiComponentShowEvent(DateTime time, bool show)
+            : this(time, GuiComponentStatusProperty.Show, show)
+        {
+
+        }
+    }
+
+    /**
+     * @brief Rule of Event
+     * we only trigger the event whose status is true
+     * for drag and focus event: there are most one control can get focus or get drag status
+     * for drag and focus event: so the focus or drag control is the biggest dfs order control(may use z order)
+     * for input event: we only trigger it on the control who enable it and get focus
+     * for mouse event: we only trigger it when the control contain the mouse cursor
+     * for mouse event: except the hover event, we trigger it when mouse enter and leave the control
+     * for show event: it effect other events, such as mouse and drag event. it only can be run when the show status is true
+     * for show event: and the show status of component is not effected by the show event status
+     */
     public static class GuiComponentStatusProperty
     {
         public static string Drag => "Drag";
-        public static string Show => "Show";
-        public static string Hide => "Hide";
         public static string Move => "Move";
+        public static string Show => "Show";
         public static string Click => "Click";
         public static string Wheel => "Wheel";
         public static string Hover => "Hover";
@@ -137,12 +181,12 @@ namespace GalEngine
 
         public static string[] Event => new string[]
         {
-            Drag, Show, Hide, Move, Click, Wheel, Hover, Input, Focus
+            Drag, Show, Move, Click, Wheel, Hover, Input, Focus
         };
 
         public static string[] Component => new string[]
         {
-            Drag, Show, Hide, Hover, Focus
+            Drag, Show, Hover, Focus
         };
     }
     

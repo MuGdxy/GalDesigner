@@ -8,7 +8,7 @@ using GalEngine.Runtime.Graphics;
 
 namespace GalEngine.GameResource
 {
-    public class Texture2D : IDisposable
+    public class Image : IDisposable
     {
         private GpuDevice mDevice;
 
@@ -24,17 +24,17 @@ namespace GalEngine.GameResource
         public int SizeInBytes => mTexture.SizeInBytes;
         public PixelFormat PixelFormat => (PixelFormat)mTexture.PixelFormat;
 
-        public Texture2D(Size<int> size, PixelFormat pixelFormat) : this(size, pixelFormat, GameSystems.GpuDevice)
+        public Image(Size<int> size, PixelFormat pixelFormat) : this(size, pixelFormat, GameSystems.GpuDevice)
         {
 
         }
 
-        public Texture2D(Size<int> size, PixelFormat pixelFormat, byte[] data) : this(size, pixelFormat)
+        public Image(Size<int> size, PixelFormat pixelFormat, byte[] data) : this(size, pixelFormat)
         {
             mTexture.Update(data);
         }
         
-        public Texture2D(Size<int> size, PixelFormat pixelFormat, GpuDevice device)
+        public Image(Size<int> size, PixelFormat pixelFormat, GpuDevice device)
         {
             mDevice = device;
 
@@ -45,9 +45,9 @@ namespace GalEngine.GameResource
                new GpuResourceInfo(GpuBindUsage.ShaderResource | GpuBindUsage.RenderTarget));
         }
 
-        ~Texture2D() => Dispose();
+        ~Image() => Dispose();
 
-        public void CopyFromTexture2D(Position<int> destination, Texture2D texture, Rectangle<int> region)
+        public void CopyFromImage(Position<int> destination, Image texture, Rectangle<int> region)
         {
             //do not need copy, because the size is zero
             if (region.Left == region.Right || region.Top == region.Bottom) return;

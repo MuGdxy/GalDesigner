@@ -17,11 +17,11 @@ namespace GuiSystemTestUnit
                 base(name: name,
                      type: "Font",
                      size: 0,
-                     createFunction: (out object x, byte[] y, List<Asset> z) => x = new Font(25, y),
+                     createFunction: (out object x, byte[] y, List<Asset> z) => x = new Font("Consolas", 25, y),
                      destoryFunction: (ref object x) => { (x as Font).Dispose(); x = null; },
                      isKeepDependentAssets: false)
             {
-
+                
             }
         }
 
@@ -36,7 +36,7 @@ namespace GuiSystemTestUnit
                 AddComponent(mLogicGuiComponent = new LogicGuiComponent());
                 AddComponent(mTransformComponent = new TransformGuiComponent(position));
                 AddComponent(mVisualGuiComponent = new RectangleGuiComponent(
-                    new RectangleShape(size), new Color<float>(0, 0, 0, 1), GuiRenderMode.WireFrame));
+                    new RectangleShape(size), new Color<float>(0, 0, 0, 1.0f), GuiRenderMode.WireFrame));
 
                 mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Drag, true);
                 mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Hover, true);
@@ -45,6 +45,8 @@ namespace GuiSystemTestUnit
                     (mVisualGuiComponent as RectangleGuiComponent).RenderMode = (y as GuiComponentHoverEvent).Hover ?
                         GuiRenderMode.Solid : GuiRenderMode.WireFrame;
                 });
+
+                SetShowStatus(true);
             }
         }
 
@@ -58,14 +60,16 @@ namespace GuiSystemTestUnit
                 WindowSize = new Size<int>(1920, 1080)
             });
 
+            GameSystems.SystemScene.Root.AddChild(new Package("Package", "Package"));
+
             GameSystems.AssetSystem.AddAssetDescription(
-                package: GameSystems.SystemScene.Root .GetChild(StringProperty.PackageRoot) as Package,
+                package: GameSystems.SystemScene.Root .GetChild("Package") as Package,
                 description: new FontAssetDescription("consola.ttf"));
 
-            var asset = GameSystems.AssetSystem.CreateAsset((GameSystems.SystemScene.Root.GetChild(StringProperty.PackageRoot) as Package)
+            var asset = GameSystems.AssetSystem.CreateAsset((GameSystems.SystemScene.Root.GetChild("Package") as Package)
                 .GetAssetDescription("consola.ttf"));
 
-            GameSystems.SystemScene.Root.GetChild(StringProperty.GuiControlRoot).AddChild(
+            GameSystems.SystemScene.Root.AddChild(
                 new SimpleGuiObject(new Position<float>(30, 30), new Size<float>(100, 100)));
 
             GameSystems.GuiSystem.GuiDebugProperty = new GuiDebugProperty()

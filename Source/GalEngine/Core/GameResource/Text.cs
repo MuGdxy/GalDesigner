@@ -12,12 +12,12 @@ namespace GalEngine.GameResource
         private readonly Size<int> mMaxSize;
         private readonly string mTextContent;
 
-        private Texture2D mTextTexture;
+        private Image mTextTexture;
 
         public Font Font => mFont;
         public Size<int> MaxSize => mMaxSize;
         public string TextContent => mTextContent;
-        public Texture2D Texture => mTextTexture;
+        public Image Texture => mTextTexture;
         public Size<int> Size => mTextTexture.Size;
 
         private static Size<int> RequirementSize(string textContent, Font font, Size<int> maxSize)
@@ -81,7 +81,7 @@ namespace GalEngine.GameResource
             return new Size<int>(requirementWidth, requirementHeight);
         }
 
-        private static void CopyTextToTexture(string textContent, Font font, Texture2D texture)
+        private static void CopyTextToTexture(string textContent, Font font, Image texture)
         {
             //see more in freetype
             var sizeMetrics = font.FontFace.Size.Metrics;
@@ -129,7 +129,7 @@ namespace GalEngine.GameResource
 
                 //copy character texture to text texture 
                 //the text texture is the texture we will display
-                texture.CopyFromTexture2D(new Position<int>(
+                texture.CopyFromImage(new Position<int>(
                     penPositionX + codeMetrics.HoriBearingX,
                     penPositionY - codeMetrics.HoriBearingY),
                     codeMetrics.Texture,
@@ -150,7 +150,7 @@ namespace GalEngine.GameResource
                 maxSize.Width == 0 ? int.MaxValue : maxSize.Width,
                 maxSize.Height == 0 ? int.MaxValue : maxSize.Height);
 
-            mTextTexture = new Texture2D(RequirementSize(mTextContent, mFont, maxSize), PixelFormat.Alpha8bit);
+            mTextTexture = new Image(RequirementSize(mTextContent, mFont, maxSize), PixelFormat.Alpha8bit);
 
             CopyTextToTexture(mTextContent, mFont, mTextTexture);
         }

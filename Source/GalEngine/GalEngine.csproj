@@ -73,17 +73,19 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponentEvent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ImageGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\RectangleGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\TextGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiControl.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiText.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiSystem.cs" />
     <Compile Include="Core\GameResource\Font.cs" />
     <Compile Include="Core\GameResource\Shape.cs" />
     <Compile Include="Core\GameResource\Text.cs" />
-    <Compile Include="Core\GameResource\Texture2D.cs" />
+    <Compile Include="Core\GameResource\Image.cs" />
     <Compile Include="Core\PresentRender.cs" />
     <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
@@ -150,6 +152,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Asset\UbuntuMono-R.ttf" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

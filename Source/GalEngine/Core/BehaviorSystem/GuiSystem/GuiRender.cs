@@ -183,7 +183,7 @@ namespace GalEngine
                 GpuResourceInfo.ConstantBuffer());
         }
 
-        public virtual void BeginDraw(Texture2D texture)
+        public virtual void BeginDraw(Image texture)
         {
             //begin draw and we need set the render target before we draw anything
 
@@ -208,7 +208,7 @@ namespace GalEngine
                 0, texture.Size.Height, 0, 1);
         }
 
-        public virtual void Clear(Texture2D texture, Color<float> clear)
+        public virtual void Clear(Image texture, Color<float> clear)
         {
             mDevice.ClearRenderTarget(
                 renderTarget: texture.GpuRenderTarget,
@@ -321,7 +321,7 @@ namespace GalEngine
             mDevice.DrawIndexed(24, 0, 0);
         }
 
-        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, Color<float> color)
+        public virtual void DrawImage(Rectangle<float> rectangle, Image image, Color<float> color)
         {
             //fill rectangle with texture
             //the result color's alpha is equal texture.alpha * opacity
@@ -350,14 +350,14 @@ namespace GalEngine
 
             mDevice.SetBuffer(mMatrixDataBuffer, mMatrixDataBufferSlot, GpuShaderType.VertexShader);
             mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.PixelShader);
-            mDevice.SetResourceUsage(texture.GpuResourceUsage, mTextureSlot, GpuShaderType.PixelShader);
+            mDevice.SetResourceUsage(image.GpuResourceUsage, mTextureSlot, GpuShaderType.PixelShader);
             
             mDevice.DrawIndexed(6, 0, 0);
         }
 
-        public virtual void DrawImage(Rectangle<float> rectangle, Texture2D texture, float opacity = 1.0f)
+        public virtual void DrawImage(Rectangle<float> rectangle, Image image, float opacity = 1.0f)
         {
-            DrawImage(rectangle, texture, new Color<float>(1.0f, 1.0f, 1.0f, opacity));
+            DrawImage(rectangle, image, new Color<float>(1.0f, 1.0f, 1.0f, opacity));
         }
 
         public virtual void DrawText(Position<float> position, Text text, Color<float> color)
