@@ -35,25 +35,14 @@ namespace GalEngine
             logicComponent.SetStatus(GuiComponentStatusProperty.Show, status);
 
             //invoke the event
-            if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Show) == true)
-                logicComponent.GetEventSolver(GuiComponentStatusProperty.Show)?.Invoke(
-                    control: this, eventArg: new GuiComponentShowEvent(DateTime.Now, status));
+            logicComponent.GetEventSolver(GuiComponentStatusProperty.Show)?.Invoke(
+                control: this, eventArg: new GuiComponentShowEvent(DateTime.Now, status));
 
             //solve some status are effect when we hide control
             if (status == false)
             {
-                //for drag event, when we hide control, we need disable it
-                if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Drag) == true &&
-                    logicComponent.GetStatus(GuiComponentStatusProperty.Drag) == true)
-                {
-                    logicComponent.SetStatus(GuiComponentStatusProperty.Drag, false);
-                    logicComponent.GetEventSolver(GuiComponentStatusProperty.Drag)?.
-                        Invoke(this, new GuiComponentDragEvent(DateTime.Now, false));
-                }
-
                 //for hover event, when we hide control, we need disable it
-                if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Hover) == true &&
-                    logicComponent.GetStatus(GuiComponentStatusProperty.Hover) == true)
+                if (logicComponent.GetStatus(GuiComponentStatusProperty.Hover) == true)
                 {
                     logicComponent.SetStatus(GuiComponentStatusProperty.Hover, false);
                     logicComponent.GetEventSolver(GuiComponentStatusProperty.Hover)?.

@@ -16,11 +16,6 @@ namespace GalEngine
             AddComponent(mTextGuiComponent = new TextGuiComponent());
 
             mLogicGuiComponent = GetComponent<LogicGuiComponent>();
-
-            mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Click, true);
-            mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Hover, true);
-            mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Wheel, true);
-            mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Move, true);
         }
     }
 }

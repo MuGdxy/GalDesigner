@@ -122,44 +122,32 @@ namespace GalEngine
                     //for solving drag and focus event
                     if (eventArg.Button == MouseButton.Left)
                     {
-                        //solve the drag event, we need enable drag event and the mouse position in the control
-                        if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Drag) == true && isContained == true && isShow == true)
+                        //solve the drag and focus event, the mouse position in the control and the control must be show
+                        //mouse down, means we may start to drag control and change the focus control
+                        //only control whose drag property is true can be dragging
+                        if (eventArg.IsDown == true && isContained == true && isShow == true)
                         {
-                            //mouse down, means we start to drag control
+                            //update new focus control
+                            newFocusControl = gameObject as GuiControl;
+
                             //if we want to drag new control, we must release last control
-                            if (eventArg.IsDown == true && eventProperty.DragControl == null)
-                            {
-                                //disable old control who are draging, because only one control should be draging at same time
-                                //and set the new control who are draging
-                                newDragControl = gameObject as GuiControl;
-                            } 
-
-                            //mouse up, means we end to drag control
-                            if (eventArg.IsDown == false && eventProperty.DragControl == gameObject)
-                            {
-                                //end to drag
-                                eventProperty.DragControl = null;
-
-                                //update the component drag status and invoke the event
-                                logicComponent.SetStatus(GuiComponentStatusProperty.Drag, false);
-                                logicComponent.GetEventSolver(GuiComponentStatusProperty.Drag)?.
-                                    Invoke(control: gameObject as GuiControl, new GuiComponentDragEvent(eventArg.Time, false));
-                            }
+                            if (eventProperty.DragControl == null) newDragControl = gameObject as GuiControl;
                         }
-
-                        //solve the focus event, we need enable focus event and the mouse position in the control
-                        if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Focus) == true && isContained == true && isShow == true)
+                        
+                        //solve the drag event when mouse up, means we end to drag control
+                        if (eventArg.IsDown == false && eventProperty.DragControl == gameObject)
                         {
-                            //only mouse button is down we need to update the game obejct who get focus
-                            if (eventArg.IsDown == true)
-                            {
-                                //only one control can get focus
-                                newFocusControl = gameObject as GuiControl;
-                            }
+                            //end to drag
+                            eventProperty.DragControl = null;
+
+                            //update the component drag status and invoke the event
+                            logicComponent.SetStatus(GuiComponentStatusProperty.Drag, false);
+                            logicComponent.GetEventSolver(GuiComponentStatusProperty.Drag)?.
+                                Invoke(control: gameObject as GuiControl, new GuiComponentDragEvent(eventArg.Time, false));
                         }
 
                         //when we click the empty place, the focus will be lost
-                        if (gameObject == eventProperty.FocusControl && isContained == false)
+                        if (eventArg.IsDown == true && isContained == false && gameObject == eventProperty.FocusControl)
                         {
                             eventProperty.FocusControl = null;
 
@@ -170,10 +158,13 @@ namespace GalEngine
                         }
                     }
 
-                    //invoke the click event for game object when event is enabled and mouse position is contained
-                    if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Click) == true && isContained == true && isShow == true)
-                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Click)?.Invoke(gameObject as GuiControl, 
-                            new GuiComponentClickEvent(eventArg.Time, eventArg.Position, eventArg.Button, eventArg.IsDown));
+                    //invoke the click event for game object when mouse position is contained
+                    if (isContained == true && isShow == true)
+                    {
+                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Click)?
+                            .Invoke(gameObject as GuiControl, new GuiComponentClickEvent(
+                                eventArg.Time, eventArg.Position, eventArg.Button, eventArg.IsDown));
+                    }
 
                     //update the ancestors stack
                     ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(gameObject, invertTransform, isShow));
@@ -182,6 +173,8 @@ namespace GalEngine
                 //update the new drag control status and invoke event
                 if (newDragControl != null)
                 {
+                    //we do not need to release the old drag control
+                    //because the old control must be released 
                     newDragControl.GetComponent<LogicGuiComponent>().SetStatus(GuiComponentStatusProperty.Drag, true);
                     newDragControl.GetComponent<LogicGuiComponent>().GetEventSolver(GuiComponentStatusProperty.Drag)?.
                         Invoke(newDragControl, new GuiComponentDragEvent(eventArg.Time, true));
@@ -193,11 +186,13 @@ namespace GalEngine
                 //disable the old focus control status and invoke event
                 if (newFocusControl != null)
                 {
+                    var oldFocusLogicComponent = eventProperty.FocusControl?.GetComponent<LogicGuiComponent>();
+
                     //disable old control
-                    if (eventProperty.FocusControl != null)
+                    if (oldFocusLogicComponent != null)
                     {
-                        eventProperty.FocusControl.GetComponent<LogicGuiComponent>().SetStatus(GuiComponentStatusProperty.Focus, false);
-                        eventProperty.FocusControl.GetComponent<LogicGuiComponent>().GetEventSolver(GuiComponentStatusProperty.Focus)?.
+                        oldFocusLogicComponent.SetStatus(GuiComponentStatusProperty.Focus, false);
+                        oldFocusLogicComponent.GetEventSolver(GuiComponentStatusProperty.Focus)?.
                             Invoke(eventProperty.FocusControl, new GuiComponentFocusEvent(eventArg.Time, false));
                     }
 
@@ -243,13 +238,11 @@ namespace GalEngine
 
                     //compute the mouse position in the local space of gui control
                     var mousePosition = Vector2.Transform(new Vector2(eventArg.Position.X, eventArg.Position.Y), invertTransform);
-                    //test if the mouse position is in the gui control
-                    var isContained = visualComponent.Shape.Contain(new Position<float>(mousePosition.X, mousePosition.Y));
                     //get the show status(sum of & from root to node)
                     var isShow = logicComponent.GetStatus(GuiComponentStatusProperty.Show) & ancestors.Peek().Item3;
 
-                    //invoke the wheel event for game object when event is enabled and mouse position is contained
-                    if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Wheel) == true && isContained == true && isShow == true)
+                    //invoke the wheel event for game object mouse position is contained
+                    if (visualComponent.Shape.Contain(new Position<float>(mousePosition.X, mousePosition.Y)) == true && isShow == true)
                         logicComponent.GetEventSolver(GuiComponentStatusProperty.Wheel)?.Invoke(gameObject as GuiControl,
                             new GuiComponentWheelEvent(eventArg.Time, eventArg.Position, eventArg.Offset));
 
@@ -265,9 +258,8 @@ namespace GalEngine
                 //solve the drag event, we only need to process the drag control
                 if (eventProperty.DragControl != null && eventProperty.MousePosition != null)
                 {
-                    //event property only record the status of event
-                    //if the drag status changed by other reason, we need to update the status
-                    if (eventProperty.DragControl.GetComponent<LogicGuiComponent>().GetStatus(GuiComponentStatusProperty.Drag) == true)
+                    //we only drag control when the property is true
+                    if (eventProperty.DragControl.GetComponent<LogicGuiComponent>().GetProperty(GuiComponentStatusProperty.Drag) == true)
                     {
                         //get the offset we need to move the drag control
                         var dragTransformComponent = eventProperty.DragControl.GetComponent<TransformGuiComponent>();
@@ -280,7 +272,7 @@ namespace GalEngine
                             dragTransformComponent.Position.X + offset.X,
                             dragTransformComponent.Position.Y + offset.Y);
                     }
-                    else eventProperty.DragControl = null;
+
                 }
 
                 //stack to maintain the path of game object's tree from node to root
@@ -317,14 +309,13 @@ namespace GalEngine
                     //get the show status(sum of & from root to node)
                     var isShow = logicComponent.GetStatus(GuiComponentStatusProperty.Show) & ancestors.Peek().Item3;
 
-                    //invoke the move event for game object when event is enabled and mouse position is contained
-                    if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Move) == true && isContained == true && isShow == true)
-                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Move)?.Invoke(gameObject as GuiControl,
-                            new GuiComponentMoveEvent(eventArg.Time, eventArg.Position));
-
-                    //solve the hover event, we only sender event when the hover is changed
-                    if (logicComponent.GetEventStatus(GuiComponentStatusProperty.Hover) == true && isShow == true)
+                    //solve the hover and move event, we only sender hover event when the hover is changed
+                    if (isShow == true)
                     {
+                        //invoke the move event for game object when mouse position is contained
+                        if (isContained == true) logicComponent.GetEventSolver(GuiComponentStatusProperty.Move)?.Invoke(gameObject as GuiControl,
+                             new GuiComponentMoveEvent(eventArg.Time, eventArg.Position));
+
                         var hover = logicComponent.GetStatus(GuiComponentStatusProperty.Hover);
 
                         //hover is not equal the is Contained, we need to sent hover event

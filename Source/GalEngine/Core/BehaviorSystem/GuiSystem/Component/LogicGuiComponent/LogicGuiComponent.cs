@@ -10,7 +10,7 @@ namespace GalEngine
     public class LogicGuiComponent : GuiComponent
     {
         private readonly GuiComponentStatus mGuiComponentStatus;
-        private readonly GuiComponentStatus mGuiComponentEventStatus;
+        private readonly GuiComponentStatus mGuiComponentProperty;
         private readonly Dictionary<string, GuiComponentEventSolver> mGuiComponentEventSolver;
 
         internal void SetStatus(string statusName, bool status) => 
@@ -24,9 +24,9 @@ namespace GalEngine
             BaseComponentType = typeof(LogicGuiComponent);
 
             //component status means the property we want to use
-            //event status means the property if we want to use 
-            mGuiComponentStatus = new GuiComponentStatus(GuiComponentStatusProperty.Component);
-            mGuiComponentEventStatus = new GuiComponentStatus(GuiComponentStatusProperty.Event);
+            //component property means the property if we want to use 
+            mGuiComponentStatus = new GuiComponentStatus(GuiComponentStatusProperty.Status);
+            mGuiComponentProperty = new GuiComponentStatus(GuiComponentStatusProperty.Property);
             mGuiComponentEventSolver = new Dictionary<string, GuiComponentEventSolver>();
 
             //set default status and solver
@@ -37,17 +37,17 @@ namespace GalEngine
             }
         }
 
-        public void SetEventStatus(string eventName, bool status) =>
-            mGuiComponentEventStatus.SetProperty(eventName, status);
-        
+        public void SetProperty(string propertyName, bool property) =>
+            mGuiComponentProperty.SetProperty(propertyName, property);
+
         public void SetEventSolver(string eventName, GuiComponentEventSolver solver) =>
             mGuiComponentEventSolver[eventName] = solver;
         
         public bool GetStatus(string statusName) =>
             mGuiComponentStatus.GetProperty(statusName);
 
-        public bool GetEventStatus(string eventName) =>
-            mGuiComponentEventStatus.GetProperty(eventName);
+        public bool GetProperty(string propertyName) =>
+            mGuiComponentProperty.GetProperty(propertyName);
 
         public GuiComponentEventSolver GetEventSolver(string eventName)
         {

@@ -159,14 +159,13 @@ namespace GalEngine
 
     /**
      * @brief Rule of Event
-     * we only trigger the event whose status is true
      * for drag and focus event: there are most one control can get focus or get drag status
      * for drag and focus event: so the focus or drag control is the biggest dfs order control(may use z order)
-     * for input event: we only trigger it on the control who enable it and get focus
+     * for input event: we only trigger it on the control who get focus
      * for mouse event: we only trigger it when the control contain the mouse cursor
      * for mouse event: except the hover event, we trigger it when mouse enter and leave the control
-     * for show event: it effect other events, such as mouse and drag event. it only can be run when the show status is true
-     * for show event: and the show status of component is not effected by the show event status
+     * for show event: it effect other events, such as mouse and drag event. it only can trigger when the show status is true
+     * for show event: so when we hide a control who get focus, it do not lost focus, but it can not get focus again.
      */
     public static class GuiComponentStatusProperty
     {
@@ -184,7 +183,17 @@ namespace GalEngine
             Drag, Show, Move, Click, Wheel, Hover, Input, Focus
         };
 
-        public static string[] Component => new string[]
+        /*
+         * @brief Rule of Property
+         * property only enable or disable the behavior of component
+         * it does not effect the status and event
+         */
+        public static string[] Property => new string[]
+        {
+            Drag
+        };
+
+        public static string[] Status => new string[]
         {
             Drag, Show, Hover, Focus
         };

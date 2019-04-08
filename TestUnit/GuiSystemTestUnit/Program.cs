@@ -31,22 +31,28 @@ namespace GuiSystemTestUnit
             private TransformGuiComponent mTransformComponent;
             private VisualGuiComponent mVisualGuiComponent;
 
-            public SimpleGuiObject(Position<float> position, Size<float> size)
+            public SimpleGuiObject(Position<float> position, Size<float> size, bool show = true)
             {
                 AddComponent(mLogicGuiComponent = new LogicGuiComponent());
                 AddComponent(mTransformComponent = new TransformGuiComponent(position));
                 AddComponent(mVisualGuiComponent = new RectangleGuiComponent(
                     new RectangleShape(size), new Color<float>(0, 0, 0, 1.0f), GuiRenderMode.WireFrame));
 
-                mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Drag, true);
-                mLogicGuiComponent.SetEventStatus(GuiComponentStatusProperty.Hover, true);
+                mLogicGuiComponent.SetProperty(GuiComponentStatusProperty.Drag, true);
+                
                 mLogicGuiComponent.SetEventSolver(GuiComponentStatusProperty.Hover, (x, y) =>
                 {
                     (mVisualGuiComponent as RectangleGuiComponent).RenderMode = (y as GuiComponentHoverEvent).Hover ?
                         GuiRenderMode.Solid : GuiRenderMode.WireFrame;
                 });
 
-                SetShowStatus(true);
+                mLogicGuiComponent.SetEventSolver(GuiComponentStatusProperty.Focus, (x, y) =>
+                {
+                    (mVisualGuiComponent as RectangleGuiComponent).Color = (y as GuiComponentFocusEvent).Focus ?
+                        new Color<float>(1, 0, 0, 1) : new Color<float>(0, 0, 0, 1);
+                });
+
+                SetShowStatus(show);
             }
         }
 
@@ -68,6 +74,9 @@ namespace GuiSystemTestUnit
 
             var asset = GameSystems.AssetSystem.CreateAsset((GameSystems.SystemScene.Root.GetChild("Package") as Package)
                 .GetAssetDescription("consola.ttf"));
+
+            GameSystems.SystemScene.Root.AddChild(
+                new SimpleGuiObject(new Position<float>(30, 30), new Size<float>(100, 100)));
 
             GameSystems.SystemScene.Root.AddChild(
                 new SimpleGuiObject(new Position<float>(30, 30), new Size<float>(100, 100)));
