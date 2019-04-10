@@ -310,24 +310,21 @@ namespace GalEngine
                     var isShow = logicComponent.GetStatus(GuiComponentStatusProperty.Show) & ancestors.Peek().Item3;
 
                     //solve the hover and move event, we only sender hover event when the hover is changed
-                    if (isShow == true)
+                    //invoke the move event for game object when mouse position is contained
+                    if (isContained == true && isShow == true) logicComponent.GetEventSolver(GuiComponentStatusProperty.Move)?.Invoke(gameObject as GuiControl,
+                         new GuiComponentMoveEvent(eventArg.Time, eventArg.Position));
+
+                    var hover = logicComponent.GetStatus(GuiComponentStatusProperty.Hover);
+
+                    //hover is not equal the is new hover status(isContained & isShow), we need to sent hover event
+                    if (hover != (isContained & isShow))
                     {
-                        //invoke the move event for game object when mouse position is contained
-                        if (isContained == true) logicComponent.GetEventSolver(GuiComponentStatusProperty.Move)?.Invoke(gameObject as GuiControl,
-                             new GuiComponentMoveEvent(eventArg.Time, eventArg.Position));
+                        //when is contained is true, the hover must be false, we need to invoke enter event(hover = true)
+                        //when is contained is false, the hover must be true, we need to invoke leave event(hover = false)
+                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Hover)?.Invoke(gameObject as GuiControl,
+                            new GuiComponentHoverEvent(eventArg.Time, isContained & isShow));
 
-                        var hover = logicComponent.GetStatus(GuiComponentStatusProperty.Hover);
-
-                        //hover is not equal the is Contained, we need to sent hover event
-                        if (hover ^ isContained == true)
-                        {
-                            //when is contained is true, the hover must be false, we need to invoke enter event(hover = true)
-                            //when is contained is false, the hover must be true, we need to invoke leave event(hover = false)
-                            logicComponent.GetEventSolver(GuiComponentStatusProperty.Hover)?.Invoke(gameObject as GuiControl,
-                                new GuiComponentHoverEvent(eventArg.Time, isContained));
-                        }
-
-                        logicComponent.SetStatus(GuiComponentStatusProperty.Hover, isContained);
+                        logicComponent.SetStatus(GuiComponentStatusProperty.Hover, isContained & isShow);
                     }
 
                     //update the ancestors stack

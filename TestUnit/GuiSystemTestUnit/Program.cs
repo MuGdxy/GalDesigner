@@ -37,7 +37,7 @@ namespace GuiSystemTestUnit
                 AddComponent(mTransformComponent = new TransformGuiComponent(position));
                 AddComponent(mVisualGuiComponent = new RectangleGuiComponent(
                     new RectangleShape(size), new Color<float>(0, 0, 0, 1.0f), GuiRenderMode.WireFrame));
-
+                
                 mLogicGuiComponent.SetProperty(GuiComponentStatusProperty.Drag, true);
                 
                 mLogicGuiComponent.SetEventSolver(GuiComponentStatusProperty.Hover, (x, y) =>

@@ -19,8 +19,8 @@ namespace GalEngine
         public GuiControl(string name) : base(name)
         {
             //add requirement component
-            AddComponent<VisualGuiComponent>();
             AddComponent<LogicGuiComponent>();
+            AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
         }
 
@@ -37,18 +37,6 @@ namespace GalEngine
             //invoke the event
             logicComponent.GetEventSolver(GuiComponentStatusProperty.Show)?.Invoke(
                 control: this, eventArg: new GuiComponentShowEvent(DateTime.Now, status));
-
-            //solve some status are effect when we hide control
-            if (status == false)
-            {
-                //for hover event, when we hide control, we need disable it
-                if (logicComponent.GetStatus(GuiComponentStatusProperty.Hover) == true)
-                {
-                    logicComponent.SetStatus(GuiComponentStatusProperty.Hover, false);
-                    logicComponent.GetEventSolver(GuiComponentStatusProperty.Hover)?.
-                        Invoke(this, new GuiComponentHoverEvent(DateTime.Now, false));
-                }
-            }
         }
     }
 }
