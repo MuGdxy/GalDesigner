@@ -23,22 +23,20 @@ namespace GuiSystemTestUnit
                 AddComponent(mTransformComponent = new TransformGuiComponent(position));
                 AddComponent(mVisualGuiComponent = new RectangleGuiComponent(
                     new RectangleShape(size), new Color<float>(0, 0, 0, 1.0f), GuiRenderMode.WireFrame));
-                
-                mLogicGuiComponent.SetProperty(GuiComponentStatusProperty.Drag, true);
-                
-                mLogicGuiComponent.SetEventSolver(GuiComponentStatusProperty.Hover, (x, y) =>
-                {
-                    (mVisualGuiComponent as RectangleGuiComponent).RenderMode = (y as GuiComponentHoverEvent).Hover ?
-                        GuiRenderMode.Solid : GuiRenderMode.WireFrame;
-                });
 
-                mLogicGuiComponent.SetEventSolver(GuiComponentStatusProperty.Focus, (x, y) =>
-                {
-                    (mVisualGuiComponent as RectangleGuiComponent).Color = (y as GuiComponentFocusEvent).Focus ?
-                        new Color<float>(1, 0, 0, 1) : new Color<float>(0, 0, 0, 1);
-                });
+                mLogicGuiComponent.EventParts.Add(GuiComponentSupportEvent.Hover, new GuiComponentHoverEventPart(
+                    (x, y) =>
+                    {
+                        (mVisualGuiComponent as RectangleGuiComponent).RenderMode =
+                        (y as GuiComponentHoverEvent).Hover ? GuiRenderMode.Solid : GuiRenderMode.WireFrame;
+                    }));
 
-                SetShowStatus(show);
+                mLogicGuiComponent.EventParts.Add(GuiComponentSupportEvent.Focus, new GuiComponentFocusEventPart(
+                    (x, y) =>
+                    {
+                        (mVisualGuiComponent as RectangleGuiComponent).Color =
+                          (y as GuiComponentFocusEvent).Focus ? new Color<float>(1, 0, 0, 1) : new Color<float>(0, 0, 0, 1);
+                    }));
             }
         }
 
@@ -56,10 +54,7 @@ namespace GuiSystemTestUnit
                 new SimpleGuiObject(new Position<float>(30, 30), new Size<float>(100, 100)));
 
             GameSystems.SystemScene.Root.AddChild(
-                new SimpleGuiObject(new Position<float>(30, 30), new Size<float>(100, 100)));
-
-            GameSystems.SystemScene.Root.AddChild(new GuiText("Hello, World!", new Font(30), new Color<float>(0, 0, 0, 1)));
-
+                new SimpleGuiObject(new Position<float>(300, 300), new Size<float>(100, 100)));
 
             GameSystems.GuiSystem.GuiDebugProperty = new GuiDebugProperty()
             {

@@ -73,9 +73,18 @@ namespace GalEngine
                 //if there are no control get focus, we do not process the event
                 if (eventProperty.FocusControl == null) return;
 
-                //because there is most one control get focus, so we only run one event solver
-                eventProperty.FocusControl.GetComponent<LogicGuiComponent>().GetEventSolver(GuiComponentStatusProperty.Input)?
-                    .Invoke(eventProperty.FocusControl, new GuiComponentInputEvent(eventArg.Time, eventArg.KeyCode));
+                //get logic component
+                var logicComponent = eventProperty.FocusControl.GetComponent<LogicGuiComponent>();
+
+                //if we remove the focus event part from logic component, we need reset the focus control in the event property
+                if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Focus))
+                {
+                    //if we add the input event part to logic component and the key code is down, we invoke event part
+                    if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Input) == true && eventArg.IsDown == true)
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.Input).Invoke(eventProperty.FocusControl, 
+                            new GuiComponentInputEvent(eventArg.Time, eventArg.KeyCode));
+                }
+                else eventProperty.FocusControl = null;
             }
 
             //solve mouse click event, we need process all objects
@@ -84,13 +93,11 @@ namespace GalEngine
             {
                 //stack to maintain the path of game object's tree from node to root
                 //matrix is the invert transform from root to node
-                //bool is the visable status sum(operator &) from root to node
-                Stack<Tuple<GameObject, Matrix4x4, bool>> ancestors = new Stack<Tuple<GameObject, Matrix4x4, bool>>();
+                Stack<Tuple<GameObject, Matrix4x4>> ancestors = new Stack<Tuple<GameObject, Matrix4x4>>();
 
                 //add virtual root to stack
-                ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(null, Matrix4x4.Identity, true));
+                ancestors.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
 
-                GuiControl newDragControl = null;
                 GuiControl newFocusControl = null;
 
                 foreach (var gameObject in gameObjects)
@@ -116,70 +123,39 @@ namespace GalEngine
                     var mousePosition = Vector2.Transform(new Vector2(eventArg.Position.X, eventArg.Position.Y), invertTransform);
                     //test if the mouse position is in the gui control
                     var isContained = visualComponent.Shape.Contain(new Position<float>(mousePosition.X, mousePosition.Y));
-                    //get the show status(sum of & from root to node)
-                    var isShow = logicComponent.GetStatus(GuiComponentStatusProperty.Show) & ancestors.Peek().Item3;
-
-                    //for solving drag and focus event
+                    
+                    //for solving focus event, we need to discuss the left button status
                     if (eventArg.Button == MouseButton.Left)
                     {
-                        //solve the drag and focus event, the mouse position in the control and the control must be show
-                        //mouse down, means we may start to drag control and change the focus control
-                        //only control whose drag property is true can be dragging
-                        if (eventArg.IsDown == true && isContained == true && isShow == true)
+                        //if left button is down and the control contains the mouse cursor
+                        //we find the new focus control
+                        if (eventArg.IsDown == true && isContained == true)
                         {
-                            //update new focus control
                             newFocusControl = gameObject as GuiControl;
-
-                            //if we want to drag new control, we must release last control
-                            if (eventProperty.DragControl == null) newDragControl = gameObject as GuiControl;
-                        }
-                        
-                        //solve the drag event when mouse up, means we end to drag control
-                        if (eventArg.IsDown == false && eventProperty.DragControl == gameObject)
-                        {
-                            //end to drag
-                            eventProperty.DragControl = null;
-
-                            //update the component drag status and invoke the event
-                            logicComponent.SetStatus(GuiComponentStatusProperty.Drag, false);
-                            logicComponent.GetEventSolver(GuiComponentStatusProperty.Drag)?.
-                                Invoke(control: gameObject as GuiControl, new GuiComponentDragEvent(eventArg.Time, false));
                         }
 
                         //when we click the empty place, the focus will be lost
-                        if (eventArg.IsDown == true && isContained == false && gameObject == eventProperty.FocusControl)
+                        if (eventArg.IsDown == true && isContained == false && eventProperty.FocusControl == gameObject)
                         {
                             eventProperty.FocusControl = null;
 
                             //update the component focus status and invoke the event of get focus
-                            logicComponent.SetStatus(GuiComponentStatusProperty.Focus, false);
-                            logicComponent.GetEventSolver(GuiComponentStatusProperty.Focus)?
-                                .Invoke(gameObject as GuiControl, new GuiComponentFocusEvent(eventArg.Time, false));
+                            if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Focus))
+                                logicComponent.EventParts.Get(GuiComponentSupportEvent.Focus).
+                                    Invoke(gameObject as GuiControl, new GuiComponentFocusEvent(eventArg.Time, false));
                         }
                     }
 
                     //invoke the click event for game object when mouse position is contained
-                    if (isContained == true && isShow == true)
+                    if (isContained == true && logicComponent.EventParts.Contain(GuiComponentSupportEvent.MouseClick))
                     {
-                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Click)?
-                            .Invoke(gameObject as GuiControl, new GuiComponentClickEvent(
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.MouseClick).
+                            Invoke(gameObject as GuiControl, new GuiComponentMouseClickEvent(
                                 eventArg.Time, eventArg.Position, eventArg.Button, eventArg.IsDown));
                     }
 
                     //update the ancestors stack
-                    ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(gameObject, invertTransform, isShow));
-                }
-
-                //update the new drag control status and invoke event
-                if (newDragControl != null)
-                {
-                    //we do not need to release the old drag control
-                    //because the old control must be released 
-                    newDragControl.GetComponent<LogicGuiComponent>().SetStatus(GuiComponentStatusProperty.Drag, true);
-                    newDragControl.GetComponent<LogicGuiComponent>().GetEventSolver(GuiComponentStatusProperty.Drag)?.
-                        Invoke(newDragControl, new GuiComponentDragEvent(eventArg.Time, true));
-
-                    eventProperty.DragControl = newDragControl;
+                    ancestors.Push(new Tuple<GameObject, Matrix4x4>(gameObject, invertTransform));
                 }
 
                 //update the new focus control status and invoke event
@@ -189,19 +165,25 @@ namespace GalEngine
                     var oldFocusLogicComponent = eventProperty.FocusControl?.GetComponent<LogicGuiComponent>();
 
                     //disable old control
-                    if (oldFocusLogicComponent != null)
+                    if (oldFocusLogicComponent != null && oldFocusLogicComponent.EventParts.Contain(GuiComponentSupportEvent.Focus))
                     {
-                        oldFocusLogicComponent.SetStatus(GuiComponentStatusProperty.Focus, false);
-                        oldFocusLogicComponent.GetEventSolver(GuiComponentStatusProperty.Focus)?.
+                        //get focus event part and invoke the event
+                        oldFocusLogicComponent.EventParts.Get(GuiComponentSupportEvent.Focus).
                             Invoke(eventProperty.FocusControl, new GuiComponentFocusEvent(eventArg.Time, false));
                     }
 
-                    //update new control
-                    newFocusControl.GetComponent<LogicGuiComponent>().SetStatus(GuiComponentStatusProperty.Focus, true);
-                    newFocusControl.GetComponent<LogicGuiComponent>().GetEventSolver(GuiComponentStatusProperty.Focus)?.
-                        Invoke(newFocusControl, new GuiComponentFocusEvent(eventArg.Time, true));
+                    //update new control, if the new contorl does not have focus event part, we will miss focus
+                    //else we invoke the event for focus event part
+                    var logicComponent = newFocusControl.GetComponent<LogicGuiComponent>();
 
-                    eventProperty.FocusControl = newFocusControl;
+                    if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Focus))
+                    {
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.Focus)
+                            .Invoke(newFocusControl, new GuiComponentFocusEvent(eventArg.Time, true));
+
+                        eventProperty.FocusControl = newFocusControl;
+                    }
+                    else eventProperty.FocusControl = null;
                 }
             }
 
@@ -211,11 +193,10 @@ namespace GalEngine
             {
                 //stack to maintain the path of game object's tree from node to root
                 //matrix is the invert transform from root to node
-                //bool is the visable status sum(operator &) from root to node
-                Stack<Tuple<GameObject, Matrix4x4, bool>> ancestors = new Stack<Tuple<GameObject, Matrix4x4, bool>>();
+                Stack<Tuple<GameObject, Matrix4x4>> ancestors = new Stack<Tuple<GameObject, Matrix4x4>>();
 
                 //add virtual root to stack
-                ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(null, Matrix4x4.Identity, true));
+                ancestors.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
 
                 foreach (var gameObject in gameObjects)
                 {
@@ -238,16 +219,16 @@ namespace GalEngine
 
                     //compute the mouse position in the local space of gui control
                     var mousePosition = Vector2.Transform(new Vector2(eventArg.Position.X, eventArg.Position.Y), invertTransform);
-                    //get the show status(sum of & from root to node)
-                    var isShow = logicComponent.GetStatus(GuiComponentStatusProperty.Show) & ancestors.Peek().Item3;
 
+                    //if the game object has mouse wheel 
                     //invoke the wheel event for game object mouse position is contained
-                    if (visualComponent.Shape.Contain(new Position<float>(mousePosition.X, mousePosition.Y)) == true && isShow == true)
-                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Wheel)?.Invoke(gameObject as GuiControl,
-                            new GuiComponentWheelEvent(eventArg.Time, eventArg.Position, eventArg.Offset));
+                    if (visualComponent.Shape.Contain(new Position<float>(mousePosition.X, mousePosition.Y)) &&
+                        logicComponent.EventParts.Contain(GuiComponentSupportEvent.MouseWheel))
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.MouseWheel).Invoke(gameObject as GuiControl,
+                            new GuiComponentMouseWheelEvent(eventArg.Time, eventArg.Position, eventArg.Offset));
 
                     //update the ancestors stack
-                    ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(gameObject, invertTransform, isShow));
+                    ancestors.Push(new Tuple<GameObject, Matrix4x4>(gameObject, invertTransform));
                 }
             }
 
@@ -255,33 +236,13 @@ namespace GalEngine
             //it may trigger the drag, move, hover
             void mouseMoveSolver(List<GameObject> gameObjects, MouseMoveEvent eventArg, ref GuiComponentEventProperty eventProperty)
             {
-                //solve the drag event, we only need to process the drag control
-                if (eventProperty.DragControl != null && eventProperty.MousePosition != null)
-                {
-                    //we only drag control when the property is true
-                    if (eventProperty.DragControl.GetComponent<LogicGuiComponent>().GetProperty(GuiComponentStatusProperty.Drag) == true)
-                    {
-                        //get the offset we need to move the drag control
-                        var dragTransformComponent = eventProperty.DragControl.GetComponent<TransformGuiComponent>();
-                        var offset = new Position<float>(
-                            eventArg.Position.X - eventProperty.MousePosition.X,
-                            eventArg.Position.Y - eventProperty.MousePosition.Y);
-
-                        //move it
-                        dragTransformComponent.Position = new Position<float>(
-                            dragTransformComponent.Position.X + offset.X,
-                            dragTransformComponent.Position.Y + offset.Y);
-                    }
-
-                }
-
                 //stack to maintain the path of game object's tree from node to root
                 //matrix is the invert transform from root to node
                 //bool is the visable status sum(operator &) from root to node
-                Stack<Tuple<GameObject, Matrix4x4, bool>> ancestors = new Stack<Tuple<GameObject, Matrix4x4, bool>>();
+                Stack<Tuple<GameObject, Matrix4x4>> ancestors = new Stack<Tuple<GameObject, Matrix4x4>>();
 
                 //add virtual root to stack
-                ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(null, Matrix4x4.Identity, true));
+                ancestors.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
 
                 foreach (var gameObject in gameObjects)
                 {
@@ -306,29 +267,31 @@ namespace GalEngine
                     var mousePosition = Vector2.Transform(new Vector2(eventArg.Position.X, eventArg.Position.Y), invertTransform);
                     //test if the mouse position is in the gui control
                     var isContained = visualComponent.Shape.Contain(new Position<float>(mousePosition.X, mousePosition.Y));
-                    //get the show status(sum of & from root to node)
-                    var isShow = logicComponent.GetStatus(GuiComponentStatusProperty.Show) & ancestors.Peek().Item3;
 
-                    //solve the hover and move event, we only sender hover event when the hover is changed
+                    //if we has mouse move event part
                     //invoke the move event for game object when mouse position is contained
-                    if (isContained == true && isShow == true) logicComponent.GetEventSolver(GuiComponentStatusProperty.Move)?.Invoke(gameObject as GuiControl,
-                         new GuiComponentMoveEvent(eventArg.Time, eventArg.Position));
+                    if (isContained == true && logicComponent.EventParts.Contain(GuiComponentSupportEvent.MouseMove))
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.MouseMove).Invoke(gameObject as GuiControl,
+                            new GuiComponentMouseMoveEvent(eventArg.Time, eventArg.Position));
 
-                    var hover = logicComponent.GetStatus(GuiComponentStatusProperty.Hover);
-
-                    //hover is not equal the is new hover status(isContained & isShow), we need to sent hover event
-                    if (hover != (isContained & isShow))
+                    //if we have mouse hover event part
+                    //solve the hover event, we only sender hover event when the hover is changed
+                    if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Hover))
                     {
-                        //when is contained is true, the hover must be false, we need to invoke enter event(hover = true)
-                        //when is contained is false, the hover must be true, we need to invoke leave event(hover = false)
-                        logicComponent.GetEventSolver(GuiComponentStatusProperty.Hover)?.Invoke(gameObject as GuiControl,
-                            new GuiComponentHoverEvent(eventArg.Time, isContained & isShow));
+                        //get mouse hover event part
+                        var hoverPart = logicComponent.EventParts.Get(GuiComponentSupportEvent.Hover) as GuiComponentHoverEventPart;
 
-                        logicComponent.SetStatus(GuiComponentStatusProperty.Hover, isContained & isShow);
+                        //hover is true and isContained is false(leave = false)
+                        //hover is false and isContained is true(enter = true)
+                        if (hoverPart.Hover != isContained)
+                        {
+                            //invoke hover event, the hover status is equal the "isContained"
+                            hoverPart.Invoke(gameObject as GuiControl, new GuiComponentHoverEvent(eventArg.Time, isContained));
+                        }
                     }
-
+                    
                     //update the ancestors stack
-                    ancestors.Push(new Tuple<GameObject, Matrix4x4, bool>(gameObject, invertTransform, isShow));
+                    ancestors.Push(new Tuple<GameObject, Matrix4x4>(gameObject, invertTransform));
                 }
 
                 //update event property
@@ -349,25 +312,23 @@ namespace GalEngine
             }
 
             //solve to render text component
-            void textGuiComponentSolver(GuiRender render, bool show, TextGuiComponent textComponent)
+            void textGuiComponentSolver(GuiRender render, TextGuiComponent textComponent)
             {
                 //update the property and create asset(Text)
                 textComponent.SetPropertyToAsset();
 
                 var size = (textComponent.Shape as RectangleShape).Size;
 
-                //only render when control is show
-                if (show == true)
-                {    
-                    //compute the position(center)
-                    var position = new Position<float>(
-                        x: (size.Width - textComponent.mTextAsset.Size.Width) * 0.5f,
-                        y: (size.Height - textComponent.mTextAsset.Size.Height) * 0.5f);
 
-                    //not invisable text, we will render it
-                    if (textComponent.mTextAsset.Texture.GpuTexture != null)
-                        render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
-                }
+                //compute the position(center)
+                var position = new Position<float>(
+                    x: (size.Width - textComponent.mTextAsset.Size.Width) * 0.5f,
+                    y: (size.Height - textComponent.mTextAsset.Size.Height) * 0.5f);
+
+                //not invisable text, we will render it
+                if (textComponent.mTextAsset.Texture.GpuTexture != null)
+                    render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
+
 
                 //enable debug mode, we will render the shape
                 if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
@@ -377,9 +338,9 @@ namespace GalEngine
                     //draw debug shape
                     render.DrawRectangle(
                         rectangle: new Rectangle<float>(
-                            left: -padding, 
-                            top: -padding, 
-                            right: size.Width + padding, 
+                            left: -padding,
+                            top: -padding,
+                            right: size.Width + padding,
                             bottom: size.Height + padding),
                         color: GuiDebugProperty.ShapeProperty.Color,
                         padding: GuiDebugProperty.ShapeProperty.Padding);
@@ -387,31 +348,29 @@ namespace GalEngine
             }
 
             //solve to render rectangle compoent
-            void rectangleComponentSolver(GuiRender render, bool show, RectangleGuiComponent rectangleComponent)
+            void rectangleComponentSolver(GuiRender render, RectangleGuiComponent rectangleComponent)
             {
                 //get size of rectangle
                 var size = (rectangleComponent.Shape as RectangleShape).Size;
 
-                //only render when control is show
-                if (show == true)
+
+                //swtich render mode
+                switch (rectangleComponent.RenderMode)
                 {
-                    //swtich render mode
-                    switch (rectangleComponent.RenderMode)
-                    {
-                        case GuiRenderMode.WireFrame:
-                            render.DrawRectangle(
-                                rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
-                                color: rectangleComponent.Color,
-                                padding: rectangleComponent.Padding);
-                            break;
-                        case GuiRenderMode.Solid:
-                            render.FillRectangle(
-                                rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
-                                color: rectangleComponent.Color);
-                            break;
-                        default: break;
-                    }
+                    case GuiRenderMode.WireFrame:
+                        render.DrawRectangle(
+                            rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
+                            color: rectangleComponent.Color,
+                            padding: rectangleComponent.Padding);
+                        break;
+                    case GuiRenderMode.Solid:
+                        render.FillRectangle(
+                            rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
+                            color: rectangleComponent.Color);
+                        break;
+                    default: break;
                 }
+
 
                 //draw debug shape
                 if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
@@ -431,19 +390,15 @@ namespace GalEngine
             }
 
             //solve to render image component
-            void imageComponentSolver(GuiRender render, bool show, ImageGuiComponent imageComponent)
+            void imageComponentSolver(GuiRender render, ImageGuiComponent imageComponent)
             {
                 var size = (imageComponent.Shape as RectangleShape).Size;
 
-                //only render when control is show
-                if (show == true)
-                {
-                    //draw image
-                    render.DrawImage(new Rectangle<float>(
-                        left: 0, top: 0, right: size.Width, bottom: size.Height),
-                        image: imageComponent.Image,
-                        opacity: imageComponent.Opacity);
-                }
+                //draw image
+                render.DrawImage(new Rectangle<float>(
+                    left: 0, top: 0, right: size.Width, bottom: size.Height),
+                    image: imageComponent.Image,
+                    opacity: imageComponent.Opacity);
 
                 //draw debug shape
                 if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
@@ -465,10 +420,10 @@ namespace GalEngine
             //stack to maintain the path of game object's tree from node to root
             //matrix is the transform from root to node
             //bool is the visable status sum(operator &) from root to node
-            Stack<Tuple<GameObject, Matrix4x4, bool>> transformStack = new Stack<Tuple<GameObject, Matrix4x4, bool>>();
+            Stack<Tuple<GameObject, Matrix4x4>> transformStack = new Stack<Tuple<GameObject, Matrix4x4>>();
 
             //add virtual root to stack
-            transformStack.Push(new Tuple<GameObject, Matrix4x4, bool>(null, Matrix4x4.Identity, true));
+            transformStack.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
 
             //visual component solver
             mRender.BeginDraw(mCanvas);
@@ -483,24 +438,23 @@ namespace GalEngine
                 //get current transform matrix, it is the result of root to node's transform matrix
                 var transformComponent = gameObject.GetComponent<TransformGuiComponent>();
                 var transformMatrix = transformComponent.Transform * transformStack.Peek().Item2;
-                var isShow = gameObject.GetComponent<LogicGuiComponent>().GetStatus(GuiComponentStatusProperty.Show) & transformStack.Peek().Item3;
-
+                
                 //set transform 
                 mRender.SetTransform(transformMatrix);
 
                 switch (gameObject.GetComponent<VisualGuiComponent>())
                 {
                     case TextGuiComponent textComponent:
-                        textGuiComponentSolver(mRender, isShow, textComponent); break;
+                        textGuiComponentSolver(mRender, textComponent); break;
                     case RectangleGuiComponent rectangleComponent:
-                        rectangleComponentSolver(mRender, isShow, rectangleComponent); break;
+                        rectangleComponentSolver(mRender, rectangleComponent); break;
                     case ImageGuiComponent imageComponent:
-                        imageComponentSolver(mRender, isShow, imageComponent); break;
+                        imageComponentSolver(mRender, imageComponent); break;
                     default: break;
                 }
 
                 //update stack
-                transformStack.Push(new Tuple<GameObject, Matrix4x4, bool>(gameObject, transformMatrix, isShow));
+                transformStack.Push(new Tuple<GameObject, Matrix4x4>(gameObject, transformMatrix));
             }
 
             mRender.EndDraw();

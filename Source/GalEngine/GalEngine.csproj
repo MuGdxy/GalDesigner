@@ -71,6 +71,7 @@
     <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponentEvent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponentEventPart.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ImageGuiComponent.cs" />
@@ -136,7 +137,7 @@
     <Compile Include="Structure\Color.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\Position.cs" />
-    <Compile Include="Structure\PropertyContainer.cs" />
+    <Compile Include="Structure\MappedContainer.cs" />
     <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
     <Compile Include="Structure\Size.cs" />

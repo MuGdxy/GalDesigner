@@ -14,8 +14,6 @@ namespace GalEngine
             AddComponent<LogicGuiComponent>();
             AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
-
-            SetShowStatus(true);
         }
 
         public GuiControl(string name) : base(name)
@@ -24,23 +22,6 @@ namespace GalEngine
             AddComponent<LogicGuiComponent>();
             AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
-
-            SetShowStatus(true);
-        }
-
-        public void SetShowStatus(bool status)
-        {
-            var logicComponent = GetComponent<LogicGuiComponent>();
-
-            //status is not changed
-            if (status == logicComponent.GetStatus(GuiComponentStatusProperty.Show)) return;
-
-            //update status
-            logicComponent.SetStatus(GuiComponentStatusProperty.Show, status);
-
-            //invoke the event
-            logicComponent.GetEventSolver(GuiComponentStatusProperty.Show)?.Invoke(
-                control: this, eventArg: new GuiComponentShowEvent(DateTime.Now, status));
         }
     }
 }

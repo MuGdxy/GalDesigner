@@ -9,12 +9,7 @@ namespace GalEngine
 
     public class LogicGuiComponent : GuiComponent
     {
-        private readonly GuiComponentStatus mGuiComponentStatus;
-        private readonly GuiComponentStatus mGuiComponentProperty;
-        private readonly Dictionary<string, GuiComponentEventSolver> mGuiComponentEventSolver;
-
-        internal void SetStatus(string statusName, bool status) => 
-            mGuiComponentStatus.SetProperty(statusName, status);
+        public MappedContainer<GuiComponentEventPart> EventParts { get; }
 
         public LogicGuiComponent()
         {
@@ -23,37 +18,8 @@ namespace GalEngine
             //because gui behavior system requires at least three component to run(visual, logic and transform gui component)
             BaseComponentType = typeof(LogicGuiComponent);
 
-            //component status means the property we want to use
-            //component property means the property if we want to use 
-            mGuiComponentStatus = new GuiComponentStatus(GuiComponentStatusProperty.Status);
-            mGuiComponentProperty = new GuiComponentStatus(GuiComponentStatusProperty.Property);
-            mGuiComponentEventSolver = new Dictionary<string, GuiComponentEventSolver>();
-
-            //set default status and solver
-            //solver means the way we want to process the event(status must be true)
-            foreach (var eventName in GuiComponentStatusProperty.Event)
-            {
-                mGuiComponentEventSolver.Add(eventName, null);
-            }
-        }
-
-        public void SetProperty(string propertyName, bool property) =>
-            mGuiComponentProperty.SetProperty(propertyName, property);
-
-        public void SetEventSolver(string eventName, GuiComponentEventSolver solver) =>
-            mGuiComponentEventSolver[eventName] = solver;
-        
-        public bool GetStatus(string statusName) =>
-            mGuiComponentStatus.GetProperty(statusName);
-
-        public bool GetProperty(string propertyName) =>
-            mGuiComponentProperty.GetProperty(propertyName);
-
-        public GuiComponentEventSolver GetEventSolver(string eventName)
-        {
-            if (mGuiComponentEventSolver.ContainsKey(eventName) == false) return null;
-
-            return mGuiComponentEventSolver[eventName];
+            //initialize the event parts container
+            EventParts = new MappedContainer<GuiComponentEventPart>();
         }
     }
 }
