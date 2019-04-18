@@ -11,9 +11,11 @@ namespace GalEngine
         public GuiControl()
         {
             //add requirement component
-            AddComponent<VisualGuiComponent>();
             AddComponent<LogicGuiComponent>();
+            AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
+
+            SetShowStatus(true);
         }
 
         public GuiControl(string name) : base(name)
@@ -22,6 +24,8 @@ namespace GalEngine
             AddComponent<LogicGuiComponent>();
             AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
+
+            SetShowStatus(true);
         }
 
         public void SetShowStatus(bool status)

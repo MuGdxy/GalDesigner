@@ -78,8 +78,7 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\TextGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiControl.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiText.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiSystem.cs" />
     <Compile Include="Core\GameResource\Font.cs" />

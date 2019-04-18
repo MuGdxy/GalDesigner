@@ -30,7 +30,7 @@ namespace GalEngine.GameResource
     public class Font : IDisposable
     {
         private static readonly Library mLibrary = new Library();
-        private static readonly Font mInternalFont = new Font("Internal.UbuntuMono-R.Font", 17, Properties.Resources.UbuntuMono_R);
+        private static readonly Font mInternalFont = new Font("Internal.UbuntuMono-R-17.Font", 17, Properties.Resources.UbuntuMono_R);
 
         private Face mFace;
         private readonly GpuDevice mDevice;
@@ -45,6 +45,11 @@ namespace GalEngine.GameResource
         public string Name { get; }
 
         public static Font Default => mInternalFont;
+
+        public Font(int size) : this("Internal.UbuntuMono-R-" + size + ".Font", size, Properties.Resources.UbuntuMono_R)
+        {
+
+        }
 
         public Font(string name, int size, byte[] fontData) : this(name, size, fontData, GameSystems.GpuDevice)
         {

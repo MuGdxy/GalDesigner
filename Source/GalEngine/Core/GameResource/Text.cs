@@ -13,7 +13,7 @@ namespace GalEngine.GameResource
         private readonly string mTextContent;
 
         private Image mTextTexture;
-
+        
         public Font Font => mFont;
         public Size<int> MaxSize => mMaxSize;
         public string TextContent => mTextContent;
