@@ -51,9 +51,9 @@ namespace GalEngine
 
         }
 
-        public GuiComponentFocusEventPart(GuiComponentEventSolver solver)
+        public GuiComponentFocusEventPart(GuiComponentEventSolver solver) : base(solver)
         {
-            Solver += solver;
+
         }
     }
 
@@ -75,9 +75,32 @@ namespace GalEngine
 
         }
 
-        public GuiComponentHoverEventPart(GuiComponentEventSolver solver)
+        public GuiComponentHoverEventPart(GuiComponentEventSolver solver) : base(solver)
         {
-            Solver += solver;
+        }
+    }
+
+    public class GuiComponentDragEventPart : GuiComponentEventPart
+    {
+        private bool mDrag;
+
+        public bool Drag => mDrag;
+
+        internal override void Invoke(GuiControl control, GuiComponentEvent eventArg)
+        {
+            mDrag = (eventArg as GuiComponentDragEvent).Drag;
+
+            base.Invoke(control, eventArg);
+        }
+
+        public GuiComponentDragEventPart()
+        {
+
+        }
+
+        public GuiComponentDragEventPart(GuiComponentEventSolver solver) : base(solver)
+        {
+
         }
     }
 }

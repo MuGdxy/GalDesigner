@@ -10,6 +10,7 @@ namespace GalEngine
     {
         public Position<int> MousePosition;
         public GuiControl FocusControl;
+        public GuiControl DragControl;
     }
 
     public class GuiComponentEvent : BaseEvent
@@ -85,11 +86,22 @@ namespace GalEngine
         }
     }
 
+    public class GuiComponentDragEvent : GuiComponentEvent
+    {
+        public bool Drag { get; }
+
+        public GuiComponentDragEvent(DateTime time, bool drag) : base(time)
+        {
+            Drag = drag;
+        }
+    }
+
     /**
      * @brief Rule of Event
      * for input event: we only trigger it on the control who get focus
      * for mouse event: we only trigger it when the control contain the mouse cursor
      * for mouse event: except the hover event, we trigger it when mouse enter and leave the control
+     * for drag event: we only drag one control at same time
      */
     public static class GuiComponentSupportEvent
     {
@@ -99,5 +111,6 @@ namespace GalEngine
         public static string Hover => "Hover";
         public static string Input => "Input";
         public static string Focus => "Focus";
+        public static string Drag => "Drag";
     }
 }

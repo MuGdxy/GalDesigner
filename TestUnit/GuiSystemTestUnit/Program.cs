@@ -35,8 +35,10 @@ namespace GuiSystemTestUnit
                     (x, y) =>
                     {
                         (mVisualGuiComponent as RectangleGuiComponent).Color =
-                          (y as GuiComponentFocusEvent).Focus ? new Color<float>(1, 0, 0, 1) : new Color<float>(0, 0, 0, 1);
+                        (y as GuiComponentFocusEvent).Focus ? new Color<float>(1, 0, 0, 1) : new Color<float>(0, 0, 0, 1);
                     }));
+
+                mLogicGuiComponent.EventParts.Add(GuiComponentSupportEvent.Drag, new GuiComponentDragEventPart());
             }
         }
 

@@ -99,6 +99,7 @@ namespace GalEngine
                 ancestors.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
 
                 GuiControl newFocusControl = null;
+                GuiControl newDragControl = null;
 
                 foreach (var gameObject in gameObjects)
                 {
@@ -128,10 +129,17 @@ namespace GalEngine
                     if (eventArg.Button == MouseButton.Left)
                     {
                         //if left button is down and the control contains the mouse cursor
-                        //we find the new focus control
+                        //we find the new focus control and new drag control
                         if (eventArg.IsDown == true && isContained == true)
                         {
                             newFocusControl = gameObject as GuiControl;
+
+                            //if we are not dragging control, we can capture new drag control
+                            //when left button is down and control contains the mouse cursor
+                            if (eventProperty.DragControl == null)
+                            {
+                                newDragControl = gameObject as GuiControl;
+                            }
                         }
 
                         //when we click the empty place, the focus will be lost
@@ -139,10 +147,26 @@ namespace GalEngine
                         {
                             eventProperty.FocusControl = null;
 
-                            //update the component focus status and invoke the event of get focus
+                            //update the component focus status
                             if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Focus))
+                            {
                                 logicComponent.EventParts.Get(GuiComponentSupportEvent.Focus).
                                     Invoke(gameObject as GuiControl, new GuiComponentFocusEvent(eventArg.Time, false));
+                            }
+                        }
+
+                        //when we finish drag control
+                        if (eventArg.IsDown == false && isContained == true && eventProperty.DragControl == gameObject)
+                        {
+                            eventProperty.DragControl = null;
+
+                            //if game object has the drag event part
+                            if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Drag))
+                            {
+                                //update the component drag status
+                                logicComponent.EventParts.Get(GuiComponentSupportEvent.Drag).
+                                    Invoke(gameObject as GuiControl, new GuiComponentDragEvent(eventArg.Time, false));
+                            }
                         }
                     }
 
@@ -184,6 +208,21 @@ namespace GalEngine
                         eventProperty.FocusControl = newFocusControl;
                     }
                     else eventProperty.FocusControl = null;
+                }
+
+                //update the new drag control status and invoke event
+                if (newDragControl != null)
+                {
+                    var logicComponent = newDragControl.GetComponent<LogicGuiComponent>();
+
+                    if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Drag))
+                    {
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.Drag).
+                            Invoke(newDragControl, new GuiComponentDragEvent(eventArg.Time, true));
+
+                        eventProperty.DragControl = newDragControl;
+                    }
+                    else eventProperty.DragControl = null;
                 }
             }
 
@@ -236,6 +275,23 @@ namespace GalEngine
             //it may trigger the drag, move, hover
             void mouseMoveSolver(List<GameObject> gameObjects, MouseMoveEvent eventArg, ref GuiComponentEventProperty eventProperty)
             {
+                //when we move the mouse, the control are dragging should be moving
+                if (eventProperty.DragControl != null)
+                {
+                    var logicComponent = eventProperty.DragControl.GetComponent<LogicGuiComponent>();
+
+                    //if the control has drag event part, we move it
+                    if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.Drag))
+                    {
+                        var transformComponent = eventProperty.DragControl.GetComponent<TransformGuiComponent>();
+
+                        transformComponent.Position = new Position<float>(
+                            transformComponent.Position.X + eventArg.Position.X - eventProperty.MousePosition.X,
+                            transformComponent.Position.Y + eventArg.Position.Y - eventProperty.MousePosition.Y);
+                    }
+                    else eventProperty.DragControl = null;
+                }
+
                 //stack to maintain the path of game object's tree from node to root
                 //matrix is the invert transform from root to node
                 //bool is the visable status sum(operator &) from root to node
