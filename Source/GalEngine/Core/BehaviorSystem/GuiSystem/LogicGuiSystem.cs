@@ -5,62 +5,20 @@ using System.Text;
 using System.Numerics;
 using System.Threading.Tasks;
 
-using GalEngine.GameResource;
-using GalEngine.Runtime.Graphics;
-
 namespace GalEngine
 {
-    
-    public class GuiDebugProperty
+    public class LogicGuiSystem : BehaviorSystem
     {
-        public ShapeDebugProperty ShapeProperty { get; set; }
-    }
-
-    public class GuiSystem : BehaviorSystem
-    {
-        private Image mCanvas;
-        private GuiRender mRender;
-
         private GuiComponentEventProperty mComponentEventProperty;
 
-        public Rectangle<int> Area { get; set; }
-        public GuiDebugProperty GuiDebugProperty { get; set; }
-        
-        public GuiSystem(GpuDevice device, Rectangle<int> area) : base("GuiSystem")
+        public LogicGuiSystem() : base("LogicGuiSystem")
         {
-            RequireComponents.AddRequireComponentType<TransformGuiComponent>();
-            RequireComponents.AddRequireComponentType<VisualGuiComponent>();
+            //add requirement component
+            //gui logic system is used for solving the logic problem like mouse move, click event
+            //we also need the visual gui component
             RequireComponents.AddRequireComponentType<LogicGuiComponent>();
-            
-            Area = area;
-
-            mRender = new GuiRender(device);
-
-            mCanvas = new Image(
-                new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
-                PixelFormat.RedBlueGreenAlpha8bit,
-                mRender.Device);
-        }
-
-        protected internal override void Update()
-        {
-            //update the render area, we need to update the canvas and render target
-            //if the area's size is not equal the canvas's size
-            if (mCanvas.Size.Width != Area.Right - Area.Left ||
-                mCanvas.Size.Height != Area.Bottom - Area.Top)
-            {
-                Utility.Dispose(ref mCanvas);
-
-                mCanvas = new Image(
-                    new Size<int>(Area.Right - Area.Left, Area.Bottom - Area.Top),
-                    PixelFormat.RedBlueGreenAlpha8bit,
-                    mRender.Device);
-            }
-        }
-
-        protected internal override void Present(PresentRender render)
-        {
-            render.Mask(mCanvas, Area, 1.0f);
+            RequireComponents.AddRequireComponentType<VisualGuiComponent>();
+            RequireComponents.AddRequireComponentType<TransformGuiComponent>();
         }
 
         protected internal override void Excute(List<GameObject> passedGameObjectList)
@@ -366,154 +324,6 @@ namespace GalEngine
                     default: break;
                 }
             }
-
-            //solve to render text component
-            void textGuiComponentSolver(GuiRender render, TextGuiComponent textComponent)
-            {
-                //update the property and create asset(Text)
-                textComponent.SetPropertyToAsset();
-
-                var size = (textComponent.Shape as RectangleShape).Size;
-
-
-                //compute the position(center)
-                var position = new Position<float>(
-                    x: (size.Width - textComponent.mTextAsset.Size.Width) * 0.5f,
-                    y: (size.Height - textComponent.mTextAsset.Size.Height) * 0.5f);
-
-                //not invisable text, we will render it
-                if (textComponent.mTextAsset.Texture.GpuTexture != null)
-                    render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
-
-
-                //enable debug mode, we will render the shape
-                if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
-                {
-                    var padding = GuiDebugProperty.ShapeProperty.Padding;
-
-                    //draw debug shape
-                    render.DrawRectangle(
-                        rectangle: new Rectangle<float>(
-                            left: -padding,
-                            top: -padding,
-                            right: size.Width + padding,
-                            bottom: size.Height + padding),
-                        color: GuiDebugProperty.ShapeProperty.Color,
-                        padding: GuiDebugProperty.ShapeProperty.Padding);
-                }
-            }
-
-            //solve to render rectangle compoent
-            void rectangleComponentSolver(GuiRender render, RectangleGuiComponent rectangleComponent)
-            {
-                //get size of rectangle
-                var size = (rectangleComponent.Shape as RectangleShape).Size;
-
-
-                //swtich render mode
-                switch (rectangleComponent.RenderMode)
-                {
-                    case GuiRenderMode.WireFrame:
-                        render.DrawRectangle(
-                            rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
-                            color: rectangleComponent.Color,
-                            padding: rectangleComponent.Padding);
-                        break;
-                    case GuiRenderMode.Solid:
-                        render.FillRectangle(
-                            rectangle: new Rectangle<float>(0, 0, size.Width, size.Height),
-                            color: rectangleComponent.Color);
-                        break;
-                    default: break;
-                }
-
-
-                //draw debug shape
-                if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
-                {
-                    var padding = GuiDebugProperty.ShapeProperty.Padding;
-
-                    //draw debug shape
-                    render.DrawRectangle(
-                        rectangle: new Rectangle<float>(
-                            left: -padding,
-                            top: -padding,
-                            right: size.Width + padding,
-                            bottom: size.Height + padding),
-                        color: GuiDebugProperty.ShapeProperty.Color,
-                        padding: GuiDebugProperty.ShapeProperty.Padding);
-                }
-            }
-
-            //solve to render image component
-            void imageComponentSolver(GuiRender render, ImageGuiComponent imageComponent)
-            {
-                var size = (imageComponent.Shape as RectangleShape).Size;
-
-                //draw image
-                render.DrawImage(new Rectangle<float>(
-                    left: 0, top: 0, right: size.Width, bottom: size.Height),
-                    image: imageComponent.Image,
-                    opacity: imageComponent.Opacity);
-
-                //draw debug shape
-                if (GuiDebugProperty != null && GuiDebugProperty.ShapeProperty != null)
-                {
-                    var padding = GuiDebugProperty.ShapeProperty.Padding;
-
-                    //draw debug shape
-                    render.DrawRectangle(
-                        rectangle: new Rectangle<float>(
-                            left: -padding,
-                            top: -padding,
-                            right: size.Width + padding,
-                            bottom: size.Height + padding),
-                        color: GuiDebugProperty.ShapeProperty.Color,
-                        padding: GuiDebugProperty.ShapeProperty.Padding);
-                }
-            }
-
-            //stack to maintain the path of game object's tree from node to root
-            //matrix is the transform from root to node
-            //bool is the visable status sum(operator &) from root to node
-            Stack<Tuple<GameObject, Matrix4x4>> transformStack = new Stack<Tuple<GameObject, Matrix4x4>>();
-
-            //add virtual root to stack
-            transformStack.Push(new Tuple<GameObject, Matrix4x4>(null, Matrix4x4.Identity));
-
-            //visual component solver
-            mRender.BeginDraw(mCanvas);
-            mRender.Clear(mCanvas, new Color<float>(1, 1, 1, 1));
-
-            foreach (var gameObject in passedGameObjectList)
-            {
-                //maintain the elments in the stack are ancestors from root to node(with deep order, first element is root)
-                //because the list of game objects is the dfs order of tree
-                while (transformStack.Count != 1 && transformStack.Peek().Item1 != gameObject.Parent) transformStack.Pop();
-
-                //get current transform matrix, it is the result of root to node's transform matrix
-                var transformComponent = gameObject.GetComponent<TransformGuiComponent>();
-                var transformMatrix = transformComponent.Transform * transformStack.Peek().Item2;
-                
-                //set transform 
-                mRender.SetTransform(transformMatrix);
-
-                switch (gameObject.GetComponent<VisualGuiComponent>())
-                {
-                    case TextGuiComponent textComponent:
-                        textGuiComponentSolver(mRender, textComponent); break;
-                    case RectangleGuiComponent rectangleComponent:
-                        rectangleComponentSolver(mRender, rectangleComponent); break;
-                    case ImageGuiComponent imageComponent:
-                        imageComponentSolver(mRender, imageComponent); break;
-                    default: break;
-                }
-
-                //update stack
-                transformStack.Push(new Tuple<GameObject, Matrix4x4>(gameObject, transformMatrix));
-            }
-
-            mRender.EndDraw();
         }
     }
 }

@@ -23,7 +23,10 @@ namespace GalEngine
         private static PresentRender PresentRender { get; set; }
 
         public static AssetSystem AssetSystem { get; private set; }
-        public static GuiSystem GuiSystem { get; private set; }
+
+        public static LogicGuiSystem LogicGuiSystem { get; private set; }
+        public static VisualGuiSystem VisualGuiSystem { get; private set; }
+        
 
         public static List<BehaviorSystem> BehaviorSystems { get; set; }
 
@@ -97,7 +100,7 @@ namespace GalEngine
             EngineWindow.OnSizeChangeEvent += (sender, eventArg) =>
             {
                 PresentRender.ReSize(eventArg.After);
-                GuiSystem.Area = new Rectangle<int>(0, 0, eventArg.After.Width, eventArg.After.Height);
+                VisualGuiSystem.Area = new Rectangle<int>(0, 0, eventArg.After.Width, eventArg.After.Height);
             };
         }
 
@@ -115,9 +118,10 @@ namespace GalEngine
 
             //add system
             AddBehaviorSystem(AssetSystem = new AssetSystem());
-            AddBehaviorSystem(GuiSystem = new GuiSystem(GpuDevice, new Rectangle<int>(0, 0, EngineWindow.Size.Width, EngineWindow.Size.Height)));
+            AddBehaviorSystem(LogicGuiSystem = new LogicGuiSystem());
+            AddBehaviorSystem(VisualGuiSystem = new VisualGuiSystem(GpuDevice, new Rectangle<int>(0, 0, EngineWindow.Size.Width, EngineWindow.Size.Height)));
 
-            EngineWindow.AddEventListener(GuiSystem);
+            EngineWindow.AddEventListener(LogicGuiSystem);
 
             LogEmitter.Apply(LogLevel.Information, "[Initialize GameSystems Finish] from [GameSystems]");
         }

@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class GuiControl : GameObject
+    public abstract class GuiControl : GameObject
     {
         public GuiControl()
         {
             //add requirement component
-            AddComponent<LogicGuiComponent>();
             AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
         }
@@ -19,7 +18,6 @@ namespace GalEngine
         public GuiControl(string name) : base(name)
         {
             //add requirement component
-            AddComponent<LogicGuiComponent>();
             AddComponent<VisualGuiComponent>();
             AddComponent<TransformGuiComponent>();
         }
