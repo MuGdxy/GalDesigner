@@ -20,9 +20,10 @@ namespace GalEngine
 
         }
 
-        public GuiText(string text, Font font, Color<float> color) : base()
+        public GuiText(string text, Font font, Color<float> color) :
+            this(null, text, font, color)
         {
-            AddComponent(new TextGuiComponent(text, font, color));
+
         }
 
         public GuiText(string name, string text, Font font, Color<float> color) : base(name)

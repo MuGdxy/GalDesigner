@@ -42,14 +42,5 @@ namespace GalEngine
             Text = text;
             Color = color;
         }
-
-        public void SetProperty(string text, Font font)
-        {
-            Text = text;
-            Font = font;
-
-            //update asset
-            SetPropertyToAsset();
-        }
     }
 }

@@ -24,7 +24,7 @@ namespace GalEngine
         public void SenderEvent(BaseEvent baseEvent)
         {
             mEventQueue.Enqueue(baseEvent);
-
+            
             mEventListeners.ForEach((listener) => listener.mEventQueue.Enqueue(baseEvent));
         }
 

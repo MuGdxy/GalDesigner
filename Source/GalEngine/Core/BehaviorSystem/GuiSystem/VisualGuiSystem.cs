@@ -62,40 +62,40 @@ namespace GalEngine
 
         protected internal override void Excute(List<GameObject> passedGameObjectList)
         {
+            //solve to render debug property
+            void renderDebugPropertySolver(GuiRender render, Shape shape)
+            {
+                if (GuiRenderDebugProperty != null && GuiRenderDebugProperty.ShapeProperty != null)
+                {
+                    var padding = GuiRenderDebugProperty.ShapeProperty.Padding;
+
+                    switch (shape)
+                    {
+                        case RectangleShape rectangle:
+                            //draw debug shape
+                            render.DrawRectangle(
+                                rectangle: new Rectangle<float>(
+                                    left: -padding,
+                                    top: -padding,
+                                    right: rectangle.Size.Width + padding,
+                                    bottom: rectangle.Size.Height + padding),
+                                color: GuiRenderDebugProperty.ShapeProperty.Color,
+                                padding: GuiRenderDebugProperty.ShapeProperty.Padding);
+                            break;
+                        default: break;
+                    }
+                }
+            }
+
             //solve to render text component
             void textGuiComponentSolver(GuiRender render, TextGuiComponent textComponent)
             {
                 //update the property and create asset(Text)
                 textComponent.SetPropertyToAsset();
 
-                var size = (textComponent.Shape as RectangleShape).Size;
-
-
-                //compute the position(center)
-                var position = new Position<float>(
-                    x: (size.Width - textComponent.mTextAsset.Size.Width) * 0.5f,
-                    y: (size.Height - textComponent.mTextAsset.Size.Height) * 0.5f);
-
                 //not invisable text, we will render it
                 if (textComponent.mTextAsset.Texture.GpuTexture != null)
-                    render.DrawText(position, textComponent.mTextAsset, textComponent.Color);
-
-
-                //enable debug mode, we will render the shape
-                if (GuiRenderDebugProperty != null && GuiRenderDebugProperty.ShapeProperty != null)
-                {
-                    var padding = GuiRenderDebugProperty.ShapeProperty.Padding;
-
-                    //draw debug shape
-                    render.DrawRectangle(
-                        rectangle: new Rectangle<float>(
-                            left: -padding,
-                            top: -padding,
-                            right: size.Width + padding,
-                            bottom: size.Height + padding),
-                        color: GuiRenderDebugProperty.ShapeProperty.Color,
-                        padding: GuiRenderDebugProperty.ShapeProperty.Padding);
-                }
+                    render.DrawText(new Position<float>(), textComponent.mTextAsset, textComponent.Color);
             }
 
             //solve to render rectangle compoent
@@ -103,7 +103,6 @@ namespace GalEngine
             {
                 //get size of rectangle
                 var size = (rectangleComponent.Shape as RectangleShape).Size;
-
 
                 //swtich render mode
                 switch (rectangleComponent.RenderMode)
@@ -121,23 +120,6 @@ namespace GalEngine
                         break;
                     default: break;
                 }
-
-
-                //draw debug shape
-                if (GuiRenderDebugProperty != null && GuiRenderDebugProperty.ShapeProperty != null)
-                {
-                    var padding = GuiRenderDebugProperty.ShapeProperty.Padding;
-
-                    //draw debug shape
-                    render.DrawRectangle(
-                        rectangle: new Rectangle<float>(
-                            left: -padding,
-                            top: -padding,
-                            right: size.Width + padding,
-                            bottom: size.Height + padding),
-                        color: GuiRenderDebugProperty.ShapeProperty.Color,
-                        padding: GuiRenderDebugProperty.ShapeProperty.Padding);
-                }
             }
 
             //solve to render image component
@@ -150,22 +132,30 @@ namespace GalEngine
                     left: 0, top: 0, right: size.Width, bottom: size.Height),
                     image: imageComponent.Image,
                     opacity: imageComponent.Opacity);
+            }
 
-                //draw debug shape
-                if (GuiRenderDebugProperty != null && GuiRenderDebugProperty.ShapeProperty != null)
-                {
-                    var padding = GuiRenderDebugProperty.ShapeProperty.Padding;
+            //solve to render button component
+            void buttonComponentSolver(GuiRender render, ButtonGuiComponent buttonComponent)
+            {
+                //update the property and create asset(Text)
+                buttonComponent.SetPropertyToAsset();
 
-                    //draw debug shape
-                    render.DrawRectangle(
-                        rectangle: new Rectangle<float>(
-                            left: -padding,
-                            top: -padding,
-                            right: size.Width + padding,
-                            bottom: size.Height + padding),
-                        color: GuiRenderDebugProperty.ShapeProperty.Color,
-                        padding: GuiRenderDebugProperty.ShapeProperty.Padding);
-                }
+                //get size of rectangle
+                var size = (buttonComponent.Shape as RectangleShape).Size;
+
+                //get position of button text
+                var position = new Position<float>(
+                    x: (size.Width - buttonComponent.mTextAsset.Size.Width) * 0.5f,
+                    y: (size.Height - buttonComponent.mTextAsset.Size.Height) * 0.5f);
+
+                //render button shape
+                render.FillRectangle(
+                    new Rectangle<float>(0, 0, size.Width, size.Height),
+                    buttonComponent.BackGround);
+
+                //render button text
+                if (buttonComponent.mTextAsset.Texture.GpuTexture != null)
+                    render.DrawText(position, buttonComponent.mTextAsset, buttonComponent.FrontGround);
             }
 
             //stack to maintain the path of game object's tree from node to root
@@ -201,9 +191,14 @@ namespace GalEngine
                         rectangleComponentSolver(mRender, rectangleComponent); break;
                     case ImageGuiComponent imageComponent:
                         imageComponentSolver(mRender, imageComponent); break;
+                    case ButtonGuiComponent buttonComponent:
+                        buttonComponentSolver(mRender, buttonComponent); break;
                     default: break;
                 }
 
+                //draw debug shape
+                renderDebugPropertySolver(mRender, gameObject.GetComponent<VisualGuiComponent>().Shape);
+                    
                 //update stack
                 transformStack.Push(new Tuple<GameObject, Matrix4x4>(gameObject, transformMatrix));
             }

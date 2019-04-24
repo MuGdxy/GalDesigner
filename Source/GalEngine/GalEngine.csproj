@@ -74,11 +74,13 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\GuiComponentEventPart.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ButtonGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ImageGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\RectangleGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\TextGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiButton.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiControl.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiText.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\LogicGuiSystem.cs" />

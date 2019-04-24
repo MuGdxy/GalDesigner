@@ -30,12 +30,16 @@ namespace GalEngine
 
         public GameObject()
         {
+            Name = "GameObject" + GetHashCode();
+
             Children = new List<GameObject>();
         }
 
         public GameObject(string name)
         {
             Name = name;
+
+            if (Name == null) Name = "GameObject" + GetHashCode();
 
             Children = new List<GameObject>();
         }
