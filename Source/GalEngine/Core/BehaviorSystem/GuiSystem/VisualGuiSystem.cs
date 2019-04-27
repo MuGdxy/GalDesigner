@@ -136,7 +136,7 @@ namespace GalEngine
             //solve to render button component
             void buttonComponentSolver(GuiRender render, ButtonGuiComponent buttonComponent)
             {
-                //update the property and create asset(Text)
+                //update the property and create asset(text)
                 buttonComponent.SetPropertyToAsset();
 
                 //get size of rectangle
@@ -155,6 +155,38 @@ namespace GalEngine
                 //render button text
                 if (buttonComponent.mTextAsset.Image.GpuTexture != null)
                     render.DrawText(position, buttonComponent.mTextAsset, buttonComponent.FrontGround);
+            }
+
+            //solve to render input text component
+            void inputTextComponentSolver(GuiRender render, InputTextGuiComponent inputTextComponent)
+            {
+                //update the property and create asset(input text)
+                inputTextComponent.SetPropertyToAsset();
+
+                var size = (inputTextComponent.Shape as RectangleShape).Size;
+                var cursorLocation = inputTextComponent.CursorLocation;
+
+                var inputTextPosition = new Position<float>(
+                    x: 0 + GuiProperty.InputTextPadding,
+                    y: 0 + (size.Height - inputTextComponent.mInputText.Size.Height) * 0.5f);
+                var cursorPosition = new Position<float>(
+                    x: inputTextPosition.X + (cursorLocation == 0 ? 0 : inputTextComponent.mInputText.GetCharacterPostLocation(cursorLocation - 1)), 
+                    y: inputTextPosition.Y);
+
+                //render background box
+                render.FillRectangle(
+                    new Rectangle<float>(0, 0, size.Width, size.Height),
+                    inputTextComponent.BackGround);
+
+                //render input text
+                render.DrawText(inputTextPosition, inputTextComponent.mInputText, inputTextComponent.FrontGround);
+
+                //render cursor
+                render.DrawLine(
+                    start: cursorPosition,
+                    end: new Position<float>(cursorPosition.X, cursorPosition.Y + inputTextComponent.mInputText.Size.Height),
+                    color: inputTextComponent.FrontGround,
+                    padding: GuiProperty.InputTextCursorWidth);
             }
 
             //stack to maintain the path of game object's tree from node to root
@@ -192,6 +224,8 @@ namespace GalEngine
                         imageComponentSolver(mRender, imageComponent); break;
                     case ButtonGuiComponent buttonComponent:
                         buttonComponentSolver(mRender, buttonComponent); break;
+                    case InputTextGuiComponent inputComponent:
+                        inputTextComponentSolver(mRender, inputComponent); break;
                     default: break;
                 }
 

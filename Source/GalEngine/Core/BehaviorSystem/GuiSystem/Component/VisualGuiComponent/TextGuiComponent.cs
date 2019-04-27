@@ -11,19 +11,19 @@ namespace GalEngine
         internal Text mTextAsset;
 
         public Font Font { get; set; }
-        public string Text { get; set; }
+        public string Content { get; set; }
         public Color<float> Color { get; set; }
 
         internal void SetPropertyToAsset()
         {
             //do not need to change the text asset, because we do not change any propertry
-            if (mTextAsset != null && mTextAsset.Content == Text && mTextAsset.Font == Font) return;
+            if (mTextAsset != null && mTextAsset.Content == Content && mTextAsset.Font == Font) return;
 
             //dispose old asset
             Utility.Dispose(ref mTextAsset);
 
             //create new asset
-            mTextAsset = new Text(Text, Font, new Size<int>(0, 0));
+            mTextAsset = new Text(Content, Font, new Size<int>(0, 0));
 
             //change the shape
             (Shape as RectangleShape).Size = new Size<float>(mTextAsset.Size.Width, mTextAsset.Size.Height);
@@ -34,10 +34,10 @@ namespace GalEngine
 
         }
 
-        public TextGuiComponent(string text, Font font, Color<float> color) : base(new RectangleShape())
+        public TextGuiComponent(string content, Font font, Color<float> color) : base(new RectangleShape())
         {
             Font = font;
-            Text = text;
+            Content = content;
             Color = color;
         }
     }

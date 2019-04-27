@@ -368,6 +368,15 @@ namespace GalEngine
                 position.Y + text.Size.Height), text.Image, color);
         }
 
+        public virtual void DrawText(Position<float> position, RowText text, Color<float> color)
+        {
+            DrawImage(new Rectangle<float>(
+                position.X,
+                position.Y,
+                position.X + text.Size.Width,
+                position.Y + text.Size.Height), text.Image, color);
+        }
+
         public virtual void DrawText(Rectangle<float> rectangle, Text text, Color<float> color)
         {
             DrawImage(rectangle, text.Image, color);

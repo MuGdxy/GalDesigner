@@ -75,6 +75,7 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ButtonGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ImageGuiComponent.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\InputTextGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\RectangleGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\TextGuiComponent.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiButton.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiControl.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiText.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiProperty.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\LogicGuiSystem.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\VisualGuiSystem.cs" />

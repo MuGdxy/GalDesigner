@@ -22,5 +22,22 @@ namespace GalEngine
         {
             return Marshal.SizeOf<T>();
         }
+
+        public static T Max<T>(T left, T right) where T : IComparable<T>
+        {
+            if (left.CompareTo(right) < 0) return right;
+            return left;
+        }
+
+        public static T Min<T>(T left, T right) where T : IComparable<T>
+        {
+            if (left.CompareTo(right) > 0) return right;
+            return left;
+        }
+    
+        public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
+        {
+            return Min(Max(value, min), max);
+        }
     }
 }
