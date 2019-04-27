@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using SharpFont;
 using GalEngine.Runtime.Graphics;
 
-namespace GalEngine.GameResource
+namespace GalEngine
 {
     public class CharacterCodeMetrics : IDisposable
     {

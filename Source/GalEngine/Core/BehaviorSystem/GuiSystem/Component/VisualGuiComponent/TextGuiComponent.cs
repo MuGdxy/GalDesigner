@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GalEngine.GameResource;
-
 namespace GalEngine
 {
     public class TextGuiComponent : VisualGuiComponent
@@ -19,7 +17,7 @@ namespace GalEngine
         internal void SetPropertyToAsset()
         {
             //do not need to change the text asset, because we do not change any propertry
-            if (mTextAsset != null && mTextAsset.TextContent == Text && mTextAsset.Font == Font) return;
+            if (mTextAsset != null && mTextAsset.Content == Text && mTextAsset.Font == Font) return;
 
             //dispose old asset
             Utility.Dispose(ref mTextAsset);

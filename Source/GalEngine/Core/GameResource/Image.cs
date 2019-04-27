@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using GalEngine.Runtime.Graphics;
 
-namespace GalEngine.GameResource
+namespace GalEngine
 {
     public class Image : IDisposable
     {

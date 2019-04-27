@@ -10,6 +10,8 @@ namespace GalEngine
     {
         public Type BaseComponentType { get; protected set; }
 
+        public bool IsBaseComponentType => GetType() == BaseComponentType;
+
         public Component()
         {
             BaseComponentType = typeof(Component);

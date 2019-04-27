@@ -5,7 +5,6 @@ using System.Text;
 using System.Numerics;
 using System.Threading.Tasks;
 
-using GalEngine.GameResource;
 using GalEngine.Runtime.Graphics;
 
 namespace GalEngine
@@ -366,12 +365,12 @@ namespace GalEngine
                 position.X,
                 position.Y,
                 position.X + text.Size.Width,
-                position.Y + text.Size.Height), text.Texture, color);
+                position.Y + text.Size.Height), text.Image, color);
         }
 
         public virtual void DrawText(Rectangle<float> rectangle, Text text, Color<float> color)
         {
-            DrawImage(rectangle, text.Texture, color);
+            DrawImage(rectangle, text.Image, color);
         }
 
         public virtual void FillRectangle(Rectangle<float> rectangle, Color<float> color)

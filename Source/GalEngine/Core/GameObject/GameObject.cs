@@ -28,11 +28,16 @@ namespace GalEngine
             }
         }
 
-        public GameObject()
+        internal protected virtual void Update(float deltaTime)
         {
-            Name = "GameObject" + GetHashCode();
+            foreach (var child in Children)
+            {
+                child.Update(deltaTime);
+            }
+        }
 
-            Children = new List<GameObject>();
+        public GameObject() : this(null)
+        {
         }
 
         public GameObject(string name)
@@ -44,37 +49,36 @@ namespace GalEngine
             Children = new List<GameObject>();
         }
 
-        public virtual void Update(float deltaTime)
+        public void AddComponent<TComponent>(TComponent component) where TComponent : Component
         {
-            foreach (var child in Children)
-            {
-                child.Update(deltaTime);
-            }
+            //we record the base component type and the component type for component
+            //record the base component type for system execution
+            mComponents[component.BaseComponentType] = component;
+
+            //record the true component type for user
+            if (!component.IsBaseComponentType) mComponents[component.GetType()] = component;
         }
 
-        public void AddComponent<TBaseComponent>(TBaseComponent commponent) where TBaseComponent : Component
+        public void RemoveComponent<TComponent>() where TComponent : Component
         {
-            mComponents[commponent.BaseComponentType] = commponent;
+            //get component we want to remove
+            var component = mComponents[typeof(TComponent)];
+
+            //remove base component type
+            mComponents.Remove(component.BaseComponentType);
+
+            //remove true component type if the component type is not base component type
+            if (!component.IsBaseComponentType) mComponents.Remove(component.GetType());
         }
 
-        public void AddComponent<TBaseComponent>() where TBaseComponent : Component, new()
+        public TComponent GetComponent<TComponent>() where TComponent : Component
         {
-            mComponents[typeof(TBaseComponent)] = new TBaseComponent();
+            return mComponents[typeof(TComponent)] as TComponent;
         }
 
-        public void RemoveComponent<TBaseComponent>() where TBaseComponent : Component
+        public bool IsComponentExist<TComponent>() where TComponent : Component
         {
-            mComponents.Remove(typeof(TBaseComponent));
-        }
-
-        public TBaseComponent GetComponent<TBaseComponent>() where TBaseComponent : Component
-        {
-            return mComponents[typeof(TBaseComponent)] as TBaseComponent;
-        }
-
-        public bool IsComponentExist<TBaseComponent>() where TBaseComponent : Component
-        {
-            return mComponents.ContainsKey(typeof(TBaseComponent));
+            return mComponents.ContainsKey(typeof(TComponent));
         }
 
         public bool IsComponentExist(Type type)

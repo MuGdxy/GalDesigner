@@ -8,18 +8,16 @@ namespace GalEngine
 {
     public abstract class GuiControl : GameObject
     {
-        public GuiControl()
+        public GuiControl() : this(null)
         {
-            //add requirement component
-            AddComponent<VisualGuiComponent>();
-            AddComponent<TransformGuiComponent>();
+
         }
 
         public GuiControl(string name) : base(name)
         {
             //add requirement component
-            AddComponent<VisualGuiComponent>();
-            AddComponent<TransformGuiComponent>();
+            AddComponent(new VisualGuiComponent());
+            AddComponent(new TransformGuiComponent());
         }
     }
 }

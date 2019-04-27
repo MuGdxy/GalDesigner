@@ -6,21 +6,20 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public class Text : IDisposable
+    public class RowText : IDisposable
     {
         private readonly Font mFont;
-        private readonly Size<int> mMaxSize;
         private readonly string mContent;
+        private readonly List<int> mCharacterPostLocation;
 
         private Image mImage;
-        
+
         public Font Font => mFont;
-        public Size<int> MaxSize => mMaxSize;
         public string Content => mContent;
         public Image Image => mImage;
         public Size<int> Size => mImage.Size;
 
-        private static Size<int> GenRequirementSize(string content, Font font, Size<int> maxSize)
+        private static Size<int> GenRequirementSize(string content, Font font)
         {
             //see more in freetype
             var sizeMetrices = font.FontFace.Size.Metrics;
@@ -35,87 +34,44 @@ namespace GalEngine
 
             //internal function: update requirement size(width and height)
             void internalfunctionUpdateSize(int width, int height)
-            { 
+            {
                 //when we has gone to next line in this time, the "penPositionX" maybe less than requirement width
                 //but at the last line, "penPositionX" maybe more than requirement width
                 //so we need to use "max" function to update requirement width
                 requirementWidth = Math.Max(requirementWidth, width);
                 requirementHeight = Math.Max(requirementHeight, height);
             }
-            
-            //internal function: go to next line, when the width of "textContent" more than max width
-            //internal function: we need to go to next line to layout the text we want to display
-            void internalfunctionNextLine()
-            {
-                penPositionX = 0;
-                penPositionY = penPositionY + baseLineDistance;
-            }
 
             foreach (var character in content)
             {
-                //if "textContent" contains '\n', we need to go next line
-                if (character == '\n')
-                {
-                    internalfunctionNextLine();
-                    internalfunctionUpdateSize(penPositionX, penPositionY);
-
-                    continue;
-                }
-
                 var codeMetrics = font.GetCharacterCodeMetrics(character);
 
-                //see more in "internalfunctionNextLine"
-                if (penPositionX + codeMetrics.Advance >= maxSize.Width) internalfunctionNextLine();
-
                 //accept an new chacacter, we need to update the size
-                //internalfunctionUpdateSize(penPositionX + codeMetrics.Texture.Size.Width + codeMetrics.HoriBearingX, penPositionY);
                 internalfunctionUpdateSize(penPositionX + codeMetrics.Advance, penPositionY);
 
                 //go to next character in the same line
                 penPositionX = penPositionX + codeMetrics.Advance;
             }
 
-            //limit the requirement size
-            requirementWidth = Math.Min(requirementWidth, maxSize.Width);
-            requirementHeight = Math.Min(requirementHeight, maxSize.Height);
-
             return new Size<int>(requirementWidth, requirementHeight);
         }
 
-        private static void GenTextureFromContent(string content, Font font, Image texture)
+        private static void GenTextureFromContent(string content, Font font, Image texture, ref List<int> characterPostLocation)
         {
+            //clear character post location
+            characterPostLocation.Clear();
+
             //see more in freetype
             var sizeMetrics = font.FontFace.Size.Metrics;
             var maxCharacterHeight = sizeMetrics.Ascender - sizeMetrics.Descender;
-            var baseLineDistance = sizeMetrics.Height.Value >> 6;
             var baseLine = ((sizeMetrics.Height - maxCharacterHeight) / 2 + sizeMetrics.Ascender).Value >> 6;
 
             var penPositionX = 0;
             var penPositionY = baseLine;
 
-            //internal function: go to next line, when the width of "textContent" more than max width
-            //internal function: we need to go to next line to layout the text we want to display
-            void internalfunctionNextLine()
-            {
-                penPositionX = 0;
-                penPositionY = penPositionY + baseLineDistance;
-            }
-
             foreach (var character in content)
             {
-                //if "textContent" contains '\n', we need to go next line
-                if (character == '\n')
-                {
-                    internalfunctionNextLine();
-
-                    continue;
-                }
-
                 var codeMetrics = font.GetCharacterCodeMetrics(character);
-
-                //see more in "internalfunctionNextLine"
-                if (penPositionX + codeMetrics.HoriBearingX + codeMetrics.Texture.Size.Width > texture.Size.Width)
-                    internalfunctionNextLine();
 
                 //it is possible that the character texture may out of the text texture
                 //we need to clip the out part(only copy the in part)
@@ -138,32 +94,39 @@ namespace GalEngine
 
                 //next character
                 penPositionX = penPositionX + codeMetrics.Advance;
+
+                //set the post location for current characater
+                characterPostLocation.Add(penPositionX);
             }
         }
 
-        public Text(string content, Font font, Size<int> maxSize)
+        public RowText(string content, Font font)
         {
             mFont = font;
-            mMaxSize = maxSize;
             mContent = content;
 
-            maxSize = new Size<int>(
-                maxSize.Width == 0 ? int.MaxValue : maxSize.Width,
-                maxSize.Height == 0 ? int.MaxValue : maxSize.Height);
+            mImage = new Image(GenRequirementSize(mContent, mFont), PixelFormat.Alpha8bit);
+            mCharacterPostLocation = new List<int>();
 
-            mImage = new Image(GenRequirementSize(mContent, mFont, maxSize), PixelFormat.Alpha8bit);
-
-            GenTextureFromContent(mContent, mFont, mImage);
+            GenTextureFromContent(mContent, mFont, mImage, ref mCharacterPostLocation);
         }
 
-        public Text(string ontent, Font font) : this(ontent, font, new Size<int>(0, 0))
+        public int GetCharacterPostLocation(int location)
         {
+            return mCharacterPostLocation[location];
+        }
 
+        public SegmentRange<int> GetCharactersLocationRange(SegmentRange<int> locationRange)
+        {
+            return new SegmentRange<int>(
+                locationRange.Start == 0 ? 0 : 
+                mCharacterPostLocation[locationRange.Start - 1],
+                mCharacterPostLocation[locationRange.End]);
         }
 
         public void Dispose()
         {
-            Utility.Dispose(ref mImage);
+            throw new NotImplementedException();
         }
     }
 }

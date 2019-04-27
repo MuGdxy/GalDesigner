@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using GalEngine.GameResource;
-
 namespace GalEngine
 {
 
@@ -50,7 +48,7 @@ namespace GalEngine
             var maxSize = new Size<int>((int)shape.Size.Width, (int)shape.Size.Height);
 
             //do not need to change the text asset, because we do not change any propertry
-            if (mTextAsset != null && mTextAsset.TextContent == Text && mTextAsset.Font == Font &&
+            if (mTextAsset != null && mTextAsset.Content == Text && mTextAsset.Font == Font &&
                 mTextAsset.MaxSize == maxSize) return;
 
             //dispose old asset

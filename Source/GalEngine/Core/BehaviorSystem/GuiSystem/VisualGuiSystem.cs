@@ -5,7 +5,6 @@ using System.Text;
 using System.Numerics;
 using System.Threading.Tasks;
 
-using GalEngine.GameResource;
 using GalEngine.Runtime.Graphics;
 
 namespace GalEngine
@@ -94,7 +93,7 @@ namespace GalEngine
                 textComponent.SetPropertyToAsset();
 
                 //not invisable text, we will render it
-                if (textComponent.mTextAsset.Texture.GpuTexture != null)
+                if (textComponent.mTextAsset.Image.GpuTexture != null)
                     render.DrawText(new Position<float>(), textComponent.mTextAsset, textComponent.Color);
             }
 
@@ -154,7 +153,7 @@ namespace GalEngine
                     buttonComponent.BackGround);
 
                 //render button text
-                if (buttonComponent.mTextAsset.Texture.GpuTexture != null)
+                if (buttonComponent.mTextAsset.Image.GpuTexture != null)
                     render.DrawText(position, buttonComponent.mTextAsset, buttonComponent.FrontGround);
             }
 
