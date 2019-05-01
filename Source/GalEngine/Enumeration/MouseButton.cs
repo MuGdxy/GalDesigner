@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public enum MouseButton
+    public enum MouseButton : uint
     {
         Left = 0,
         Middle = 1,

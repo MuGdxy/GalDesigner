@@ -39,5 +39,19 @@ namespace GalEngine
         {
             return Min(Max(value, min), max);
         }
+
+        public static void Assert(bool condition)
+        {
+#if DEBUG
+            if (!condition) throw new Exception();
+#endif
+        }
+
+        public static void Assert(bool condition, Exception exception)
+        {
+#if DEBUG
+            if (!condition) throw exception;
+#endif
+        }
     }
 }

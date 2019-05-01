@@ -19,6 +19,9 @@ namespace GalEngine
             RequireComponents.AddRequireComponentType<LogicGuiComponent>();
             RequireComponents.AddRequireComponentType<VisualGuiComponent>();
             RequireComponents.AddRequireComponentType<TransformGuiComponent>();
+
+            //init component event property
+            mComponentEventProperty.CaptureControl = new GuiControl[3];
         }
 
         protected internal override void Excute(List<GameObject> passedGameObjectList)
@@ -49,6 +52,26 @@ namespace GalEngine
             //it may trigger the drag, focus, click event for gui control
             void mouseClickSolver(List<GameObject> gameObjects, MouseClickEvent eventArg, ref GuiComponentEventProperty eventProperty)
             {
+                //when mouse button up, we need release the capture control and invoke click event
+                if (eventArg.IsDown == false)
+                {
+                    var button = (uint)eventArg.Button;
+
+                    //we have the control
+                    if (eventProperty.CaptureControl[button] != null)
+                    {
+                        var logicComponent = eventProperty.CaptureControl[button].GetComponent<LogicGuiComponent>();
+
+                        //invoke event
+                        if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.MouseClick))
+                            logicComponent.EventParts.Get(GuiComponentSupportEvent.MouseClick).
+                                Invoke(eventProperty.CaptureControl[button],
+                                new GuiComponentMouseClickEvent(eventArg.Time, eventArg.Position, eventArg.Button, eventArg.IsDown));
+
+                        eventProperty.CaptureControl[button] = null;
+                    }
+                }
+
                 //stack to maintain the path of game object's tree from node to root
                 //matrix is the invert transform from root to node
                 Stack<Tuple<GameObject, Matrix4x4>> ancestors = new Stack<Tuple<GameObject, Matrix4x4>>();
@@ -58,6 +81,7 @@ namespace GalEngine
 
                 GuiControl newFocusControl = null;
                 GuiControl newDragControl = null;
+                GuiControl newCaptureControl = null;
 
                 foreach (var gameObject in gameObjects)
                 {
@@ -128,12 +152,10 @@ namespace GalEngine
                         }
                     }
 
-                    //invoke the click event for game object when mouse position is contained
-                    if (isContained == true && logicComponent.EventParts.Contain(GuiComponentSupportEvent.MouseClick))
+                    //mouse down and it is in the control, record the capture control
+                    if (eventArg.IsDown && isContained)
                     {
-                        logicComponent.EventParts.Get(GuiComponentSupportEvent.MouseClick).
-                            Invoke(gameObject as GuiControl, new GuiComponentMouseClickEvent(
-                                eventArg.Time, eventArg.Position, eventArg.Button, eventArg.IsDown));
+                        newCaptureControl = gameObject as GuiControl;
                     }
 
                     //update the ancestors stack
@@ -181,6 +203,24 @@ namespace GalEngine
                         eventProperty.DragControl = newDragControl;
                     }
                     else eventProperty.DragControl = null;
+                }
+
+                //update the new capture control status and invoke event
+                if (newCaptureControl != null)
+                {
+                    var button = (uint)eventArg.Button;
+                    var logicComponent = newCaptureControl.GetComponent<LogicGuiComponent>();
+
+                    //if the old capture control is not null, means we do not release the button before we press
+                    Utility.Assert(eventProperty.CaptureControl[button] == null);
+
+                    eventProperty.CaptureControl[button] = newCaptureControl;
+
+                    //invoke the event 
+                    if (logicComponent.EventParts.Contain(GuiComponentSupportEvent.MouseClick))
+                        logicComponent.EventParts.Get(GuiComponentSupportEvent.MouseClick).
+                            Invoke(newCaptureControl, new GuiComponentMouseClickEvent(
+                                eventArg.Time, eventArg.Position, eventArg.Button, eventArg.IsDown));
                 }
             }
 

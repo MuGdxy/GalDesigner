@@ -11,6 +11,7 @@ namespace GalEngine
         public Position<int> MousePosition;
         public GuiControl FocusControl;
         public GuiControl DragControl;
+        public GuiControl[] CaptureControl;
     }
 
     public class GuiComponentEvent : BaseEvent
