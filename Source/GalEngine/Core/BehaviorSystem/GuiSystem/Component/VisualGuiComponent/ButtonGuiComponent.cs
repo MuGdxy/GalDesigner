@@ -13,20 +13,20 @@ namespace GalEngine
         {
             public static Font Font { get; set; }
             public static string Text { get; set; }
-            public static Color<float> BackGround { get; set; }
-            public static Color<float> FrontGround { get; set; }
-            public static Color<float> HoverBackGround { get; set; }
-            public static Color<float> HoverFrontGround { get; set; }
+            public static Color<float> Background { get; set; }
+            public static Color<float> Frontground { get; set; }
+            public static Color<float> HoverBackground { get; set; }
+            public static Color<float> HoverFrontground { get; set; }
 
             static DefaultButtonProperty()
             {
                 //design requirement
                 Font = Font.Default;
                 Text = "Button";
-                BackGround = new Color<float>(0.7f, 0.7f, 0.7f, 1.0f);
-                FrontGround = new Color<float>(0, 0, 0, 1);
-                HoverBackGround = new Color<float>(0.8f, 0.8f, 0.8f, 1.0f);
-                HoverFrontGround = new Color<float>(0, 0, 0, 1);
+                Background = new Color<float>(0.7f, 0.7f, 0.7f, 1.0f);
+                Frontground = new Color<float>(0, 0, 0, 1);
+                HoverBackground = new Color<float>(0.8f, 0.8f, 0.8f, 1.0f);
+                HoverFrontground = new Color<float>(0, 0, 0, 1);
             }
         }
     }
@@ -38,8 +38,8 @@ namespace GalEngine
         public Font Font { get; set; }
         public string Text { get; set; }
 
-        public Color<float> BackGround { get; set; }
-        public Color<float> FrontGround { get; set; }
+        public Color<float> Background { get; set; }
+        public Color<float> Frontground { get; set; }
 
         internal void SetPropertyToAsset()
         {
@@ -61,8 +61,8 @@ namespace GalEngine
         public ButtonGuiComponent() : this(new RectangleShape(),
             Internal.DefaultButtonProperty.Text,
             Internal.DefaultButtonProperty.Font,
-            Internal.DefaultButtonProperty.BackGround,
-            Internal.DefaultButtonProperty.FrontGround)
+            Internal.DefaultButtonProperty.Background,
+            Internal.DefaultButtonProperty.Frontground)
         {
             
         }
@@ -71,13 +71,13 @@ namespace GalEngine
             RectangleShape shape, 
             string text, 
             Font font,
-            Color<float> backGround, 
-            Color<float> frontGround) : base(shape)
+            Color<float> background, 
+            Color<float> frontground) : base(shape)
         {
             Font = font;
             Text = text;
-            BackGround = backGround;
-            FrontGround = frontGround;
+            Background = background;
+            Frontground = frontground;
         }
     }
 }

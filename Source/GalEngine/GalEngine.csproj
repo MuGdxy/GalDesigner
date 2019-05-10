@@ -85,6 +85,7 @@
     <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiButton.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiControl.cs" />
+    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiInputText.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiText.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiProperty.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\LogicGuiSystem.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="Runtime\Windows\EngineWindow.cs" />
     <Compile Include="Structure\Color.cs" />
     <Compile Include="Structure\Graph.cs" />
+    <Compile Include="Structure\LegalContainer.cs" />
     <Compile Include="Structure\Position.cs" />
     <Compile Include="Structure\MappedContainer.cs" />
     <Compile Include="Structure\Rectangle.cs" />

@@ -22,9 +22,15 @@ namespace GuiSystemTestUnit
 
             var guiText = new GuiText("This is a test text!", new Font(20), new Color<float>(0, 0, 0, 1));
             var guiButton = new GuiButton();
+            var guiInputText = new GuiInputText("input", 100, 
+                DefaultInputTextProperty.Background, 
+                DefaultInputTextProperty.Frontground, new Font(30));
+            //guiInputText.GetComponent<InputTextGuiComponent>().Content = "2333";
+            guiInputText.GetComponent<InputTextGuiComponent>().CursorLocation = 1;
+            guiInputText.GetComponent<TransformGuiComponent>().Position = new Position<float>(100, 100);
 
             (guiButton.GetComponent<ButtonGuiComponent>().Shape as RectangleShape).Size = new Size<float>(80, 40);
-            guiButton.GetComponent<TransformGuiComponent>().Position = new Position<float>(100, 100);
+            //guiButton.GetComponent<TransformGuiComponent>().Position = new Position<float>(100, 100);
 
             guiButton.GetComponent<LogicGuiComponent>().EventParts.Get(GuiComponentSupportEvent.MouseClick)
                 .Solver += (x, y) =>
@@ -36,7 +42,8 @@ namespace GuiSystemTestUnit
                  };
 
             GameSystems.SystemScene.Root.AddChild(guiButton);
-            GameSystems.SystemScene.Root.AddChild(guiText);
+            //GameSystems.SystemScene.Root.AddChild(guiText);
+            GameSystems.SystemScene.Root.AddChild(guiInputText);
 
 
             GameSystems.VisualGuiSystem.GuiRenderDebugProperty = new GuiRenderDebugProperty()

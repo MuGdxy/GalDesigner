@@ -9,14 +9,14 @@ namespace GalEngine
     public static class DefaultInputTextProperty
     {
         public static Font Font { get; set; }
-        public static Color<float> BackGround { get; set; }
-        public static Color<float> FrontGround { get; set; }
+        public static Color<float> Background { get; set; }
+        public static Color<float> Frontground { get; set; }
 
         static DefaultInputTextProperty()
         {
             Font = Font.Default;
-            BackGround = new Color<float>(0, 0, 0.7f, 1);
-            FrontGround = new Color<float>(0, 0, 0, 1);
+            Background = new Color<float>(0, 0.4f, 0.7f, 1);
+            Frontground = new Color<float>(0, 0, 0, 1);
         }
     }
 
@@ -27,8 +27,8 @@ namespace GalEngine
         internal RowText mInputText;
 
         public Font Font { get; set; }
-        public Color<float> BackGround { get; set; }
-        public Color<float> FrontGround { get; set; }
+        public Color<float> Background { get; set; }
+        public Color<float> Frontground { get; set; }
 
         public string Content { get; set; }
         public int CursorLocation { get; set; }
@@ -42,30 +42,29 @@ namespace GalEngine
             //dispose the input text and create new input text
             Utility.Dispose(ref mInputText);
             //limit the cursor position
-            Utility.Clamp(CursorLocation, NullLocation, Content.Length);
+            CursorLocation = Utility.Clamp(CursorLocation, NullLocation, Content.Length);
 
             mInputText = new RowText(Content, Font);
         }
 
-        public InputTextGuiComponent() : this(
-            new RectangleShape(),
-            DefaultInputTextProperty.BackGround,
-            DefaultInputTextProperty.FrontGround,
+        public InputTextGuiComponent() : this(0,
+            DefaultInputTextProperty.Background,
+            DefaultInputTextProperty.Frontground,
             DefaultInputTextProperty.Font)
         {
 
         }
 
         public InputTextGuiComponent(
-            RectangleShape shape, 
-            Color<float> backGround, 
-            Color<float> frontGround, 
+            float width, 
+            Color<float> background, 
+            Color<float> frontground, 
             Font font) :
-            base(shape)
+            base(new RectangleShape(new Size<float>(width, font.Size + GuiProperty.InputTextPadding * 2.0f)))
         {
             Font = font;
-            BackGround = backGround;
-            FrontGround = frontGround;
+            Background = background;
+            Frontground = frontground;
 
             Content = "";
             CursorLocation = NullLocation;

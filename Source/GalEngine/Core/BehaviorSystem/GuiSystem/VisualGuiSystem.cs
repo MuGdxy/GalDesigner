@@ -150,11 +150,11 @@ namespace GalEngine
                 //render button shape
                 render.FillRectangle(
                     new Rectangle<float>(0, 0, size.Width, size.Height),
-                    buttonComponent.BackGround);
+                    buttonComponent.Background);
 
                 //render button text
                 if (buttonComponent.mTextAsset.Image.GpuTexture != null)
-                    render.DrawText(position, buttonComponent.mTextAsset, buttonComponent.FrontGround);
+                    render.DrawText(position, buttonComponent.mTextAsset, buttonComponent.Frontground);
             }
 
             //solve to render input text component
@@ -168,7 +168,7 @@ namespace GalEngine
 
                 var inputTextPosition = new Position<float>(
                     x: 0 + GuiProperty.InputTextPadding,
-                    y: 0 + (size.Height - inputTextComponent.mInputText.Size.Height) * 0.5f);
+                    y: 0 + GuiProperty.InputTextPadding);
                 var cursorPosition = new Position<float>(
                     x: inputTextPosition.X + (cursorLocation == 0 ? 0 : inputTextComponent.mInputText.GetCharacterPostLocation(cursorLocation - 1)), 
                     y: inputTextPosition.Y);
@@ -176,16 +176,17 @@ namespace GalEngine
                 //render background box
                 render.FillRectangle(
                     new Rectangle<float>(0, 0, size.Width, size.Height),
-                    inputTextComponent.BackGround);
+                    inputTextComponent.Background);
 
                 //render input text
-                render.DrawText(inputTextPosition, inputTextComponent.mInputText, inputTextComponent.FrontGround);
+                if (inputTextComponent.mInputText.Image.GpuTexture != null)
+                    render.DrawText(inputTextPosition, inputTextComponent.mInputText, inputTextComponent.Frontground);
 
                 //render cursor
                 render.DrawLine(
                     start: cursorPosition,
-                    end: new Position<float>(cursorPosition.X, cursorPosition.Y + inputTextComponent.mInputText.Size.Height),
-                    color: inputTextComponent.FrontGround,
+                    end: new Position<float>(cursorPosition.X, size.Height - GuiProperty.InputTextPadding),
+                    color: inputTextComponent.Frontground,
                     padding: GuiProperty.InputTextCursorWidth);
             }
 
