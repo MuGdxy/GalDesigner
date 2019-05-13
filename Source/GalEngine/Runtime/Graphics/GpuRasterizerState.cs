@@ -37,6 +37,24 @@ namespace GalEngine.Runtime.Graphics
 
             mRasterizerState = new SharpDX.Direct3D11.RasterizerState(GpuDevice.Device,
                 mDescription = SharpDX.Direct3D11.RasterizerStateDescription.Default());
+
+            FillMode = (GpuFillMode)mDescription.FillMode;
+            CullMode = (GpuCullMode)mDescription.CullMode;
+        }
+
+        public GpuRasterizerState(GpuDevice device, GpuFillMode fillMode, GpuCullMode cullMode)
+        {
+            GpuDevice = device;
+
+            FillMode = fillMode;
+            CullMode = cullMode;
+
+            mDescription = SharpDX.Direct3D11.RasterizerStateDescription.Default();
+
+            mDescription.FillMode = (SharpDX.Direct3D11.FillMode)FillMode;
+            mDescription.CullMode = (SharpDX.Direct3D11.CullMode)CullMode;
+
+            mRasterizerState = new SharpDX.Direct3D11.RasterizerState(GpuDevice.Device, mDescription);
         }
 
         ~GpuRasterizerState() => Dispose();

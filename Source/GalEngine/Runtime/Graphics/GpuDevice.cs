@@ -74,6 +74,14 @@ namespace GalEngine.Runtime.Graphics
                 new SharpDX.Mathematics.Interop.RawColor4(color.X, color.Y, color.Z, color.W));
         }
 
+        public void ClearRenderTarget(Image renderTarget, Vector4<float> color)
+        {
+            //clear render target using color
+            //x = red, y = green, z = blue, w = alpha
+            ImmediateContext.ClearRenderTargetView(renderTarget.GpuRenderTarget.RenderTarget,
+                new SharpDX.Mathematics.Interop.RawColor4(color.X, color.Y, color.Z, color.W));
+        }
+
         public void SetViewPort(Rectangle<float> viewPort)
         {
             //set view port
@@ -95,6 +103,12 @@ namespace GalEngine.Runtime.Graphics
         {
             //set render target
             ImmediateContext.OutputMerger.SetRenderTargets(renderTarget.RenderTarget);
+        }
+
+        public void SetRenderTarget(Image image)
+        {
+            //set render target
+            SetRenderTarget(image.GpuRenderTarget);
         }
 
         public void SetInputLayout(GpuInputLayout inputLayout)
