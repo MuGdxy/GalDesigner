@@ -36,6 +36,26 @@ namespace GalEngine.Runtime.Graphics
             mShaderResource = new SharpDX.Direct3D11.ShaderResourceView(GpuDevice.Device, texture.Resource, shaderResourceDesc);
         }
 
+        public GpuResourceUsage(GpuDevice device, GpuBufferArray bufferArray)
+        {
+            Utility.Assert(GpuConvert.HasBindUsage(bufferArray.ResourceInfo.BindUsage, GpuBindUsage.ShaderResource) == true);
+
+            GpuDevice = device;
+
+            var shaderResourceDesc = new SharpDX.Direct3D11.ShaderResourceViewDescription()
+            {
+                Format = SharpDX.DXGI.Format.Unknown,
+                Buffer = new SharpDX.Direct3D11.ShaderResourceViewDescription.BufferResource()
+                {
+                    FirstElement = 0,
+                    ElementCount = bufferArray.ElementCount
+                },
+                Dimension = SharpDX.Direct3D.ShaderResourceViewDimension.Buffer
+            };
+
+            mShaderResource = new SharpDX.Direct3D11.ShaderResourceView(GpuDevice.Device, bufferArray.Resource, shaderResourceDesc);
+        }
+
         ~GpuResourceUsage() => Dispose();
 
         public void Dispose()

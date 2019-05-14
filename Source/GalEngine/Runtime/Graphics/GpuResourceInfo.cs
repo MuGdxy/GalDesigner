@@ -28,7 +28,7 @@ namespace GalEngine.Runtime.Graphics
         VideoEncoder = 1024
     }
 
-   public enum GpuHeapType
+    public enum GpuHeapType
     {
         Default = 0,
         Immutable = 1,
@@ -66,6 +66,11 @@ namespace GalEngine.Runtime.Graphics
             GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
             GpuHeapType heapType = GpuHeapType.Default)
             => new GpuResourceInfo(GpuBindUsage.IndexBuffer, cpuAccessFlag, heapType);
+
+        public static GpuResourceInfo BufferArray(
+            GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,
+            GpuHeapType heapType = GpuHeapType.Default)
+            => new GpuResourceInfo(GpuBindUsage.ShaderResource, cpuAccessFlag, heapType);
 
         public static GpuResourceInfo ShaderResource(
             GpuCpuAccessFlag cpuAccessFlag = GpuCpuAccessFlag.None,

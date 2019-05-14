@@ -124,6 +124,7 @@
     <Compile Include="Runtime\Event\MouseEvent.cs" />
     <Compile Include="Runtime\Event\SizeChangeEvent.cs" />
     <Compile Include="Runtime\Event\UpdateEvent.cs" />
+    <Compile Include="Runtime\Graphics\GpuBufferArray.cs" />
     <Compile Include="Runtime\Graphics\GpuAdapter.cs" />
     <Compile Include="Runtime\Graphics\GpuBlendState.cs" />
     <Compile Include="Runtime\Graphics\GpuBuffer.cs" />

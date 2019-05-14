@@ -231,10 +231,16 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.Rasterizer.State = rasterizerState.RasterizerState;
         }
 
-        public void DrawIndexed(int indexCount, int startVertexLocation = 0, int baseVertexLocation = 0)
+        public void DrawIndexed(int indexCount, int startIndexLocation = 0, int baseVertexLocation = 0)
         {
             //draw indexed
-            ImmediateContext.DrawIndexed(indexCount, startVertexLocation, baseVertexLocation);
+            ImmediateContext.DrawIndexed(indexCount, startIndexLocation, baseVertexLocation);
+        }
+
+        public void DrawIndexedInstanced(int indexCount, int instanceCount, int startIndexLocation = 0, int baseVertexLocation = 0)
+        {
+            //drwa indexed instanced
+            ImmediateContext.DrawIndexedInstanced(indexCount, instanceCount, startIndexLocation, baseVertexLocation, 0);
         }
 
         public void Dispose()

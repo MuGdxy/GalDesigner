@@ -49,7 +49,7 @@ namespace GalEngine
         private readonly int mSamplerStateSlot = 0;
         private readonly int mTransformBufferSlot = 0;
         private readonly int mRenderConfigBufferSlot = 0;
-        
+
         public PresentRender(GpuDevice device, IntPtr handle, Size<int> size)
         {
             mHandle = handle;

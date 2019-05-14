@@ -146,7 +146,7 @@ namespace GalEngine
 
                 PresentRender.BeginDraw();
                 BehaviorSystems.ForEach((system) => system.Present(PresentRender));
-                PresentRender.EndDraw(true);
+                PresentRender.EndDraw(false);
             }
         }
 
