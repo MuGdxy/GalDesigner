@@ -91,11 +91,11 @@
     <Compile Include="Core\BehaviorSystem\GuiSystem\LogicGuiSystem.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\BehaviorSystem\GuiSystem\VisualGuiSystem.cs" />
-    <Compile Include="Core\GameResource\Font.cs" />
-    <Compile Include="Core\GameResource\RowText.cs" />
-    <Compile Include="Core\GameResource\Shape.cs" />
-    <Compile Include="Core\GameResource\Text.cs" />
-    <Compile Include="Core\GameResource\Image.cs" />
+    <Compile Include="Core\GameResource\Text\Font.cs" />
+    <Compile Include="Core\GameResource\Text\RowText.cs" />
+    <Compile Include="Core\GameResource\Shape\Shape.cs" />
+    <Compile Include="Core\GameResource\Text\Text.cs" />
+    <Compile Include="Core\GameResource\Image\Image.cs" />
     <Compile Include="Core\PresentRender.cs" />
     <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
@@ -147,14 +147,14 @@
     <Compile Include="Runtime\Windows\EngineWindow.cs" />
     <Compile Include="Structure\Color.cs" />
     <Compile Include="Structure\Graph.cs" />
-    <Compile Include="Structure\LegalContainer.cs" />
+    <Compile Include="Structure\Container\LegalContainer.cs" />
     <Compile Include="Structure\Position.cs" />
-    <Compile Include="Structure\MappedContainer.cs" />
+    <Compile Include="Structure\Container\MappedContainer.cs" />
     <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
     <Compile Include="Structure\Size.cs" />
-    <Compile Include="Structure\Vector2.cs" />
-    <Compile Include="Structure\Vector4.cs" />
+    <Compile Include="Structure\Math\Vector2.cs" />
+    <Compile Include="Structure\Math\Vector4.cs" />
     <Compile Include="Utility.cs" />
   </ItemGroup>
   <ItemGroup>
