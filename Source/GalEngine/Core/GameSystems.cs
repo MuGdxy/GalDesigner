@@ -15,6 +15,8 @@ namespace GalEngine
         public string IconName { get; set; }
 
         public Size<int> WindowSize { get; set; }
+
+        public GpuAdapter Adapter { get; set; }
     }
 
     public static class GameSystems
@@ -82,11 +84,15 @@ namespace GalEngine
 
         private static void InitializeRuntime(GameStartInfo gameStartInfo)
         {
-            var adapters = GpuAdapter.EnumerateGraphicsAdapter();
+            if (gameStartInfo.Adapter == null)
+            {
+                var adapters = GpuAdapter.EnumerateGraphicsAdapter();
 
-            LogEmitter.Assert(adapters.Count > 0, LogLevel.Error, "[Initialize Graphics Device Failed without Support Adapter] from [GameSystems]");
+                LogEmitter.Assert(adapters.Count > 0, LogLevel.Error, "[Initialize Graphics Device Failed without Support Adapter] from [GameSystems]");
 
-            GpuDevice = new GpuDevice(adapters[0]);
+                GpuDevice = new GpuDevice(adapters[0]);
+            }
+            else GpuDevice = new GpuDevice(gameStartInfo.Adapter);
 
             EngineWindow = new EngineWindow(
                 gameStartInfo.WindowName,
