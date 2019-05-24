@@ -196,8 +196,8 @@ namespace GalEngine
             mLogColorMap = new Dictionary<LogLevel, LogColor>();
 
             mStringMap.Add(LogLevel.Information, "Information");
-            mStringMap.Add(LogLevel.Warning, "Warning");
-            mStringMap.Add(LogLevel.Error, "Error");
+            mStringMap.Add(LogLevel.Warning, "__Warning__");
+            mStringMap.Add(LogLevel.Error, "___Error___");
 
             mLogColorMap.Add(LogLevel.Information, LogColor.Blue);
             mLogColorMap.Add(LogLevel.Warning, LogColor.Green);

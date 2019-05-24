@@ -19,8 +19,8 @@ namespace GalEngine
 
         public Size()
         {
-            Width = default;
-            Height = default;
+            Width = default(T);
+            Height = default(T);
         }
 
         public static bool operator == (Size<T> left, Size<T> right)

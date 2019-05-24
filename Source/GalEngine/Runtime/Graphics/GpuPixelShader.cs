@@ -21,12 +21,26 @@ namespace GalEngine.Runtime.Graphics
 
         public static byte[] Compile(byte[] byteCode, string entryPoint = "main")
         {
-            LogEmitter.Apply(LogLevel.Information, "[Start Compile Pixel Shader]", LogLevel.Information);
+            LogEmitter.Apply(LogLevel.Information, "[Start Compile Pixel Shader]");
 
             var result = SharpDX.D3DCompiler.ShaderBytecode.Compile(byteCode, entryPoint, "ps_5_0",
                     ShaderFlags, SharpDX.D3DCompiler.EffectFlags.None);
 
-            LogEmitter.Assert(result.HasErrors == false,LogLevel.Error, "[Compile Pixel Shader Failed] [Message = {0}]", result.Message);
+            if (result.Message != null)
+            {
+                var messages = result.Message.Split('\n');
+                
+                foreach (var message in messages)
+                {
+                    if (message == "") continue;
+
+                    LogEmitter.Apply(LogLevel.Warning, "[Pixel Shader Message = {0}]", message);
+                }
+            }
+
+            LogEmitter.Apply(LogLevel.Information, "[Finish Compile Pixel Shader]");
+
+            LogEmitter.Assert(result.HasErrors == false, LogLevel.Error, "[Compile Pixel Shader Failed]");
 
             return result;
         }

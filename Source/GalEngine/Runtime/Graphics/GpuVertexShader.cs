@@ -26,7 +26,21 @@ namespace GalEngine.Runtime.Graphics
             var result = SharpDX.D3DCompiler.ShaderBytecode.Compile(byteCode, entryPoint, "vs_5_0",
                  ShaderFlags);
 
-            LogEmitter.Assert(result.HasErrors == false, LogLevel.Error, "[Compile Vertex Shader Failed] [Message = {0}]", result.Message);
+            if (result.Message != null)
+            {
+                var messages = result.Message.Split('\n');
+
+                foreach (var message in messages)
+                {
+                    if (message == "") continue;
+
+                    LogEmitter.Apply(LogLevel.Warning, "[Vertex Shader Message = {0}]", message);
+                }
+            }
+
+            LogEmitter.Apply(LogLevel.Information, "[Finish Compile Vertex Shader]");
+
+            LogEmitter.Assert(result.HasErrors == false, LogLevel.Error, "[Compile Vertex Shader Failed]");
 
             return result;
         }
