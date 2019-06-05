@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
+    
     public delegate void AxisInputActionSolver(AxisInputAction action);
 
     public class AxisInputAction : InputAction

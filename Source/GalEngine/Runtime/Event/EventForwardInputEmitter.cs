@@ -45,6 +45,8 @@ namespace GalEngine
 
         public void Forward(MouseWheelEvent eventArg)
         {
+            //forward mouse wheel event
+            //notice: the range of offset is from -inf to inf
             Accept(new AxisInputAction(InputProperty.MouseWheel, eventArg.Offset / 120.0f));
         }
 
