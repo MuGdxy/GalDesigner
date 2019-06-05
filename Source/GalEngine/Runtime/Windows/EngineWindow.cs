@@ -15,8 +15,8 @@ namespace GalEngine
         public string Name { get; private set; }
         public string Icon { get; }
 
-        public Size<int> Size { get; private set; }
-        public Position<int> Position { get; private set; }
+        public Size Size { get; private set; }
+        public Point2 Position { get; private set; }
 
         public bool IsExisted { get; set; }
 
@@ -33,12 +33,12 @@ namespace GalEngine
            IntPtr wParam, IntPtr lParam)
         {
             //record old size
-            Size<int> oldSize = Size;
+            Size oldSize = Size;
 
             //get window size
-            Size<int> getSize()
+            Size getSize()
             {
-                return new Size<int>(
+                return new Size(
                     APILibrary.Win32.Message.LowWord(lParam),
                     APILibrary.Win32.Message.HighWord(lParam));
             }
@@ -77,9 +77,9 @@ namespace GalEngine
         private void CatchMessage(APILibrary.Win32.Message message)
         {
             //get mouse position
-            Position<int> mousePosition()
+            Point2 mousePosition()
             {
-                return new Position<int>(
+                return new Point2(
                     APILibrary.Win32.Message.GetXFromLparam(message.lParam),
                     APILibrary.Win32.Message.GetYFromLparam(message.lParam));
             }
@@ -141,7 +141,7 @@ namespace GalEngine
             }
         }
 
-        public EngineWindow(string name, string icon, Size<int> size)
+        public EngineWindow(string name, string icon, Size size)
         {
             Name = name; Icon = icon;
             Size = size;
@@ -192,8 +192,8 @@ namespace GalEngine
             APILibrary.Win32.Internal.GetWindowRect(mHandle, ref rect);
 
             //set position and size
-            Position = new Position<int>(rect.left, rect.top);
-            Size = new Size<int>(rect.right - rect.left, rect.bottom - rect.top);
+            Position = new Point2(rect.left, rect.top);
+            Size = new Size(rect.right - rect.left, rect.bottom - rect.top);
             IsExisted = true;
         }
 
@@ -235,7 +235,7 @@ namespace GalEngine
             APILibrary.Win32.Internal.SetWindowText(mHandle, Name = name);
         }
 
-        public void SetSize(Size<int> size)
+        public void SetSize(Size size)
         {
             Size = size;
 
@@ -245,7 +245,7 @@ namespace GalEngine
                 APILibrary.Win32.SetWindowPosFlags.SWP_NOZORDER));
         }
 
-        public void SetPosition(Position<int> position)
+        public void SetPosition(Point2 position)
         {
             Position = position;
 

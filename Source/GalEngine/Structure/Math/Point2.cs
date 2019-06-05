@@ -6,27 +6,25 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public struct Vector2
+    public struct Point2
     {
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Vector2(int x = 0, int y = 0)
+        public Point2(int x, int y)
         {
-            X = x;
-            Y = y;
+            X = x; Y = y;
         }
     }
 
-    public struct Vector2f
+    public struct Point2f
     {
         public float X { get; set; }
         public float Y { get; set; }
 
-        public Vector2f(float x = 0, float y = 0)
+        public Point2f(float x, float y)
         {
-            X = x;
-            Y = y;
+            X = x; Y = y;
         }
     }
 }

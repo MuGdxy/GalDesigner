@@ -62,49 +62,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\BehaviorSystem\AssetSystem\Asset.cs" />
-    <Compile Include="Core\BehaviorSystem\AssetSystem\AssetGraph.cs" />
-    <Compile Include="Core\BehaviorSystem\AssetSystem\AssetSystem.cs" />
-    <Compile Include="Core\BehaviorSystem\AssetSystem\Component\PackageComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\AssetSystem\Package.cs" />
-    <Compile Include="Core\BehaviorSystem\BehaviorSystem.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\GuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\GuiComponentEvent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\GuiComponentEventPart.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\LogicGuiComponent\LogicGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\TransformGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ButtonGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\ImageGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\InputTextGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\RectangleGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\TextGuiComponent.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\Component\VisualGuiComponent\VisualGuiComponent.cs" />
     <Content Include="freetype6.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderTexturePixelShader.hlsl" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiButton.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiControl.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiInputText.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiControl\GuiText.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiProperty.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\LogicGuiSystem.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\GuiRender.cs" />
-    <Compile Include="Core\BehaviorSystem\GuiSystem\VisualGuiSystem.cs" />
     <Compile Include="Core\GameResource\Text\Font.cs" />
     <Compile Include="Core\GameResource\Text\RowText.cs" />
-    <Compile Include="Core\GameResource\Shape\Shape.cs" />
     <Compile Include="Core\GameResource\Text\Text.cs" />
     <Compile Include="Core\GameResource\Image\Image.cs" />
     <Compile Include="Core\PresentRender.cs" />
     <Compile Include="Core\StringLogging.cs" />
-    <Compile Include="Core\BehaviorSystem\RequireComponents.cs" />
-    <Compile Include="Core\GameObject\Component\Component.cs" />
-    <Compile Include="Core\GameScene\GameScene.cs" />
     <Compile Include="Core\GameSystems.cs" />
     <Compile Include="Core\StringProperty.cs" />
     <Compile Include="Core\Time.cs" />
-    <Compile Include="Core\GameObject\GameObject.cs" />
     <Compile Include="Enumeration\EnumerationConvert.cs" />
     <Compile Include="Enumeration\KeyCode.cs" />
     <Compile Include="Enumeration\LogColor.cs" />
@@ -148,8 +117,9 @@
     <Compile Include="Structure\Color.cs" />
     <Compile Include="Structure\Graph.cs" />
     <Compile Include="Structure\Container\LegalContainer.cs" />
-    <Compile Include="Structure\Position.cs" />
     <Compile Include="Structure\Container\MappedContainer.cs" />
+    <Compile Include="Structure\Math\Point2.cs" />
+    <Compile Include="Structure\Math\Vector3.cs" />
     <Compile Include="Structure\Rectangle.cs" />
     <Compile Include="Structure\SegmentRange.cs" />
     <Compile Include="Structure\Size.cs" />
@@ -170,6 +140,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -177,8 +148,9 @@
     <None Include="Asset\PresentDrawPixelShader.hlsl" />
     <Content Include="Asset\PresentMaskPixelShader.hlsl" />
     <Content Include="Asset\PresentVertexShader.hlsl" />
-    <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderCommonVertexShader.hlsl" />
-    <Content Include="Core\BehaviorSystem\GuiSystem\GuiAsset\GuiRenderColorPixelShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\GameScene\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

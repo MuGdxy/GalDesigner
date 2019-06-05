@@ -63,36 +63,6 @@ namespace GalEngine.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] GuiRenderColorPixelShader {
-            get {
-                object obj = ResourceManager.GetObject("GuiRenderColorPixelShader", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] GuiRenderCommonVertexShader {
-            get {
-                object obj = ResourceManager.GetObject("GuiRenderCommonVertexShader", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] GuiRenderTexturePixelShader {
-            get {
-                object obj = ResourceManager.GetObject("GuiRenderTexturePixelShader", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
         internal static byte[] PresentDrawPixelShader {
             get {
                 object obj = ResourceManager.GetObject("PresentDrawPixelShader", resourceCulture);

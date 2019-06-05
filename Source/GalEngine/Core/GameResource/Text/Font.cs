@@ -111,9 +111,9 @@ namespace GalEngine
             codeMetrics.HoriBearingX = (mFace.Glyph.Metrics.HorizontalBearingX.Value >> 6);
             codeMetrics.HoriBearingY = (mFace.Glyph.Metrics.HorizontalBearingY.Value >> 6);
             codeMetrics.Texture = mFace.Glyph.Bitmap.Buffer != IntPtr.Zero ? new Image(
-                new Size<int>(mFace.Glyph.Bitmap.Width, mFace.Glyph.Bitmap.Rows),
+                new Size(mFace.Glyph.Bitmap.Width, mFace.Glyph.Bitmap.Rows),
                 PixelFormat.Alpha8bit, mFace.Glyph.Bitmap.BufferData) : 
-                new Image(new Size<int>(0,0), PixelFormat.Alpha8bit);
+                new Image(new Size(0,0), PixelFormat.Alpha8bit);
 
             mCharacterIndex.Add(character, codeMetrics);
 

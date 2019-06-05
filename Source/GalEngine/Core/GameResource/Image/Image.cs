@@ -20,21 +20,21 @@ namespace GalEngine
         internal GpuRenderTarget GpuRenderTarget => mRenderTarget == null ? mRenderTarget = new GpuRenderTarget(mDevice, mTexture) : mRenderTarget;
         internal GpuResourceUsage GpuResourceUsage => mResourceUsage == null ? mResourceUsage = new GpuResourceUsage(mDevice, mTexture) : mResourceUsage;
 
-        public Size<int> Size => mTexture != null ? mTexture.Size : new Size<int>(0, 0);
+        public Size Size => mTexture != null ? mTexture.Size : new Size(0, 0);
         public int SizeInBytes => mTexture.SizeInBytes;
         public PixelFormat PixelFormat => (PixelFormat)mTexture.PixelFormat;
 
-        public Image(Size<int> size, PixelFormat pixelFormat) : this(size, pixelFormat, GameSystems.GpuDevice)
+        public Image(Size size, PixelFormat pixelFormat) : this(size, pixelFormat, GameSystems.GpuDevice)
         {
 
         }
 
-        public Image(Size<int> size, PixelFormat pixelFormat, byte[] data) : this(size, pixelFormat)
+        public Image(Size size, PixelFormat pixelFormat, byte[] data) : this(size, pixelFormat)
         {
             mTexture.Update(data);
         }
         
-        public Image(Size<int> size, PixelFormat pixelFormat, GpuDevice device)
+        public Image(Size size, PixelFormat pixelFormat, GpuDevice device)
         {
             mDevice = device;
 
@@ -47,7 +47,7 @@ namespace GalEngine
 
         ~Image() => Dispose();
 
-        public void CopyFromImage(Position<int> destination, Image texture, Rectangle<int> region)
+        public void CopyFromImage(Point2 destination, Image texture, Rectangle region)
         {
             //do not need copy, because the size is zero
             if (region.Left == region.Right || region.Top == region.Bottom) return;

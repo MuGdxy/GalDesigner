@@ -66,23 +66,23 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.ClearState();
         }
 
-        public void ClearRenderTarget(GpuRenderTarget renderTarget, Vector4<float> color)
+        public void ClearRenderTarget(GpuRenderTarget renderTarget, Colorf color)
         {
             //clear render target using color
             //x = red, y = green, z = blue, w = alpha
             ImmediateContext.ClearRenderTargetView(renderTarget.RenderTarget,
-                new SharpDX.Mathematics.Interop.RawColor4(color.X, color.Y, color.Z, color.W));
+                new SharpDX.Mathematics.Interop.RawColor4(color.Red, color.Green, color.Blue, color.Alpha));
         }
 
-        public void ClearRenderTarget(Image renderTarget, Vector4<float> color)
+        public void ClearRenderTarget(Image renderTarget, Colorf color)
         {
             //clear render target using color
             //x = red, y = green, z = blue, w = alpha
             ImmediateContext.ClearRenderTargetView(renderTarget.GpuRenderTarget.RenderTarget,
-                new SharpDX.Mathematics.Interop.RawColor4(color.X, color.Y, color.Z, color.W));
+                new SharpDX.Mathematics.Interop.RawColor4(color.Red, color.Green, color.Blue, color.Alpha));
         }
 
-        public void SetViewPort(Rectangle<float> viewPort)
+        public void SetViewPort(Rectanglef viewPort)
         {
             //set view port
 
