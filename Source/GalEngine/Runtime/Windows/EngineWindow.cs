@@ -253,5 +253,12 @@ namespace GalEngine
                 0, 0, (uint)(APILibrary.Win32.SetWindowPosFlags.SWP_NOSIZE |
                 APILibrary.Win32.SetWindowPosFlags.SWP_NOZORDER));
         }
+
+        public override void SenderEvent(BaseEvent baseEvent)
+        {
+            new EventForwardInputEmitter(this).Forward(baseEvent);
+
+            base.SenderEvent(baseEvent);
+        }
     }
 }

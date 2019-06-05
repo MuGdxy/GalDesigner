@@ -77,8 +77,12 @@ namespace GalEngine
                 if (EngineWindow != null && EngineWindow.IsExisted == false)
                     IsExist = false;
 
+                InputListener.Update();
+
                 PresentRender.BeginDraw();
                 PresentRender.EndDraw(false);
+
+                InputListener.Clear();
             }
         }
     }

@@ -69,6 +69,14 @@
     <Compile Include="Core\GameResource\Text\RowText.cs" />
     <Compile Include="Core\GameResource\Text\Text.cs" />
     <Compile Include="Core\GameResource\Image\Image.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputAction\AxisInputAction.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputAction\ButtonInputAction.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputEmitter.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputListener.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputProperty.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputSolver.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputStatus.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputType.cs" />
     <Compile Include="Core\PresentRender.cs" />
     <Compile Include="Core\StringLogging.cs" />
     <Compile Include="Core\GameSystems.cs" />
@@ -88,6 +96,7 @@
     </Compile>
     <Compile Include="Runtime\Event\BaseEvent.cs" />
     <Compile Include="Runtime\Event\EventEmitter.cs" />
+    <Compile Include="Runtime\Event\EventForwardInputEmitter.cs" />
     <Compile Include="Runtime\Event\EventListener.cs" />
     <Compile Include="Runtime\Event\KeyBoardEvent.cs" />
     <Compile Include="Runtime\Event\MouseEvent.cs" />
@@ -150,7 +159,8 @@
     <Content Include="Asset\PresentVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Core\GameScene\" />
+    <Folder Include="Core\GameSystem\AssetSystem\" />
+    <Folder Include="Core\GameSystem\GuiSystem\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
