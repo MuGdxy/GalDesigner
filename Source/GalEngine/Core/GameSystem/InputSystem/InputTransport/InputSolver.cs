@@ -17,5 +17,16 @@ namespace GalEngine
             ButtonInputAction = new Dictionary<string, ButtonInputActionSolvers>();
             AxisInputAction = new Dictionary<string, AxisInputActionSolvers>();
         }
+
+        public InputSolver(InputSolver other) : base() =>
+            Override(other);
+
+        public void Override(InputSolver other)
+        {
+            foreach (var action in other.ButtonInputAction)
+                ButtonInputAction[action.Key] = action.Value;
+            foreach (var action in other.AxisInputAction)
+                AxisInputAction[action.Key] = action.Value;
+        }
     }
 }

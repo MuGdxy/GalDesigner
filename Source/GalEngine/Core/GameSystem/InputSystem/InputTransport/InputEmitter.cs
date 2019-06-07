@@ -8,7 +8,7 @@ namespace GalEngine
 {
     public class InputEmitter
     {
-        public void Accept(InputAction action)
+        public void Forward(InputAction action)
         {
             InputListener.Accept(action);
         }

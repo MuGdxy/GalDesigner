@@ -24,8 +24,8 @@ namespace GalEngine
             float xOffset = (eventArg.Position.X - halfSize.Width) / halfSize.Width;
             float yOffset = (eventArg.Position.Y - halfSize.Height) / halfSize.Height;
 
-            Accept(new AxisInputAction(InputProperty.MouseX, xOffset));
-            Accept(new AxisInputAction(InputProperty.MouseY, yOffset));
+            Forward(new AxisInputAction(InputProperty.MouseX, xOffset));
+            Forward(new AxisInputAction(InputProperty.MouseY, yOffset));
         }
 
         public void Forward(MouseClickEvent eventArg)
@@ -40,14 +40,14 @@ namespace GalEngine
                 default: throw new Exception("Invalid Mouse Button.");
             }
 
-            Accept(new ButtonInputAction(buttonName, eventArg.IsDown));
+            Forward(new ButtonInputAction(buttonName, eventArg.IsDown));
         }
 
         public void Forward(MouseWheelEvent eventArg)
         {
             //forward mouse wheel event
             //notice: the range of offset is from -inf to inf
-            Accept(new AxisInputAction(InputProperty.MouseWheel, eventArg.Offset / 120.0f));
+            Forward(new AxisInputAction(InputProperty.MouseWheel, eventArg.Offset / 120.0f));
         }
 
         public void Forward(KeyBoardEvent eventArg)
@@ -57,7 +57,7 @@ namespace GalEngine
             //forward keyboard event, for current version, we only forward A-Z keycode
             if (keyCode >= 'A' && keyCode <= 'Z')
             {
-                Accept(new ButtonInputAction(((char)keyCode).ToString(), eventArg.IsDown));
+                Forward(new ButtonInputAction(((char)keyCode).ToString(), eventArg.IsDown));
             }
         }
 

@@ -71,6 +71,7 @@
     <Compile Include="Core\GameResource\Image\Image.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\AxisInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\ButtonInputAction.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputCombine.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputEmitter.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputListener.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputProperty.cs" />

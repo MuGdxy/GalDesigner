@@ -54,5 +54,7 @@ namespace GalEngine
                 }
             }
         }
+
+        public static void Execute(InputCombine solver) => Execute(solver.Peek());
     }
 }

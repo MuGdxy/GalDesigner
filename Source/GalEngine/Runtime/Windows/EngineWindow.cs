@@ -47,7 +47,7 @@ namespace GalEngine
             {
                 case APILibrary.Win32.WinMsg.WM_DESTROY: APILibrary.Win32.Internal.PostQuitMessage(0); break;
                 //catch the size event, because the order, we record old size
-                case APILibrary.Win32.WinMsg.WM_SIZE: SenderEvent(new SizeChangeEvent(DateTime.Now, oldSize, Size = getSize())); break;
+                case APILibrary.Win32.WinMsg.WM_SIZE: ForwardEvent(new SizeChangeEvent(DateTime.Now, oldSize, Size = getSize())); break;
                 default: break;
             }
 
@@ -121,22 +121,22 @@ namespace GalEngine
             switch ((APILibrary.Win32.WinMsg)message.type)
             {
                 //sender event
-                case APILibrary.Win32.WinMsg.WM_KEYUP: SenderEvent(new KeyBoardEvent(DateTime.Now, (KeyCode)message.wParam, false)); break;
-                case APILibrary.Win32.WinMsg.WM_KEYDOWN: SenderEvent(new KeyBoardEvent(DateTime.Now, (KeyCode)message.wParam, true)); break;
-                case APILibrary.Win32.WinMsg.WM_MOUSEMOVE: SenderEvent(new MouseMoveEvent(DateTime.Now, mousePosition())); break;
+                case APILibrary.Win32.WinMsg.WM_KEYUP: ForwardEvent(new KeyBoardEvent(DateTime.Now, (KeyCode)message.wParam, false)); break;
+                case APILibrary.Win32.WinMsg.WM_KEYDOWN: ForwardEvent(new KeyBoardEvent(DateTime.Now, (KeyCode)message.wParam, true)); break;
+                case APILibrary.Win32.WinMsg.WM_MOUSEMOVE: ForwardEvent(new MouseMoveEvent(DateTime.Now, mousePosition())); break;
                 case APILibrary.Win32.WinMsg.WM_LBUTTONUP: unLockCursor();
-                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, false)); break;
+                    ForwardEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, false)); break;
                 case APILibrary.Win32.WinMsg.WM_MBUTTONUP: unLockCursor();
-                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, false)); break;
+                    ForwardEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, false)); break;
                 case APILibrary.Win32.WinMsg.WM_RBUTTONUP: unLockCursor();
-                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, false)); break;
-                case APILibrary.Win32.WinMsg.WM_MOUSEWHEEL: SenderEvent(new MouseWheelEvent(DateTime.Now, mousePosition(), mouseWheelScrollOffset())); break;
+                    ForwardEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, false)); break;
+                case APILibrary.Win32.WinMsg.WM_MOUSEWHEEL: ForwardEvent(new MouseWheelEvent(DateTime.Now, mousePosition(), mouseWheelScrollOffset())); break;
                 case APILibrary.Win32.WinMsg.WM_LBUTTONDOWN: lockCursor();
-                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, true)); break;
+                    ForwardEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Left, true)); break;
                 case APILibrary.Win32.WinMsg.WM_MBUTTONDOWN: lockCursor();
-                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, true)); break;
+                    ForwardEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Middle, true)); break;
                 case APILibrary.Win32.WinMsg.WM_RBUTTONDOWN: lockCursor();
-                    SenderEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, true)); break;
+                    ForwardEvent(new MouseClickEvent(DateTime.Now, mousePosition(), MouseButton.Right, true)); break;
                 default: break;
             }
         }
@@ -202,8 +202,8 @@ namespace GalEngine
             //pump message
             PumpMessage();
 
-            SenderEvent(new UpdateEvent(DateTime.Now, deltaTime));
-            SenderEvent(new RenderEvent(DateTime.Now, deltaTime));
+            ForwardEvent(new UpdateEvent(DateTime.Now, deltaTime));
+            ForwardEvent(new RenderEvent(DateTime.Now, deltaTime));
 
             //process the event
             while (EventCount != 0)
@@ -254,11 +254,11 @@ namespace GalEngine
                 APILibrary.Win32.SetWindowPosFlags.SWP_NOZORDER));
         }
 
-        public override void SenderEvent(BaseEvent baseEvent)
+        public override void ForwardEvent(BaseEvent baseEvent)
         {
             new EventForwardInputEmitter(this).Forward(baseEvent);
 
-            base.SenderEvent(baseEvent);
+            base.ForwardEvent(baseEvent);
         }
     }
 }
