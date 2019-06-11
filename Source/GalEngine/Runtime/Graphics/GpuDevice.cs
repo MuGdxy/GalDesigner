@@ -138,7 +138,7 @@ namespace GalEngine.Runtime.Graphics
             ImmediateContext.PixelShader.SetShader(mPixelShader.PixelShader, null, 0);
         }
 
-        public void SetBuffer(GpuBuffer buffer, int register, GpuShaderType target = GpuShaderType.VertexShaderAndPixelShader)
+        public void SetBuffer(GpuBuffer buffer, int register, GpuShaderType target = GpuShaderType.All)
         {
             //set buffer Direct3D instance to pipeline's shader
             //we use target shader to flag which shader the buffer will set to
@@ -155,7 +155,7 @@ namespace GalEngine.Runtime.Graphics
                 ImmediateContext.PixelShader.SetConstantBuffer(register, buffer.Resource as SharpDX.Direct3D11.Buffer);
         }
 
-        public void SetResourceUsage(GpuResourceUsage resourceUsage, int register, GpuShaderType target = GpuShaderType.VertexShaderAndPixelShader)
+        public void SetResourceUsage(GpuResourceUsage resourceUsage, int register, GpuShaderType target = GpuShaderType.All)
         {
             //set resource Direct3D instance to pipeline's shader
             //we use target shader to flag which shader the resource will set to
@@ -169,7 +169,7 @@ namespace GalEngine.Runtime.Graphics
                 ImmediateContext.PixelShader.SetShaderResource(register, resourceUsage.ShaderResource);
         }
 
-        public void SetSamplerState(GpuSamplerState samplerState, int register, GpuShaderType target = GpuShaderType.VertexShaderAndPixelShader)
+        public void SetSamplerState(GpuSamplerState samplerState, int register, GpuShaderType target = GpuShaderType.All)
         {
             //set sampler state Direct3D instance to pipeline's shader
             //we use target shader to flag which shader the resource will set to

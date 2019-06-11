@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Core\GameSystem\GuiSystem\GuiAsset\GuiRenderShader.hlsl" />
     <Content Include="freetype6.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -69,6 +70,11 @@
     <Compile Include="Core\GameResource\Text\RowText.cs" />
     <Compile Include="Core\GameResource\Text\Text.cs" />
     <Compile Include="Core\GameResource\Image\Image.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\Gui.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiElement.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiTransform.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiGroup.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\AxisInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\ButtonInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputCombine.cs" />
@@ -159,10 +165,7 @@
     <Content Include="Asset\PresentMaskPixelShader.hlsl" />
     <Content Include="Asset\PresentVertexShader.hlsl" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Core\GameSystem\AssetSystem\" />
-    <Folder Include="Core\GameSystem\GuiSystem\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
