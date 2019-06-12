@@ -34,5 +34,18 @@ namespace GalEngine
         /// Axis Input: Mouse Position Y Axis Name. Offset from (-1) to (1).
         /// </summary>
         public static string MouseY => "MouseY";
+
+        /// <summary>
+        /// Button Input: KeyBoard's key Name;
+        /// </summary>
+        public static List<string> KeyBoardMapped { get; }
+
+        static InputProperty()
+        {
+            KeyBoardMapped = new List<string>();
+
+            for (char character = 'A'; character <= 'Z'; character++)
+                KeyBoardMapped.Add(character.ToString());
+        }
     }
 }

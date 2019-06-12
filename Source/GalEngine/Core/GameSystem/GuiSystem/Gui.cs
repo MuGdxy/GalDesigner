@@ -52,7 +52,8 @@ namespace GalEngine
             InputMapped.Mapped(InputProperty.MouseWheel, GuiProperty.InputWheel);
             ///button input mapped
             InputMapped.Mapped(InputProperty.LeftButton, GuiProperty.InputClick);
-            
+            ///mapped the keycode to input text
+            InputProperty.KeyBoardMapped.ForEach((name) => InputMapped.Mapped(name, GuiProperty.InputText));
 
             LogEmitter.Apply(LogLevel.Information, "[Initialize Gui System Finish] from [Gui]");
         }

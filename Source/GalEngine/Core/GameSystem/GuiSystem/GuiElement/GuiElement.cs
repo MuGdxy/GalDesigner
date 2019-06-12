@@ -10,6 +10,10 @@ namespace GalEngine
     {
         public GuiTransform Transform { get; set; }
 
+        public bool Dragable { get; set; }
+
+        public bool Readable { get; set; }
+
         protected internal virtual void Draw(GuiRender render) { }
 
         protected internal virtual void Input(InputAction action) { }
@@ -19,6 +23,9 @@ namespace GalEngine
         public GuiElement()
         {
             Transform = new GuiTransform();
+
+            Dragable = true;
+            Readable = true;
         }
 
         public virtual bool Contain(Point2f point) { return false; }

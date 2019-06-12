@@ -12,31 +12,18 @@ namespace GalEngine
 
         public InputMapped InputMapped { get; }
 
-        protected internal override void Draw(GuiRender render) 
-            => Elements.ForEach((element) =>
-            {
-                render.SetTransform(element.Transform.GetMatrix());
+        public InputSolver InputSolver { get; }
 
-                element.Draw(render);
-            });
-
-        protected internal override void Update(float delta)
-            => Elements.ForEach((element) => element.Update(delta));
-
-        protected internal override void Input(InputAction action)
+        private void InitializeInputSolver()
         {
-            var alias = InputMapped.IsMapped(action.Name) ?
-                InputMapped.MappedInput(action.Name) : Gui.InputMapped.MappedInput(action.Name);
-
-            if (!GuiProperty.IsGuiInput(alias)) return;
-
             void resolveInputMoveX(AxisInputAction input)
             {
                 float offset = input.Offset * Gui.Canvas.Size.Width;
 
                 Gui.GlobalElementStatus.Position.X += offset;
 
-                if (Gui.GlobalElementStatus.DragElement != null)
+                if (Gui.GlobalElementStatus.DragElement != null &&
+                    Gui.GlobalElementStatus.DragElement.Dragable == true)
                 {
                     Gui.GlobalElementStatus.DragElement.Transform.Position =
                         new Point2f(
@@ -51,7 +38,8 @@ namespace GalEngine
 
                 Gui.GlobalElementStatus.Position.Y += offset;
 
-                if (Gui.GlobalElementStatus.DragElement != null)
+                if (Gui.GlobalElementStatus.DragElement != null &&
+                    Gui.GlobalElementStatus.DragElement.Dragable == true)
                 {
                     Gui.GlobalElementStatus.DragElement.Transform.Position =
                         new Point2f(
@@ -109,37 +97,59 @@ namespace GalEngine
                     if (anyElementContain == false)
                         Gui.GlobalElementStatus.FocusElement = null;
                 }
-                else Gui.GlobalElementStatus.DragElement = null;
+                else
+                {
+                    Gui.GlobalElementStatus.DragElement?.Input(new ButtonInputAction(GuiProperty.InputClick, input.Status));
+                    Gui.GlobalElementStatus.DragElement = null;
+                }
             }
 
             void resolveInputText(ButtonInputAction input)
             {
-                if (Gui.GlobalElementStatus.FocusElement != null)
+                if (Gui.GlobalElementStatus.FocusElement != null &&
+                    Gui.GlobalElementStatus.FocusElement.Readable == true)
                 {
                     Gui.GlobalElementStatus.FocusElement.Input(input);
                 }
             }
 
-            InputSolver solver = new InputSolver();
+            InputSolver.AxisInputAction.Add(GuiProperty.InputMoveX, new AxisInputActionSolvers());
+            InputSolver.AxisInputAction.Add(GuiProperty.InputMoveY, new AxisInputActionSolvers());
+            InputSolver.AxisInputAction.Add(GuiProperty.InputWheel, new AxisInputActionSolvers());
 
-            solver.AxisInputAction.Add(GuiProperty.InputMoveX, new AxisInputActionSolvers());
-            solver.AxisInputAction.Add(GuiProperty.InputMoveY, new AxisInputActionSolvers());
-            solver.AxisInputAction.Add(GuiProperty.InputWheel, new AxisInputActionSolvers());
+            InputSolver.AxisInputAction[GuiProperty.InputMoveX].Solvers.Add(resolveInputMoveX);
+            InputSolver.AxisInputAction[GuiProperty.InputMoveY].Solvers.Add(resolveInputMoveY);
+            InputSolver.AxisInputAction[GuiProperty.InputWheel].Solvers.Add(resolveInputWheel);
 
-            solver.AxisInputAction[GuiProperty.InputMoveX].Solvers.Add(resolveInputMoveX);
-            solver.AxisInputAction[GuiProperty.InputMoveY].Solvers.Add(resolveInputMoveY);
-            solver.AxisInputAction[GuiProperty.InputWheel].Solvers.Add(resolveInputWheel);
+            InputSolver.ButtonInputAction.Add(GuiProperty.InputClick, new ButtonInputActionSolvers());
+            InputSolver.ButtonInputAction.Add(GuiProperty.InputText, new ButtonInputActionSolvers());
 
-            solver.ButtonInputAction.Add(GuiProperty.InputClick, new ButtonInputActionSolvers());
-            solver.ButtonInputAction.Add(GuiProperty.InputText, new ButtonInputActionSolvers());
+            InputSolver.ButtonInputAction[GuiProperty.InputClick].Solvers.Add(resolveInputClick);
+            InputSolver.ButtonInputAction[GuiProperty.InputText].Solvers.Add(resolveInputText);
 
-            solver.ButtonInputAction[GuiProperty.InputClick].Solvers.Add(resolveInputClick);
-            solver.ButtonInputAction[GuiProperty.InputText].Solvers.Add(resolveInputText);
+            InputSolver.InputMappeds.Add(InputMapped);
+            InputSolver.InputMappeds.Add(Gui.InputMapped);
+        }
 
-            solver.InputMappeds.Add(InputMapped);
-            solver.InputMappeds.Add(Gui.InputMapped);
+        protected internal override void Draw(GuiRender render) 
+            => Elements.ForEach((element) =>
+            {
+                render.SetTransform(element.Transform.GetMatrix());
 
-            solver.Execute(action);
+                element.Draw(render);
+            });
+
+        protected internal override void Update(float delta)
+            => Elements.ForEach((element) => element.Update(delta));
+
+        protected internal override void Input(InputAction action)
+        {
+            var alias = InputMapped.IsMapped(action.Name) ?
+                InputMapped.MappedInput(action.Name) : Gui.InputMapped.MappedInput(action.Name);
+
+            if (!GuiProperty.IsGuiInput(alias)) return;
+
+            InputSolver.Execute(action);
         }
 
         public override bool Contain(Point2f point)
@@ -156,6 +166,9 @@ namespace GalEngine
             Name = name;
             Elements = new List<GuiElement>();
             InputMapped = new InputMapped();
+            InputSolver = new InputSolver();
+
+            InitializeInputSolver();
         }
     }
 }
