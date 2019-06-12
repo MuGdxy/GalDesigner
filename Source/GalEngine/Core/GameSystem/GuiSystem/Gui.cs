@@ -27,6 +27,8 @@ namespace GalEngine
 
         public static bool AutoSize { get; set; }
 
+        public static Point2f Position => GlobalElementStatus.Position;
+
         internal static void Initialize()
         {
             mRender = new GuiRender(GameSystems.GpuDevice);

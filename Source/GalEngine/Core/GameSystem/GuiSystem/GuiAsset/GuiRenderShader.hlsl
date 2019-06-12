@@ -2,6 +2,7 @@
 
 #define TEXTURE 1
 #define COLOR 0
+#define TEXT 2
 
 struct output_struct {
 	float2 texcoord : TEXCOORD;
@@ -13,7 +14,7 @@ cbuffer transform : register(b0) {
 	matrix project;
 };
 
-cbuffer render_config {
+cbuffer render_config : register(b1) {
 	float4 color;
 	int4 config;
 };
@@ -42,6 +43,8 @@ float4 ps_main(
 	if (config.x == COLOR) return color;
 
 	if (config.x == TEXTURE) return texture0.Sample(samplerState, texcoord) * color;
+
+	if (config.x == TEXT) return float4(color.rgb, texture0.Sample(samplerState, texcoord).a * color.a);
 
 	return float4(1, 0, 0, 1);
 }

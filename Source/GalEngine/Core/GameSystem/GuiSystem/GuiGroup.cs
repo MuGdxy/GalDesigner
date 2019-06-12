@@ -30,6 +30,12 @@ namespace GalEngine
                             Gui.GlobalElementStatus.DragElement.Transform.Position.X + offset,
                             Gui.GlobalElementStatus.DragElement.Transform.Position.Y);
                 }
+
+                Elements.ForEach((element) =>
+                {
+                    if (element.Contain(Gui.GlobalElementStatus.Position))
+                        element.Input(new AxisInputAction(GuiProperty.InputMoveX, input.Offset));
+                });
             }
 
             void resolveInputMoveY(AxisInputAction input)
@@ -46,6 +52,12 @@ namespace GalEngine
                             Gui.GlobalElementStatus.DragElement.Transform.Position.X,
                             Gui.GlobalElementStatus.DragElement.Transform.Position.Y + offset);
                 }
+
+                Elements.ForEach((element) =>
+                {
+                    if (element.Contain(Gui.GlobalElementStatus.Position))
+                        element.Input(new AxisInputAction(GuiProperty.InputMoveY, input.Offset));
+                });
             }
 
             void resolveInputWheel(AxisInputAction input)

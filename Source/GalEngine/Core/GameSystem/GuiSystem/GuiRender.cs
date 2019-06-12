@@ -11,6 +11,13 @@ namespace GalEngine
 {
     public class GuiRender
     {
+        private enum GuiRenderMode
+        {
+            Color = 0,
+            Image = 1,
+            Text = 2
+        }
+
         private struct GuiVertex
         {
             public Vector3f Position;
@@ -131,6 +138,37 @@ namespace GalEngine
             mRectangleIndexBuffer.Update(rectangleIndices);
         }
 
+        private void DrawImage(Rectanglef rectangle, Image image, Colorf color, GuiRenderMode mode)
+        {
+            //fill rectangle with texture
+            //the result color's alpha is equal texture.alpha * opacity
+
+            var transform = new GuiTransform();
+            var renderConfig = new GuiRenderConfig() { Color = color, Config = new Vector4((int)mode) };
+
+            //1.scale the rectangle
+            transform.World = Matrix4x4.CreateScale(rectangle.Right - rectangle.Left, rectangle.Bottom - rectangle.Top, 1.0f);
+            //2.translate it
+            transform.World *= Matrix4x4.CreateTranslation(rectangle.Left, rectangle.Top, 0.0f);
+            //3.keep transform matrix data
+            transform.World *= Transform;
+
+            //set projection matrix
+            transform.Project = mProject;
+
+            mTransformBuffer.Update(transform);
+            mRenderConfigBuffer.Update(renderConfig);
+
+            mDevice.SetVertexBuffer(mSquareVertexBuffer);
+            mDevice.SetIndexBuffer(mSquareIndexBuffer);
+
+            mDevice.SetBuffer(mTransformBuffer, mTransformBufferSlot, GpuShaderType.All);
+            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.All);
+            mDevice.SetResourceUsage(image.GpuResourceUsage, mTextureSlot, GpuShaderType.All);
+
+            mDevice.DrawIndexed(6, 0, 0);
+        }
+
         public GuiRender(GpuDevice device)
         {
             //gui render is a simple render to render gui object
@@ -196,6 +234,8 @@ namespace GalEngine
 
             //set view port
             mDevice.SetViewPort(new Rectanglef(0, 0, image.Size.Width, image.Size.Height));
+
+            mDevice.SetSamplerState(mSamplerState, mSamplerStateSlot, GpuShaderType.All);
 
             //set the project matrix, need set null when we end draw
             mProject = Matrix4x4.CreateOrthographicOffCenter(
@@ -314,48 +354,21 @@ namespace GalEngine
 
         public virtual void DrawImage(Rectanglef rectangle, Image image, Colorf color)
         {
-            //fill rectangle with texture
-            //the result color's alpha is equal texture.alpha * opacity
-
-            var transform = new GuiTransform();
-            var renderConfig = new GuiRenderConfig() { Color = color, Config = new Vector4(1) };
-
-            //1.scale the rectangle
-            transform.World = Matrix4x4.CreateScale(rectangle.Right - rectangle.Left, rectangle.Bottom - rectangle.Top, 1.0f);
-            //2.translate it
-            transform.World *= Matrix4x4.CreateTranslation(rectangle.Left, rectangle.Top, 0.0f);
-            //3.keep transform matrix data
-            transform.World *= Transform;
-
-            //set projection matrix
-            transform.Project = mProject;
-
-            mTransformBuffer.Update(transform);
-            mRenderConfigBuffer.Update(renderConfig);
-
-            mDevice.SetVertexBuffer(mSquareVertexBuffer);
-            mDevice.SetIndexBuffer(mSquareIndexBuffer);
-
-            mDevice.SetSamplerState(mSamplerState, mSamplerStateSlot, GpuShaderType.All);
-
-            mDevice.SetBuffer(mTransformBuffer, mTransformBufferSlot, GpuShaderType.All);
-            mDevice.SetBuffer(mRenderConfigBuffer, mRenderConfigBufferSlot, GpuShaderType.All);
-            mDevice.SetResourceUsage(image.GpuResourceUsage, mTextureSlot, GpuShaderType.All);
-
-            mDevice.DrawIndexed(6, 0, 0);
+            DrawImage(rectangle, image, color, GuiRenderMode.Image);
         }
 
         public virtual void DrawImage(Rectanglef rectangle, Image image, float opacity = 1.0f)
         {
             DrawImage(rectangle, image, new Colorf(1.0f, 1.0f, 1.0f, opacity));
         }
+
         public virtual void DrawText(Point2f position, Text text, Colorf color)
         {
             DrawImage(new Rectanglef(
                 position.X,
                 position.Y,
                 position.X + text.Size.Width,
-                position.Y + text.Size.Height), text.Image, color);
+                position.Y + text.Size.Height), text.Image, color, GuiRenderMode.Text);
         }
 
         public virtual void DrawText(Point2f position, RowText text, Colorf color)
@@ -364,12 +377,12 @@ namespace GalEngine
                 position.X,
                 position.Y,
                 position.X + text.Size.Width,
-                position.Y + text.Size.Height), text.Image, color);
+                position.Y + text.Size.Height), text.Image, color, GuiRenderMode.Text);
         }
 
         public virtual void DrawText(Rectanglef rectangle, Text text, Colorf color)
         {
-            DrawImage(rectangle, text.Image, color);
+            DrawImage(rectangle, text.Image, color, GuiRenderMode.Text);
         }
 
         public virtual void FillRectangle(Rectanglef rectangle, Colorf color)
