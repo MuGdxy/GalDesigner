@@ -42,4 +42,6 @@ float4 ps_main(
 	if (config.x == COLOR) return color;
 
 	if (config.x == TEXTURE) return texture0.Sample(samplerState, texcoord) * color;
+
+	return float4(1, 0, 0, 1);
 }

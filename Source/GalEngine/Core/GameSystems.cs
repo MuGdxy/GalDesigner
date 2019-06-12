@@ -61,7 +61,9 @@ namespace GalEngine
             
             InitializeRuntime(gameStartInfo);
 
-            LogEmitter.Apply(LogLevel.Information, "[Initialize GameSystems Finish] from [GameSystems]");
+            Gui.Initialize();
+
+            LogEmitter.Apply(LogLevel.Information, "[Initialize Game Systems Finish] from [GameSystems]");
         }
         
         public static void RunLoop()
@@ -76,10 +78,19 @@ namespace GalEngine
 
                 if (EngineWindow != null && EngineWindow.IsExisted == false)
                     IsExist = false;
-
+                
+                //update time
                 InputListener.Update();
+                Gui.Update(Time.DeltaSeconds);
+                
+                //draw time
+                Gui.Draw();
 
+                //present time
                 PresentRender.BeginDraw();
+
+                Gui.Present(PresentRender);
+
                 PresentRender.EndDraw(false);
 
                 InputListener.Clear();

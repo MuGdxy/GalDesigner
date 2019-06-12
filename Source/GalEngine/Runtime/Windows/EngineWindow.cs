@@ -12,6 +12,8 @@ namespace GalEngine
         private APILibrary.Win32.Internal.WndProc mWndProc;
         private APILibrary.Win32.Rect mLastClipRect;
 
+        private EventForwardInputEmitter mEventForwardInputEmitter;
+
         public string Name { get; private set; }
         public string Icon { get; }
 
@@ -191,6 +193,9 @@ namespace GalEngine
             //get window rect property
             APILibrary.Win32.Internal.GetWindowRect(mHandle, ref rect);
 
+            //set event forwarder
+            mEventForwardInputEmitter = new EventForwardInputEmitter(this);
+
             //set position and size
             Position = new Point2(rect.left, rect.top);
             Size = new Size(rect.right - rect.left, rect.bottom - rect.top);
@@ -256,7 +261,7 @@ namespace GalEngine
 
         public override void ForwardEvent(BaseEvent baseEvent)
         {
-            new EventForwardInputEmitter(this).Forward(baseEvent);
+            mEventForwardInputEmitter.Forward(baseEvent);
 
             base.ForwardEvent(baseEvent);
         }

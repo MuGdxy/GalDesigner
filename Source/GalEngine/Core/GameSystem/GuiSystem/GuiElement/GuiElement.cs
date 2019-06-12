@@ -16,6 +16,11 @@ namespace GalEngine
 
         protected internal virtual void Update(float delta) { }
 
+        public GuiElement()
+        {
+            Transform = new GuiTransform();
+        }
+
         public virtual bool Contain(Point2f point) { return false; }
     }
 }

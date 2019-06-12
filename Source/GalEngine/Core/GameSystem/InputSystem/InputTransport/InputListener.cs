@@ -19,6 +19,7 @@ namespace GalEngine
         internal static void Update()
         {
             InputStatus.Update(mInputQueue);
+            Gui.Input(mInputQueue);
         }
 
         static InputListener()
@@ -42,16 +43,8 @@ namespace GalEngine
         {
             //execute input solver without remove input actions
             foreach (var inputAction in mInputQueue)
-            {
-                //button or axis
-                switch (inputAction)
-                {
-                    case ButtonInputAction button:
-                        solver.ButtonInputAction[button.Name]?.ForEach(button); break;
-                    case AxisInputAction axis:
-                        solver.AxisInputAction[axis.Name]?.ForEach(axis); break;
-                    default: throw new Exception("Invalid Input Action.");
-                }
+            { 
+                solver.Execute(inputAction);
             }
         }
 

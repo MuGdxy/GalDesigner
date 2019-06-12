@@ -74,10 +74,12 @@
     <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiElement.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiTransform.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\GuiGroup.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiProperty.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\AxisInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\ButtonInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputCombine.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputMapped.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputEmitter.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputListener.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputProperty.cs" />

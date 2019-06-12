@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GalEngine
 {
-    public struct GuiTransform
+    public class GuiTransform
     {
         public Point2f Position { get; set; }
 

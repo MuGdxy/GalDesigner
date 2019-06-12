@@ -94,7 +94,7 @@ namespace GalEngine
             //init shader buffer
             mTransformBuffer = new GpuBuffer(
                 Utility.SizeOf<GuiTransform>(),
-                Utility.SizeOf<GuiVertex>(),
+                Utility.SizeOf<GuiTransform>(),
                 mDevice,
                 GpuResourceInfo.ConstantBuffer());
 
@@ -378,7 +378,7 @@ namespace GalEngine
             //color.alpha means the opacity of rectangle
 
             var transform = new GuiTransform();
-            var renderConfig = new GuiRenderConfig() { Color = color, Config = new Vector4(1) };
+            var renderConfig = new GuiRenderConfig() { Color = color, Config = new Vector4(0) };
 
             //1.scale the rectangle
             transform.World = Matrix4x4.CreateScale(rectangle.Right - rectangle.Left, rectangle.Bottom - rectangle.Top, 1.0f);

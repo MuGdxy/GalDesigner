@@ -8,6 +8,7 @@ namespace GalEngine
 {
     class EventForwardInputEmitter : InputEmitter
     {
+        private Point2 mMousePosition;
         private EngineWindow mWindow;
 
         public EventForwardInputEmitter(EngineWindow window)
@@ -17,12 +18,10 @@ namespace GalEngine
 
         public void Forward(MouseMoveEvent eventArg)
         {
-            var halfSize = new Sizef(
-                width: mWindow.Size.Width * 0.5f,
-                height: mWindow.Size.Height * 0.5f);
-
-            float xOffset = (eventArg.Position.X - halfSize.Width) / halfSize.Width;
-            float yOffset = (eventArg.Position.Y - halfSize.Height) / halfSize.Height;
+            float xOffset = (float)(eventArg.Position.X - mMousePosition.X) / mWindow.Size.Width;
+            float yOffset = (float)(eventArg.Position.Y - mMousePosition.Y) / mWindow.Size.Height;
+            
+            mMousePosition = eventArg.Position;
 
             Forward(new AxisInputAction(InputProperty.MouseX, xOffset));
             Forward(new AxisInputAction(InputProperty.MouseY, yOffset));
