@@ -143,6 +143,9 @@ namespace GalEngine
             //fill rectangle with texture
             //the result color's alpha is equal texture.alpha * opacity
 
+            //do not render image
+            if (image.GpuTexture == null) return;
+
             var transform = new GuiTransform();
             var renderConfig = new GuiRenderConfig() { Color = color, Config = new Vector4((int)mode) };
 

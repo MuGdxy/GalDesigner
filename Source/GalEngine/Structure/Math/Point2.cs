@@ -26,5 +26,12 @@ namespace GalEngine
         {
             X = x; Y = y;
         }
+
+        public static Point2f operator +(Point2f left, Vector2f right)
+        {
+            return new Point2f(
+                left.X + right.X,
+                left.Y + right.Y);
+        }
     }
 }

@@ -29,41 +29,22 @@ namespace GalEngine
 
     public class Font : IDisposable
     {
-        private static readonly Library mLibrary = new Library();
-        private static readonly Font mInternalFont = new Font("Internal.UbuntuMono-R-17.Font", 17, Properties.Resources.UbuntuMono_R);
-
         private Face mFace;
-        private readonly GpuDevice mDevice;
-
+        
         private readonly Dictionary<char, CharacterCodeMetrics> mCharacterIndex;
 
         internal Face FontFace => mFace;
-        internal GpuDevice GpuDevice => mDevice;
-
+        
         public int Size { get; }
 
-        public string Name { get; }
+        public string ClassName { get; }
 
-        public static Font Default => mInternalFont;
-
-        public Font(int size) : this("Internal.UbuntuMono-R-" + size + ".Font", size, Properties.Resources.UbuntuMono_R)
+        internal Font(string className, Face face, int size)
         {
-
-        }
-
-        public Font(string name, int size, byte[] fontData) : this(name, size, fontData, GameSystems.GpuDevice)
-        {
-
-        }
-
-        public Font(string name, int size, byte[] fontData, GpuDevice device)
-        {
-            //create font
-            mFace = new Face(mLibrary, fontData, 0);
-            mDevice = device;
+            mFace = face;
             Size = size;
-            Name = name;
-
+            ClassName = className;
+            
             //set font size and encoding
             mFace.SetPixelSizes(0, (uint)size);
             mFace.SelectCharmap(SharpFont.Encoding.Unicode);
@@ -95,7 +76,7 @@ namespace GalEngine
             {
                 index = mFace.GetCharIndex(' ');
 
-                LogEmitter.Apply(LogLevel.Warning, "There are some nonsupport character used in [{0}] font.", Name);
+                LogEmitter.Apply(LogLevel.Warning, "There are some nonsupport character used in [{0}] font.", ClassName);
             }
 
             //load glyph

@@ -111,6 +111,8 @@ namespace GalEngine
             GenTextureFromContent(mContent, mFont, mImage, ref mCharacterPostLocation);
         }
 
+        ~RowText() => Dispose();
+
         public int GetCharacterPostLocation(int location)
         {
             return mCharacterPostLocation[location];
@@ -126,7 +128,7 @@ namespace GalEngine
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Utility.Dispose(ref mImage);
         }
     }
 }

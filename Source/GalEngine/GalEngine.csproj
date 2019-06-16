@@ -67,10 +67,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="Core\GameResource\Text\Font.cs" />
+    <Compile Include="Core\GameResource\Text\FontClass.cs" />
     <Compile Include="Core\GameResource\Text\RowText.cs" />
     <Compile Include="Core\GameResource\Text\Text.cs" />
     <Compile Include="Core\GameResource\Image\Image.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\Gui.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiControl\GuiButton.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiControl\GuiFactory.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiControl\GuiInputText.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiControl\GuiStyle.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiControl\GuiText.cs" />
+    <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiRectangleElement.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiElement.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\GuiElement\GuiTransform.cs" />
     <Compile Include="Core\GameSystem\GuiSystem\GuiGroup.cs" />

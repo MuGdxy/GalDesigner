@@ -51,13 +51,7 @@ namespace GalEngine
 
         public void Forward(KeyBoardEvent eventArg)
         {
-            int keyCode = (int)eventArg.KeyCode;
-            
-            //forward keyboard event, for current version, we only forward A-Z keycode
-            if (keyCode >= 'A' && keyCode <= 'Z')
-            {
-                Forward(new ButtonInputAction(((char)keyCode).ToString(), eventArg.IsDown));
-            }
+            Forward(new ButtonInputAction(InputProperty.KeyCodeMapped[eventArg.KeyCode], eventArg.IsDown));
         }
 
         public void Forward(BaseEvent eventArg)
