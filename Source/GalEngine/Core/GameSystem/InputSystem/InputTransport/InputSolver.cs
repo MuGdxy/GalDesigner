@@ -50,14 +50,19 @@ namespace GalEngine
 
         public void Execute(InputAction action)
         {
+            var alias = MappedInput(action.Name);
+
             switch (action)
-            {
+            {            
                 case ButtonInputAction button:
-                    ButtonInputAction[MappedInput(button.Name)]?.ForEach(button); break;
+                    if (ButtonInputAction.ContainsKey(alias)) 
+                        ButtonInputAction[alias]?.ForEach(button); break;
                 case AxisInputAction axis:
-                    AxisInputAction[MappedInput(axis.Name)]?.ForEach(axis); break;
+                    if (AxisInputAction.ContainsKey(alias))
+                        AxisInputAction[MappedInput(axis.Name)]?.ForEach(axis); break;
                 case CharInputAction charInput:
-                    CharInputAction[MappedInput(charInput.Name)]?.ForEach(charInput); break;
+                    if (CharInputAction.ContainsKey(alias))
+                        CharInputAction[MappedInput(charInput.Name)]?.ForEach(charInput); break;
                 default: throw new Exception("Invalid Input Action.");
             }
         }

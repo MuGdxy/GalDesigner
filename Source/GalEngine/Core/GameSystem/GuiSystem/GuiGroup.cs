@@ -20,8 +20,6 @@ namespace GalEngine
             {
                 float offset = input.Offset * Gui.Canvas.Size.Width;
 
-                Gui.GlobalElementStatus.Position.X += offset;
-
                 if (Gui.GlobalElementStatus.DragElement != null &&
                     Gui.GlobalElementStatus.DragElement.Dragable == true)
                 {
@@ -41,8 +39,6 @@ namespace GalEngine
             void resolveInputMoveY(AxisInputAction input)
             {
                 float offset = input.Offset * Gui.Canvas.Size.Height;
-
-                Gui.GlobalElementStatus.Position.Y += offset;
 
                 if (Gui.GlobalElementStatus.DragElement != null &&
                     Gui.GlobalElementStatus.DragElement.Dragable == true)

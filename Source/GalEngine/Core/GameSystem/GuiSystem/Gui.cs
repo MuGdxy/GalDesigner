@@ -78,8 +78,24 @@ namespace GalEngine
 
         internal static void Input(Queue<InputAction> actions)
         {
+            InputSolver tempSolver = new InputSolver();
+            tempSolver.AxisInputAction.Add(GuiProperty.InputMoveX, new AxisInputActionSolvers());
+            tempSolver.AxisInputAction.Add(GuiProperty.InputMoveY, new AxisInputActionSolvers());
+
+            tempSolver.AxisInputAction[GuiProperty.InputMoveX].Solvers.Add((action) =>
+                GlobalElementStatus.Position.X += action.Offset * Canvas.Size.Width
+            );
+
+            tempSolver.AxisInputAction[GuiProperty.InputMoveY].Solvers.Add((action) =>
+                GlobalElementStatus.Position.Y += action.Offset * Canvas.Size.Height
+            );
+
+            tempSolver.InputMappeds.Add(InputMapped);
+
             foreach (var action in actions)
             {
+                tempSolver.Execute(action);
+
                 foreach (var group in Groups)
                 {
                     group.Value.Input(action);
@@ -109,7 +125,16 @@ namespace GalEngine
         {
             if (Canvas?.Size == size) return;
 
-            if (Canvas != null) Canvas.Dispose();
+            //update the position and dispose the canvas
+            if (Canvas != null)
+            {
+                //update the position, because the canvas size is changed
+                GlobalElementStatus.Position = new Point2f(
+                    GlobalElementStatus.Position.X / Canvas.Size.Width * size.Width,
+                    GlobalElementStatus.Position.Y / Canvas.Size.Height * size.Height);
+
+                Canvas.Dispose();
+            }
 
             Canvas = new Image(size, PixelFormat.RedBlueGreenAlpha8bit);
         }
