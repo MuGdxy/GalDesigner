@@ -116,10 +116,18 @@ namespace GalEngine
                 }
             }
 
-            void resolveInputText(ButtonInputAction input)
+            void resolveInputText(CharInputAction input)
             {
                 if (Gui.GlobalElementStatus.FocusElement != null &&
                     Gui.GlobalElementStatus.FocusElement.Readable == true)
+                {
+                    Gui.GlobalElementStatus.FocusElement.Input(input);
+                }
+            }
+
+            void resolveInputKey(ButtonInputAction input)
+            {
+                if (Gui.GlobalElementStatus.FocusElement != null)
                 {
                     Gui.GlobalElementStatus.FocusElement.Input(input);
                 }
@@ -134,10 +142,14 @@ namespace GalEngine
             InputSolver.AxisInputAction[GuiProperty.InputWheel].Solvers.Add(resolveInputWheel);
 
             InputSolver.ButtonInputAction.Add(GuiProperty.InputClick, new ButtonInputActionSolvers());
-            InputSolver.ButtonInputAction.Add(GuiProperty.InputText, new ButtonInputActionSolvers());
+            InputSolver.ButtonInputAction.Add(GuiProperty.InputKey, new ButtonInputActionSolvers());
+
+            InputSolver.CharInputAction.Add(GuiProperty.InputText, new CharInputActionSolvers());
 
             InputSolver.ButtonInputAction[GuiProperty.InputClick].Solvers.Add(resolveInputClick);
-            InputSolver.ButtonInputAction[GuiProperty.InputText].Solvers.Add(resolveInputText);
+            InputSolver.ButtonInputAction[GuiProperty.InputKey].Solvers.Add(resolveInputKey);
+
+            InputSolver.CharInputAction[GuiProperty.InputText].Solvers.Add(resolveInputText);
 
             InputSolver.InputMappeds.Add(InputMapped);
             InputSolver.InputMappeds.Add(Gui.InputMapped);
@@ -156,6 +168,10 @@ namespace GalEngine
 
         protected internal override void Input(InputAction action)
         {
+            //for char input action, we need to skip the mapped test
+            if (action.Type == InputType.Char)
+                InputSolver.CharInputAction[GuiProperty.InputText].ForEach(action as CharInputAction);
+
             var alias = InputMapped.IsMapped(action.Name) ?
                 InputMapped.MappedInput(action.Name) : Gui.InputMapped.MappedInput(action.Name);
 

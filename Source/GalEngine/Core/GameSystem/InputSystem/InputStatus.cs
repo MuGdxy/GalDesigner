@@ -23,6 +23,7 @@ namespace GalEngine
                         mButtonStatus[button.Name] = button.Status; break;
                     case AxisInputAction axis:
                         mAxisStatus[axis.Name] = axis.Offset; break;
+                    case CharInputAction charInput: break;
                     default: throw new Exception("Invalid Input Action.");
                 }
             }

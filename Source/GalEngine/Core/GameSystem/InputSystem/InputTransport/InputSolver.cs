@@ -11,6 +11,7 @@ namespace GalEngine
     {
         public Dictionary<string, ButtonInputActionSolvers> ButtonInputAction { get; }
         public Dictionary<string, AxisInputActionSolvers> AxisInputAction { get; }
+        public Dictionary<string, CharInputActionSolvers> CharInputAction { get; }
 
         public List<InputMapped> InputMappeds { get; }
 
@@ -18,6 +19,7 @@ namespace GalEngine
         {
             ButtonInputAction = new Dictionary<string, ButtonInputActionSolvers>();
             AxisInputAction = new Dictionary<string, AxisInputActionSolvers>();
+            CharInputAction = new Dictionary<string, CharInputActionSolvers>();
             InputMappeds = new List<InputMapped>();
         }
 
@@ -30,6 +32,8 @@ namespace GalEngine
                 ButtonInputAction[action.Key] = action.Value;
             foreach (var action in other.AxisInputAction)
                 AxisInputAction[action.Key] = action.Value;
+            foreach (var action in other.CharInputAction)
+                CharInputAction[action.Key] = action.Value;
 
             InputMappeds.InsertRange(0, other.InputMappeds);
         }
@@ -52,6 +56,8 @@ namespace GalEngine
                     ButtonInputAction[MappedInput(button.Name)]?.ForEach(button); break;
                 case AxisInputAction axis:
                     AxisInputAction[MappedInput(axis.Name)]?.ForEach(axis); break;
+                case CharInputAction charInput:
+                    CharInputAction[MappedInput(charInput.Name)]?.ForEach(charInput); break;
                 default: throw new Exception("Invalid Input Action.");
             }
         }

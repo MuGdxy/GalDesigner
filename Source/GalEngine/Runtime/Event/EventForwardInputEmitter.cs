@@ -54,6 +54,11 @@ namespace GalEngine
             Forward(new ButtonInputAction(InputProperty.KeyCodeMapped[eventArg.KeyCode], eventArg.IsDown));
         }
 
+        public void Forward(CharEvent eventArg)
+        {
+            Forward(new CharInputAction(eventArg.Char.ToString()));
+        }
+
         public void Forward(BaseEvent eventArg)
         {
             switch (eventArg)
@@ -62,6 +67,7 @@ namespace GalEngine
                 case MouseWheelEvent mouseWheel: Forward(mouseWheel); break;
                 case MouseMoveEvent mouseMove: Forward(mouseMove); break;
                 case KeyBoardEvent keyBoard: Forward(keyBoard); break;
+                case CharEvent charInput: Forward(charInput); break;
                 default: break;
             }
         }

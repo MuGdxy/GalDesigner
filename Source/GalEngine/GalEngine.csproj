@@ -85,6 +85,7 @@
     <Compile Include="Core\GameSystem\GuiSystem\GuiRender.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\AxisInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputAction\ButtonInputAction.cs" />
+    <Compile Include="Core\GameSystem\InputSystem\InputAction\CharInputAction.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputCombine.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputMapped.cs" />
     <Compile Include="Core\GameSystem\InputSystem\InputTransport\InputEmitter.cs" />
@@ -111,6 +112,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Runtime\Event\BaseEvent.cs" />
+    <Compile Include="Runtime\Event\CharEvent.cs" />
     <Compile Include="Runtime\Event\EventEmitter.cs" />
     <Compile Include="Runtime\Event\EventForwardInputEmitter.cs" />
     <Compile Include="Runtime\Event\EventListener.cs" />

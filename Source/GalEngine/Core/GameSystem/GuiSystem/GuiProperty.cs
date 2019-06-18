@@ -16,13 +16,16 @@ namespace GalEngine
 
         public static string InputText => "InputText";
 
+        public static string InputKey => "InputKey";
+
         public static bool IsGuiInput(string name)
         {
             if (name == InputMoveX || 
                 name == InputMoveY || 
                 name == InputWheel ||
                 name == InputClick || 
-                name == InputText) return true;
+                name == InputText  ||
+                name == InputKey) return true;
 
             return false;
         }

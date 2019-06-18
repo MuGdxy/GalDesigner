@@ -9,7 +9,8 @@ namespace GalEngine
     public enum InputType
     {
         Button,
-        Axis
+        Axis,
+        Char
     }
 
     public class InputAction

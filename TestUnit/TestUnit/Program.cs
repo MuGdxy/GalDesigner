@@ -23,7 +23,7 @@ namespace TestUnit
 
             GuiGroup group = new GuiGroup("group0");
 
-            group.Elements.Add(new GuiInputText("", new Size(100, 25))
+            group.Elements.Add(new GuiInputText("", new Size(100, 30))
             {
                 Transform = new GuiTransform()
                 {

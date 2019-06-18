@@ -24,6 +24,7 @@ namespace GalEngine
 
         public IntPtr Handle => mHandle;
 
+        public event CharEventHandler OnCharEvent;
         public event UpdateEventHandler OnUpdateEvent;
         public event KeyBoardEventHandler OnKeyBoardEvent;
         public event MouseMoveEventHandler OnMouseMoveEvent;
@@ -50,6 +51,8 @@ namespace GalEngine
                 case APILibrary.Win32.WinMsg.WM_DESTROY: APILibrary.Win32.Internal.PostQuitMessage(0); break;
                 //catch the size event, because the order, we record old size
                 case APILibrary.Win32.WinMsg.WM_SIZE: ForwardEvent(new SizeChangeEvent(DateTime.Now, oldSize, Size = getSize())); break;
+                //catch the char input event
+                case APILibrary.Win32.WinMsg.WM_CHAR: ForwardEvent(new CharEvent(DateTime.Now, (char)wParam)); break;
                 default: break;
             }
 
@@ -215,6 +218,7 @@ namespace GalEngine
             {
                 switch (GetEvent(true))
                 {
+                    case CharEvent charInput: OnCharEvent?.Invoke(this, charInput); break;
                     case UpdateEvent update: OnUpdateEvent?.Invoke(this, update); break;
                     case KeyBoardEvent keyBoard: OnKeyBoardEvent?.Invoke(this, keyBoard); break;
                     case MouseClickEvent mouseClick: OnMouseClickEvent?.Invoke(this, mouseClick); break;

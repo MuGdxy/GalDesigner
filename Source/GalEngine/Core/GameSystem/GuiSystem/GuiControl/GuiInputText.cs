@@ -84,7 +84,7 @@ namespace GalEngine
             render.DrawRectangle(area, Style.Padding, padding);
             render.DrawText(textPosition, mTextBuffer, Style.Text);
 
-            if (mPassTime < HalfDuration) return;
+            if (mPassTime < HalfDuration || Gui.GlobalElementStatus.FocusElement != this) return;
 
             render.DrawLine(cursorPosition, cursorPosition + new Vector2f(0, cursorHeight), Style.Cursor, padding);
         }
@@ -93,51 +93,35 @@ namespace GalEngine
         {
             if (action.Type == InputType.Axis) return;
 
-            var buttonAction = action as ButtonInputAction;
-
-            //if the input button is keycode and keycode is down
-            if (InputProperty.InvertKeyCodeMapped.ContainsKey(buttonAction.Name) && buttonAction.Status)
+            //catch some control input, like back space, left, right
+            if (action.Type == InputType.Button)
             {
-                //get keycode
-                var keyCode = InputProperty.InvertKeyCodeMapped[buttonAction.Name];
+                var buttonInput = action as ButtonInputAction;
 
-                //move the cursor with left or right button
-                void OnCursorMove()
-                {
-                    if (keyCode == KeyCode.Left) Cursor--;
-                    if (keyCode == KeyCode.Right) Cursor++;
+                if (buttonInput.Status == false) return;
 
-                    Cursor = Utility.Clamp(Cursor, 0, Content.Length);
-                }
+                //when we move the cursor
+                if (buttonInput.Name == KeyCode.Left.ToString()) Cursor--;
+                if (buttonInput.Name == KeyCode.Right.ToString()) Cursor++;
 
-                void OnBackSpace()
-                {
-                    if (keyCode == KeyCode.Back && Cursor != 0)
-                        Content = Content.Remove(--Cursor, 1);
-                }
+                //when we input the back space, we need remove one character
+                if (buttonInput.Name == KeyCode.Back.ToString() && Cursor != 0)
+                    Content = Content.Remove(--Cursor, 1);
 
-                void OnInsert()
-                {
-                    //get the insert value
-                    var value = KeyCodeConvertTo(keyCode);
-
-                    //null means we do not need to insert
-                    if (value == null) return;
-
-                    Content = Content.Insert(Cursor, value);
-                    Cursor = Cursor + value.Length;
-                }
-
-                //solve the input action
-                OnCursorMove();
-                OnBackSpace();
-                OnInsert();
+                Cursor = Utility.Clamp(Cursor, 0, Content.Length);
             }
-        }
 
-        protected virtual string KeyCodeConvertTo(KeyCode keyCode)
-        {
+            if (action.Type == InputType.Char)
+            {
+                var charInput = action as CharInputAction;
 
+                //only visable character can read
+                if (char.IsControl(charInput.Name, 0)) return;
+
+                //insert character
+                Content = Content.Insert(Cursor, charInput.Name);
+                Cursor = Cursor + charInput.Name.Length;
+            }
         }
         
         public GuiInputText(string content, Size size) :
