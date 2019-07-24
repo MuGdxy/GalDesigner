@@ -44,9 +44,22 @@ namespace GalEngine.Runtime.Graphics
                  SharpDX.Direct3D.FeatureLevel.Level_11_0,
                  SharpDX.Direct3D.FeatureLevel.Level_12_0
             };
-            
-            //create device with current adapter
-            mDevice = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
+
+            try
+            {
+                //create device with current adapter
+                mDevice = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
+            }
+            catch (SharpDX.SharpDXException)
+            {
+                //try without debug layer
+                creationFlags = SharpDX.Direct3D11.DeviceCreationFlags.None;
+
+                mDevice = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
+
+                LogEmitter.Apply(LogLevel.Warning, "Enable Graphics Debug Layer Error.");
+            }
+      
             mImmediateContext = Device.ImmediateContext;
             
             LogEmitter.Apply(LogLevel.Information, "[Initialize Graphics Device with {0}]", adapter.Description);
