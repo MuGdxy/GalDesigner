@@ -12,9 +12,7 @@ namespace GalEngine
 
         public override bool Contain(Point2f point)
         {
-            var newPoint = new Point2f(
-                point.X - Transform.Position.X,
-                point.Y - Transform.Position.Y);
+            var newPoint = Transform.Invert().TransformTo(point);
 
             if (newPoint.X < 0 || newPoint.X > Size.Width) return false;
             if (newPoint.Y < 0 || newPoint.Y > Size.Height) return false;

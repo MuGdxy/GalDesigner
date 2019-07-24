@@ -23,12 +23,15 @@ namespace TestUnit
 
             GuiGroup group = new GuiGroup("group0");
 
-            group.Elements.Add(new GuiInputText("", new Size(100, 30))
+            Transform transform = new Transform();
+
+            transform.ApplyTransform(System.Numerics.Matrix4x4.CreateFromAxisAngle(new System.Numerics.Vector3(0, 0, 1), 1));
+            transform.ApplyTransform(System.Numerics.Matrix4x4.CreateTranslation(100, 100, 0));
+
+            group.Elements.Add(new GuiButton("button", 24, new Size(100, 30))
             {
-                Transform = new GuiTransform()
-                {
-                    Position = new Point2f(100, 100)
-                }
+                Transform = transform,
+                Dragable = true
             });
 
             Gui.Add(group);

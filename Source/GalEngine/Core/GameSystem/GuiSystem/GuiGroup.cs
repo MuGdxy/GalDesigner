@@ -23,10 +23,8 @@ namespace GalEngine
                 if (Gui.GlobalElementStatus.DragElement != null &&
                     Gui.GlobalElementStatus.DragElement.Dragable == true)
                 {
-                    Gui.GlobalElementStatus.DragElement.Transform.Position =
-                        new Point2f(
-                            Gui.GlobalElementStatus.DragElement.Transform.Position.X + offset,
-                            Gui.GlobalElementStatus.DragElement.Transform.Position.Y);
+                    Gui.GlobalElementStatus.DragElement.Transform.
+                        ApplyTransform(System.Numerics.Matrix4x4.CreateTranslation(offset, 0, 0));
                 }
 
                 Elements.ForEach((element) =>
@@ -43,10 +41,8 @@ namespace GalEngine
                 if (Gui.GlobalElementStatus.DragElement != null &&
                     Gui.GlobalElementStatus.DragElement.Dragable == true)
                 {
-                    Gui.GlobalElementStatus.DragElement.Transform.Position =
-                        new Point2f(
-                            Gui.GlobalElementStatus.DragElement.Transform.Position.X,
-                            Gui.GlobalElementStatus.DragElement.Transform.Position.Y + offset);
+                    Gui.GlobalElementStatus.DragElement.Transform.
+                        ApplyTransform(System.Numerics.Matrix4x4.CreateTranslation(0, offset, 0));
                 }
 
                 Elements.ForEach((element) =>
@@ -154,9 +150,11 @@ namespace GalEngine
         protected internal override void Draw(GuiRender render) 
             => Elements.ForEach((element) =>
             {
-                render.SetTransform(element.Transform.GetMatrix());
+                render.PushTransform(element.Transform);
 
                 element.Draw(render);
+
+                render.PopTransform();
             });
 
         protected internal override void Update(float delta)

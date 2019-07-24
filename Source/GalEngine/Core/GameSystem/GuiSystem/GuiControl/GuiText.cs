@@ -31,7 +31,7 @@ namespace GalEngine
 
         protected internal override void Draw(GuiRender render)
         {
-            render.DrawText(Transform.Position, mTextBuffer, Color);
+            render.DrawText(new Point2f(0, 0), mTextBuffer, Color);
         }
 
         public GuiText(string content, int fontSize) : 

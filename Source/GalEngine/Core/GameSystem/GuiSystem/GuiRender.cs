@@ -61,9 +61,11 @@ namespace GalEngine
 
         private Matrix4x4 mProject;
 
+        private Stack<Matrix4x4> mTransforms;
+
         public GpuDevice Device => mDevice;
 
-        public Matrix4x4 Transform { get; set; }
+        public Matrix4x4 Transform => mTransforms.Count == 0 ? Matrix4x4.Identity : mTransforms.Peek();
 
         private void InitializeSquareBuffer()
         {
@@ -180,7 +182,7 @@ namespace GalEngine
             mDevice = device;
 
             //default transform is I
-            Transform = Matrix4x4.Identity;
+            mTransforms = new Stack<Matrix4x4>();
 
             //init blend state
             mBlendState = new GpuBlendState(mDevice, new RenderTargetBlendDescription()
@@ -258,9 +260,21 @@ namespace GalEngine
             mProject = Matrix4x4.Identity;
         }
 
-        public virtual void SetTransform(Matrix4x4 transform)
+        public virtual void PushTransform(Transform transform)
         {
-            Transform = transform;
+            mTransforms.Push(
+                (mTransforms.Count == 0 ? Matrix4x4.Identity : mTransforms.Peek()) * 
+                transform.Matrix);
+        }
+
+        public virtual void PopTransform()
+        {
+            mTransforms.Pop();
+        }
+
+        public virtual void ClearTransform()
+        {
+            mTransforms.Clear();
         }
 
         public virtual void DrawLine(Point2f start, Point2f end, Colorf color, float padding = 2.0f)

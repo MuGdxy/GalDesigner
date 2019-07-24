@@ -8,7 +8,7 @@ namespace GalEngine
 {
     public class GuiElement
     {
-        public GuiTransform Transform { get; set; }
+        public Transform Transform { get; set; }
 
         public bool Dragable { get; set; }
 
@@ -22,7 +22,7 @@ namespace GalEngine
 
         public GuiElement()
         {
-            Transform = new GuiTransform();
+            Transform = new Transform();
 
             Dragable = true;
             Readable = true;
