@@ -30,7 +30,8 @@ namespace GalEngine
     public class Font : IDisposable
     {
         private Face mFace;
-        
+
+        private readonly FontClass mFontClass;
         private readonly Dictionary<char, CharacterCodeMetrics> mCharacterIndex;
 
         internal Face FontFace => mFace;
@@ -39,7 +40,7 @@ namespace GalEngine
 
         public string ClassName { get; }
 
-        internal Font(string className, Face face, int size)
+        internal Font(string className, Face face, int size, FontClass fontClass)
         {
             mFace = face;
             Size = size;
@@ -50,6 +51,8 @@ namespace GalEngine
             mFace.SelectCharmap(SharpFont.Encoding.Unicode);
 
             mCharacterIndex = new Dictionary<char, CharacterCodeMetrics>();
+
+            mFontClass = fontClass;
         }
 
         ~Font() => Dispose();
@@ -108,6 +111,9 @@ namespace GalEngine
 
             //dispose the font class
             Utility.Dispose(ref mFace);
+
+            //remove the reference in font class
+            mFontClass.FreeCache(Size);
         }
     }
 }

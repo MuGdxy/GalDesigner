@@ -24,6 +24,8 @@ namespace GalEngine
 
         public static FontClass UbuntuMono => mUbuntuMono;
 
+        internal void FreeCache(int size) => mFonts.Remove(size);
+
         public FontClass(string name, byte[] data) :
             this(name, data, GameSystems.GpuDevice)
         {
@@ -42,7 +44,7 @@ namespace GalEngine
         public Font Fonts(int size)
         {
             if (mFonts.ContainsKey(size) == false)
-                mFonts.Add(size, new Font(Name, new Face(mLibrary, mFontData, 0), size));
+                mFonts.Add(size, new Font(Name, new Face(mLibrary, mFontData, 0), size, this));
 
             return mFonts[size];
         }
