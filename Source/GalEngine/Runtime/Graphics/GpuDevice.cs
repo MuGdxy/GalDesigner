@@ -57,7 +57,7 @@ namespace GalEngine.Runtime.Graphics
 
                 mDevice = new SharpDX.Direct3D11.Device(Adapter.Adapter, creationFlags, fetuares);
 
-                LogEmitter.Apply(LogLevel.Warning, "Enable Graphics Debug Layer Error.");
+                LogEmitter.Apply(LogLevel.Warning, "[Enable Graphics Debug Layer Error]");
             }
       
             mImmediateContext = Device.ImmediateContext;
