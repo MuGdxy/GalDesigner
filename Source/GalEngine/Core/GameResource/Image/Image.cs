@@ -10,6 +10,8 @@ namespace GalEngine
 {
     public class Image : IDisposable
     {
+        private readonly static SharpDX.WIC.ImagingFactory mImageFactory = new SharpDX.WIC.ImagingFactory();
+
         private GpuDevice mDevice;
 
         private GpuTexture2D mTexture;
@@ -60,6 +62,27 @@ namespace GalEngine
             Utility.Dispose(ref mResourceUsage);
             Utility.Dispose(ref mRenderTarget);
             Utility.Dispose(ref mTexture);
+        }
+
+        public static Image Load(string path)
+        {
+            using (var decoder = new SharpDX.WIC.BitmapDecoder(mImageFactory,
+                path, SharpDX.WIC.DecodeOptions.CacheOnLoad))
+            {
+                using (var frame = decoder.GetFrame(0))
+                {
+                    using (var converter = new SharpDX.WIC.FormatConverter(mImageFactory))
+                    {
+                        converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppRGBA);
+
+                        byte[] data = new byte[4 * converter.Size.Width * converter.Size.Height];
+
+                        converter.CopyPixels(data, 4 * converter.Size.Width);
+
+                        return new Image(new Size(converter.Size.Width, converter.Size.Height), PixelFormat.RedBlueGreenAlpha8bit, data);
+                    }
+                }
+            }
         }
     }
 }
