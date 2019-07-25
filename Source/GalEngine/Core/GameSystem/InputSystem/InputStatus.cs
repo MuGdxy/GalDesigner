@@ -35,8 +35,8 @@ namespace GalEngine
             mAxisStatus = new Dictionary<string, float>();
         }
 
-        public static bool GetButton(string button) => mButtonStatus[button];
+        public static bool GetButton(string button) => mButtonStatus.ContainsKey(button) ? mButtonStatus[button] : false;
 
-        public static float GetAxis(string axis) => mAxisStatus[axis];
+        public static float GetAxis(string axis) => mAxisStatus.ContainsKey(axis) ? mAxisStatus[axis] : 0;
     }
 }
